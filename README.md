@@ -14,6 +14,9 @@ TODO:
     - install.sh and a build.sh?
     - config file? yaml? everyone loves yaml
 
+- create tests
+  - we need to ensure folks don't cheat
+
 - create ci check to comment back on the PR if the src/runner can't access the build:prod output
 - graph the results
 - implement a monthly CI cron to remind me to run the tests on in a controlled environment (not CI)
