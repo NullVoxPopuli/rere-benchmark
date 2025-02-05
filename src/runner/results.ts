@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 import { existsSync } from 'node:fs';
-const filePath = 'results.json';
+const filePath = './results/app/results.json';
 
 async function getResults() {
   if (!existsSync(filePath)) {

@@ -4,6 +4,9 @@ import { pageTitle } from 'ember-page-title';
 import { AnimateResults } from './results';
 
 import jsonData from '../results.json';
+
+import type { Mark, ResultData } from './types.ts';
+
 const results = jsonData as unknown as ResultData;
 /**
  * TODO: add logos
@@ -26,15 +29,6 @@ const frameworks: Record<string, { color: string }> = {
   },
 };
 
-interface Mark {
-  name: string;
-  startTime: number;
-}
-interface ResultData {
-  [framework: string]: {
-    [benchName: string]: Array<[Mark, Mark]>;
-  };
-}
 function averageOf(arrayOfMarks: Array<[Mark, Mark]>) {
   const durations = [];
 
@@ -79,14 +73,6 @@ function dataOf(benchName: string) {
   return list.sort((a, b) => a.speed - b.speed);
 }
 
-function ms_to_centiseconds(ms: number) {
-  return ms * 10;
-}
-
-function ms_to_decisecods(ms: number) {
-  return ms * 100;
-}
-
 export default Route(
   <template>
     {{pageTitle "Results"}}
@@ -94,7 +80,6 @@ export default Route(
     <AnimateResults
       @name="1 item, 10k updates"
       @results={{dataOf "one-item-10k-times"}}
-      @scaleTime={{ms_to_decisecods}}
     />
     {{!--
     <AnimateResults
