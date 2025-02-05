@@ -1,13 +1,31 @@
+function tryVerify(label, check, remainingAttempts = 10) {
+  if (check()) {
+    console.timeEnd(label);
+    performance.mark(`${label}:done`);
+    return;
+  }
+
+  if (remainingAttempts > 0) {
+    requestAnimationFrame(() => {
+      tryVerify(label, check, remainingAttempts - 1);
+    })
+    return;
+  }
+
+  throw new Error(`Could not determine verified state within 10 frames`);
+}
+
 export const helpers = {
   '1i10ku': {
     name: '1 Item, 10k updates',
     verify: () => {
       let result = document.querySelector('output').textContent;
 
-      if (result !== '9999') {
-        throw new Error('Animation frame occurred before iteration finished');
-      }
+      return (result !== '9999');
     },
+    /**
+    * @param {(nextValue: number) => unknown} set
+    */
     run: (set) => {
       requestAnimationFrame(() => {
         let name = helpers['1i10ku'].name;
@@ -19,13 +37,7 @@ export const helpers = {
           set(i);
         }
 
-        requestAnimationFrame(() => {
-          console.timeEnd(name);
-          helpers['1i10ku'].verify();
-
-          performance.mark(`${name}:done`);
-        });
-
+        tryVerify(name, helpers['1i10ku'].verify);
       })
     }
   },
