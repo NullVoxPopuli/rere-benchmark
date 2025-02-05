@@ -90,5 +90,8 @@
   "exports": {
     "./tests/*": "./tests/*",
     "./*": "./app/*"
+  },
+  "dependencies": {
+    "common": "link:../../../common"
   }
 }
