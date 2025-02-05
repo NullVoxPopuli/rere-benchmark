@@ -98,6 +98,7 @@ export default ts.config(
       ...emberRecommended,
       ...gtsRecommended,
     ],
+    rules: {},
   },
   {
     files: ['tests/**/*-test.{js,gjs}'],
@@ -148,5 +149,5 @@ export default ts.config(
         ...globals.node,
       },
     },
-  }
+  },
 );

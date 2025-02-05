@@ -11,21 +11,26 @@ const results = jsonData as unknown as ResultData;
 /**
  * TODO: add logos
  */
-const frameworks: Record<string, { color: string }> = {
+const frameworks: Record<string, { color: string; logo: string }> = {
   ember: {
     color: '#E04E39',
+    logo: '/ember.svg',
   },
   react: {
     color: '#61DBFB',
+    logo: '/react.svg',
   },
   solid: {
     color: '#2c4f7c',
+    logo: '/solid.svg',
   },
   vue: {
     color: '#42b883',
+    logo: '/vue.svg',
   },
   svelte: {
     color: '#ff3e00',
+    logo: '/svelte.svg',
   },
 };
 
@@ -67,6 +72,7 @@ function dataOf(benchName: string) {
       name: framework,
       speed: time,
       color: frameworkInfo.color,
+      logo: frameworkInfo.logo,
     });
   }
 

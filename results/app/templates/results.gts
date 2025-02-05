@@ -24,18 +24,23 @@ export const AnimateResults = <template>
 
       <tbody>
         {{#let (scaleFactor @results) as |scaleTime|}}
-          {{#each @results as |lang|}}
+          {{#each @results as |fw|}}
             <tr>
-              <td>{{lang.name}}</td>
-              <td>{{round lang.speed}}ms</td>
+              <td>
+                <div class="name">
+                  <img src={{fw.logo}} />
+                  <span>{{fw.name}}</span>
+                </div>
+              </td>
+              <td>{{round fw.speed}}ms</td>
               <td>
                 <svg width="400" height="48" viewBox="0 0 400 48">
-                  <circle cx="50" cy="24" r="10" fill={{lang.color}}>
+                  <circle cx="50" cy="24" r="10" fill={{fw.color}}>
                     <animate
                       attributeName="cx"
                       values="50; 350; 50"
                       keyTimes="0; 0.5; 1"
-                      dur="{{scaleTime lang.speed}}s"
+                      dur="{{scaleTime fw.speed}}s"
                       repeatCount="indefinite"
                     />
                   </circle>
@@ -49,7 +54,20 @@ export const AnimateResults = <template>
   </section>
 
   <style>
-    tr td { border-bottom: 1px solid; }
+    tr td {
+      border-bottom: 1px solid;
+    }
+    .name {
+      display: grid;
+      justify-items: center;
+
+      img {
+        max-height: 48px;
+      }
+      span {
+        font-size: 0.8rem;
+      }
+    }
   </style>
 </template> satisfies TOC<{
   name: string;
