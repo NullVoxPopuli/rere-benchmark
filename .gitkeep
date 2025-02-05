@@ -1,0 +1,7 @@
+# deps
+node_modudles/
+
+# common output directories
+dist/
+build/
+out/
