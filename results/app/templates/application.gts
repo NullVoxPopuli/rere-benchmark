@@ -53,7 +53,8 @@ const results = {
   one10ku: [
     { name: 'Ember', color: '#E04E39', speed: 1 },
     { name: 'React', color: '#61DBFB', speed: 4 },
-    { name: 'Solid', color: '#61DBFB', speed: 15 },
+    { name: 'Solid', color: '#2c4f7c', speed: 15 },
+    { name: 'Vue', color: '#42b883', speed: 14 },
   ],
 };
 
