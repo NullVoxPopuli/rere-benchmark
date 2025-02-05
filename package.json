@@ -1,10 +1,22 @@
 {
   "name": "rere-benchmark",
+  "type": "module",
   "scripts": {
-    "start": "pnpm --filter 'results' start"
+    "start": "cd ./results; pnpm start",
+    "bench": "node --experimental-strip-types ./src/runner/index.ts"
   },
   "packageManager": "pnpm@10.2.0",
-  "dependencies": {
-    "common": "link:../../../common"
+  "engines": {
+    "node": ">= 22.11.0"
+  },
+  "devDependencies": {
+    "@tsconfig/node22": "^22.0.0",
+    "@tsconfig/strictest": "^2.0.5",
+    "@types/node": "^22.13.1",
+    "execa": "^9.5.2",
+    "globby": "^14.0.2",
+    "prettier": "^3.4.2",
+    "puppeteer": "^24.2.0",
+    "typescript": "^5.7.3"
   }
 }
