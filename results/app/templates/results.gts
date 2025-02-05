@@ -20,7 +20,7 @@ export const AnimateResults = <template>
                     attributeName="cx"
                     values="50; 350; 50"
                     keyTimes="0; 0.5; 1"
-                    dur="{{lang.speed}}s"
+                    dur="{{@scaleTime lang.speed}}ms"
                     repeatCount="indefinite"
                   />
                 </circle>
@@ -35,4 +35,8 @@ export const AnimateResults = <template>
   <style>
     tr td { border-bottom: 1px solid; }
   </style>
-</template> satisfies TOC<{ name: string; results: Results }>;
+</template> satisfies TOC<{
+  name: string;
+  results: Results;
+  scaleTime: (ms: number) => number;
+}>;
