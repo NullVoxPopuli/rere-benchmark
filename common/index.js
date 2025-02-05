@@ -43,7 +43,11 @@ export const helpers = {
   },
   '10ki1u': {
     name: '10k items, 1 update',
-    verify: () => {},
+    verify: () => {
+      let result = document.querySelector('body').textContent.trim();
+
+      return result.endsWith('9999');
+    },
     run: (set) => {
       requestAnimationFrame(() => {
         let name = helpers['10ki1u'].name;
@@ -55,7 +59,7 @@ export const helpers = {
           set(i);
         }
 
-        tryVerify(name, helpers['1i10ku'].verify);
+        tryVerify(name, helpers['10ki1u'].verify);
       });
     },
   },

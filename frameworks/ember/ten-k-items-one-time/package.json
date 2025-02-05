@@ -92,6 +92,7 @@
     "./*": "./app/*"
   },
   "dependencies": {
-    "common": "link:../../../common"
+    "common": "link:../../../common",
+    "tracked-built-ins": "^4.0.0"
   }
 }

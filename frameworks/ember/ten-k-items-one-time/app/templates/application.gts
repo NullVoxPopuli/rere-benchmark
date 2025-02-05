@@ -5,7 +5,7 @@ import { helpers } from 'common';
 import { TrackedArray } from 'tracked-built-ins';
 
 class Test extends Component {
-  items = new TrackedArray(10_000);
+  items = new TrackedArray(Array(10_000));
 
   start = () => helpers['10ki1u'].run((i) => (this.items[i] = i));
 
