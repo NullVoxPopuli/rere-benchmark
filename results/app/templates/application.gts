@@ -55,6 +55,7 @@ const results = {
     { name: 'React', color: '#61DBFB', speed: 4 },
     { name: 'Solid', color: '#2c4f7c', speed: 15 },
     { name: 'Vue', color: '#42b883', speed: 14 },
+    { name: 'Svelte', color: '#ff3e00', speed: 10 },
   ],
 };
 
