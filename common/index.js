@@ -21,7 +21,7 @@ export const helpers = {
     verify: () => {
       let result = document.querySelector('output').textContent;
 
-      return (result !== '9999');
+      return result === '9999';
     },
     /**
     * @param {(nextValue: number) => unknown} set

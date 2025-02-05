@@ -1,3 +1,0 @@
-# Most packages are not part of this monorepo
-packages:
-- "./results"
