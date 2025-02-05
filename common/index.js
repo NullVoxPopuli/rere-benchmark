@@ -8,7 +8,7 @@ function tryVerify(label, check, remainingAttempts = 10) {
   if (remainingAttempts > 0) {
     requestAnimationFrame(() => {
       tryVerify(label, check, remainingAttempts - 1);
-    })
+    });
     return;
   }
 
@@ -24,8 +24,8 @@ export const helpers = {
       return result === '9999';
     },
     /**
-    * @param {(nextValue: number) => unknown} set
-    */
+     * @param {(nextValue: number) => unknown} set
+     */
     run: (set) => {
       requestAnimationFrame(() => {
         let name = helpers['1i10ku'].name;
@@ -38,13 +38,25 @@ export const helpers = {
         }
 
         tryVerify(name, helpers['1i10ku'].verify);
-      })
-    }
+      });
+    },
   },
   '10ki1u': {
     name: '10k items, 1 update',
+    verify: () => {},
     run: (set) => {
-    },
-  }
-}
+      requestAnimationFrame(() => {
+        let name = helpers['10ki1u'].name;
 
+        console.time(name);
+        performance.mark(`${name}:start`);
+
+        for (let i = 0; i < 10_000; i++) {
+          set(i);
+        }
+
+        tryVerify(name, helpers['1i10ku'].verify);
+      });
+    },
+  },
+};
