@@ -6,6 +6,7 @@ import { AnimateResults } from './results';
  * TODO: add logos
  */
 const results = {
+  pending: [],
   // NOTE: these are not real values atm
   //       they *could be*, but I'm not ready to claim that they are until
   //       I get start automating the read of perf.mark()
@@ -25,5 +26,9 @@ export default Route(
     {{pageTitle "Results"}}
 
     <AnimateResults @name="1 item, 10k updates" @results={{results.one10ku}} />
+    <AnimateResults
+      @name="10k items, 1 update each (sequential)"
+      @results={{results.pending}}
+    />
   </template>
 );
