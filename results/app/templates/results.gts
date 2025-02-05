@@ -32,7 +32,7 @@ export const AnimateResults = <template>
                   <span>{{fw.name}}</span>
                 </div>
               </td>
-              <td>{{round fw.speed}}ms</td>
+              <td class="time">{{round fw.speed}}ms</td>
               <td>
                 <svg width="400" height="48" viewBox="0 0 400 48">
                   <circle cx="50" cy="24" r="10" fill={{fw.color}}>
@@ -56,6 +56,10 @@ export const AnimateResults = <template>
   <style>
     tr td {
       border-bottom: 1px solid;
+    }
+    .time {
+      font-style: italic;
+      padding: 0 0.5rem;
     }
     .name {
       display: grid;
