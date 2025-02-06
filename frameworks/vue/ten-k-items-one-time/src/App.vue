@@ -7,7 +7,7 @@ const items = reactive(Array(10_000));
 onMounted(() => {
   helpers['10ki1u'].run((i) => (items[i] = i));
 })
-function appendSpace(x) {
+function appendSpace(x: string) {
 return `${x} `;
 }
 </script>

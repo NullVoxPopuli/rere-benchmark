@@ -14,6 +14,7 @@ async function getMarks(browser: Browser, url: string) {
   await page.goto(url, { waitUntil: 'load' });
 
   // TODO: is there a way to wait for teh page to caln down?
+  await page.waitForNetworkIdle();
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
   const performanceMarks = await page.evaluate(() => {
@@ -28,13 +29,14 @@ async function getMarks(browser: Browser, url: string) {
   return performanceMarks;
 }
 
-const url = 'http://localhost:4173'; // Change this to your target URL
 let tests = await getTests();
 
 const browser = await puppeteer.launch({
   executablePath: chromeLocation,
   headless: HEADLESS,
 });
+
+console.log(`Running ${tests.length} tests...`);
 
 for (let test of tests) {
   let [, framework, benchName] = test.split('/');
@@ -51,6 +53,19 @@ for (let test of tests) {
   await $({ preferLocal: true, cwd: test })`pnpm build`;
 
   let server = await serve(`${test}/dist`);
+  let address = server.address();
+
+  assert(
+    address,
+    `Server for ${framework}, ${benchName} does not have an address!`,
+  );
+
+  let url =
+    typeof address === 'string'
+      ? address
+      : `http://${address.address === '::' ? 'localhost' : address.address}:${address.port}`;
+
+  console.log(`${framework} w/ ${benchName} up at ${url}`);
 
   for (let i = 0; i < COUNT; i++) {
     let performanceMarks = await getMarks(browser, url);

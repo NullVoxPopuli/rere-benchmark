@@ -40,6 +40,11 @@ function averageOf(arrayOfMarks: Array<[Mark, Mark]>) {
   for (const pair of arrayOfMarks) {
     const start = pair.find((x) => x.name.endsWith('start'));
     const done = pair.find((x) => x.name.endsWith('done'));
+
+    if (!done || !start) {
+      console.log(arrayOfMarks);
+      continue;
+    }
     const duration = done.startTime - start.startTime;
     durations.push(duration);
   }
@@ -87,11 +92,9 @@ export default Route(
       @name="1 item, 10k updates"
       @results={{dataOf "one-item-10k-times"}}
     />
-    {{!--
     <AnimateResults
       @name="10k items, 1 update each (sequential)"
-      @results={{results.pending}}
+      @results={{dataOf "ten-k-items-one-time"}}
     />
-    --}}
   </template>
 );

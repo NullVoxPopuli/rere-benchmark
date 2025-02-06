@@ -19,6 +19,7 @@ function tryVerify(label, check, attempts = 0) {
   if (check()) {
     console.timeEnd(label);
     performance.mark(`${label}:done`);
+    console.log(`Rendered in ${attempts} frames`);
     return;
   }
 
