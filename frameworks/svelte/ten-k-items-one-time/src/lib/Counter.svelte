@@ -1,6 +1,6 @@
 <script lang="ts">
   import { helpers } from 'common';
-  let items = Array(10_000);
+  let items = $state(Array(10_000));
 
   $effect(() => {
     helpers['10ki1u'].run((i) => {
@@ -10,5 +10,5 @@
 </script>
 
 {#each items as item}
-  {item}
+  {`${ item } `}
 {/each}
