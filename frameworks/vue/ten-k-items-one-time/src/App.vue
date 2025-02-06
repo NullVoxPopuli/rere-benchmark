@@ -1,16 +1,19 @@
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue'
+import { reactive, onMounted } from 'vue'
 import { helpers } from 'common';
 
-const items = ref(Array(10_000));
+const items = reactive(Array(10_000));
 
-watchEffect(() => {
-  helpers['10ki1u'].run((i) => (this.items[i] = i));
+onMounted(() => {
+  helpers['10ki1u'].run((i) => (items[i] = i));
 })
+function appendSpace(x) {
+return `${x} `;
+}
 </script>
 
 <template>
-  <template v-for="item in items">
-    {{item}}
+  <template v-for="(item) in items">
+    {{appendSpace(item)}} 
   </template>
 </template>
