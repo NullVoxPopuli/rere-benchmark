@@ -1,18 +1,37 @@
-function tryVerify(label, check, remainingAttempts = 10) {
+/**
+ * 960 frames:
+ * - 16s @ 60fps
+ * - 4s @ 240fps
+ *
+ * 480 frames:
+ * - 8s @ 60fps
+ * - 2s @ 240fps
+ *
+ * 120 frames:
+ * - 2s @ 60fps
+ * - 0.5s @ 240fps
+ */
+const NUM_FRAMES_TO_WAIT = 960;
+
+// TODO?: also have a second-based timeout?
+
+function tryVerify(label, check, attempts = 0) {
   if (check()) {
     console.timeEnd(label);
     performance.mark(`${label}:done`);
     return;
   }
 
-  if (remainingAttempts > 0) {
+  if (attempts < NUM_FRAMES_TO_WAIT) {
     requestAnimationFrame(() => {
-      tryVerify(label, check, remainingAttempts - 1);
+      tryVerify(label, check, attempts + 1);
     });
     return;
   }
 
-  throw new Error(`Could not determine verified state within 10 frames`);
+  throw new Error(
+    `Could not determine verified state within ${attempts} frames`,
+  );
 }
 
 export const helpers = {
