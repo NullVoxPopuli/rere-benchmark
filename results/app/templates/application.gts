@@ -6,6 +6,7 @@ import { AnimateResults } from './results';
 import jsonData from '../results.json';
 
 import type { Mark, ResultData } from './types.ts';
+import { Header } from './header.gts';
 
 const results = jsonData as unknown as ResultData;
 /**
@@ -88,6 +89,7 @@ export default Route(
   <template>
     {{pageTitle "Results"}}
 
+    <Header />
     <main>
       Tested on 2025-02-07 on
       <ul>
