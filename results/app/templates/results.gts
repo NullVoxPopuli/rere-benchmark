@@ -55,7 +55,7 @@ export const AnimateResults = <template>
 
   <style>
     tr td {
-      border-bottom: 1px solid;
+      border-bottom: 1px solid lightgray;
     }
     .time {
       font-style: italic;

@@ -1,1 +1,18 @@
 /* Ember supports plain CSS out of the box. More info: https://cli.emberjs.com/release/advanced-use/stylesheets/ */
+
+body {
+  display: grid;
+  gap: 0.5rem;
+  justify-content: center;
+  algin-items: center;
+}
+
+.all-results {
+  display: grid;
+  gap: 2rem;
+
+  h2 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+}
