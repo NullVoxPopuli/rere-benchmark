@@ -83,4 +83,30 @@ export const helpers = {
       });
     },
   },
+  '10ki1u-25p': {
+    name: '10k items, 1 update',
+    verify: () => {
+      let result = document.querySelector('body').textContent.trim();
+
+      return result.endsWith('2499');
+    },
+    run: (set) => {
+      requestAnimationFrame(() => {
+        let name = helpers['10ki1u-25p'].name;
+
+        // 25% of 10k
+        let total = 2500;
+
+        console.time(name);
+        performance.mark(`${name}:start`);
+
+        for (let i = 0; i < total; i++) {
+          let index = Math.floor(Math.random() * total);
+          set(index);
+        }
+
+        tryVerify(name, helpers['10ki1u-25p'].verify);
+      });
+    },
+  },
 };

@@ -6,7 +6,7 @@ import { TrackedArray } from 'tracked-built-ins';
 class Test extends Component {
   items = new TrackedArray(Array(10_000));
 
-  start = () => helpers['10ki1u'].run((i) => (this.items[i] = i));
+  start = () => helpers['10ki1u-25p'].run((i) => (this.items[i] = i));
 
   <template>
     {{#each this.items as |item|}}
