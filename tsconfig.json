@@ -2,6 +2,8 @@
   "extends": ["@tsconfig/strictest", "@tsconfig/node22"],
   "include": ["src"],
   "compilerOptions": {
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": true,
+    // Silly incorrectly published types and/or packages...
+    "esModuleInterop": true,
   }
 }

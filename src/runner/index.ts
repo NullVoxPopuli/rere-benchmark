@@ -6,7 +6,7 @@ import { serve } from './serve.ts';
 import { addResult } from './results.ts';
 import assert from 'node:assert';
 
-const { stdout: chromeLocation } = await $`which google-chrome`;
+import { chromeLocation } from './environment.ts';
 
 async function getMarks(browser: Browser, url: string) {
   const page = await browser.newPage();
