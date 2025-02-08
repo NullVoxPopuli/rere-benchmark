@@ -28,7 +28,7 @@ export const Visualize = <template>
             <tr>
               <td>
                 <div class="name">
-                  <img src={{fw.logo}} />
+                  <img alt="" src={{fw.logo}} />
                   <span>{{fw.name}}</span>
                 </div>
               </td>
