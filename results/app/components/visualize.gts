@@ -2,6 +2,7 @@ import type { TOC } from '@ember/component/template-only';
 
 import type { Results } from '#types';
 import { assert } from '@ember/debug';
+import { FrameworkInfo } from './framework-info';
 
 function scaleFactor(results: Results) {
   const fastest = results[0];
@@ -27,10 +28,7 @@ export const Visualize = <template>
           {{#each @results as |fw|}}
             <tr>
               <td>
-                <div class="name">
-                  <img alt="" src={{fw.logo}} />
-                  <span>{{fw.name}}</span>
-                </div>
+                <FrameworkInfo @name={{fw.name}} />
               </td>
               <td class="time">{{round fw.speed}}ms</td>
               <td>
@@ -60,17 +58,6 @@ export const Visualize = <template>
     .time {
       font-style: italic;
       padding: 0 0.5rem;
-    }
-    .name {
-      display: grid;
-      justify-items: center;
-
-      img {
-        max-height: 48px;
-      }
-      span {
-        font-size: 0.8rem;
-      }
     }
   </style>
 </template> satisfies TOC<{

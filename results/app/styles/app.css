@@ -2,7 +2,6 @@ body {
   display: grid;
   gap: 0.5rem;
   justify-content: center;
-  algin-items: center;
 }
 
 .home-link {

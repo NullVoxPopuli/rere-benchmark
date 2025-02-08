@@ -88,6 +88,7 @@
   "imports": {
     "#types": "./app/types.ts",
     "#utils": "./app/utils.ts",
+    "#frameworks": "./app/frameworks.ts",
     "#routes/*": "./app/routes/*",
     "#components/*": "./app/components/*"
   },
