@@ -86,9 +86,18 @@ export const helpers = {
   '10ki1u-25p': {
     name: '10k items, 1 update on 25% of the items',
     verify: () => {
-      let result = document.querySelector('body').textContent.trim();
+      let result = document
+        .querySelector('body')
+        .textContent.trim()
+        .replaceAll(/\s+/g, ' ');
 
-      return result.endsWith('2499');
+      let lastValue = helpers['10ki1u-25p'].last;
+      /**
+       * Include spaces so we don't match 123, when searching for 2
+       */
+      let target = ` ${lastValue} `;
+      console.log(`Looking for ${lastValue} via '${target}'`);
+      return result.includes(target);
     },
     run: (set) => {
       requestAnimationFrame(() => {
@@ -101,8 +110,9 @@ export const helpers = {
         performance.mark(`${name}:start`);
 
         for (let i = 0; i < total; i++) {
-          let index = Math.floor(Math.random() * total);
+          let index = Math.floor(Math.random() * 10_000);
           set(index);
+          helpers['10ki1u-25p'].last = index;
         }
 
         tryVerify(name, helpers['10ki1u-25p'].verify);

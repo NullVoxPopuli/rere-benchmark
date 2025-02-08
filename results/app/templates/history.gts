@@ -5,7 +5,7 @@ import { LinkTo } from '@ember/routing';
 // manual for now
 //
 // NOTE: most recent on top -- least recent on bottom
-export const results = ['2025-02-07'];
+export const results = ['2025-02-08', '2025-02-07'];
 
 function qp(resultName: string) {
   return { q: resultName };

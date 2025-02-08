@@ -3,13 +3,16 @@ import { $ } from 'execa';
 import { COUNT, HEADLESS } from './arg.ts';
 import { getTests } from './repo.ts';
 import { serve } from './serve.ts';
-import { info, addResult } from './results.ts';
+import { info, addResult, filePath } from './results.ts';
 import assert from 'node:assert';
 import * as clack from '@clack/prompts';
 import { chromeLocation } from './environment.ts';
 import { inspect } from 'node:util';
 
 console.info(inspect(info, { showHidden: false, depth: null, colors: true }));
+console.log(`
+  Results will be written to ${filePath}
+`);
 
 let letsgo = await clack.confirm({
   message: 'Does this information look correct?',

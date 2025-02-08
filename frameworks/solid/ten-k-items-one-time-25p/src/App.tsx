@@ -3,7 +3,7 @@ import { helpers } from 'common';
 import { createStore } from 'solid-js/store';
 
 function App() {
-  const [store, setStore] = createStore({ items: Array(10_000) });
+  const [store, setStore] = createStore({ items: Array(10_000).fill(0) });
 
   createEffect(() => {
     requestAnimationFrame(() => {

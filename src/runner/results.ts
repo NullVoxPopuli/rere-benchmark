@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { getInfo, yyyymmdd } from './environment.ts';
 
-const filePath = `./results/public/results/${yyyymmdd}.json`;
+export const filePath = `./results/public/results/${yyyymmdd}.json`;
 
 export const info = await getInfo();
 
