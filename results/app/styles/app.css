@@ -1,10 +1,16 @@
-/* Ember supports plain CSS out of the box. More info: https://cli.emberjs.com/release/advanced-use/stylesheets/ */
-
 body {
   display: grid;
   gap: 0.5rem;
   justify-content: center;
-  algin-items: center;
+}
+
+.home-link {
+  text-decoration: none;
+  color: currentColor;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .all-results {
@@ -14,5 +20,24 @@ body {
   h2 {
     margin-top: 0;
     margin-bottom: 0.5rem;
+  }
+}
+
+main.error-page {
+  display: grid;
+  gap: 1rem;
+
+  h1 {
+    margin: 0;
+  }
+  h2 {
+    margin: 0;
+    font-size: 1.25rem;
+  }
+
+  .error-box {
+    border: 1px solid darkred;
+    border-radius: 0.25rem;
+    padding: 1rem;
   }
 }

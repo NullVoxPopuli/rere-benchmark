@@ -1,0 +1,2668 @@
+{
+  "date": "2025-02-07",
+  "environment": {
+    "machine": {
+      "os": {
+        "name": "Ubuntu",
+        "version": "24.04"
+      },
+      "cpu": "AMD Ryzen 9 7900X",
+      "ram": "64GB"
+    },
+    "borwser": {
+      "name": "Google Chrome",
+      "version": "133.0.6943.53"
+    },
+    "monitor": {
+      "hz": 240
+    }
+  },
+  "results": {
+    "ember": {
+      "one-item-10k-times": [
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 49.89999997615814
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 53.89999997615814
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 38.800000071525574
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 44.40000009536743
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 42.89999997615814
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 46.39999997615814
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 41
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 47.299999952316284
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 41.10000002384186
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 51.5
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 39.39999997615814
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 44.200000047683716
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 43.699999928474426
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 47
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 44.5
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 51.800000071525574
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 43.59999990463257
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 52
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 40.800000071525574
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 52.10000002384186
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 29
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 31.799999999813735
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 30.799999999813735
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 33.700000000186265
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 30.199999999254942
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 33.19999999925494
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 30.59999999962747
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 33.39999999944121
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 31.799999999813735
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 35
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 30.299999999813735
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 33.200000000186265
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 31.100000000558794
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 34.40000000037253
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 30.59999999962747
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 33.39999999944121
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 30.100000000558794
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 32.80000000074506
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 29.899999999441206
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 32.59999999962747
+          }
+        ]
+      ],
+      "ten-k-items-one-time": [
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 54
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 160.10000002384186
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 523.6999999284744
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 154.5
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 535.3999999761581
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 167.29999995231628
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 543.8999999761581
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 156.5
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 527.3000000715256
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 157.10000002384186
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 538.3999999761581
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 166.29999995231628
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 543.7999999523163
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 160
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 535.8999999761581
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 151.10000002384186
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 529.6000000238419
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 157.80000007152557
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 542.2000000476837
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 103.90000000037253
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 288.59999999962747
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 109.70000000018626
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 300.5
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 105.40000000037253
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 298.59999999962747
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 106.79999999981374
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 306.79999999981374
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 110
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 310
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 106.59999999962747
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 312.79999999981374
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 110.40000000037253
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 316
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 108.79999999981374
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 294.3999999994412
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 107.3999999994412
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 304.5
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 107.29999999981374
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 307
+          }
+        ]
+      ]
+    },
+    "react": {
+      "one-item-10k-times": [
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 13.600000023841858
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 21.100000023841858
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 17.300000071525574
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 26.300000071525574
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 16.600000023841858
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 33.60000002384186
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 16.59999990463257
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 33.5
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 19.299999952316284
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 36.59999990463257
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 23.299999952316284
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 40.299999952316284
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 11.699999928474426
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 28.100000023841858
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 11.200000047683716
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 26.5
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 11
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 28
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 13.600000023841858
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 30.600000023841858
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 15.400000095367432
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 32.200000047683716
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 18.199999928474426
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 35.09999990463257
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 27.200000047683716
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 44.5
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 18.59999990463257
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 35.799999952316284
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 31
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 48.5
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 26.600000023841858
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 44
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 25.600000023841858
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 42.700000047683716
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 22.600000023841858
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 39.89999997615814
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 19.200000047683716
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 36.200000047683716
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 31.299999952316284
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 48.89999997615814
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 26.399999976158142
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 43.89999997615814
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 20
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 36.5
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 13.199999999254942
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.799999999813735
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.799999999813735
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.40000000037253
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.599999999627471
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.59999999962747
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.799999999813735
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.5
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 14.5
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 19.799999999813735
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 13.300000000745058
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 18.200000000186265
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 14.700000000186265
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 19.40000000037253
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 13
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.90000000037253
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 13.100000000558794
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.90000000037253
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 13.600000000558794
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 18.600000000558794
+          }
+        ]
+      ],
+      "ten-k-items-one-time": [
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 66
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 535.8999999761581
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 59.700000047683716
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 529.7000000476837
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 61.60000002384186
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 534
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 65.5
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 539.7000000476837
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 61.799999952316284
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 530.5
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 60.200000047683716
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 542.7000000476837
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 59.299999952316284
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 541.2999999523163
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 61.90000009536743
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 533.4000000953674
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 62.5
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 558.5
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 60.5
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 529.2999999523163
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 47.59999999962747
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 421.5
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 50.299999999813735
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 430.6000000005588
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 51.60000000055879
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 430.40000000037253
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 48.5
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 427.70000000018626
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 49.90000000037253
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 432.09999999962747
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 49.299999999813735
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 428.5
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 50.700000000186265
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 433.5
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 47.200000000186265
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 425.70000000018626
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 51.200000000186265
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 436
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 51.200000000186265
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 434.5
+          }
+        ]
+      ]
+    },
+    "solid": {
+      "one-item-10k-times": [
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 23.600000023841858
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 40.700000047683716
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 24.699999928474426
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 42
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 11.200000047683716
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 28.399999976158142
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 15.5
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 32.300000071525574
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 13.800000071525574
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 30.600000023841858
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 15.100000023841858
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 31.90000009536743
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 17.300000071525574
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 34.200000047683716
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 19.5
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 36.200000047683716
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 22.899999976158142
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 39.60000002384186
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 24.700000047683716
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 41.60000002384186
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 65.40000009536743
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 502.10000002384186
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 62.39999997615814
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 513.5
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 56.60000002384186
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 507.7000000476837
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 58.39999997615814
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 488.8000000715256
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 57.800000071525574
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 509.60000002384186
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 80.30000007152557
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 531
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 60.10000002384186
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 498.10000002384186
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 59.89999997615814
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 503.10000002384186
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 57.700000047683716
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 498.8000000715256
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 55.5
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 485.39999997615814
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 18
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 26.899999976158142
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 13.099999904632568
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 21.899999976158142
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 10.199999928474426
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 18.799999952316284
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.799999952316284
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 22.09999990463257
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 21
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 19.299999952316284
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 28.299999952316284
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 16.600000023841858
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 27.699999928474426
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 18.300000071525574
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 27.800000071525574
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 19.5
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 28.600000023841858
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 20.699999928474426
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 30.59999990463257
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.099999999627471
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 16.59999999962747
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 14
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 19.399999999441206
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 14.600000000558794
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 19.700000000186265
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 14.399999999441206
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 18.899999999441206
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.099999999627471
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.59999999962747
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 14.299999999813735
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 19
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.200000000186265
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.100000000558794
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.200000000186265
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 16.800000000745058
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.899999999441206
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.59999999962747
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.599999999627471
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.199999999254942
+          }
+        ]
+      ],
+      "ten-k-items-one-time": [
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 60
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 521.8999999761581
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 64.60000002384186
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 533.7000000476837
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 64.19999992847443
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 546.2999999523163
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 60.89999997615814
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 545.8999999761581
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 62.60000002384186
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 538.1000000238419
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 64.20000004768372
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 539.4000000953674
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 65.89999997615814
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 555.2000000476837
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 60.200000047683716
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 540.2000000476837
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 62
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 543
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 65
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 528
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.700000000186265
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.299999999813735
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 13.899999999441206
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 18.5
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 11.799999999813735
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 16.5
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 13.200000000186265
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.90000000037253
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 14.200000000186265
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 19
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.200000000186265
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.600000000558794
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.299999999813735
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.299999999813735
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.199999999254942
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.799999999813735
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 18
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.300000000745058
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.200000000186265
+          }
+        ]
+      ]
+    },
+    "svelte": {
+      "one-item-10k-times": [
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 18.699999928474426
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 35.59999990463257
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 19.600000023841858
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 36.60000002384186
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 21.399999976158142
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 38.5
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 24.799999952316284
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 41.799999952316284
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 11.300000071525574
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 28.300000071525574
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 13.100000023841858
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 30.100000023841858
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 16.399999976158142
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 33.299999952316284
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 17.899999976158142
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 34.800000071525574
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 20.300000071525574
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 37
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 22.600000023841858
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 39.5
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 22.5
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 39.90000009536743
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 11
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 28
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 10.299999952316284
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 26.5
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 20.299999952316284
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 37.60000002384186
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 17.100000023841858
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 34.10000002384186
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 14.799999952316284
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 31.699999928474426
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 14.799999952316284
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 31.899999976158142
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 13.5
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 30.600000023841858
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.5
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 29.300000071525574
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 10.5
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 27
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 13.5
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 18
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.299999999813735
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.5
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.600000000558794
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 18.100000000558794
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 13.5
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 18.399999999441206
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 13
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.799999999813735
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.5
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.200000000186265
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 14.400000000372529
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 20.200000000186265
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.5
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.59999999962747
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 11.5
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 16
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 14.299999999813735
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 19.09999999962747
+          }
+        ]
+      ],
+      "ten-k-items-one-time": [
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 51.800000071525574
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 92.30000007152557
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 59.60000002384186
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 106.40000009536743
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 56.300000071525574
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 106.5
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 59.89999997615814
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 105
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 56.200000047683716
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 106.30000007152557
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 58.5
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 102.60000002384186
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 56.299999952316284
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 103.20000004768372
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 58.5
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 107.39999997615814
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 59.60000002384186
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 107.20000004768372
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 59.10000002384186
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 104.80000007152557
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 11.799999999813735
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 16.40000000037253
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.900000000372529
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.600000000558794
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.5
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.40000000037253
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 11.799999999813735
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 16.5
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 13.400000000372529
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.90000000037253
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.799999999813735
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.899999999441206
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.600000000558794
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.299999999813735
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.400000000372529
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.100000000558794
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 13.200000000186265
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 18.600000000558794
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.100000000558794
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.600000000558794
+          }
+        ]
+      ]
+    },
+    "vue": {
+      "one-item-10k-times": [
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 21.799999952316284
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 38.799999952316284
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 24
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 41
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 9.799999952316284
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 27.100000023841858
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.5
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 29.399999976158142
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 16.299999952316284
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 33.39999997615814
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 18.90000009536743
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 35.800000071525574
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 22.700000047683716
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 39.60000002384186
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 24.799999952316284
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 41.699999928474426
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 10.900000095367432
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 27
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.900000095367432
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 29.90000009536743
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 25.299999952316284
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 42.700000047683716
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.700000047683716
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 28.5
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 19.90000009536743
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 37
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 14
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 28.299999952316284
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 16.300000071525574
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 33.39999997615814
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 13
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 28.300000071525574
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 18.899999976158142
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 36
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 15.100000023841858
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 31.899999976158142
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.800000071525574
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 28.300000071525574
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 20.600000023841858
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 37.700000047683716
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 21.799999952316284
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 30.699999928474426
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 15.5
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 28.100000023841858
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 17.100000023841858
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 34.300000071525574
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 24.299999952316284
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 41.699999928474426
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 24.09999990463257
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 41.299999952316284
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 17.300000071525574
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 34.5
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.5
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 29.40000009536743
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 13.599999904632568
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 26.399999976158142
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 19.299999952316284
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 36.5
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 17.5
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 35.10000002384186
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.299999999813735
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.200000000186265
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 13.5
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 18
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 13.700000000186265
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 18.40000000037253
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 14.200000000186265
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 19.5
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.5
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.299999999813735
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 14.700000000186265
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 19.299999999813735
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 14.100000000558794
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 18.799999999813735
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 13.899999999441206
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 18.59999999962747
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.100000000558794
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 16.700000000186265
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 13.5
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 18.200000000186265
+          }
+        ]
+      ],
+      "ten-k-items-one-time": [
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 59.200000047683716
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 101.39999997615814
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 57.299999952316284
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 102.10000002384186
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 58.300000071525574
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 105
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 63
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 116.89999997615814
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 59
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 107.20000004768372
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 58.799999952316284
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 103
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 54.800000071525574
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 99.20000004768372
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 61.89999997615814
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 109.10000002384186
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 54.5
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 102.30000007152557
+          }
+        ],
+        [
+          {
+            "name": "10k items, 1 update:start",
+            "startTime": 62.200000047683716
+          },
+          {
+            "name": "10k items, 1 update:done",
+            "startTime": 108.20000004768372
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 11.900000000372529
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 16.200000000186265
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.400000000372529
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.200000000186265
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 13.099999999627471
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.699999999254942
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 14.200000000186265
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 19
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 13.699999999254942
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 18.5
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.199999999254942
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 16.899999999441206
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 13.799999999813735
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 18.700000000186265
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.099999999627471
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 16.700000000186265
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 12.900000000372529
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 17.700000000186265
+          }
+        ],
+        [
+          {
+            "name": "1 Item, 10k updates:start",
+            "startTime": 14.399999999441206
+          },
+          {
+            "name": "1 Item, 10k updates:done",
+            "startTime": 20.299999999813735
+          }
+        ]
+      ]
+    }
+  }
+}

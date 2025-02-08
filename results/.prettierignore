@@ -1,3 +1,11 @@
+# Prettier is wrong HTML
+*.html
+
+# Unneeded
+*.yaml
+*.yml
+*.md
+
 # unconventional js
 /blueprints/*/files/
 

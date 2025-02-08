@@ -1,79 +1,56 @@
+import { dataOf } from '#utils';
+import { Visualize } from '#components/visualize.gts';
+import type { Model } from '#routes/results.ts';
 import type { TOC } from '@ember/component/template-only';
 
-import type { Results } from './types.ts';
-import { assert } from '@ember/debug';
+const msInOneHz = 1_000;
 
-function scaleFactor(results: Results) {
-  const fastest = results[0];
-  assert(`Results are empty`, fastest);
+function msOfFrameAt(hz: number) {
+  const result = msInOneHz / hz;
 
-  const scale = fastest.speed;
-  return (ms: number) => ms / scale;
+  return Math.round(result * 100) / 100;
 }
 
-function round(ms: number) {
-  return Math.round(ms * 100) / 100;
-}
-
-export const AnimateResults = <template>
-  <section class="languages-container">
-    <h2>{{@name}}</h2>
-
-    <table>
-      <thead></thead>
-
-      <tbody>
-        {{#let (scaleFactor @results) as |scaleTime|}}
-          {{#each @results as |fw|}}
-            <tr>
-              <td>
-                <div class="name">
-                  <img src={{fw.logo}} />
-                  <span>{{fw.name}}</span>
-                </div>
-              </td>
-              <td class="time">{{round fw.speed}}ms</td>
-              <td>
-                <svg width="400" height="48" viewBox="0 0 400 48">
-                  <circle cx="50" cy="24" r="10" fill={{fw.color}}>
-                    <animate
-                      attributeName="cx"
-                      values="50; 350; 50"
-                      keyTimes="0; 0.5; 1"
-                      dur="{{scaleTime fw.speed}}s"
-                      repeatCount="indefinite"
-                    />
-                  </circle>
-                </svg>
-              </td>
-            </tr>
-          {{/each}}
-        {{/let}}
-      </tbody>
-    </table>
-  </section>
-
-  <style>
-    tr td {
-      border-bottom: 1px solid lightgray;
-    }
-    .time {
-      font-style: italic;
-      padding: 0 0.5rem;
-    }
-    .name {
-      display: grid;
-      justify-items: center;
-
-      img {
-        max-height: 48px;
-      }
-      span {
-        font-size: 0.8rem;
-      }
-    }
-  </style>
+const Info = <template>
+  Tested on
+  {{@date}}
+  with:
+  <ul>
+    <li>
+      {{@env.machine.os.name}}
+      {{@env.machine.os.version}}
+      w/
+      {{@env.machine.cpu}}
+      /
+      {{@env.machine.ram}}
+      RAM
+    </li>
+    <li>
+      {{@env.browser.name}}
+      {{@env.browser.version}}
+      (non-headless)
+    </li>
+    <li>
+      {{@env.monitor.hz}}hz Monitor (1 frame =
+      {{msOfFrameAt @env.monitor.hz}}ms)
+    </li>
+  </ul>
 </template> satisfies TOC<{
-  name: string;
-  results: Results;
+  date: Model['data']['date'];
+  env: Model['data']['environment'];
 }>;
+
+export default <template>
+  <Info @date={{@model.data.date}} @env={{@model.data.environment}} />
+
+  <div class="all-results">
+    <Visualize
+      @name="1 item, 10k updates"
+      @results={{dataOf @model.data.results "one-item-10k-times"}}
+    />
+    <Visualize
+      @name="10k items, 1 update each (sequential)"
+      @results={{dataOf @model.data.results "ten-k-items-one-time"}}
+    />
+  </div>
+</template> satisfies TOC<{ model: Model }>;
