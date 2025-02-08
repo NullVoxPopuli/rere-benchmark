@@ -12,7 +12,12 @@ function infoFor(name: string): Info {
 
 export const FrameworkInfo = <template>
   {{#let (infoFor @name) as |info|}}
-    <a href={{info.url}} class="fw-info" target="_blank" rel="noopener noreferrer">
+    <a
+      href={{info.url}}
+      class="fw-info"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       <img alt="" src={{info.logo}} />
       <span>{{info.name}}</span>
     </a>
