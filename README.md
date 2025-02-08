@@ -3,6 +3,11 @@
 Very wip
 
 TODO:
+- More Benches:
+  - 10k, 5, 10, 25% updates (random)
+  - db mon + chat
+  - 
+
 - implement the two tests for each of the starter frameworks
   - ember
   - react
