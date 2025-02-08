@@ -1,22 +1,56 @@
-import { dataOf } from './components/reshape.ts';
-import { Visualize } from './components/visualize.gts';
+import { dataOf } from '#utils';
+import { Visualize } from '#components/visualize.gts';
+import type { Model } from '#routes/results.ts';
+import type { TOC } from '@ember/component/template-only';
 
-<template>
-  Tested on 2025-02-07 on
+const msInOneHz = 1_000;
+
+function msOfFrameAt(hz: number) {
+  const result = msInOneHz / hz;
+
+  return Math.round(result * 100) / 100;
+}
+
+const Info = <template>
+  Tested on
+  {{@date}}
+  with:
   <ul>
-    <li>Ubuntu 24.04 w/ AMD Ryzen 9 7900X / 64GB RAM</li>
-    <li>Google Chrome 133.0.6943.53 (non-headless)</li>
-    <li>240hz Monitor (1 frame = 4.17ms)</li>
+    <li>
+      {{@env.machine.os.name}}
+      {{@env.machine.os.version}}
+      w/
+      {{@env.machine.cpu}}
+      /
+      {{@env.machine.ram}}
+      RAM
+    </li>
+    <li>
+      {{@env.browser.name}}
+      {{@env.browser.version}}
+      (non-headless)
+    </li>
+    <li>
+      {{@env.monitor.hz}}hz Monitor (1 frame =
+      {{msOfFrameAt @env.monitor.hz}}ms)
+    </li>
   </ul>
+</template> satisfies TOC<{
+  date: Model['data']['date'];
+  env: Model['data']['environment'];
+}>;
+
+export default <template>
+  <Info @date={{@model.data.date}} @env={{@model.data.environment}} />
 
   <div class="all-results">
     <Visualize
       @name="1 item, 10k updates"
-      @results={{dataOf "one-item-10k-times"}}
+      @results={{dataOf @model.data.results "one-item-10k-times"}}
     />
     <Visualize
       @name="10k items, 1 update each (sequential)"
-      @results={{dataOf "ten-k-items-one-time"}}
+      @results={{dataOf @model.data.results "ten-k-items-one-time"}}
     />
   </div>
-</template>
+</template> satisfies TOC<{ model: Model }>;

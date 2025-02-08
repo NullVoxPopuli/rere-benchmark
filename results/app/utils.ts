@@ -1,6 +1,6 @@
 import { assert } from '@ember/debug';
-import type { Mark } from '#types';
-import { frameworks } from '../../frameworks.ts';
+import type { Mark, ResultData } from '#types';
+import { frameworks } from './frameworks.ts';
 
 function averageOf(arrayOfMarks: Array<[Mark, Mark]>) {
   const durations = [];
@@ -10,6 +10,7 @@ function averageOf(arrayOfMarks: Array<[Mark, Mark]>) {
     const done = pair.find((x) => x.name.endsWith('done'));
 
     if (!done || !start) {
+      console.warn(`Dataset could have missing data`);
       console.log(arrayOfMarks);
       continue;
     }
@@ -22,7 +23,7 @@ function averageOf(arrayOfMarks: Array<[Mark, Mark]>) {
   return total / durations.length;
 }
 
-export function dataOf(benchName: string) {
+export function dataOf(results: ResultData, benchName: string) {
   const list = [];
 
   for (const [framework, benches] of Object.entries(results)) {

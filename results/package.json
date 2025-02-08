@@ -87,6 +87,8 @@
   "type": "module",
   "imports": {
     "#types": "./app/types.ts",
+    "#utils": "./app/utils.ts",
+    "#routes/*": "./app/routes/*",
     "#components/*": "./app/components/*"
   },
   "exports": {

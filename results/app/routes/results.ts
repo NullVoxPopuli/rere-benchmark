@@ -8,7 +8,7 @@ interface Params {
   q: string;
 }
 
-interface Model {
+export interface Model {
   data: ResultSet;
 }
 
@@ -21,10 +21,8 @@ export default class Results extends Route<Model> {
 
   beforeModel(transition: Transition) {
     const { to } = transition;
-    console.log(to, to?.queryParams);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
     if (!(to as any)?.queryParams?.q) {
-      console.log('ah!');
       transition.abort();
       this.router.transitionTo('error', {
         queryParams: {
@@ -34,15 +32,26 @@ export default class Results extends Route<Model> {
     }
   }
 
+  // SAFETY: see note about JS Language mishap
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   async model(params: Record<string, string>): Promise<Model> {
     // SAFETY: verified in beforeModel
     const { q } = params as unknown as Params;
 
-    const response = await fetch(`/results/${q}.json`);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const json = await response.json();
+    try {
+      const response = await fetch(`/results/${q}.json`);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const json = await response.json();
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    return { data: json };
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      return { data: json };
+    } catch (e) {
+      console.error(e);
+      // SAFETY: don't care -- the fact that people can throw non-errors is a mistake
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      this.router.transitionTo('error', { queryParams: { error: e.message } });
+    }
   }
 }

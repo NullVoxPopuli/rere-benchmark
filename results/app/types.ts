@@ -23,12 +23,14 @@ export interface ResultSet {
    */
   date: string;
   environment: {
-    os: {
-      name: string;
-      version: string;
+    machine: {
+      os: {
+        name: string;
+        version: string;
+      };
+      cpu: string;
+      ram: string;
     };
-    cpu: string;
-    ram: string;
     browser: {
       name: string;
       version: string;
