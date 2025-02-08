@@ -10,7 +10,11 @@ export const Header = <template>
         History
       </LinkTo>
       |
-      <a href="https://github.com/NullVoxPopuli/rere-benchmark">
+      <a
+        href="https://github.com/NullVoxPopuli/rere-benchmark"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         GitHub
       </a>
     </span>
