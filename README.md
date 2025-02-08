@@ -1,5 +1,9 @@
 # rere-benchmark
 
+> [!NOTE]  
+> This whole repo should be taken with a grain of salt right now. The benchmarks are still being developed. 
+
+
 This is the Reactivity and Rendering Benchmark for frontend application and component frameworks.
 
 - [Motivation](#motivation) 
@@ -9,9 +13,11 @@ This is the Reactivity and Rendering Benchmark for frontend application and comp
 
 ## Motivation
 
-
+TODO: Write this
 
 ## Methodology
+
+TODO: Write this
 
 
 ## Adding a new framework
@@ -23,20 +29,12 @@ This is the Reactivity and Rendering Benchmark for frontend application and comp
 4. Open a PR <3 
 
 
-Very wip
+## TODOs
 
-TODO:
 - More Benches:
   - 10k, 5, 10, 25% updates (random)
-  - db mon + chat
-  - 
+  - db mon + chat + typing-responsiveness
 
-- implement the two tests for each of the starter frameworks
-  - ember
-  - react
-  - solid
-  - svelte
-  - vue
 - create lints 
   - we don't want to prescribe pnpm vs npm vs yarn, so folks should provide an
     - install.sh and a build.sh?
@@ -44,9 +42,8 @@ TODO:
 
 - create tests
   - we need to ensure folks don't cheat
+  - how to do this? Should we just trust code review?
 
 - create ci check to comment back on the PR if the src/runner can't access the build:prod output
-- graph the results
-- implement a monthly CI cron to remind me to run the tests on in a controlled environment (not CI)
 - document the methodology
 - document how to add more frameworks
