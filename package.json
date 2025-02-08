@@ -3,6 +3,7 @@
   "type": "module",
   "scripts": {
     "start": "cd ./results; pnpm start",
+    "copy": "node --experimental-strip-types ./src/runner/copy.ts",
     "bench": "node --experimental-strip-types ./src/runner/index.ts"
   },
   "packageManager": "pnpm@10.2.0",
@@ -10,6 +11,7 @@
     "node": ">= 22.11.0"
   },
   "devDependencies": {
+    "@clack/prompts": "^0.10.0",
     "@tsconfig/node22": "^22.0.0",
     "@tsconfig/strictest": "^2.0.5",
     "@types/node": "^22.13.1",

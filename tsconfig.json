@@ -5,5 +5,8 @@
     "allowImportingTsExtensions": true,
     // Silly incorrectly published types and/or packages...
     "esModuleInterop": true,
+
+    // Linting
+    "noImplicitReturns": false,
   }
 }
