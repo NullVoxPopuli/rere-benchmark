@@ -8,7 +8,10 @@ export const info = await getInfo();
 
 async function read() {
   if (!existsSync(filePath)) {
-    return {};
+    return {
+      ...info,
+      results: {},
+    };
   }
 
   let buffer = await fs.readFile(filePath);

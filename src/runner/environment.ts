@@ -5,13 +5,12 @@ import * as si from 'systeminformation';
 import bs from 'byte-size';
 import assert from 'node:assert';
 
-const now = new Date();
-
 const whichGoogleChrome = await $`which google-chrome`;
 
 export const chromeLocation = whichGoogleChrome.stdout.trim();
+export const yyyymmdd = new Date().toJSON().split('T')[0];
 
-export const yyyymmdd = `${now.getUTCFullYear()}-${now.getUTCMonth() + 1}-${now.getUTCDay() + 1}`;
+assert(yyyymmdd, `Failed to find date`);
 
 function normalizeCPUName(cpu: si.Systeminformation.CpuData) {
   let { brand, manufacturer } = cpu;

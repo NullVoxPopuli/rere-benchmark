@@ -3,17 +3,29 @@ import { $ } from 'execa';
 import { COUNT, HEADLESS } from './arg.ts';
 import { getTests } from './repo.ts';
 import { serve } from './serve.ts';
-import { addResult } from './results.ts';
+import { info, addResult } from './results.ts';
 import assert from 'node:assert';
-
+import * as clack from '@clack/prompts';
 import { chromeLocation } from './environment.ts';
+import { inspect } from 'node:util';
+
+console.info(inspect(info, { showHidden: false, depth: null, colors: true }));
+
+let letsgo = await clack.confirm({
+  message: 'Does this information look correct?',
+});
+
+if (!letsgo || clack.isCancel(letsgo)) {
+  clack.log.info('Exiting');
+  process.exit(1);
+}
 
 async function getMarks(browser: Browser, url: string) {
   const page = await browser.newPage();
 
   await page.goto(url, { waitUntil: 'load' });
 
-  // TODO: is there a way to wait for teh page to caln down?
+  // TODO: is there a way to wait for the page to calmn down?
   await page.waitForNetworkIdle();
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
