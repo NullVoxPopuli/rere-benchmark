@@ -25,7 +25,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.26.7",
-    "@babel/eslint-parser": "^7.26.5",
     "@babel/plugin-transform-runtime": "^7.25.9",
     "@babel/plugin-transform-typescript": "^7.26.7",
     "@babel/runtime": "^7.26.7",
@@ -37,7 +36,6 @@
     "@embroider/core": "3.5.1-unstable.0f6c294",
     "@embroider/test-setup": "4.0.1-unstable.0f6c294",
     "@embroider/vite": "0.2.2-unstable.0f6c294",
-    "@eslint/js": "^9.17.0",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
     "@glint/core": "1.4.1-unstable.34c4510",
@@ -46,11 +44,8 @@
     "@glint/template": "1.4.1-unstable.34c4510",
     "@rollup/plugin-babel": "^6.0.4",
     "@tsconfig/ember": "^3.0.8",
-    "@types/eslint__js": "^8.42.3",
     "@types/qunit": "^2.19.12",
     "@types/rsvp": "^4.0.9",
-    "@typescript-eslint/eslint-plugin": "^8.23.0",
-    "@typescript-eslint/parser": "^8.23.0",
     "babel-plugin-ember-template-compilation": "^2.3.0",
     "concurrently": "^9.1.2",
     "decorator-transforms": "^2.3.0",
@@ -58,21 +53,17 @@
     "ember-cli": "~6.1.0",
     "ember-cli-babel": "^8.2.0",
     "ember-cli-htmlbars": "^6.3.0",
+    "ember-eslint": "^0.0.2",
     "ember-load-initializers": "^3.0.1",
     "ember-modifier": "^4.2.0",
     "ember-page-title": "^8.2.3",
     "ember-qunit": "^8.1.1",
     "ember-resolver": "^13.1.0",
     "ember-route-template": "^1.0.3",
-    "ember-source": "~6.1.0",
+    "ember-source": "6.4.0-alpha.1",
     "ember-template-imports": "^4.2.0",
     "ember-template-lint": "^6.1.0",
     "eslint": "^9.19.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-ember": "^12.5.0",
-    "eslint-plugin-n": "^17.15.1",
-    "eslint-plugin-prettier": "^5.2.1",
-    "eslint-plugin-qunit": "^8.1.2",
     "globals": "^15.14.0",
     "loader.js": "^4.7.0",
     "prettier": "github:prettier/prettier",
@@ -81,7 +72,6 @@
     "qunit-dom": "^3.4.0",
     "tracked-built-ins": "^3.4.0",
     "typescript": "^5.5.4",
-    "typescript-eslint": "^8.23.0",
     "vite": "^5.4.11"
   },
   "engines": {
@@ -93,6 +83,11 @@
   "ember-addon": {
     "type": "app",
     "version": 2
+  },
+  "type": "module",
+  "imports": {
+    "#types": "./app/types.ts",
+    "#components/*": "./app/components/*"
   },
   "exports": {
     "./tests/*": "./tests/*",

@@ -1,5 +1,28 @@
 # rere-benchmark
 
+This is the Reactivity and Rendering Benchmark for frontend application and component frameworks.
+
+- [Motivation](#motivation) 
+- [Methodology](#methodology)
+- [Adding a new framework](#adding-a-new-framework)
+
+
+## Motivation
+
+
+
+## Methodology
+
+
+## Adding a new framework
+
+1. Add relevant information to ./results/app/frameworks.ts
+2. Add the framework's logo to `./results/public/`
+2. `mkdir frameworks/$frameworkName`
+3. For each benchmark, create a separate project in `frameworks/$frameworkName` that implements that benchmark
+4. Open a PR <3 
+
+
 Very wip
 
 TODO:
