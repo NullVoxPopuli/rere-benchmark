@@ -84,7 +84,7 @@ export const helpers = {
     },
   },
   '10ki1u-25p': {
-    name: '10k items, 1 update',
+    name: '10k items, 1 update on 25% of the items',
     verify: () => {
       let result = document.querySelector('body').textContent.trim();
 
