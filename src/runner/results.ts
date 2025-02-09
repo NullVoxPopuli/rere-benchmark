@@ -21,7 +21,6 @@ async function read() {
 }
 
 async function write(json: any) {
-  console.log(`Saving to ${filePath}`);
   await fs.writeFile(filePath, JSON.stringify(json, null, 2));
 }
 

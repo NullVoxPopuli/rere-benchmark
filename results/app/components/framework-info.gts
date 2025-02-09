@@ -18,7 +18,7 @@ export const FrameworkInfo = <template>
       target="_blank"
       rel="noopener noreferrer"
     >
-      <img alt="" src={{info.logo}} />
+      <img alt="" height="32" style="max-width: 32px" src={{info.logo}} />
       <span>{{info.name}}</span>
     </a>
   {{/let}}
