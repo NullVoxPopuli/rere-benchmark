@@ -31,6 +31,18 @@ const benchmarks = [
     app: 'ten-k-items-one-time',
     query: '',
   },
+  // Experiments
+  {
+    name: '10k items, 1 update each (sequentially, array of cells)',
+    app: 'ten-k-items-one-time',
+    query: '?variant=array-of-cells',
+  },
+  {
+    name: '10k items, 1 update each (sequentially, one signal)',
+    app: 'ten-k-items-one-time',
+    query: '?variant=array-one-signal',
+  },
+  // End Experiments
   {
     name: '10k items 1 update on 5% (random)',
     app: 'ten-k-items-one-time',
