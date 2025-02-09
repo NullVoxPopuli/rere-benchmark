@@ -66,6 +66,7 @@ const variant = new URLSearchParams(window.location.search).get('variant');
 function trackedArray(initialData: Array<number>) {
   console.log(`Creating ${variant}`);
   switch (variant) {
+    case 'proposed':
     case 'array-of-cells': {
       return initialData.map((d) => new Cell<number>(d));
     }
@@ -99,6 +100,7 @@ class Test extends Component {
   start = () => {
     console.log(`Starting ${variant}`);
     switch (variant) {
+      case 'proposed':
       case 'array-of-cells':
         test.run((i) => {
           this.items[i].set(i);

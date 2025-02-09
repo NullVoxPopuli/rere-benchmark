@@ -27,15 +27,15 @@ const benchmarks = [
     query: '?updates=1000000',
   },
   {
-    name: '10k items, 1 update each (sequentially)',
+    name: '10k items, 1 update each (sequentially, polyfilled)',
     app: 'ten-k-items-one-time',
-    query: '',
+    query: '?variant=default',
   },
   // Experiments
   {
-    name: '10k items, 1 update each (sequentially, array of cells)',
+    name: '10k items, 1 update each (sequentially)',
     app: 'ten-k-items-one-time',
-    query: '?variant=array-of-cells',
+    query: '?variant=proposed',
   },
   {
     name: '10k items, 1 update each (sequentially, one signal)',
@@ -46,12 +46,17 @@ const benchmarks = [
   {
     name: '10k items 1 update on 5% (random)',
     app: 'ten-k-items-one-time',
-    query: '?updates=500&random=true',
+    query: '?updates=500&random=true&variant=proposed',
+  },
+  {
+    name: '10k items 1 update on 10% (random)',
+    app: 'ten-k-items-one-time',
+    query: '?updates=1000&random=true&variant=proposed',
   },
   {
     name: '10k items 1 update on 25% (random)',
     app: 'ten-k-items-one-time',
-    query: '?updates=2500&random=true',
+    query: '?updates=2500&random=true&variant=proposed',
   },
 ];
 
