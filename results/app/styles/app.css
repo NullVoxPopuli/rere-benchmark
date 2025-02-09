@@ -1,3 +1,14 @@
+@media (width <= 450px) {
+  .hide-sm {
+    display: none;
+  }
+}
+
+h1 {
+  margin-top: 0;
+  margin-bottom: 0.125rem;
+}
+
 body {
   display: grid;
   gap: 0.5rem;

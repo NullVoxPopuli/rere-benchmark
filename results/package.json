@@ -31,8 +31,6 @@
     "@babel/plugin-transform-typescript": "^7.26.7",
     "@babel/runtime": "^7.26.7",
     "@ember/optional-features": "^2.2.0",
-    "@ember/string": "^4.0.0",
-    "@ember/test-helpers": "^4.0.5",
     "@embroider/compat": "3.8.1-unstable.0f6c294",
     "@embroider/config-meta-loader": "0.0.1-unstable.0f6c294",
     "@embroider/core": "3.5.1-unstable.0f6c294",
@@ -59,22 +57,18 @@
     "ember-load-initializers": "^3.0.1",
     "ember-modifier": "^4.2.0",
     "ember-page-title": "^8.2.3",
-    "ember-qunit": "^8.1.1",
     "ember-resolver": "^13.1.0",
     "ember-route-template": "^1.0.3",
     "ember-source": "6.4.0-alpha.1",
-    "ember-template-imports": "^4.2.0",
     "ember-template-lint": "^6.1.0",
     "eslint": "^9.19.0",
-    "globals": "^15.14.0",
     "loader.js": "^4.7.0",
     "prettier": "github:prettier/prettier",
     "prettier-plugin-ember-template-tag": "^2.0.4",
-    "qunit": "^2.24.1",
-    "qunit-dom": "^3.4.0",
     "tracked-built-ins": "^3.4.0",
     "typescript": "^5.5.4",
-    "vite": "^5.4.11"
+    "vite": "^5.4.11",
+    "vite-plugin-virtual": "^0.3.0"
   },
   "engines": {
     "node": ">= 18"
