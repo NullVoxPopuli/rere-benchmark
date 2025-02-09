@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react'
 import { helpers } from 'common';
 
+let test = helpers.oneItem10kUpdates();
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(test.getData());
 
   useEffect(() => {
-    helpers['1i10ku'].run((i) => setCount(i));
+    test.run((i: number) => setCount(i));
   }, [])
 
-  return <output>{count}</output>
+  return <output>{test.formatItem(count)}</output>
 }
 
 export default App

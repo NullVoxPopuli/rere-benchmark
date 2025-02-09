@@ -28,6 +28,22 @@ TODO: Write this
 3. For each benchmark, create a separate project in `frameworks/$frameworkName` that implements that benchmark
 4. Open a PR <3 
 
+## Renning the Benchmark
+
+1. Clone the repo
+2. `cd` into the cloned repo
+3. With a terminal on your fastest monitor, run:
+
+    ```bash
+    pnpm install
+    pnpm bench
+    ```
+
+4. Wait for it to finish    
+5. View results:
+    1. `cd results`
+    2. `pnpm install`
+    3. `pnpm start`
 
 ## TODOs
 

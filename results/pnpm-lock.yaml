@@ -7,10 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      ember-eslint-parser:
-        specifier: ^0.5.9
-        version: 0.5.9(@babel/core@7.26.8)(@typescript-eslint/parser@8.23.0(eslint@9.20.0)(typescript@5.7.3))(eslint@9.20.0)
     devDependencies:
       '@babel/core':
         specifier: ^7.26.7

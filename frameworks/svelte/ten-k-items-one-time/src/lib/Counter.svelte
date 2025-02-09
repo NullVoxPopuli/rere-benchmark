@@ -1,14 +1,14 @@
 <script lang="ts">
   import { helpers } from 'common';
-  let items = $state(Array(10_000));
+
+  let test = helpers.tenKitems1UpdateEach();
+  let items = $state(test.getData());
 
   $effect(() => {
-    helpers['10ki1u'].run((i) => {
+    test.run((i) => {
       items[i] = i;
     });
   });
 </script>
 
-{#each items as item}
-  {`${ item } `}
-{/each}
+{#each items as item}{test.formatItem(item)}{/each}

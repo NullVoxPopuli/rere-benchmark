@@ -1,6 +1,8 @@
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+// Come on, node
+import killable from 'killable';
 
 const mimeTypes: Record<string, string> = {
   '.html': 'text/html',
@@ -47,6 +49,7 @@ export function serve(directory: string, port = 3000): Promise<http.Server> {
 
   return new Promise((resolve) => {
     server.listen(port, () => {
+      killable(server);
       resolve(server);
     });
   });

@@ -3,13 +3,17 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { helpers } from 'common';
 
-class Test extends Component {
-  @tracked value = 0;
+const test = helpers.oneItem10kUpdates();
 
-  start = () => helpers['1i10ku'].run((i) => (this.value = i));
+class Test extends Component {
+  @tracked value = test.getData();
+
+  start = () => {
+    test.run((i) => (this.value = i));
+  };
 
   <template>
-    <output>{{this.value}}</output>
+    <output>{{test.formatItem this.value}}</output>
     {{(this.start)}}
   </template>
 }

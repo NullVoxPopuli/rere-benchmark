@@ -3,6 +3,7 @@
   "type": "module",
   "scripts": {
     "start": "cd ./results; pnpm start",
+    "copy": "node --experimental-strip-types ./src/runner/copy.ts",
     "bench": "node --experimental-strip-types ./src/runner/index.ts"
   },
   "packageManager": "pnpm@10.2.0",
@@ -10,13 +11,17 @@
     "node": ">= 22.11.0"
   },
   "devDependencies": {
+    "@clack/prompts": "^0.10.0",
     "@tsconfig/node22": "^22.0.0",
     "@tsconfig/strictest": "^2.0.5",
     "@types/node": "^22.13.1",
+    "byte-size": "^9.0.1",
     "execa": "^9.5.2",
     "globby": "^14.0.2",
+    "killable": "^1.0.1",
     "prettier": "github:prettier/prettier",
     "puppeteer": "^24.2.0",
+    "systeminformation": "^5.25.11",
     "typescript": "^5.7.3"
   }
 }
