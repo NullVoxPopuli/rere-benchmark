@@ -1,5 +1,10 @@
 import { qpNum, tryVerify } from './utils.js';
 
+/**
+ * @typedef {import('./types.ts').BenchTest<number>} NumberTest
+ *
+ * @implements {NumberTest}
+ */
 export class OneItem {
   /**
    * @type {string}

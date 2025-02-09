@@ -1,5 +1,10 @@
 import { qpBool, qpNum, tryVerify } from './utils.js';
 
+/**
+ * @typedef {import('./types.ts').BenchTest<Array<number | undefined>>} ArrayTest
+ *
+ * @implements {ArrayTest}
+ */
 export class TenKItems {
   name = '10k items, 1 update';
 
