@@ -4,7 +4,10 @@ import { $ } from 'execa';
 import { COUNT, HEADLESS, SKIP_BUILD } from './arg.ts';
 import { benchNames, frameworks } from './repo.ts';
 import { serve } from './serve.ts';
-import { addResult, clearPriorResults } from './results.ts';
+import {
+  addResult,
+  prepareForResults as prepareForResults,
+} from './results.ts';
 import assert from 'node:assert';
 import { chromeLocation } from './environment.ts';
 import { getBenchInfo } from './bench-info.ts';
@@ -24,7 +27,7 @@ async function getMarks(browser: Browser, url: string) {
   const performanceMarks = await page.evaluate(() => {
     return performance.getEntriesByType('mark').map((entry) => ({
       name: entry.name,
-      startTime: entry.startTime,
+      at: entry.startTime,
     }));
   });
 
@@ -65,8 +68,6 @@ for (let framework of info.frameworks) {
   for (let bench of info.benches) {
     let dir = join('frameworks', framework, bench.app);
 
-    await clearPriorResults(framework, bench.name);
-
     clack.log.info(`Starting server for ${bench.name} in ${dir}/dist`);
 
     // TODO: make the output directory configurable
@@ -84,6 +85,8 @@ for (let framework of info.frameworks) {
         : `http://${address.address === '::' ? 'localhost' : address.address}:${address.port}`;
 
     url += '/' + bench.query;
+
+    await prepareForResults(framework, bench.name, bench.query);
 
     clack.log.info(`Server up at ${url}`);
 

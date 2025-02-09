@@ -22,7 +22,7 @@ function averageOf(arrayOfMarks: Array<[Mark, Mark]>) {
       console.log(arrayOfMarks);
       continue;
     }
-    const duration = done.startTime - start.startTime;
+    const duration = done.at - start.at;
     durations.push(duration);
   }
 
@@ -49,12 +49,11 @@ export function dataOf(results: ResultData, benchName: string) {
       frameworkInfo
     );
 
-    const time = averageOf(benchData);
+    const time = averageOf(benchData.times);
     list.push({
       name: framework,
       speed: time,
       color: frameworkInfo.color,
-      logo: frameworkInfo.logo,
     });
   }
 

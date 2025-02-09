@@ -9,11 +9,14 @@ interface Result {
 
 export interface Mark {
   name: string;
-  startTime: number;
+  at: number;
 }
 export interface ResultData {
   [framework: string]: {
-    [benchName: string]: Array<[Mark, Mark]>;
+    [benchName: string]: {
+      url: string;
+      times: Array<[Mark, Mark]>;
+    };
   };
 }
 
