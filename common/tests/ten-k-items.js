@@ -1,9 +1,9 @@
-import { tryVerify } from './utils.js';
+import { qpBool, qpNum, tryVerify } from './utils.js';
 
 export class TenKItems {
   name = '10k items, 1 update';
 
-  #num = 10_000;
+  #num = qpNum('items', 10_000);
   #totalUpdates;
   #random;
   /**
@@ -11,7 +11,10 @@ export class TenKItems {
    */
   #last;
 
-  constructor({ totalUpdates = 10_000, random = false } = {}) {
+  constructor({
+    totalUpdates = qpNum('updates', 10_000),
+    random = qpBool('random', false),
+  } = {}) {
     this.#totalUpdates = totalUpdates;
     this.#random = random;
   }

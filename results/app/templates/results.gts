@@ -1,16 +1,8 @@
-import { dataOf } from '#utils';
+import { dataOf, msOfFrameAt } from '#utils';
 import { Visualize } from '#components/visualize.gts';
 import type { Model } from '#routes/results.ts';
 import type { TOC } from '@ember/component/template-only';
 import type { ResultData } from '#types';
-
-const msInOneHz = 1_000;
-
-function msOfFrameAt(hz: number) {
-  const result = msInOneHz / hz;
-
-  return Math.round(result * 100) / 100;
-}
 
 const Info = <template>
   Tested on
@@ -46,8 +38,8 @@ function allHave(results: ResultData, key: string) {
 }
 
 const ShowIfAllPresent = <template>
-  {{#if (allHave @results @key)}}
-    <Visualize @name={{@name}} @results={{dataOf @results @key}} />
+  {{#if (allHave @results @name)}}
+    <Visualize @name={{@name}} @results={{dataOf @results @name}} />
   {{/if}}
 </template> satisfies TOC<{
   results: Model['data']['results'];
@@ -55,24 +47,25 @@ const ShowIfAllPresent = <template>
   key: string;
 }>;
 
+function getBenchNames(results: ResultData): Set<string> {
+  const names = new Set<string>();
+
+  Object.values(results)
+    .map(Object.keys)
+    .flat()
+    .forEach((name) => {
+      names.add(name);
+    });
+
+  return names;
+}
+
 export default <template>
   <Info @date={{@model.data.date}} @env={{@model.data.environment}} />
 
   <div class="all-results">
-    <ShowIfAllPresent
-      @key="one-item-10k-times"
-      @name="1 item, 10k updates"
-      @results={{@model.data.results}}
-    />
-    <ShowIfAllPresent
-      @key="ten-k-items-one-time"
-      @name="10k items, 1 update each (sequential)"
-      @results={{@model.data.results}}
-    />
-    <ShowIfAllPresent
-      @key="ten-k-items-one-time-25p"
-      @name="10k items, 1 update on 25% (random)"
-      @results={{@model.data.results}}
-    />
+    {{#each (getBenchNames @model.data.results) as |name|}}
+      <ShowIfAllPresent @name={{name}} @results={{@model.data.results}} />
+    {{/each}}
   </div>
 </template> satisfies TOC<{ model: Model }>;

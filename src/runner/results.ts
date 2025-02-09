@@ -21,7 +21,6 @@ async function read() {
 }
 
 async function write(json: any) {
-  console.log(`Saving to ${filePath}`);
   await fs.writeFile(filePath, JSON.stringify(json, null, 2));
 }
 
@@ -38,11 +37,17 @@ async function saveResults(results: any) {
   await write(file);
 }
 
-export async function clearPriorResults(framework: string, benchName: string) {
+export async function prepareForResults(
+  framework: string,
+  benchName: string,
+  query: string,
+) {
   let existing = await getResults();
 
   existing[framework] ||= {};
-  existing[framework][benchName] = [];
+  existing[framework][benchName] = {};
+  existing[framework][benchName].url = query;
+  existing[framework][benchName].times = [];
 
   await saveResults(existing);
 }
@@ -55,8 +60,9 @@ export async function addResult(
   let existing = await getResults();
 
   existing[framework] ||= {};
-  existing[framework][benchName] ||= [];
-  existing[framework][benchName].push(result);
+  existing[framework][benchName] ||= {};
+  existing[framework][benchName].times ||= [];
+  existing[framework][benchName].times.push(result);
 
   await saveResults(existing);
 }

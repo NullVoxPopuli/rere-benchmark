@@ -29,10 +29,8 @@ export function serve(directory: string, port = 3000): Promise<http.Server> {
       throw new Error(`No request url?`);
     }
 
-    let filePath = path.join(
-      directory,
-      req.url === '/' ? 'index.html' : req.url,
-    );
+    let url = req.url.split('?')[0]!;
+    let filePath = path.join(directory, url === '/' ? 'index.html' : url);
     let extname = path.extname(filePath).toLowerCase();
 
     fs.readFile(filePath, (err, content) => {

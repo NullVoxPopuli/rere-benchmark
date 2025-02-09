@@ -1,27 +1,19 @@
 import puppeteer, { type Browser } from 'puppeteer';
-import { $ } from 'execa';
-import { COUNT, HEADLESS } from './arg.ts';
-import { getTests } from './repo.ts';
-import { serve } from './serve.ts';
-import { info, addResult, filePath, clearPriorResults } from './results.ts';
-import assert from 'node:assert';
 import * as clack from '@clack/prompts';
+import { $ } from 'execa';
+import { COUNT, HEADLESS, SKIP_BUILD } from './arg.ts';
+import { benchNames, frameworks } from './repo.ts';
+import { serve } from './serve.ts';
+import {
+  addResult,
+  prepareForResults as prepareForResults,
+} from './results.ts';
+import assert from 'node:assert';
 import { chromeLocation } from './environment.ts';
-import { inspect } from 'node:util';
+import { getBenchInfo } from './bench-info.ts';
+import { join } from 'node:path';
 
-console.info(inspect(info, { showHidden: false, depth: null, colors: true }));
-console.log(`
-  Results will be written to ${filePath}
-`);
-
-let letsgo = await clack.confirm({
-  message: 'Does this information look correct?',
-});
-
-if (!letsgo || clack.isCancel(letsgo)) {
-  clack.log.info('Exiting');
-  process.exit(1);
-}
+let info = await getBenchInfo();
 
 async function getMarks(browser: Browser, url: string) {
   const page = await browser.newPage();
@@ -35,7 +27,7 @@ async function getMarks(browser: Browser, url: string) {
   const performanceMarks = await page.evaluate(() => {
     return performance.getEntriesByType('mark').map((entry) => ({
       name: entry.name,
-      startTime: entry.startTime,
+      at: entry.startTime,
     }));
   });
 
@@ -44,64 +36,77 @@ async function getMarks(browser: Browser, url: string) {
   return performanceMarks;
 }
 
-let tests = await getTests();
-
 const browser = await puppeteer.launch({
   executablePath: chromeLocation,
   headless: HEADLESS,
 });
 
-console.log(`Running ${tests.length} tests...`);
+if (!SKIP_BUILD) {
+  clack.log.info(`Building Projects`);
+  for (let framework of info.frameworks) {
+    for (let app of info.apps) {
+      let dir = join('frameworks', framework, app);
 
-for (let test of tests) {
-  let [, framework, benchName] = test.split('/');
+      console.info(`Building in ${dir}`);
 
-  assert(framework, `Could not determine framework from ${test}`);
-  assert(benchName, `Could not determine benchmark from ${test}`);
-
-  console.info(`Framework: ${framework}, ${benchName}`);
-  // TODO: make this configurable
-  //       - folks could use a different package manager
-  //       - different build command
-  //       - different output directory
-  await $({ preferLocal: true, cwd: test })`pnpm install`;
-  await $({ preferLocal: true, cwd: test })`pnpm build`;
-
-  await clearPriorResults(framework, benchName);
-
-  let server = await serve(`${test}/dist`);
-  let address = server.address();
-
-  assert(
-    address,
-    `Server for ${framework}, ${benchName} does not have an address!`,
-  );
-
-  let url =
-    typeof address === 'string'
-      ? address
-      : `http://${address.address === '::' ? 'localhost' : address.address}:${address.port}`;
-
-  console.log(`${framework} w/ ${benchName} up at ${url}`);
-
-  for (let i = 0; i < COUNT; i++) {
-    let performanceMarks = await getMarks(browser, url);
-
-    console.log('Performance marks:', performanceMarks);
-
-    await addResult(framework, benchName, performanceMarks);
+      // TODO: make this configurable
+      //       - folks could use a different package manager
+      //       - different build command
+      //       - different output directory
+      await $({ preferLocal: true, cwd: dir })`pnpm install`;
+      await $({ preferLocal: true, cwd: dir })`pnpm build`;
+    }
   }
+  clack.log.success('Building Done!');
+}
 
-  let promise = new Promise((resolve) => {
-    server.on('close', resolve);
-  });
+clack.log.info('Starting Benchmark Runs');
 
-  // We add this via the killable package
-  // @ts-expect-error
-  server.kill();
+for (let framework of info.frameworks) {
+  clack.log.info(`Benchmarking ${framework}`);
 
-  console.log(`Waiting for server to exit`);
-  await promise;
+  for (let bench of info.benches) {
+    let dir = join('frameworks', framework, bench.app);
+
+    clack.log.info(`Starting server for ${bench.name} in ${dir}/dist`);
+
+    // TODO: make the output directory configurable
+    let server = await serve(`${dir}/dist`);
+    let address = server.address();
+
+    assert(
+      address,
+      `Server for ${framework}, ${bench.name} (in ${bench.app}) does not have an address!`,
+    );
+
+    let url =
+      typeof address === 'string'
+        ? address
+        : `http://${address.address === '::' ? 'localhost' : address.address}:${address.port}`;
+
+    url += '/' + bench.query;
+
+    await prepareForResults(framework, bench.name, bench.query);
+
+    clack.log.info(`Server up at ${url}`);
+
+    for (let i = 0; i < COUNT; i++) {
+      let performanceMarks = await getMarks(browser, url);
+
+      await addResult(framework, bench.name, performanceMarks);
+    }
+
+    let promise = new Promise((resolve) => {
+      server.on('close', resolve);
+    });
+
+    // We add this via the killable package
+    // @ts-expect-error
+    server.kill();
+
+    clack.log.info(`Waiting for server to exit`);
+    await promise;
+  }
 }
 
 await browser.close();

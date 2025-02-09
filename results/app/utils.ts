@@ -2,6 +2,14 @@ import { assert } from '@ember/debug';
 import type { Mark, ResultData } from '#types';
 import { frameworks } from './frameworks.ts';
 
+const msInOneHz = 1_000;
+
+export function msOfFrameAt(hz: number) {
+  const result = msInOneHz / hz;
+
+  return Math.round(result * 100) / 100;
+}
+
 function averageOf(arrayOfMarks: Array<[Mark, Mark]>) {
   const durations = [];
 
@@ -14,7 +22,7 @@ function averageOf(arrayOfMarks: Array<[Mark, Mark]>) {
       console.log(arrayOfMarks);
       continue;
     }
-    const duration = done.startTime - start.startTime;
+    const duration = done.at - start.at;
     durations.push(duration);
   }
 
@@ -41,12 +49,11 @@ export function dataOf(results: ResultData, benchName: string) {
       frameworkInfo
     );
 
-    const time = averageOf(benchData);
+    const time = averageOf(benchData.times);
     list.push({
       name: framework,
       speed: time,
       color: frameworkInfo.color,
-      logo: frameworkInfo.logo,
     });
   }
 

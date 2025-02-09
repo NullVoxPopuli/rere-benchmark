@@ -15,8 +15,12 @@
  */
 const NUM_FRAMES_TO_WAIT = 960;
 
-// TODO?: also have a second-based timeout?
-
+/**
+ * TODO?: also have a second-based timeout?
+ *
+ * @param {string} label
+ * @param {() => boolean} check
+ */
 export function tryVerify(label, check, attempts = 0) {
   if (check()) {
     console.timeEnd(label);
@@ -35,4 +39,39 @@ export function tryVerify(label, check, attempts = 0) {
   throw new Error(
     `Could not determine verified state within ${attempts} frames`,
   );
+}
+
+/**
+ * @param {string} name
+ */
+export function qp(name) {
+  let search = window.location.search;
+
+  let query = new URLSearchParams(search);
+
+  return query.get(name);
+}
+
+/**
+ * @param {string} name
+ * @param {number} fallback
+ */
+export function qpNum(name, fallback) {
+  let q = qp(name);
+  let r = q ? parseInt(q, 10) || fallback : fallback;
+  return r;
+}
+
+/**
+ * @param {string} name
+ * @param {boolean} fallback
+ */
+export function qpBool(name, fallback) {
+  let q = qp(name);
+
+  if (!q) return fallback;
+
+  if (q === 'true' || q === '1') return true;
+
+  return false;
 }
