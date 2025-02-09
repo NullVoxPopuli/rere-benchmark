@@ -1,0 +1,1562 @@
+{
+  "date": "2025-02-09T16:07:02.194Z",
+  "environment": {
+    "machine": {
+      "os": {
+        "name": "Ubuntu",
+        "version": "24.04.1"
+      },
+      "cpu": "AMD Ryzen 9 7900X",
+      "ram": "66.6 GB"
+    },
+    "monitor": {
+      "hz": 239
+    },
+    "browser": {
+      "name": "Google Chrome",
+      "version": "133.0.6943.53"
+    }
+  },
+  "results": {
+    "ember": {
+      "1 item, 10k updates": [
+        [
+          {
+            "name": ":start",
+            "startTime": 46.79999998211861
+          },
+          {
+            "name": ":done",
+            "startTime": 49.19999998807907
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 45.099999994039536
+          },
+          {
+            "name": ":done",
+            "startTime": 47.19999998807907
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 36
+          },
+          {
+            "name": ":done",
+            "startTime": 38.099999994039536
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 43
+          },
+          {
+            "name": ":done",
+            "startTime": 45.30000001192093
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 35.599999994039536
+          },
+          {
+            "name": ":done",
+            "startTime": 37.599999994039536
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 34.19999998807907
+          },
+          {
+            "name": ":done",
+            "startTime": 35.900000005960464
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 40.599999994039536
+          },
+          {
+            "name": ":done",
+            "startTime": 42.69999998807907
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 34.39999997615814
+          },
+          {
+            "name": ":done",
+            "startTime": 36.39999997615814
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 41.70000001788139
+          },
+          {
+            "name": ":done",
+            "startTime": 43.900000005960464
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 46.099999994039536
+          },
+          {
+            "name": ":done",
+            "startTime": 48.30000001192093
+          }
+        ]
+      ],
+      "1 item, 100k updates": [
+        [
+          {
+            "name": ":start",
+            "startTime": 35.400000005960464
+          },
+          {
+            "name": ":done",
+            "startTime": 39.900000005960464
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 42.900000005960464
+          },
+          {
+            "name": ":done",
+            "startTime": 47.400000005960464
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 37.29999998211861
+          },
+          {
+            "name": ":done",
+            "startTime": 43.099999994039536
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 41.400000005960464
+          },
+          {
+            "name": ":done",
+            "startTime": 45.900000005960464
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 46.900000005960464
+          },
+          {
+            "name": ":done",
+            "startTime": 51.900000005960464
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 38.900000005960464
+          },
+          {
+            "name": ":done",
+            "startTime": 43.099999994039536
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 34.79999998211861
+          },
+          {
+            "name": ":done",
+            "startTime": 39.89999997615814
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 43.70000001788139
+          },
+          {
+            "name": ":done",
+            "startTime": 48.30000001192093
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 35.099999994039536
+          },
+          {
+            "name": ":done",
+            "startTime": 39.69999998807907
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 43.599999994039536
+          },
+          {
+            "name": ":done",
+            "startTime": 48.099999994039536
+          }
+        ]
+      ],
+      "1 item, 1 million updates": [
+        [
+          {
+            "name": ":start",
+            "startTime": 42.5
+          },
+          {
+            "name": ":done",
+            "startTime": 69.80000001192093
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 34.60000002384186
+          },
+          {
+            "name": ":done",
+            "startTime": 61.70000001788139
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 33
+          },
+          {
+            "name": ":done",
+            "startTime": 59.80000001192093
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 41
+          },
+          {
+            "name": ":done",
+            "startTime": 68.19999998807907
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 34.70000001788139
+          },
+          {
+            "name": ":done",
+            "startTime": 74.7000000178814
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 36.599999994039536
+          },
+          {
+            "name": ":done",
+            "startTime": 64.39999997615814
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 44.099999994039536
+          },
+          {
+            "name": ":done",
+            "startTime": 71.5
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 34.599999994039536
+          },
+          {
+            "name": ":done",
+            "startTime": 75.19999998807907
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 44.900000005960464
+          },
+          {
+            "name": ":done",
+            "startTime": 85.5
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 40.19999998807907
+          },
+          {
+            "name": ":done",
+            "startTime": 67.2999999821186
+          }
+        ]
+      ]
+    },
+    "react": {
+      "1 item, 10k updates": [
+        [
+          {
+            "name": ":start",
+            "startTime": 30.700000017881393
+          },
+          {
+            "name": ":done",
+            "startTime": 35.099999994039536
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 29.5
+          },
+          {
+            "name": ":done",
+            "startTime": 33.900000005960464
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 30
+          },
+          {
+            "name": ":done",
+            "startTime": 34
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 31.200000017881393
+          },
+          {
+            "name": ":done",
+            "startTime": 35.20000001788139
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 32.69999998807907
+          },
+          {
+            "name": ":done",
+            "startTime": 36.79999998211861
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 33.69999998807907
+          },
+          {
+            "name": ":done",
+            "startTime": 37.599999994039536
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 35.900000005960464
+          },
+          {
+            "name": ":done",
+            "startTime": 40.400000005960464
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 36.5
+          },
+          {
+            "name": ":done",
+            "startTime": 40.599999994039536
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 36.69999998807907
+          },
+          {
+            "name": ":done",
+            "startTime": 40.900000005960464
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 36.5
+          },
+          {
+            "name": ":done",
+            "startTime": 40.60000002384186
+          }
+        ]
+      ],
+      "1 item, 100k updates": [
+        [
+          {
+            "name": ":start",
+            "startTime": 15.699999988079071
+          },
+          {
+            "name": ":done",
+            "startTime": 38.599999994039536
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 30.30000001192093
+          },
+          {
+            "name": ":done",
+            "startTime": 58.10000002384186
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 30.19999998807907
+          },
+          {
+            "name": ":done",
+            "startTime": 52.79999998211861
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 30.399999976158142
+          },
+          {
+            "name": ":done",
+            "startTime": 52.69999998807907
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 30.299999982118607
+          },
+          {
+            "name": ":done",
+            "startTime": 58.099999994039536
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 29.799999982118607
+          },
+          {
+            "name": ":done",
+            "startTime": 57.099999994039536
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 29.900000005960464
+          },
+          {
+            "name": ":done",
+            "startTime": 51.70000001788139
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 27.599999994039536
+          },
+          {
+            "name": ":done",
+            "startTime": 48.29999998211861
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 28.19999998807907
+          },
+          {
+            "name": ":done",
+            "startTime": 50.5
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 29.5
+          },
+          {
+            "name": ":done",
+            "startTime": 57.29999998211861
+          }
+        ]
+      ],
+      "1 item, 1 million updates": [
+        [
+          {
+            "name": ":start",
+            "startTime": 25.099999994039536
+          },
+          {
+            "name": ":done",
+            "startTime": 172.89999997615814
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 32.099999994039536
+          },
+          {
+            "name": ":done",
+            "startTime": 184.19999998807907
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 31.599999994039536
+          },
+          {
+            "name": ":done",
+            "startTime": 181.59999999403954
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 33.79999998211861
+          },
+          {
+            "name": ":done",
+            "startTime": 189.19999998807907
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 34.30000001192093
+          },
+          {
+            "name": ":done",
+            "startTime": 185.40000000596046
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 34.89999997615814
+          },
+          {
+            "name": ":done",
+            "startTime": 189.5
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 35.29999998211861
+          },
+          {
+            "name": ":done",
+            "startTime": 186.69999998807907
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 34.80000001192093
+          },
+          {
+            "name": ":done",
+            "startTime": 193.80000001192093
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 35.80000001192093
+          },
+          {
+            "name": ":done",
+            "startTime": 184.09999999403954
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 34
+          },
+          {
+            "name": ":done",
+            "startTime": 187.40000000596046
+          }
+        ]
+      ]
+    },
+    "solid": {
+      "1 item, 10k updates": [
+        [
+          {
+            "name": ":start",
+            "startTime": 30.19999998807907
+          },
+          {
+            "name": ":done",
+            "startTime": 38.599999994039536
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 23.80000001192093
+          },
+          {
+            "name": ":done",
+            "startTime": 31.30000001192093
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 28
+          },
+          {
+            "name": ":done",
+            "startTime": 36.10000002384186
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 19.69999998807907
+          },
+          {
+            "name": ":done",
+            "startTime": 27.900000005960464
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 22.5
+          },
+          {
+            "name": ":done",
+            "startTime": 31.5
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 27.599999994039536
+          },
+          {
+            "name": ":done",
+            "startTime": 36.400000005960464
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 17.900000005960464
+          },
+          {
+            "name": ":done",
+            "startTime": 25.900000005960464
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 24.5
+          },
+          {
+            "name": ":done",
+            "startTime": 33
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 16.599999994039536
+          },
+          {
+            "name": ":done",
+            "startTime": 24.69999998807907
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 21.799999982118607
+          },
+          {
+            "name": ":done",
+            "startTime": 30.5
+          }
+        ]
+      ],
+      "1 item, 100k updates": [
+        [
+          {
+            "name": ":start",
+            "startTime": 21.600000023841858
+          },
+          {
+            "name": ":done",
+            "startTime": 65.10000002384186
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 9.400000005960464
+          },
+          {
+            "name": ":done",
+            "startTime": 53.69999998807907
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 27.30000001192093
+          },
+          {
+            "name": ":done",
+            "startTime": 70.7000000178814
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 31.19999998807907
+          },
+          {
+            "name": ":done",
+            "startTime": 73.80000001192093
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 25
+          },
+          {
+            "name": ":done",
+            "startTime": 69.09999999403954
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 16.700000017881393
+          },
+          {
+            "name": ":done",
+            "startTime": 60.20000001788139
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 21.69999998807907
+          },
+          {
+            "name": ":done",
+            "startTime": 62.5
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 28.400000005960464
+          },
+          {
+            "name": ":done",
+            "startTime": 70.7000000178814
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 20.30000001192093
+          },
+          {
+            "name": ":done",
+            "startTime": 62.70000001788139
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 23.099999994039536
+          },
+          {
+            "name": ":done",
+            "startTime": 65.59999999403954
+          }
+        ]
+      ],
+      "1 item, 1 million updates": [
+        [
+          {
+            "name": ":start",
+            "startTime": 28.30000001192093
+          },
+          {
+            "name": ":done",
+            "startTime": 394.80000001192093
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 19.400000005960464
+          },
+          {
+            "name": ":done",
+            "startTime": 390.80000001192093
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 21.69999998807907
+          },
+          {
+            "name": ":done",
+            "startTime": 381.19999998807907
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 23
+          },
+          {
+            "name": ":done",
+            "startTime": 381.5
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 28
+          },
+          {
+            "name": ":done",
+            "startTime": 397.09999999403954
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 19.599999994039536
+          },
+          {
+            "name": ":done",
+            "startTime": 384.7999999821186
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 21.5
+          },
+          {
+            "name": ":done",
+            "startTime": 391.30000001192093
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 23.599999994039536
+          },
+          {
+            "name": ":done",
+            "startTime": 396.7000000178814
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 16.099999994039536
+          },
+          {
+            "name": ":done",
+            "startTime": 370.90000000596046
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 20.200000017881393
+          },
+          {
+            "name": ":done",
+            "startTime": 385.90000000596046
+          }
+        ]
+      ]
+    },
+    "svelte": {
+      "1 item, 10k updates": [
+        [
+          {
+            "name": ":start",
+            "startTime": 19.900000005960464
+          },
+          {
+            "name": ":done",
+            "startTime": 22.099999994039536
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 23.299999982118607
+          },
+          {
+            "name": ":done",
+            "startTime": 25
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 19.700000017881393
+          },
+          {
+            "name": ":done",
+            "startTime": 21.400000005960464
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 22.5
+          },
+          {
+            "name": ":done",
+            "startTime": 24.099999994039536
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 22.100000023841858
+          },
+          {
+            "name": ":done",
+            "startTime": 24.30000001192093
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 27.30000001192093
+          },
+          {
+            "name": ":done",
+            "startTime": 29.099999994039536
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 29.700000017881393
+          },
+          {
+            "name": ":done",
+            "startTime": 31.599999994039536
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 21.69999998807907
+          },
+          {
+            "name": ":done",
+            "startTime": 23.69999998807907
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 26.700000017881393
+          },
+          {
+            "name": ":done",
+            "startTime": 28.600000023841858
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 30
+          },
+          {
+            "name": ":done",
+            "startTime": 31.799999982118607
+          }
+        ]
+      ],
+      "1 item, 100k updates": [
+        [
+          {
+            "name": ":start",
+            "startTime": 27.900000005960464
+          },
+          {
+            "name": ":done",
+            "startTime": 32.10000002384186
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 17.700000017881393
+          },
+          {
+            "name": ":done",
+            "startTime": 22.30000001192093
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 22.799999982118607
+          },
+          {
+            "name": ":done",
+            "startTime": 27.400000005960464
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 25
+          },
+          {
+            "name": ":done",
+            "startTime": 29.099999994039536
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 16.30000001192093
+          },
+          {
+            "name": ":done",
+            "startTime": 20.599999994039536
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 20.399999976158142
+          },
+          {
+            "name": ":done",
+            "startTime": 25.299999982118607
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 24.599999994039536
+          },
+          {
+            "name": ":done",
+            "startTime": 29.80000001192093
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 26.80000001192093
+          },
+          {
+            "name": ":done",
+            "startTime": 31.100000023841858
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 30.900000005960464
+          },
+          {
+            "name": ":done",
+            "startTime": 35.29999998211861
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 20.099999994039536
+          },
+          {
+            "name": ":done",
+            "startTime": 24.30000001192093
+          }
+        ]
+      ],
+      "1 item, 1 million updates": [
+        [
+          {
+            "name": ":start",
+            "startTime": 19.5
+          },
+          {
+            "name": ":done",
+            "startTime": 35.400000005960464
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 23.200000017881393
+          },
+          {
+            "name": ":done",
+            "startTime": 50.099999994039536
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 27.5
+          },
+          {
+            "name": ":done",
+            "startTime": 54.599999994039536
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 20.19999998807907
+          },
+          {
+            "name": ":done",
+            "startTime": 36.39999997615814
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 22.599999994039536
+          },
+          {
+            "name": ":done",
+            "startTime": 49
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 24
+          },
+          {
+            "name": ":done",
+            "startTime": 50.80000001192093
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 20.400000005960464
+          },
+          {
+            "name": ":done",
+            "startTime": 47.69999998807907
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 23.200000017881393
+          },
+          {
+            "name": ":done",
+            "startTime": 50.20000001788139
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 20.69999998807907
+          },
+          {
+            "name": ":done",
+            "startTime": 47.5
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 25
+          },
+          {
+            "name": ":done",
+            "startTime": 51.599999994039536
+          }
+        ]
+      ]
+    },
+    "vue": {
+      "1 item, 10k updates": [
+        [
+          {
+            "name": ":start",
+            "startTime": 24.69999998807907
+          },
+          {
+            "name": ":done",
+            "startTime": 27.900000005960464
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 22.799999982118607
+          },
+          {
+            "name": ":done",
+            "startTime": 25.599999994039536
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 22.80000001192093
+          },
+          {
+            "name": ":done",
+            "startTime": 25.700000017881393
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 23.900000005960464
+          },
+          {
+            "name": ":done",
+            "startTime": 27.19999998807907
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 21.5
+          },
+          {
+            "name": ":done",
+            "startTime": 24.100000023841858
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 23.400000005960464
+          },
+          {
+            "name": ":done",
+            "startTime": 26.299999982118607
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 22.900000005960464
+          },
+          {
+            "name": ":done",
+            "startTime": 26.100000023841858
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 20.799999982118607
+          },
+          {
+            "name": ":done",
+            "startTime": 24.099999994039536
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 21
+          },
+          {
+            "name": ":done",
+            "startTime": 23.900000005960464
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 24
+          },
+          {
+            "name": ":done",
+            "startTime": 26.900000005960464
+          }
+        ]
+      ],
+      "1 item, 100k updates": [
+        [
+          {
+            "name": ":start",
+            "startTime": 19
+          },
+          {
+            "name": ":done",
+            "startTime": 24.5
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 33
+          },
+          {
+            "name": ":done",
+            "startTime": 38.599999994039536
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 20.200000017881393
+          },
+          {
+            "name": ":done",
+            "startTime": 25.80000001192093
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 22
+          },
+          {
+            "name": ":done",
+            "startTime": 27.600000023841858
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 22.299999982118607
+          },
+          {
+            "name": ":done",
+            "startTime": 28
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 21.69999998807907
+          },
+          {
+            "name": ":done",
+            "startTime": 27.099999994039536
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 23.099999994039536
+          },
+          {
+            "name": ":done",
+            "startTime": 28.80000001192093
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 26
+          },
+          {
+            "name": ":done",
+            "startTime": 31.400000005960464
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 29.200000017881393
+          },
+          {
+            "name": ":done",
+            "startTime": 35.30000001192093
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 30.69999998807907
+          },
+          {
+            "name": ":done",
+            "startTime": 36.5
+          }
+        ]
+      ],
+      "1 item, 1 million updates": [
+        [
+          {
+            "name": ":start",
+            "startTime": 29.100000023841858
+          },
+          {
+            "name": ":done",
+            "startTime": 55.70000001788139
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 28.900000005960464
+          },
+          {
+            "name": ":done",
+            "startTime": 69.40000000596046
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 31.30000001192093
+          },
+          {
+            "name": ":done",
+            "startTime": 57.900000005960464
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 19.80000001192093
+          },
+          {
+            "name": ":done",
+            "startTime": 46.70000001788139
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 21.400000005960464
+          },
+          {
+            "name": ":done",
+            "startTime": 48.099999994039536
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 22.099999994039536
+          },
+          {
+            "name": ":done",
+            "startTime": 49
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 23.799999982118607
+          },
+          {
+            "name": ":done",
+            "startTime": 63.599999994039536
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 21.799999982118607
+          },
+          {
+            "name": ":done",
+            "startTime": 48
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 21.299999982118607
+          },
+          {
+            "name": ":done",
+            "startTime": 62.19999998807907
+          }
+        ],
+        [
+          {
+            "name": ":start",
+            "startTime": 22.5
+          },
+          {
+            "name": ":done",
+            "startTime": 49
+          }
+        ]
+      ]
+    }
+  }
+}

@@ -2,6 +2,14 @@ import { assert } from '@ember/debug';
 import type { Mark, ResultData } from '#types';
 import { frameworks } from './frameworks.ts';
 
+const msInOneHz = 1_000;
+
+export function msOfFrameAt(hz: number) {
+  const result = msInOneHz / hz;
+
+  return Math.round(result * 100) / 100;
+}
+
 function averageOf(arrayOfMarks: Array<[Mark, Mark]>) {
   const durations = [];
 

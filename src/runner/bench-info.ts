@@ -22,6 +22,11 @@ const benchmarks = [
     query: '?updates=100000',
   },
   {
+    name: '1 item, 1 million updates',
+    app: 'one-item-many-updates',
+    query: '?updates=1000000',
+  },
+  {
     name: '10k items, 1 update each (sequentially)',
     app: 'ten-k-items-one-time',
     query: '',

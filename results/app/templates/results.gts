@@ -1,16 +1,8 @@
-import { dataOf } from '#utils';
+import { dataOf, msOfFrameAt } from '#utils';
 import { Visualize } from '#components/visualize.gts';
 import type { Model } from '#routes/results.ts';
 import type { TOC } from '@ember/component/template-only';
 import type { ResultData } from '#types';
-
-const msInOneHz = 1_000;
-
-function msOfFrameAt(hz: number) {
-  const result = msInOneHz / hz;
-
-  return Math.round(result * 100) / 100;
-}
 
 const Info = <template>
   Tested on
@@ -55,14 +47,17 @@ const ShowIfAllPresent = <template>
   key: string;
 }>;
 
-function getBenchNames(results: ResultData) {
-  const names = new Set();
+function getBenchNames(results: ResultData): Set<string> {
+  const names = new Set<string>();
 
   Object.values(results)
     .map(Object.keys)
-    .forEach((name) => names.add(name));
+    .flat()
+    .forEach((name) => {
+      names.add(name);
+    });
 
-  return [...names.values()].flat();
+  return names;
 }
 
 export default <template>
@@ -70,7 +65,6 @@ export default <template>
 
   <div class="all-results">
     {{#each (getBenchNames @model.data.results) as |name|}}
-      {{log name}}
       <ShowIfAllPresent @name={{name}} @results={{@model.data.results}} />
     {{/each}}
   </div>
