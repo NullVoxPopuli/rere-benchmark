@@ -1,7 +1,10 @@
 import { qpNum, tryVerify } from './utils.js';
 
 export class OneItem {
-  name = '1 Item, 10k updates';
+  /**
+   * @type {string}
+   */
+  name;
 
   /**
    * @type {number}
@@ -9,6 +12,7 @@ export class OneItem {
   #num;
   constructor(num = qpNum('updates', 10_000)) {
     this.#num = num;
+    this.name = `1 Item, ${num / 1000}k updates`;
   }
 
   /**

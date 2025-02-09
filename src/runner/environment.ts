@@ -8,7 +8,7 @@ import assert from 'node:assert';
 const whichGoogleChrome = await $`which google-chrome`;
 
 export const chromeLocation = whichGoogleChrome.stdout.trim();
-export const yyyymmdd = new Date().toJSON().split('T')[0];
+export const yyyymmdd = new Date().toJSON();
 
 assert(yyyymmdd, `Failed to find date`);
 
