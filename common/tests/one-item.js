@@ -1,4 +1,4 @@
-import { tryVerify } from './utils.js';
+import { qpNum, tryVerify } from './utils.js';
 
 export class OneItem {
   name = '1 Item, 10k updates';
@@ -7,7 +7,7 @@ export class OneItem {
    * @type {number}
    */
   #num;
-  constructor(num = 10_000) {
+  constructor(num = qpNum('updates', 10_000)) {
     this.#num = num;
   }
 

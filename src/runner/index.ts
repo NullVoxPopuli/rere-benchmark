@@ -9,6 +9,12 @@ import * as clack from '@clack/prompts';
 import { chromeLocation } from './environment.ts';
 import { inspect } from 'node:util';
 
+const benchmarks = [
+  { app: 'one-item-10k-times', query: '' },
+  { app: 'ten-k-items-one-time', query: '' },
+  { app: 'ten-k-items-one-time', query: '?updates=2500&random=false' },
+];
+
 console.info(inspect(info, { showHidden: false, depth: null, colors: true }));
 console.log(`
   Results will be written to ${filePath}
