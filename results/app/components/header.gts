@@ -3,7 +3,8 @@ import { LinkTo } from '@ember/routing';
 export const Header = <template>
   <header>
     <LinkTo @route="application" class="home-link">
-      Reactivity + Rendering Benchmark
+      Reactivity + Rendering
+      <span class="hide-sm">Benchmark</span>
     </LinkTo>
     <span>
       <LinkTo @route="history">

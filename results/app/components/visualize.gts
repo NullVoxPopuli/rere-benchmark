@@ -32,7 +32,7 @@ export const Visualize = <template>
               </td>
               <td class="time">{{round fw.speed}}ms</td>
               <td>
-                <svg width="400" height="48" viewBox="0 0 400 48">
+                <svg width="100%" height="48" viewBox="0 0 400 48">
                   <circle cx="50" cy="24" r="10" fill={{fw.color}}>
                     <animate
                       attributeName="cx"

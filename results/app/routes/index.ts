@@ -1,5 +1,5 @@
 import { service } from '@ember/service';
-import { results } from '../templates/history.gts';
+import { results } from 'virtual:result-sets';
 import Route from '@ember/routing/route';
 import type RouterService from '@ember/routing/router-service';
 
@@ -9,7 +9,6 @@ export default class Index extends Route {
   beforeModel() {
     this.router.transitionTo('results', {
       queryParams: {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         q: results[0],
       },
     });

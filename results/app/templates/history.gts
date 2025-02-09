@@ -1,11 +1,7 @@
 import { pageTitle } from 'ember-page-title';
 import { LinkTo } from '@ember/routing';
 
-// TODO: generate this from a build plugin
-// manual for now
-//
-// NOTE: most recent on top -- least recent on bottom
-export const results = ['2025-02-09', '2025-02-07'];
+import { results } from 'virtual:result-sets';
 
 function qp(resultName: string) {
   return { q: resultName };
