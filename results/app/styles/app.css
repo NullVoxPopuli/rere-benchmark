@@ -52,3 +52,23 @@ main.error-page {
     padding: 1rem;
   }
 }
+
+.fw-info {
+  display: grid;
+  justify-items: center;
+  text-decoration: none;
+  color: currentColor;
+  max-height: 50px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  img {
+    max-width: 32px;
+    max-height: 32px;
+  }
+  span {
+    font-size: 0.8rem;
+  }
+}

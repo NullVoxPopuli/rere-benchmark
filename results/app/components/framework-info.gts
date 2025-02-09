@@ -18,30 +18,10 @@ export const FrameworkInfo = <template>
       target="_blank"
       rel="noopener noreferrer"
     >
-      <img alt="" height="32" style="max-width: 32px" src={{info.logo}} />
+      <img alt="" width="32" src={{info.logo}} />
       <span>{{info.name}}</span>
     </a>
   {{/let}}
-
-  <style>
-    .fw-info {
-      display: grid;
-      justify-items: center;
-      text-decoration: none;
-      color: currentColor;
-
-      &:hover {
-        text-decoration: underline;
-      }
-
-      img {
-        max-height: 48px;
-      }
-      span {
-        font-size: 0.8rem;
-      }
-    }
-  </style>
 </template> satisfies TOC<{
   name: string;
 }>;
