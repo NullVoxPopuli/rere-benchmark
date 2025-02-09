@@ -1,0 +1,13 @@
+{
+  "extends": "@tsconfig/strictest",
+  "compilerOptions": {
+    "target": "esnext",
+    "moduleResolution": "nodenext",
+    "module": "esnext",
+    "checkJs": true,
+    "skipLibCheck": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
+     // Linting
+    "noImplicitReturns": false,
+  }
+}

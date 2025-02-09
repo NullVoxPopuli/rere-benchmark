@@ -2,18 +2,16 @@
 import { reactive, onMounted } from 'vue'
 import { helpers } from 'common';
 
-const items = reactive(Array(10_000).fill(0));
+const test = helpers.tenKitems1UpdateOn25Percent();
+const items = reactive(test.getData());
 
 onMounted(() => {
-  helpers['10ki1u-25p'].run((i) => (items[i] = i));
+  test.run((i) => (items[i] = i));
 })
-function appendSpace(x: string) {
-return `${x} `;
-}
 </script>
 
 <template>
   <template v-for="(item) in items">
-    {{appendSpace(item)}} 
+    {{test.formatItem(item)}} 
   </template>
 </template>

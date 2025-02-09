@@ -1,15 +1,14 @@
 <script lang="ts">
   import { helpers } from 'common';
-  let count: number = $state(0)
-  const increment = () => {
-    count += 1
-  }
+
+  let test = helpers.oneItem10kUpdates();
+  let count: number = $state(test.getData())
 
   $effect(() => {
-    helpers['1i10ku'].run((i) => count = i);
+    test.run((i) => count = i);
   });
 
   
 </script>
 
-<output>{count}</output>
+<output>{test.formatItem(count)}</output>

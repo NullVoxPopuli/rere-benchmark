@@ -21,6 +21,7 @@ async function read() {
 }
 
 async function write(json: any) {
+  console.log(`Saving to ${filePath}`);
   await fs.writeFile(filePath, JSON.stringify(json, null, 2));
 }
 
@@ -35,6 +36,15 @@ async function saveResults(results: any) {
   file.results = results;
 
   await write(file);
+}
+
+export async function clearPriorResults(framework: string, benchName: string) {
+  let existing = await getResults();
+
+  existing[framework] ||= {};
+  existing[framework][benchName] = [];
+
+  await saveResults(existing);
 }
 
 export async function addResult(

@@ -29,6 +29,9 @@ importers:
       globby:
         specifier: ^14.0.2
         version: 14.0.2
+      killable:
+        specifier: ^1.0.1
+        version: 1.0.1
       prettier:
         specifier: github:prettier/prettier
         version: https://codeload.github.com/prettier/prettier/tar.gz/34f6badf2d6f3004642711a391e9a0d3c547d317
@@ -4667,6 +4670,9 @@ packages:
 
   keyv@5.2.3:
     resolution: {integrity: sha512-AGKecUfzrowabUv0bH1RIR5Vf7w+l4S3xtQAypKaUpTdIR1EbrAcTxHCrpo9Q+IWeUlFE2palRtgIQcgm+PQJw==}
+
+  killable@1.0.1:
+    resolution: {integrity: sha512-LzqtLKlUwirEUyl/nicirVmNiPvYs7l5n8wOPP7fyJVpUPkvCnW/vuiXGpylGUlnPDnB7311rARzAt3Mhswpjg==}
 
   kind-of@3.2.2:
     resolution: {integrity: sha512-NOW9QQXMoZGg/oqnVNoNTTIFEIid1627WCffUBJEdMxYApq7mNE7CpzucIPc+ZQg25Phej7IJSmX3hO+oblOtQ==}
@@ -12555,6 +12561,8 @@ snapshots:
   keyv@5.2.3:
     dependencies:
       '@keyv/serialize': 1.0.2
+
+  killable@1.0.1: {}
 
   kind-of@3.2.2:
     dependencies:

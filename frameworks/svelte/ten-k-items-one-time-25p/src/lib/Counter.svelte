@@ -1,14 +1,14 @@
 <script lang="ts">
   import { helpers } from 'common';
-  let items = $state(Array(10_000).fill(0));
+
+  let test = helpers.tenKitems1UpdateOn25Percent();
+  let items = $state(test.getData());
 
   $effect(() => {
-    helpers['10ki1u-25p'].run((i) => {
+    test.run((i) => {
       items[i] = i;
     });
   });
 </script>
 
-{#each items as item}
-  {`${ item } `}
-{/each}
+{#each items as item}{test.formatItem(item)}{/each}

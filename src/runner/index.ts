@@ -3,7 +3,7 @@ import { $ } from 'execa';
 import { COUNT, HEADLESS } from './arg.ts';
 import { getTests } from './repo.ts';
 import { serve } from './serve.ts';
-import { info, addResult, filePath } from './results.ts';
+import { info, addResult, filePath, clearPriorResults } from './results.ts';
 import assert from 'node:assert';
 import * as clack from '@clack/prompts';
 import { chromeLocation } from './environment.ts';
@@ -67,6 +67,8 @@ for (let test of tests) {
   await $({ preferLocal: true, cwd: test })`pnpm install`;
   await $({ preferLocal: true, cwd: test })`pnpm build`;
 
+  await clearPriorResults(framework, benchName);
+
   let server = await serve(`${test}/dist`);
   let address = server.address();
 
@@ -90,7 +92,16 @@ for (let test of tests) {
     await addResult(framework, benchName, performanceMarks);
   }
 
-  server.close();
+  let promise = new Promise((resolve) => {
+    server.on('close', resolve);
+  });
+
+  // We add this via the killable package
+  // @ts-expect-error
+  server.kill();
+
+  console.log(`Waiting for server to exit`);
+  await promise;
 }
 
 await browser.close();

@@ -3,17 +3,22 @@ import Component from '@glimmer/component';
 import { helpers } from 'common';
 import { TrackedArray } from 'tracked-built-ins';
 
+const test = helpers.tenKitems1UpdateOn25Percent();
+
 class Test extends Component {
-  items = new TrackedArray(Array(10_000).fill(0));
+  items = new TrackedArray(test.getData());
 
-  start = () => helpers['10ki1u-25p'].run((i) => (this.items[i] = i));
+  start = () => {
+    test.run((i) => (this.items[i] = i));
+  };
 
-  <template>
-    {{#each this.items as |item|}}
-      {{item}}
-    {{/each}}
-    {{(this.start)}}
-  </template>
+  // No spaces, like all the other frameworks (especially JSX)
+  // Adding invisible characters is so annoying in JSX haha
+  //
+  // Ember should probably have a way to strip the unmeaning spaces anyway
+  // I think the algo is easy
+  // prettier-ignore
+  <template>{{#each this.items as |item|}}{{test.formatItem item}}{{/each}}{{(this.start)}}</template>
 }
 
 export default Route(Test);

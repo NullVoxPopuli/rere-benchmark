@@ -1,14 +1,16 @@
 import { createSignal, createEffect } from 'solid-js'
 import { helpers } from 'common';
 
+let test = helpers.oneItem10kUpdates();
+
 function App() {
-  const [count, setCount] = createSignal(0)
+  const [count, setCount] = createSignal(test.getData())
 
   createEffect(() => {
-    helpers['1i10ku'].run((i) => setCount(i));
+    test.run((i) => setCount(i));
   }, [])
 
-  return <output>{count()}</output>
+  return <output>{test.formatItem(count())}</output>
 }
 
 export default App

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { helpers } from 'common';
 
+let test = helpers.tenKitems1UpdateOn25Percent();
+
 function App() {
-  const [items, setItems] = useState(Array(10_000).fill(0));
+  const [items, setItems] = useState(test.getData());
 
   useEffect(() => {
-    helpers['10ki1u-25p'].run((i) => {
+    test.run((i) => {
       // https://react.dev/learn/updating-arrays-in-state#updating-arrays-without-mutation
       setItems((previous) => {
         let replacement = previous.map((item, index) => {
@@ -20,7 +22,7 @@ function App() {
     {items.map((i, index) => {
       // NOTE: using index for key is bad, but we have predictable data here
       return <React.Fragment key={index}>
-        {`${i} `}
+        {test.formatItem(i)}
       </React.Fragment>;
     })}
   </>;
