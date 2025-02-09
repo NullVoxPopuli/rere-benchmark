@@ -1,7 +1,7 @@
 import puppeteer, { type Browser } from 'puppeteer';
 import { $ } from 'execa';
 import { COUNT, HEADLESS } from './arg.ts';
-import { getTests } from './repo.ts';
+import { benchNames, frameworks } from './repo.ts';
 import { serve } from './serve.ts';
 import { info, addResult, filePath, clearPriorResults } from './results.ts';
 import assert from 'node:assert';
@@ -10,13 +10,63 @@ import { chromeLocation } from './environment.ts';
 import { inspect } from 'node:util';
 
 const benchmarks = [
-  { app: 'one-item-10k-times', query: '' },
-  { app: 'ten-k-items-one-time', query: '' },
-  { app: 'ten-k-items-one-time', query: '?updates=2500&random=false' },
+  {
+    name: '1 item, 10k updates',
+    app: 'one-item-10k-times',
+    query: '',
+  },
+  {
+    name: '1 item, 50k updates',
+    app: 'one-item-10k-times',
+    query: '?updates=50000',
+  },
+  {
+    name: '10k items, 1 update each (sequentially)',
+    app: 'ten-k-items-one-time',
+    query: '',
+  },
+  {
+    name: '10k items 1 update on 5% (random)',
+    app: 'ten-k-items-one-time',
+    query: '?updates=500&random=true',
+  },
+  {
+    name: '10k items 1 update on 25% (random)',
+    app: 'ten-k-items-one-time',
+    query: '?updates=2500&random=true',
+  },
 ];
+
+let selectedFrameworks = await clack.multiselect({
+  message: 'Which frameworks?',
+  options: [...frameworks.values()].map((fw) => {
+    return { value: fw, label: fw };
+  }),
+});
+
+if (clack.isCancel(selectedFrameworks)) {
+  clack.log.info('Cancelled');
+  process.exit(1);
+}
+
+let selectedBenches = await clack.multiselect({
+  message: 'Which benchmarks?',
+  options: benchmarks.map((b) => {
+    return { value: b, label: b.name };
+  }),
+});
+
+if (clack.isCancel(selectedBenches)) {
+  clack.log.info('Cancelled');
+  process.exit(1);
+}
 
 console.info(inspect(info, { showHidden: false, depth: null, colors: true }));
 console.log(`
+  Selected Frameworks: ${selectedFrameworks.join(', ')}  
+  Selected Benches:
+    ${selectedBenches.map((b) => b.name).join('\n    ')}
+
   Results will be written to ${filePath}
 `);
 
@@ -50,14 +100,15 @@ async function getMarks(browser: Browser, url: string) {
   return performanceMarks;
 }
 
-let tests = await getTests();
-
 const browser = await puppeteer.launch({
   executablePath: chromeLocation,
   headless: HEADLESS,
 });
 
-console.log(`Running ${tests.length} tests...`);
+for (let framework of frameworks) {
+  for (let benchName of benchNames) {
+  }
+}
 
 for (let test of tests) {
   let [, framework, benchName] = test.split('/');

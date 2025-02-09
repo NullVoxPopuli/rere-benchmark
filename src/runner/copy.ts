@@ -5,23 +5,7 @@
  */
 import fs from 'node:fs/promises';
 import * as clack from '@clack/prompts';
-import { getTests } from './repo.ts';
-import assert from 'node:assert';
-
-let tests = await getTests();
-
-let frameworks = new Set<string>();
-let benchNames = new Set<string>();
-
-for (let test of tests) {
-  let [, /* frameworks folder */ fw, name] = test.split('/');
-
-  assert(fw, `Framework name missing for ${test}`);
-  assert(name, `Bench name missing for ${test}`);
-
-  frameworks.add(fw);
-  benchNames.add(name);
-}
+import { benchNames, frameworks } from './repo.ts';
 
 let bench = await clack.select({
   message: 'Which bench to copy?',
