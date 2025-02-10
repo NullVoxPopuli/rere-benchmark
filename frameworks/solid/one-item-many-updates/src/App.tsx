@@ -1,4 +1,4 @@
-import { createSignal, createEffect } from 'solid-js'
+import { createSignal, batch, onMount } from 'solid-js'
 import { helpers } from 'common';
 
 let test = helpers.oneItem10kUpdates();
@@ -6,9 +6,9 @@ let test = helpers.oneItem10kUpdates();
 function App() {
   const [count, setCount] = createSignal(test.getData())
 
-  createEffect(() => {
-    test.run((i) => setCount(i));
-  }, [])
+  onMount(() => {
+    test.run((i) => setCount(i), batch);
+  });
 
   return <output>{test.formatItem(count())}</output>
 }

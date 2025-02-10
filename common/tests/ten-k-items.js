@@ -1,5 +1,10 @@
 import { qpBool, qpNum, tryVerify } from './utils.js';
 
+/**
+ * @typedef {import('./types.ts').BenchTest<Array<number | undefined>>} ArrayTest
+ *
+ * @implements {ArrayTest}
+ */
 export class TenKItems {
   name = '10k items, 1 update';
 
@@ -48,8 +53,9 @@ export class TenKItems {
 
   /**
    * @param {(nextValue: number) => unknown} set
+   * @param {(callback: () => unknown) => unknown} [ batch ] if a reactivity system requires manual, userland batching, pass that function here, it will wrap the test run
    */
-  run(set) {
+  run(set, batch) {
     // Account for React's double-mount...
     //   (only occurs during dev mode tho)
     // Normally we'd hard error if this is called more than once.
@@ -61,13 +67,21 @@ export class TenKItems {
       requestAnimationFrame(() => {
         let name = this.name;
 
+        const run = () => {
+          for (let i = 0; i < this.#totalUpdates; i++) {
+            let nextValue = this.#random ? this.#randomNextValue() : i;
+            set(nextValue);
+            this.#last = nextValue;
+          }
+        };
+
         console.time(name);
         performance.mark(`:start`);
 
-        for (let i = 0; i < this.#totalUpdates; i++) {
-          let nextValue = this.#random ? this.#randomNextValue() : i;
-          set(nextValue);
-          this.#last = nextValue;
+        if (batch) {
+          batch(() => run());
+        } else {
+          run();
         }
 
         tryVerify(name, this.verify);
