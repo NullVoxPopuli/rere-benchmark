@@ -4,11 +4,16 @@ import { inspect } from 'node:util';
 import { frameworks } from './repo.ts';
 import * as args from './arg.ts';
 
-interface BenchmarkInfo {
+export interface BenchmarkInfo {
   name: string;
   app: string;
   query: string;
 }
+
+const variants = [
+  { name: '', query: '?manualBatch=false' },
+  { name: 'w/ manual batching', query: '?manualBatch=true' },
+];
 
 const benchmarks = [
   {
@@ -19,12 +24,12 @@ const benchmarks = [
   {
     name: '1 item, 100k updates',
     app: 'one-item-many-updates',
-    query: '?updates=100000',
+    query: '&updates=100000',
   },
   {
     name: '1 item, 1 million updates',
     app: 'one-item-many-updates',
-    query: '?updates=1000000',
+    query: '&updates=1000000',
   },
   {
     name: '10k items, 1 update each (sequentially)',
@@ -34,12 +39,12 @@ const benchmarks = [
   {
     name: '10k items 1 update on 5% (random)',
     app: 'ten-k-items-one-time',
-    query: '?updates=500&random=true',
+    query: '&updates=500&random=true',
   },
   {
     name: '10k items 1 update on 25% (random)',
     app: 'ten-k-items-one-time',
-    query: '?updates=2500&random=true',
+    query: '&updates=2500&random=true',
   },
 ];
 
@@ -117,5 +122,10 @@ export async function getBenchInfo() {
 
   let apps = new Set(selectedBenches.map((b) => b.app));
 
-  return { apps, benches: selectedBenches, frameworks: selectedFrameworks };
+  return {
+    apps,
+    benches: selectedBenches,
+    frameworks: selectedFrameworks,
+    variants: variants,
+  };
 }

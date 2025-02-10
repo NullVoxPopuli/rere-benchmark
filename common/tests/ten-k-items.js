@@ -16,12 +16,18 @@ export class TenKItems {
    */
   #last;
 
+  /**
+   * @type {boolean}
+   */
+  #allowManualBatch = false;
+
   constructor({
     totalUpdates = qpNum('updates', 10_000),
     random = qpBool('random', false),
   } = {}) {
     this.#totalUpdates = totalUpdates;
     this.#random = random;
+    this.#allowManualBatch = qpBool('manualBatch', false);
   }
 
   getData = () => {
@@ -78,7 +84,7 @@ export class TenKItems {
         console.time(name);
         performance.mark(`:start`);
 
-        if (batch) {
+        if (batch && this.#allowManualBatch) {
           batch(() => run());
         } else {
           run();
