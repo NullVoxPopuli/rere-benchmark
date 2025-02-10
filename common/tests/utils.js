@@ -54,12 +54,24 @@ export function qp(name) {
 
 /**
  * @param {string} name
- * @param {number} fallback
+ * @param {number} [ fallback ]
  */
 export function qpNum(name, fallback) {
   let q = qp(name);
   let r = q ? parseInt(q, 10) || fallback : fallback;
   return r;
+}
+
+/**
+ * Reads percent (0-100), returns percent (0-1)
+ *
+ * @param {string} name
+ * @param {number} fallback
+ */
+export function qpPercent(name, fallback) {
+  let num = qpNum(name);
+
+  return num !== undefined ? num / 100 : fallback;
 }
 
 /**

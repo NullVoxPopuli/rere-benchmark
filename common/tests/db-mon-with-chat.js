@@ -1,4 +1,4 @@
-import { ENV } from './dbmon/env.js';
+import { generateData } from './dbmon/env.js';
 /**
  * @typedef {import('./dbmon/types.ts').Row} DBRow;
  *
@@ -10,10 +10,12 @@ import { ENV } from './dbmon/env.js';
  * @implements {DataTest}
  */
 export class DBMonWithChat {
+  #db = generateData();
   getData() {
     return {
-      db: ENV.generateData().toArray(),
+      db: this.#db.toArray(),
       chats: [],
+      update: this.#db.updateData,
     };
   }
 
@@ -33,6 +35,10 @@ export class DBMonWithChat {
    * @param {GetData} getData
    */
   run(updateDB, addChat) {
-    throw new Error('Method not implemented.');
+    let loop = () => {
+      this.#db.updateData(updateDB);
+      requestAnimationFrame(loop);
+    };
+    requestAnimationFrame(loop);
   }
 }
