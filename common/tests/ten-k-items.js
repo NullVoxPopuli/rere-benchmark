@@ -67,9 +67,6 @@ export class TenKItems {
       requestAnimationFrame(() => {
         let name = this.name;
 
-        console.time(name);
-        performance.mark(`:start`);
-
         const run = () => {
           for (let i = 0; i < this.#totalUpdates; i++) {
             let nextValue = this.#random ? this.#randomNextValue() : i;
@@ -77,6 +74,9 @@ export class TenKItems {
             this.#last = nextValue;
           }
         };
+
+        console.time(name);
+        performance.mark(`:start`);
 
         if (batch) {
           batch(() => run());

@@ -48,9 +48,10 @@ export class OneItem {
 
   /**
    * @param {(nextValue: number) => unknown} set
+   * @param {(callback: () => unknown) => unknown} [ batch ] if a reactivity system requires manual, userland batching, pass that function here, it will wrap the test run
    * @return {unknown}
    */
-  run(set) {
+  run(set, batch) {
     // Account for React's double-mount...
     //   (only occurs during dev mode tho)
     // Normally we'd hard error if this is called more than once.
@@ -61,11 +62,19 @@ export class OneItem {
       requestAnimationFrame(() => {
         let name = this.name;
 
+        const run = () => {
+          for (let i = 0; i < this.#num; i++) {
+            set(i);
+          }
+        };
+
         console.time(name);
         performance.mark(`:start`);
 
-        for (let i = 0; i < this.#num; i++) {
-          set(i);
+        if (batch) {
+          batch(() => run());
+        } else {
+          run();
         }
 
         tryVerify(name, this.verify);

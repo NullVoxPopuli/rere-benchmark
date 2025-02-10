@@ -58,7 +58,11 @@ export function qp(name) {
  */
 export function qpNum(name, fallback) {
   let q = qp(name);
-  let r = q ? parseInt(q, 10) || fallback : fallback;
+
+  if (q === null || q === undefined) return fallback;
+
+  let r = parseInt(q, 10) || fallback;
+
   return r;
 }
 
