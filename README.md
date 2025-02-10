@@ -9,6 +9,7 @@
 - When running the benchmark, capture the version numbers
 - Split all benches by "auto-batch" vs "manual batch" -- as manual batching is a low-level fix to noisy updates, and we want to capture performance of both situations.
 - Add another page for viewing the data as boxplots (important to understand how reliable individual test runs are)
+- Add another page for a tabular view to quickly see how each framework compares in each test (like js-framework-benchmark)
 
 - More Benches:
   - db mon + chat + typing-responsiveness
