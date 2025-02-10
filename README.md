@@ -6,6 +6,7 @@
 
 ## TODOs
 
+- When running the benchmark, capture the version numbers
 - Add another page for viewing the data as boxplots (important to understand how reliable individual test runs are)
 
 - More Benches:
