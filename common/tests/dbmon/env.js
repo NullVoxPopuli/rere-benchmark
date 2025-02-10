@@ -16,6 +16,7 @@
 //   (which we need to do to have a chance to tie in to fine-grained reactivity)
 //
 // More references:
+//   https://github.com/mathieuancelin/js-repaint-perfs/blob/gh-pages/ENV.js
 //   https://github.com/ryansolid/solid-dbmon/blob/master/dist/ENV.js
 //   https://github.com/html-next/vertical-collection/blob/master/tests/dummy/app/lib/get-data.js
 
