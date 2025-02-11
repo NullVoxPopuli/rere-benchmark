@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { getInfo, yyyymmdd } from './environment.ts';
-import { BenchmarkInfo } from './bench-info.ts';
+import type { BenchmarkInfo } from './bench-info.ts';
 import { frameworks } from '../../results/app/frameworks.ts';
 import { join } from 'node:path';
 import assert from 'node:assert';

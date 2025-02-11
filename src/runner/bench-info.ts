@@ -11,8 +11,8 @@ export interface BenchmarkInfo {
 }
 
 const variants = [
-  { name: '', query: '?manualBatch=false' },
-  { name: 'w/ manual batching', query: '?manualBatch=true' },
+  { name: '', query: '&manualBatch=false' },
+  { name: 'w/ manual batching', query: '&manualBatch=true' },
 ];
 
 const benchmarks = [
