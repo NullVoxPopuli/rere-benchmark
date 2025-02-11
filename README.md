@@ -81,9 +81,23 @@ All benchmarks are quite synthetic, as they're intended to stress how efficient 
 
 This test is primarily about assessing the impact of dirtying the reactive system, and how the renderer can reconcile with many rapid updates.
 
+It's kinda similar to having this in your app:
+```js 
+websocket.on('message', updateData);
+```
+
+Where you don't control the frequency of the updates, and they could happen at any speed. In this bench, we test if the message event is so fast, it's synchronous. And then measure the time it takes for the framework to render those schanges. 
+
 #### 10k items, one update (variable) 
 
 This test is coverying a few things: iteration, ability to efficiently update one thing in the list without re-rendering the list, as well as the ability to handle a reactive collection, as is common in tables where you edit data.
+
+It's kinda similar to having this in your app:
+```js 
+websocket.on('message', updateRow);
+```
+
+Where you don't control the frequency of the updates, and they could happen at any speed. In this bench, we test if the message event is so fast, it's synchronous. And then measure the time it takes for the framework to render those schanges. 
 
 #### DB Monitoring + Live Chat + interactivity retention
 

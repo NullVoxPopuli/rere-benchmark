@@ -1,5 +1,5 @@
 export interface BenchTest<DataType> {
   getData(): DataType;
   verify(): boolean;
-  run(): unknown;
+  run(...args: unknown[]): unknown;
 }

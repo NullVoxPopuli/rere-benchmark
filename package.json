@@ -17,6 +17,7 @@
     "@tsconfig/strictest": "^2.0.5",
     "@types/node": "^22.13.1",
     "byte-size": "^9.0.1",
+    "cosmiconfig": "^9.0.0",
     "execa": "^9.5.2",
     "globby": "^14.0.2",
     "killable": "^1.0.1",

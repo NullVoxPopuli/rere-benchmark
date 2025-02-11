@@ -1,4 +1,4 @@
-import { qpNum, tryVerify } from './utils.js';
+import { qpBool, qpNum, tryVerify } from './utils.js';
 
 /**
  * @typedef {import('./types.ts').BenchTest<number>} NumberTest
@@ -12,12 +12,18 @@ export class OneItem {
   name;
 
   /**
+   * @type {boolean}
+   */
+  #allowManualBatch = false;
+
+  /**
    * @type {number}
    */
   #num;
   constructor(num = qpNum('updates', 10_000)) {
     this.#num = num;
     this.name = `1 Item, ${num / 1000}k updates`;
+    this.#allowManualBatch = qpBool('manualBatch', false);
   }
 
   /**
@@ -59,11 +65,12 @@ export class OneItem {
 
     this.#isRunning = true;
     requestIdleCallback(() => {
-      requestAnimationFrame(() => {
+      requestAnimationFrame(async () => {
         let name = this.name;
 
-        const run = () => {
+        const run = async () => {
           for (let i = 0; i < this.#num; i++) {
+            await 0;
             set(i);
           }
         };
@@ -71,10 +78,10 @@ export class OneItem {
         console.time(name);
         performance.mark(`:start`);
 
-        if (batch) {
+        if (batch && this.#allowManualBatch) {
           batch(() => run());
         } else {
-          run();
+          await run();
         }
 
         tryVerify(name, this.verify);

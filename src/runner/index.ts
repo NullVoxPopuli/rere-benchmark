@@ -65,10 +65,13 @@ clack.log.info('Starting Benchmark Runs');
 for (let framework of info.frameworks) {
   clack.log.info(`Benchmarking ${framework}`);
 
-  for (let bench of info.benches) {
-    let dir = join('frameworks', framework, bench.app);
+  /**
+   * Iterating on the apps allows us to boot one server for a whose suite of tests
+   */
+  for (let app of info.apps) {
+    let dir = join('frameworks', framework, app);
 
-    clack.log.info(`Starting server for ${bench.name} in ${dir}/dist`);
+    clack.log.info(`Starting server for ${app} in ${dir}/dist`);
 
     // TODO: make the output directory configurable
     let server = await serve(`${dir}/dist`);
@@ -76,24 +79,34 @@ for (let framework of info.frameworks) {
 
     assert(
       address,
-      `Server for ${framework}, ${bench.name} (in ${bench.app}) does not have an address!`,
+      `Server for ${framework}, (in ${app}) does not have an address!`,
     );
 
-    let url =
+    let serverUrl =
       typeof address === 'string'
         ? address
         : `http://${address.address === '::' ? 'localhost' : address.address}:${address.port}`;
 
-    url += '/' + bench.query;
+    clack.log.info(`Server up at ${serverUrl}`);
 
-    await prepareForResults(framework, bench.name, bench.query);
+    for (let bench of info.benches) {
+      if (bench.app !== app) continue;
 
-    clack.log.info(`Server up at ${url}`);
+      await prepareForResults(framework, bench);
 
-    for (let i = 0; i < COUNT; i++) {
-      let performanceMarks = await getMarks(browser, url);
+      for (let variant of info.variants) {
+        let url = serverUrl + '/?' + bench.query + variant.query;
 
-      await addResult(framework, bench.name, performanceMarks);
+        for (let i = 0; i < COUNT; i++) {
+          let performanceMarks = await getMarks(browser, url);
+
+          let name = Boolean(variant.name)
+            ? `${bench.name} ${variant.name}`
+            : bench.name;
+
+          await addResult(framework, name, performanceMarks);
+        }
+      }
     }
 
     let promise = new Promise((resolve) => {
