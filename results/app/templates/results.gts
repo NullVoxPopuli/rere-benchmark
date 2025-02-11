@@ -8,6 +8,8 @@ export default <template>
     <LinkTo @route="results.animated">Animated</LinkTo>
     |
     <LinkTo @route="results.index">Table</LinkTo>
+    |
+    <LinkTo @route="results.boxplot">Boxplot</LinkTo>
   </nav>
 
   <Info @date={{@model.data.date}} @env={{@model.data.environment}} />
