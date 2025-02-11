@@ -70,11 +70,12 @@ export class TenKItems {
     this.#isRunning = true;
 
     requestIdleCallback(() => {
-      requestAnimationFrame(() => {
+      requestAnimationFrame(async () => {
         let name = this.name;
 
-        const run = () => {
+        const run = async () => {
           for (let i = 0; i < this.#totalUpdates; i++) {
+            await 0;
             let nextValue = this.#random ? this.#randomNextValue() : i;
             set(nextValue);
             this.#last = nextValue;
@@ -87,7 +88,7 @@ export class TenKItems {
         if (batch && this.#allowManualBatch) {
           batch(() => run());
         } else {
-          run();
+          await run();
         }
 
         tryVerify(name, this.verify);

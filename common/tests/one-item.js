@@ -65,11 +65,12 @@ export class OneItem {
 
     this.#isRunning = true;
     requestIdleCallback(() => {
-      requestAnimationFrame(() => {
+      requestAnimationFrame(async () => {
         let name = this.name;
 
-        const run = () => {
+        const run = async () => {
           for (let i = 0; i < this.#num; i++) {
+            await 0;
             set(i);
           }
         };
@@ -80,7 +81,7 @@ export class OneItem {
         if (batch && this.#allowManualBatch) {
           batch(() => run());
         } else {
-          run();
+          await run();
         }
 
         tryVerify(name, this.verify);

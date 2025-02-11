@@ -101,7 +101,7 @@ for (let framework of info.frameworks) {
           let performanceMarks = await getMarks(browser, url);
 
           let name = Boolean(variant.name)
-            ? bench.name + variant.name
+            ? `${bench.name} ${variant.name}`
             : bench.name;
 
           await addResult(framework, name, performanceMarks);
