@@ -27,11 +27,22 @@ body {
 .all-results {
   display: grid;
   gap: 2rem;
+  justify-items: center;
 
   h2 {
     margin-top: 0;
     margin-bottom: 0.5rem;
   }
+}
+
+.visualizations {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+main {
+  display: grid;
+  justify-items: center;
 }
 
 main.error-page {
@@ -70,5 +81,11 @@ main.error-page {
   }
   span {
     font-size: 0.8rem;
+  }
+}
+
+table {
+  th, td {
+    padding: 0.25rem 0.5rem;
   }
 }
