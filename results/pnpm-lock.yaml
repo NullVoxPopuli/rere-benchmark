@@ -62,6 +62,9 @@ importers:
       '@tsconfig/ember':
         specifier: ^3.0.8
         version: 3.0.9
+      '@types/culori':
+        specifier: ^2.1.1
+        version: 2.1.1
       '@types/qunit':
         specifier: ^2.19.12
         version: 2.19.12
@@ -74,6 +77,9 @@ importers:
       concurrently:
         specifier: ^9.1.2
         version: 9.1.2
+      culori:
+        specifier: ^4.0.1
+        version: 4.0.1
       decorator-transforms:
         specifier: ^2.3.0
         version: 2.3.0(@babel/core@7.26.8)
@@ -1544,6 +1550,9 @@ packages:
   '@types/cors@2.8.17':
     resolution: {integrity: sha512-8CGDvrBj1zgo2qE+oS3pOCyYNqCPryMWY2bGfwA0dcfopWGgxs+78df0Rs3rc9THP4JkOhLsAa+15VdpAqkcUA==}
 
+  '@types/culori@2.1.1':
+    resolution: {integrity: sha512-NzLYD0vNHLxTdPp8+RlvGbR2NfOZkwxcYGFwxNtm+WH2NuUNV8785zv1h0sulFQ5aFQ9n/jNDUuJeo3Bh7+oFA==}
+
   '@types/eslint-scope@3.7.7':
     resolution: {integrity: sha512-MzMFlSLBqNF2gcHWO0G1vP/YQyfvrxZ0bF+u7mzUdZ1/xK4A4sru+nraZz5i3iEIk1l1uyicaDVTB4QbbEkAYg==}
 
@@ -2770,6 +2779,10 @@ packages:
   cssstyle@4.2.1:
     resolution: {integrity: sha512-9+vem03dMXG7gDmZ62uqmRiMRNtinIZ9ZyuF6BdxzfOD+FdN5hretzynkn0ReS2DO2GSw76RWHs0UmJPI2zUjw==}
     engines: {node: '>=18'}
+
+  culori@4.0.1:
+    resolution: {integrity: sha512-LSnjA6HuIUOlkfKVbzi2OlToZE8OjFi667JWN9qNymXVXzGDmvuP60SSgC+e92sd7B7158f7Fy3Mb6rXS5EDPw==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
   dag-map@2.0.2:
     resolution: {integrity: sha512-xnsprIzYuDeiyu5zSKwilV/ajRHxnoMlAhEREfyfTgTSViMVY2fGP1ZcHJbtwup26oCkofySU/m6oKJ3HrkW7w==}
@@ -8130,6 +8143,8 @@ snapshots:
     dependencies:
       '@types/node': 22.13.1
 
+  '@types/culori@2.1.1': {}
+
   '@types/eslint-scope@3.7.7':
     dependencies:
       '@types/eslint': 9.6.1
@@ -9519,6 +9534,8 @@ snapshots:
     dependencies:
       '@asamuzakjp/css-color': 2.8.3
       rrweb-cssom: 0.8.0
+
+  culori@4.0.1: {}
 
   dag-map@2.0.2: {}
 

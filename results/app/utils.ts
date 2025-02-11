@@ -2,6 +2,30 @@ import { assert } from '@ember/debug';
 import type { Mark, ResultData } from '#types';
 import { frameworks } from './frameworks.ts';
 
+export function getFrameworks(results: ResultData): string[] {
+  return Object.keys(results);
+}
+
+export function getBenchNames(results: ResultData): Set<string> {
+  const names = new Set<string>();
+
+  Object.values(results)
+    .map(Object.keys)
+    .flat()
+    .forEach((name) => {
+      names.add(name);
+    });
+
+  return names;
+}
+
+/**
+ * Round to the hundredth's place
+ */
+export function round(ms: number) {
+  return Math.round(ms * 100) / 100;
+}
+
 const msInOneHz = 1_000;
 
 export function msOfFrameAt(hz: number) {

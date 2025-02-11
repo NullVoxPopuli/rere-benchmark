@@ -3,6 +3,7 @@ import type { TOC } from '@ember/component/template-only';
 import type { Results } from '#types';
 import { assert } from '@ember/debug';
 import { FrameworkInfo } from './framework-info';
+import { round } from '#utils';
 
 function scaleFactor(results: Results) {
   const fastest = results[0];
@@ -10,10 +11,6 @@ function scaleFactor(results: Results) {
 
   const scale = fastest.speed;
   return (ms: number) => ms / scale;
-}
-
-function round(ms: number) {
-  return Math.round(ms * 100) / 100;
 }
 
 export const Visualize = <template>
