@@ -48,6 +48,29 @@ function min(data: Result[]) {
   return Math.min(...speeds);
 }
 
+function maxTotal({
+  rows,
+  frameworks,
+}: {
+  rows: Record<string, Result[]>;
+  frameworks: string[];
+}) {
+  const totals = frameworks.map((fw) => totalFor(rows, fw));
+
+  return Math.max(...totals);
+}
+function minTotal({
+  rows,
+  frameworks,
+}: {
+  rows: Record<string, Result[]>;
+  frameworks: string[];
+}) {
+  const totals = frameworks.map((fw) => totalFor(rows, fw));
+
+  return Math.min(...totals);
+}
+
 const start = '#ff7777';
 const end = '#77ff77';
 function colorFor(speed: number | undefined, min: number, max: number) {
@@ -92,14 +115,20 @@ export default <template>
         </tbody>
         <tfoot>
           <tr><th>Total</th>
-            {{#each p.frameworks as |framework|}}
-              <td>
-                {{totalFor p.rows framework}}
-              </td>
-            {{/each}}
+            {{#let (maxTotal p) (minTotal p) as |max min|}}
+              {{#each p.frameworks as |framework|}}
+                {{#let (totalFor p.rows framework) as |total|}}
+                  <td style="background: {{colorFor total min max}}">
+                    {{total}}
+                  </td>
+                {{/let}}
+              {{/each}}
+            {{/let}}
           </tr>
         </tfoot>
       </table>
     {{/let}}
   </div>
-</template> satisfies TOC<{ model: Model }>;
+</template> satisfies TOC<{
+  model: Model;
+}>;
