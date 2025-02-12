@@ -17,19 +17,19 @@ const variants = [
 
 const benchmarks = [
   {
-    name: '1 item, 100 updates',
-    app: 'one-item-many-updates',
-    query: '&updates=100',
-  },
-  {
     name: '1 item, 1k updates',
     app: 'one-item-many-updates',
-    query: '&updates=1000',
+    query: '&updates=1000&percentRandomAwait=25',
   },
   {
     name: '1 item, 10k updates',
     app: 'one-item-many-updates',
-    query: '&updates=10000',
+    query: '&updates=10000&percentRandomAwait=25',
+  },
+  {
+    name: '1 item, 100k updates',
+    app: 'one-item-many-updates',
+    query: '&updates=100000&percentRandomAwait=100',
   },
   // {
   //   name: '1 item, 100k updates',
@@ -48,14 +48,24 @@ const benchmarks = [
     query: '&items=1000&updates=1000',
   },
   {
-    name: '1k items, 1k total updates (sequentially)',
+    name: '1k items, 1k total updates (random)',
     app: 'ten-k-items-one-time',
     query: '&items=1000&random=true&updates=1000',
+  },
+  {
+    name: '1k items, 1k total updates (random, random async)',
+    app: 'ten-k-items-one-time',
+    query: '&items=1000&random=true&updates=1000&percentRandomAwait=70',
   },
   {
     name: '1k items 1 update on 5% (random)',
     app: 'ten-k-items-one-time',
     query: '&items=1000&updates=50&random=true',
+  },
+  {
+    name: '1k items 1 update on 5% (random, random async)',
+    app: 'ten-k-items-one-time',
+    query: '&items=1000&updates=50&random=true&percentRandomAwait=70',
   },
   {
     name: '1k items 1 update on 25% (random)',

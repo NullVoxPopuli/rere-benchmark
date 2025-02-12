@@ -147,6 +147,9 @@ importers:
       vite:
         specifier: ^5.4.11
         version: 5.4.14(@types/node@22.13.1)(terser@5.38.1)
+      vite-plugin-full-reload:
+        specifier: ^1.2.0
+        version: 1.2.0
       vite-plugin-virtual:
         specifier: ^0.3.0
         version: 0.3.0(vite@5.4.14(@types/node@22.13.1)(terser@5.38.1))
@@ -6231,6 +6234,9 @@ packages:
 
   vfile@4.2.1:
     resolution: {integrity: sha512-O6AE4OskCG5S1emQ/4gl8zK586RqA3srz3nfK/Viy0UPToBc5Trp9BVFb1u0CjsKrAWwnpr4ifM/KBXPWwJbCA==}
+
+  vite-plugin-full-reload@1.2.0:
+    resolution: {integrity: sha512-kz18NW79x0IHbxRSHm0jttP4zoO9P9gXh+n6UTwlNKnviTTEpOlum6oS9SmecrTtSr+muHEn5TUuC75UovQzcA==}
 
   vite-plugin-virtual@0.3.0:
     resolution: {integrity: sha512-TOtrWw6jKrJNXfxhGRUiQzfAP1gRkYkVzMkJNjHUJ8idLuxf8eeeDKZKZHhdeYfaCc/87rv+KvWE2iCy1QInWA==}
@@ -14026,6 +14032,11 @@ snapshots:
       is-buffer: 2.0.5
       unist-util-stringify-position: 2.0.3
       vfile-message: 2.0.4
+
+  vite-plugin-full-reload@1.2.0:
+    dependencies:
+      picocolors: 1.1.1
+      picomatch: 2.3.1
 
   vite-plugin-virtual@0.3.0(vite@5.4.14(@types/node@22.13.1)(terser@5.38.1)):
     dependencies:

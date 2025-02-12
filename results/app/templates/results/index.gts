@@ -2,20 +2,12 @@ import type { Model } from '#routes/results.ts';
 import type { Result, ResultData } from '#types';
 import { dataOf, getBenchNames, getFrameworks, round } from '#utils';
 import type { TOC } from '@ember/component/template-only';
-import { on } from '@ember/modifier';
-import { tracked } from '@glimmer/tracking';
 import { interpolate } from 'culori';
 
-function pivot(data: ResultData, showManuallyBatched: boolean) {
+function pivot(data: ResultData) {
   const frameworks = getFrameworks(data);
 
-  let benchNames = [...getBenchNames(data)];
-
-  if (!showManuallyBatched) {
-    benchNames = benchNames.filter((x) => !x.includes('manual batching'));
-  } else {
-    benchNames = benchNames.filter((x) => x.includes('manual batching'));
-  }
+  const benchNames = [...getBenchNames(data)];
 
   const result: Record<string, Result[]> = {};
 
@@ -84,30 +76,14 @@ function colorFor(speed: number | undefined, min: number, max: number) {
   if (!speed) return;
   const interpolation = interpolate([end, start], 'oklch');
 
-  const normalized = speed / (max - min);
+  const normalized = (speed - min) / (max - min);
   const color = interpolation(normalized);
 
   return `oklch(${color.l} ${color.c} ${color.h}deg)`;
 }
 
-class ShowManuallyBatched {
-  @tracked current = true;
-  toggle = () => (this.current = !this.current);
-}
-
-const manuallyChecked = new ShowManuallyBatched();
-
 export default <template>
-  <label>
-    Show Manually Batched
-    <input
-      type="checkbox"
-      checked={{manuallyChecked.current}}
-      {{on "change" manuallyChecked.toggle}}
-    />
-  </label>
-
-  {{#let (pivot @model.data.results manuallyChecked.current) as |p|}}
+  {{#let (pivot @model.data.results) as |p|}}
     <table>
       <thead>
         <tr>
@@ -119,18 +95,18 @@ export default <template>
       </thead>
       <tbody>
         {{#each-in p.rows as |name data|}}
-          <tr>
-            <td style="text-align: right;">{{name}}</td>
-            {{#each p.frameworks as |framework|}}
-              {{#let (max data) (min data) as |max min|}}
+          {{#let (max data) (min data) as |max min|}}
+            <tr>
+              <td style="text-align: right;">{{name}}</td>
+              {{#each p.frameworks as |framework|}}
                 {{#let (speedFor data framework) as |speed|}}
                   <td
                     style="background: {{colorFor speed min max}}"
                   >{{speed}}</td>
                 {{/let}}
-              {{/let}}
-            {{/each}}
-          </tr>
+              {{/each}}
+            </tr>
+          {{/let}}
         {{/each-in}}
       </tbody>
       <tfoot>

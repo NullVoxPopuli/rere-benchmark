@@ -1,11 +1,12 @@
-import { qpBool, qpNum, tryVerify } from './utils.js';
+import { BaseTest, RUN } from './base-test.js';
+import { qpBool, qpNum, qpPercent, tryVerify } from './utils.js';
 
 /**
  * @typedef {import('./types.ts').BenchTest<Array<number | undefined>>} ArrayTest
  *
  * @implements {ArrayTest}
  */
-export class ManyItems {
+export class ManyItems extends BaseTest {
   name = '10k items, 1 update';
 
   #num = qpNum('items', 10_000);
@@ -15,6 +16,10 @@ export class ManyItems {
    * @type {number | undefined}
    */
   #last;
+  /**
+   * @type {number}
+   */
+  #percentRandomAwait = 0;
 
   /**
    * @type {boolean}
@@ -25,8 +30,11 @@ export class ManyItems {
     totalUpdates = qpNum('updates', 10_000),
     random = qpBool('random', false),
   } = {}) {
+    super();
+
     this.#totalUpdates = totalUpdates;
     this.#random = random;
+    this.#percentRandomAwait = qpPercent('percentRandomAwait', 0);
     this.#allowManualBatch = qpBool('manualBatch', false);
   }
 
@@ -51,8 +59,6 @@ export class ManyItems {
     return result.includes(`[${this.#last}]`);
   };
 
-  #isRunning = false;
-
   #randomNextValue = () => {
     return Math.floor(Math.random() * this.#num);
   };
@@ -61,40 +67,22 @@ export class ManyItems {
    * @param {(nextValue: number) => unknown} set
    * @param {(callback: () => unknown) => unknown} [ batch ] if a reactivity system requires manual, userland batching, pass that function here, it will wrap the test run
    */
-  run(set, batch) {
-    // Account for React's double-mount...
-    //   (only occurs during dev mode tho)
-    // Normally we'd hard error if this is called more than once.
-    if (this.#isRunning) return;
+  async [RUN](set) {
+    let name = this.name;
 
-    this.#isRunning = true;
+    console.time(name);
+    performance.mark(`:start`);
 
-    requestIdleCallback(() => {
-      requestAnimationFrame(async () => {
-        let name = this.name;
+    for (let i = 0; i < this.#totalUpdates; i++) {
+      if (Math.random() < this.#percentRandomAwait) {
+        await 0;
+      }
 
-        const run = async () => {
-          for (let i = 0; i < this.#totalUpdates; i++) {
-            if (Math.random() > 0.5) {
-              await 0;
-            }
-            let nextValue = this.#random ? this.#randomNextValue() : i;
-            set(nextValue);
-            this.#last = nextValue;
-          }
-        };
+      let nextValue = this.#random ? this.#randomNextValue() : i;
+      set(nextValue);
+      this.#last = nextValue;
+    }
 
-        console.time(name);
-        performance.mark(`:start`);
-
-        if (batch && this.#allowManualBatch) {
-          batch(() => run());
-        } else {
-          await run();
-        }
-
-        tryVerify(name, this.verify);
-      });
-    });
+    tryVerify(name, this.verify);
   }
 }

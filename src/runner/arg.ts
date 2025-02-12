@@ -1,7 +1,7 @@
 const [, , ...args] = process.argv;
 
 export const HEADLESS = bool('--headless');
-export const COUNT = int('--count', 20);
+export const COUNT = int('--count', 10);
 export const FRAMEWORK = str('--framework');
 export const BENCH_NAME = str('--bench');
 export const SKIP_BUILD = bool('--skip-build');
