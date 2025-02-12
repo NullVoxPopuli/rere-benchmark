@@ -1,9 +1,8 @@
 export type Results = Result[];
 
-interface Result {
+export interface Result {
   name: string;
   color: string;
-  logo: string;
   speed: number;
 }
 
@@ -15,6 +14,7 @@ export interface ResultData {
   [framework: string]: {
     [benchName: string]: {
       url: string;
+      version: string;
       times: Array<[Mark, Mark]>;
     };
   };

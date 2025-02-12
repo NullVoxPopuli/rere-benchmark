@@ -44,10 +44,12 @@
     "@glint/template": "1.4.1-unstable.34c4510",
     "@rollup/plugin-babel": "^6.0.4",
     "@tsconfig/ember": "^3.0.8",
+    "@types/culori": "^2.1.1",
     "@types/qunit": "^2.19.12",
     "@types/rsvp": "^4.0.9",
     "babel-plugin-ember-template-compilation": "^2.3.0",
     "concurrently": "^9.1.2",
+    "culori": "^4.0.1",
     "decorator-transforms": "^2.3.0",
     "ember-auto-import": "^2.10.0",
     "ember-cli": "~6.1.0",
@@ -91,5 +93,9 @@
   "exports": {
     "./tests/*": "./tests/*",
     "./*": "./app/*"
+  },
+  "dependencies": {
+    "@sgratzl/chartjs-chart-boxplot": "^4.4.4",
+    "chart.js": "^4.4.7"
   }
 }

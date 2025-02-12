@@ -7,6 +7,13 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@sgratzl/chartjs-chart-boxplot':
+        specifier: ^4.4.4
+        version: 4.4.4(chart.js@4.4.7)
+      chart.js:
+        specifier: ^4.4.7
+        version: 4.4.7
     devDependencies:
       '@babel/core':
         specifier: ^7.26.7
@@ -62,6 +69,9 @@ importers:
       '@tsconfig/ember':
         specifier: ^3.0.8
         version: 3.0.9
+      '@types/culori':
+        specifier: ^2.1.1
+        version: 2.1.1
       '@types/qunit':
         specifier: ^2.19.12
         version: 2.19.12
@@ -74,6 +84,9 @@ importers:
       concurrently:
         specifier: ^9.1.2
         version: 9.1.2
+      culori:
+        specifier: ^4.0.1
+        version: 4.0.1
       decorator-transforms:
         specifier: ^2.3.0
         version: 2.3.0(@babel/core@7.26.8)
@@ -1356,6 +1369,9 @@ packages:
   '@keyv/serialize@1.0.2':
     resolution: {integrity: sha512-+E/LyaAeuABniD/RvUezWVXKpeuvwLEA9//nE9952zBaOdBd2mQ3pPoM8cUe2X6IcMByfuSLzmYqnYshG60+HQ==}
 
+  '@kurkle/color@0.3.4':
+    resolution: {integrity: sha512-M5UknZPHRu3DEDWoipU6sE8PdkZ6Z/S+v4dD+Ke8IaNlpdSQah50lz1KtcFBa2vsdOnwbbnxJwVM4wty6udA5w==}
+
   '@lint-todo/utils@13.1.1':
     resolution: {integrity: sha512-F5z53uvRIF4dYfFfJP3a2Cqg+4P1dgJchJsFnsZE0eZp0LK8X7g2J0CsJHRgns+skpXOlM7n5vFGwkWCWj8qJg==}
     engines: {node: 12.* || >= 14}
@@ -1510,6 +1526,14 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@sgratzl/boxplots@2.0.0':
+    resolution: {integrity: sha512-XHQTNTk0OtDEZyT7v+BKNKt4OEXYhn4GtfI+iQ1eFiFsx8Aq/csz+mOJYbfpkiP8Popd/8Nky8vLh1zzkYn0gw==}
+
+  '@sgratzl/chartjs-chart-boxplot@4.4.4':
+    resolution: {integrity: sha512-yenMztcbRyiBm20FxYry5HiJZPVGL/+Tc0nj3SIU5JlruthH2Awl3qSyrXUOwTzAhye2Lc/45Tw3j/UTBMLcrQ==}
+    peerDependencies:
+      chart.js: ^4.1.1
+
   '@simple-dom/document@1.4.0':
     resolution: {integrity: sha512-/RUeVH4kuD3rzo5/91+h4Z1meLSLP66eXqpVAw/4aZmYozkeqUkMprq0znL4psX/adEed5cBgiNJcfMz/eKZLg==}
 
@@ -1543,6 +1567,9 @@ packages:
 
   '@types/cors@2.8.17':
     resolution: {integrity: sha512-8CGDvrBj1zgo2qE+oS3pOCyYNqCPryMWY2bGfwA0dcfopWGgxs+78df0Rs3rc9THP4JkOhLsAa+15VdpAqkcUA==}
+
+  '@types/culori@2.1.1':
+    resolution: {integrity: sha512-NzLYD0vNHLxTdPp8+RlvGbR2NfOZkwxcYGFwxNtm+WH2NuUNV8785zv1h0sulFQ5aFQ9n/jNDUuJeo3Bh7+oFA==}
 
   '@types/eslint-scope@3.7.7':
     resolution: {integrity: sha512-MzMFlSLBqNF2gcHWO0G1vP/YQyfvrxZ0bF+u7mzUdZ1/xK4A4sru+nraZz5i3iEIk1l1uyicaDVTB4QbbEkAYg==}
@@ -2359,6 +2386,10 @@ packages:
   charm@1.0.2:
     resolution: {integrity: sha512-wqW3VdPnlSWT4eRiYX+hcs+C6ViBPUWk1qTCd+37qw9kEm/a5n2qcyQDMBWvSYKN/ctqZzeXNQaeBjOetJJUkw==}
 
+  chart.js@4.4.7:
+    resolution: {integrity: sha512-pwkcKfdzTMAU/+jNosKhNL2bHtJc/sSmYgVbuGTEDhzkrhmyihmP7vUc/5ZK9WopidMDHNe3Wm7jOd/WhuHWuw==}
+    engines: {pnpm: '>=8'}
+
   chrome-trace-event@1.0.4:
     resolution: {integrity: sha512-rNjApaLzuwaOTjCiT8lSDdGN1APCiqkChLMJxJPWLunPAt5fy8xgU9/jNOchV84wfIxrA0lRQB7oCT8jrn/wrQ==}
     engines: {node: '>=6.0'}
@@ -2770,6 +2801,10 @@ packages:
   cssstyle@4.2.1:
     resolution: {integrity: sha512-9+vem03dMXG7gDmZ62uqmRiMRNtinIZ9ZyuF6BdxzfOD+FdN5hretzynkn0ReS2DO2GSw76RWHs0UmJPI2zUjw==}
     engines: {node: '>=18'}
+
+  culori@4.0.1:
+    resolution: {integrity: sha512-LSnjA6HuIUOlkfKVbzi2OlToZE8OjFi667JWN9qNymXVXzGDmvuP60SSgC+e92sd7B7158f7Fy3Mb6rXS5EDPw==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
   dag-map@2.0.2:
     resolution: {integrity: sha512-xnsprIzYuDeiyu5zSKwilV/ajRHxnoMlAhEREfyfTgTSViMVY2fGP1ZcHJbtwup26oCkofySU/m6oKJ3HrkW7w==}
@@ -7981,6 +8016,8 @@ snapshots:
     dependencies:
       buffer: 6.0.3
 
+  '@kurkle/color@0.3.4': {}
+
   '@lint-todo/utils@13.1.1':
     dependencies:
       '@types/eslint': 8.56.12
@@ -8097,6 +8134,13 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.34.6':
     optional: true
 
+  '@sgratzl/boxplots@2.0.0': {}
+
+  '@sgratzl/chartjs-chart-boxplot@4.4.4(chart.js@4.4.7)':
+    dependencies:
+      '@sgratzl/boxplots': 2.0.0
+      chart.js: 4.4.7
+
   '@simple-dom/document@1.4.0':
     dependencies:
       '@simple-dom/interface': 1.4.0
@@ -8129,6 +8173,8 @@ snapshots:
   '@types/cors@2.8.17':
     dependencies:
       '@types/node': 22.13.1
+
+  '@types/culori@2.1.1': {}
 
   '@types/eslint-scope@3.7.7':
     dependencies:
@@ -9275,6 +9321,10 @@ snapshots:
     dependencies:
       inherits: 2.0.4
 
+  chart.js@4.4.7:
+    dependencies:
+      '@kurkle/color': 0.3.4
+
   chrome-trace-event@1.0.4: {}
 
   ci-info@4.1.0: {}
@@ -9519,6 +9569,8 @@ snapshots:
     dependencies:
       '@asamuzakjp/css-color': 2.8.3
       rrweb-cssom: 0.8.0
+
+  culori@4.0.1: {}
 
   dag-map@2.0.2: {}
 

@@ -7,7 +7,10 @@ export default class Router extends EmberRouter {
 }
 
 Router.map(function () {
-  this.route('results');
+  this.route('results', function () {
+    this.route('boxplot');
+    this.route('animated');
+  });
   this.route('history');
   this.route('error');
 });
