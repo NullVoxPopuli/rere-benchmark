@@ -6,7 +6,7 @@ const test = helpers.tenKitems1UpdateEach();
 const items = reactive(test.getData());
 
 onMounted(() => {
-  test.run((i) => (items[i] = i));
+  test.doit((i) => (items[i] = i));
 })
 </script>
 

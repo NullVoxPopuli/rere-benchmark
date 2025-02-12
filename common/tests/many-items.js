@@ -5,7 +5,7 @@ import { qpBool, qpNum, tryVerify } from './utils.js';
  *
  * @implements {ArrayTest}
  */
-export class TenKItems {
+export class ManyItems {
   name = '10k items, 1 update';
 
   #num = qpNum('items', 10_000);
@@ -75,7 +75,9 @@ export class TenKItems {
 
         const run = async () => {
           for (let i = 0; i < this.#totalUpdates; i++) {
-            await 0;
+            if (Math.random() > 0.5) {
+              await 0;
+            }
             let nextValue = this.#random ? this.#randomNextValue() : i;
             set(nextValue);
             this.#last = nextValue;

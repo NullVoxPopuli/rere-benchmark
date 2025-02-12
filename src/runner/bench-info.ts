@@ -17,35 +17,66 @@ const variants = [
 
 const benchmarks = [
   {
+    name: '1 item, 100 updates',
+    app: 'one-item-many-updates',
+    query: '&updates=100',
+  },
+  {
+    name: '1 item, 1k updates',
+    app: 'one-item-many-updates',
+    query: '&updates=1000',
+  },
+  {
     name: '1 item, 10k updates',
     app: 'one-item-many-updates',
-    query: '',
+    query: '&updates=10000',
   },
+  // {
+  //   name: '1 item, 100k updates',
+  //   app: 'one-item-many-updates',
+  //   query: '&updates=100000',
+  // },
+  // {
+  //   name: '1 item, 1 million updates',
+  //   app: 'one-item-many-updates',
+  //   query: '&updates=1000000',
+  // },
+
   {
-    name: '1 item, 100k updates',
-    app: 'one-item-many-updates',
-    query: '&updates=100000',
-  },
-  {
-    name: '1 item, 1 million updates',
-    app: 'one-item-many-updates',
-    query: '&updates=1000000',
-  },
-  {
-    name: '10k items, 1 update each (sequentially)',
+    name: '1k items, 1 update each (sequentially)',
     app: 'ten-k-items-one-time',
-    query: '',
+    query: '&items=1000&updates=1000',
   },
   {
-    name: '10k items 1 update on 5% (random)',
+    name: '1k items, 1k total updates (sequentially)',
     app: 'ten-k-items-one-time',
-    query: '&updates=500&random=true',
+    query: '&items=1000&random=true&updates=1000',
   },
   {
-    name: '10k items 1 update on 25% (random)',
+    name: '1k items 1 update on 5% (random)',
     app: 'ten-k-items-one-time',
-    query: '&updates=2500&random=true',
+    query: '&items=1000&updates=50&random=true',
   },
+  {
+    name: '1k items 1 update on 25% (random)',
+    app: 'ten-k-items-one-time',
+    query: '&items=1000&updates=250&random=true',
+  },
+  // {
+  //   name: '10k items, 1 update each (sequentially)',
+  //   app: 'ten-k-items-one-time',
+  //   query: '',
+  // },
+  // {
+  //   name: '10k items 1 update on 5% (random)',
+  //   app: 'ten-k-items-one-time',
+  //   query: '&updates=500&random=true',
+  // },
+  // {
+  //   name: '10k items 1 update on 25% (random)',
+  //   app: 'ten-k-items-one-time',
+  //   query: '&updates=2500&random=true',
+  // },
 ];
 
 async function getFrameworks() {

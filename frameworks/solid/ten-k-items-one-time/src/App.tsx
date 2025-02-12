@@ -8,9 +8,13 @@ function App() {
   const [store, setStore] = createStore({ items: test.getData() });
 
   onMount(() => {
-    test.run((i) => {
-      setStore('items', i, i);
-    }, batch);
+    test.prepare(() => {
+      batch(() => {
+        test.run((i) => {
+          setStore('items', i, i);
+        });
+      })
+    })
   });
 
   return <For each={store.items}>{i => test.formatItem(i)}</For>

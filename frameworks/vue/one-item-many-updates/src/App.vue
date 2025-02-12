@@ -6,7 +6,7 @@ const test = helpers.oneItem10kUpdates();
 const count = ref(test.getData())
 
 watchEffect(() => {
-  test.run((i) => count.value = i)
+  test.doit((i) => count.value = i)
 })
 </script>
 

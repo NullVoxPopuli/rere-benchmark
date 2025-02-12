@@ -17,7 +17,7 @@ class Test extends Component {
   // chats = new TrackedWindow();
 
   start = () => {
-    test.run(
+    test.doit(
       (dbRow, data) => {
         console.log(dbRow);
         this.db.set(dbRow, data);

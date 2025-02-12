@@ -1,15 +1,21 @@
-import { qpBool, qpNum, tryVerify } from './utils.js';
+import { qpBool, qpNum, qpPercent, tryVerify } from './utils.js';
+import { RUN, BaseTest } from './base-test.js';
 
 /**
  * @typedef {import('./types.ts').BenchTest<number>} NumberTest
  *
  * @implements {NumberTest}
  */
-export class OneItem {
+export class OneItem extends BaseTest {
   /**
    * @type {string}
    */
   name;
+
+  /**
+   * @type {number}
+   */
+  #percentRandomAwait = 0;
 
   /**
    * @type {boolean}
@@ -20,9 +26,13 @@ export class OneItem {
    * @type {number}
    */
   #num;
+
   constructor(num = qpNum('updates', 10_000)) {
+    super();
+
     this.#num = num;
     this.name = `1 Item, ${num / 1000}k updates`;
+    this.#percentRandomAwait = qpPercent('percentRandomAwait', 0);
     this.#allowManualBatch = qpBool('manualBatch', false);
   }
 
@@ -50,42 +60,25 @@ export class OneItem {
     return result.includes(`[${this.#num - 1}]`);
   };
 
-  #isRunning = false;
-
   /**
+   * .run() is in teh base class, and just calls this function.
+   * (after making sure it can run twice)
+   *
    * @param {(nextValue: number) => unknown} set
-   * @param {(callback: () => unknown) => unknown} [ batch ] if a reactivity system requires manual, userland batching, pass that function here, it will wrap the test run
-   * @return {unknown}
    */
-  run(set, batch) {
-    // Account for React's double-mount...
-    //   (only occurs during dev mode tho)
-    // Normally we'd hard error if this is called more than once.
-    if (this.#isRunning) return;
+  async [RUN](set) {
+    let name = this.name;
 
-    this.#isRunning = true;
-    requestIdleCallback(() => {
-      requestAnimationFrame(async () => {
-        let name = this.name;
+    console.time(name);
+    performance.mark(`:start`);
 
-        const run = async () => {
-          for (let i = 0; i < this.#num; i++) {
-            await 0;
-            set(i);
-          }
-        };
+    for (let i = 0; i < this.#num; i++) {
+      if (Math.random() < this.#percentRandomAwait) {
+        await 0;
+      }
+      set(i);
+    }
 
-        console.time(name);
-        performance.mark(`:start`);
-
-        if (batch && this.#allowManualBatch) {
-          batch(() => run());
-        } else {
-          await run();
-        }
-
-        tryVerify(name, this.verify);
-      });
-    });
+    tryVerify(name, this.verify);
   }
 }

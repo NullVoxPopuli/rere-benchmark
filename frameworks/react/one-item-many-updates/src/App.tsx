@@ -7,7 +7,7 @@ function App() {
   const [count, setCount] = useState(test.getData());
 
   useEffect(() => {
-    test.run((i: number) => setCount(i));
+    test.doit((i: number) => setCount(i));
   }, [])
 
   return <output>{test.formatItem(count)}</output>

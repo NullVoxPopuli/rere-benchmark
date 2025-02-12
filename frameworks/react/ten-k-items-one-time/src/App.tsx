@@ -7,7 +7,7 @@ function App() {
   const [items, setItems] = useState(test.getData());
 
   useEffect(() => {
-    test.run((i) => {
+    test.doit((i) => {
       // https://react.dev/learn/updating-arrays-in-state#updating-arrays-without-mutation
       setItems((previous) => {
         let replacement = previous.map((item, index) => {
