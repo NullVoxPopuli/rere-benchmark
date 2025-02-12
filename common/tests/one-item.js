@@ -27,6 +27,8 @@ export class OneItem extends BaseTest {
    */
   #num;
 
+  #updateCount = 0;
+
   constructor(num = qpNum('updates', 10_000)) {
     super();
 
@@ -57,7 +59,10 @@ export class OneItem extends BaseTest {
   verify = () => {
     let result = document.querySelector('output')?.textContent?.trim() ?? '';
 
-    return result.includes(`[${this.#num - 1}]`);
+    let didRunEverything = this.#updateCount === this.#num;
+    let hasCorrectDOM = result.includes(`[${this.#num - 1}]`);
+
+    return didRunEverything && hasCorrectDOM;
   };
 
   /**
@@ -73,10 +78,16 @@ export class OneItem extends BaseTest {
     performance.mark(`:start`);
 
     for (let i = 0; i < this.#num; i++) {
-      if (Math.random() < this.#percentRandomAwait) {
-        await 0;
+      if (this.#percentRandomAwait > 0) {
+        if (
+          this.#percentRandomAwait < 1 ||
+          Math.random() < this.#percentRandomAwait
+        ) {
+          await 0;
+        }
       }
       set(i);
+      this.#updateCount++;
     }
 
     tryVerify(name, this.verify);

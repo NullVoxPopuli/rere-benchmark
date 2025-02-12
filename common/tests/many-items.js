@@ -12,6 +12,8 @@ export class ManyItems extends BaseTest {
   #num = qpNum('items', 10_000);
   #totalUpdates;
   #random;
+  #updateCount = 0;
+
   /**
    * @type {number | undefined}
    */
@@ -56,7 +58,10 @@ export class ManyItems extends BaseTest {
   verify = () => {
     let result = document.body.textContent?.trim() ?? '';
 
-    return result.includes(`[${this.#last}]`);
+    let didRunEverything = this.#updateCount === this.#totalUpdates;
+    let hasCorrectDOM = result.includes(`[${this.#last}]`);
+
+    return didRunEverything && hasCorrectDOM;
   };
 
   #randomNextValue = () => {
@@ -65,7 +70,6 @@ export class ManyItems extends BaseTest {
 
   /**
    * @param {(nextValue: number) => unknown} set
-   * @param {(callback: () => unknown) => unknown} [ batch ] if a reactivity system requires manual, userland batching, pass that function here, it will wrap the test run
    */
   async [RUN](set) {
     let name = this.name;
@@ -74,12 +78,18 @@ export class ManyItems extends BaseTest {
     performance.mark(`:start`);
 
     for (let i = 0; i < this.#totalUpdates; i++) {
-      if (Math.random() < this.#percentRandomAwait) {
-        await 0;
+      if (this.#percentRandomAwait > 0) {
+        if (
+          this.#percentRandomAwait < 1 ||
+          Math.random() < this.#percentRandomAwait
+        ) {
+          await 0;
+        }
       }
 
       let nextValue = this.#random ? this.#randomNextValue() : i;
       set(nextValue);
+      this.#updateCount++;
       this.#last = nextValue;
     }
 

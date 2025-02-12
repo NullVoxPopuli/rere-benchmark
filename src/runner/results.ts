@@ -6,11 +6,9 @@ import { frameworks } from '../../results/app/frameworks.ts';
 import { join } from 'node:path';
 import assert from 'node:assert';
 
-export const filePath = `./results/public/results/${yyyymmdd}.json`;
-
 export const info = await getInfo();
 
-async function read() {
+async function read(filePath: string) {
   if (!existsSync(filePath)) {
     return {
       ...info,
@@ -24,21 +22,21 @@ async function read() {
   return json;
 }
 
-async function write(json: any) {
+async function write(json: any, filePath: string) {
   await fs.writeFile(filePath, JSON.stringify(json, null, 2));
 }
 
-async function getResults() {
-  let json = await read();
+async function getResults(filePath: string) {
+  let json = await read(filePath);
   return json.results;
 }
 
-async function saveResults(results: any) {
-  let file = await read();
+async function saveResults(results: any, filePath: string) {
+  let file = await read(filePath);
 
   file.results = results;
 
-  await write(file);
+  await write(file, filePath);
 }
 
 async function getVersion(framework: string, bench: BenchmarkInfo) {
@@ -68,8 +66,9 @@ async function getVersion(framework: string, bench: BenchmarkInfo) {
 export async function prepareForResults(
   framework: string,
   bench: BenchmarkInfo,
+  filePath: string,
 ) {
-  let existing = await getResults();
+  let existing = await getResults(filePath);
 
   let benchName = bench.name;
   let query = bench.query;
@@ -81,20 +80,21 @@ export async function prepareForResults(
   existing[framework][benchName].version = version;
   existing[framework][benchName].times = [];
 
-  await saveResults(existing);
+  await saveResults(existing, filePath);
 }
 
 export async function addResult(
   framework: string,
   benchName: string,
   result: any,
+  filePath: string,
 ) {
-  let existing = await getResults();
+  let existing = await getResults(filePath);
 
   existing[framework] ||= {};
   existing[framework][benchName] ||= {};
   existing[framework][benchName].times ||= [];
   existing[framework][benchName].times.push(result);
 
-  await saveResults(existing);
+  await saveResults(existing, filePath);
 }

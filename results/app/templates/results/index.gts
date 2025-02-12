@@ -8,6 +8,10 @@ function pivot(data: ResultData) {
   const frameworks = getFrameworks(data);
 
   const benchNames = [...getBenchNames(data)];
+  benchNames.sort();
+  benchNames.sort(
+    (a, b) => (a.includes('async') ? 1 : 0) - (b.includes('async') ? 1 : 0)
+  );
 
   const result: Record<string, Result[]> = {};
 
