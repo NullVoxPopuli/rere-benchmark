@@ -85,7 +85,8 @@ main.error-page {
 }
 
 table {
-  th, td {
+  th,
+  td {
     padding: 0.25rem 0.5rem;
   }
 }
