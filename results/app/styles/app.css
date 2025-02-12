@@ -9,6 +9,10 @@ h1 {
   margin-bottom: 0.125rem;
 }
 
+.small {
+  font-size: 0.8rem;
+}
+
 body {
   display: grid;
   gap: 0.5rem;

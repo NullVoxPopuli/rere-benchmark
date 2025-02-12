@@ -91,6 +91,7 @@ export default <template>
   {{#each (getBenchNames @model.data.results) as |name|}}
     <section>
       <h2>{{name}}</h2>
+      <span class="small">times in milliseconds</span>
 
       <canvas
         style="height:500px"
