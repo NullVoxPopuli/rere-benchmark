@@ -140,7 +140,6 @@ async function getBenches() {
 async function getFilePath() {
   let existing = await readdir(`./results/public/results/`);
 
-  console.log(existing);
   let today = yyyymmdd.split('T')[0]!;
 
   existing = existing.filter((x) => x.includes(today));

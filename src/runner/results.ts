@@ -1,10 +1,14 @@
 import fs from 'node:fs/promises';
 import { existsSync } from 'node:fs';
-import { getInfo, yyyymmdd } from './environment.ts';
+import { getInfo } from './environment.ts';
 import type { BenchmarkInfo } from './bench-info.ts';
 import { frameworks } from '../../results/app/frameworks.ts';
 import { join } from 'node:path';
 import assert from 'node:assert';
+import { createRequire } from 'node:module';
+import { packageUp } from 'package-up';
+
+const require = createRequire(import.meta.url);
 
 export const info = await getInfo();
 
@@ -39,21 +43,34 @@ async function saveResults(results: any, filePath: string) {
   await write(file, filePath);
 }
 
+async function readJSON(filePath: string) {
+  let buffer = await fs.readFile(filePath);
+  let json = JSON.parse(buffer.toString());
+  return json;
+}
+
 async function getVersion(framework: string, bench: BenchmarkInfo) {
   let dir = join('frameworks', framework, bench.app);
   let manifestPath = join(dir, 'package.json');
-  let manifestBuffer = await fs.readFile(manifestPath);
-  let manifest = JSON.parse(manifestBuffer.toString());
-  let dependencies = {
-    ...manifest.devDependencies,
-    ...manifest.dependencies,
-  };
-
   let packageName = frameworks[framework]?.package;
 
   assert(packageName, `Could not find framework in the frameworks.ts file`);
 
-  let version = dependencies[packageName];
+  let entry: string;
+  try {
+    entry = require.resolve(packageName, { paths: [dir] });
+  } catch (e) {
+    // if the '.' is not listed in exports, the above will fail
+    entry = require.resolve(`${packageName}/package.json`, { paths: [dir] });
+  }
+
+  let packageManifestPath = await packageUp({ cwd: entry });
+  assert(
+    packageManifestPath,
+    `The package, ${packageName}, does not have a package.json. This is required.`,
+  );
+  let dependencyManifest = await readJSON(packageManifestPath);
+  let version = dependencyManifest.version;
 
   assert(
     version,
