@@ -93,6 +93,8 @@ export async function prepareForResults(
 
   existing[framework] ||= {};
   existing[framework][benchName] = {};
+  existing[framework][benchName].app = bench.app;
+  existing[framework][benchName].query = bench.query;
   existing[framework][benchName].url = query;
   existing[framework][benchName].version = version;
   existing[framework][benchName].times = [];

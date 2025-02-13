@@ -25,6 +25,7 @@ export interface ResultSet {
    * YYYY-MM-DD
    */
   date: string;
+  sha: string;
   environment: {
     machine: {
       os: {

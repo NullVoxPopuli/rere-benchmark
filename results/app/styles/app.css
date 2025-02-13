@@ -1,3 +1,41 @@
+:root {
+  --light-bg: #fff;
+  --light-fg: #000;
+
+  --dark-bg: #151515;
+  --dark-fg: #efefef;
+}
+
+body {
+  background: var(--light-bg);
+  color: var(--light-fg);
+}
+header {
+  background: var(--light-bg);
+  color: var(--light-fg);
+  box-shadow: 0 4px 4px -4px rgba(0, 0, 0, 0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: var(--dark-bg);
+    color: var(--dark-fg);
+
+    a {
+      color: #7777ff;
+
+      &:visited {
+        color: #5a5aff;
+      }
+    }
+  }
+
+  header {
+    background: var(--dark-bg);
+    color: var(--dark-fg);
+  }
+}
+
 @media (width <= 450px) {
   .hide-sm {
     display: none;

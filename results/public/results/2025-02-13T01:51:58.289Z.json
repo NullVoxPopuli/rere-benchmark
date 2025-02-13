@@ -1,0 +1,133 @@
+{
+  "date": "2025-02-13T01:51:58.289Z",
+  "sha": "af23e2b8470976828ed5f8b0d897724e6478110d",
+  "environment": {
+    "machine": {
+      "os": {
+        "name": "Ubuntu",
+        "version": "24.10"
+      },
+      "cpu": "AMD Ryzen 5 7640U w/ Radeon 760M Graphics",
+      "ram": "96.5 GB"
+    },
+    "monitor": {
+      "hz": 119
+    },
+    "browser": {
+      "name": "Google Chrome",
+      "version": "131.0.6778.204"
+    }
+  },
+  "results": {
+    "ember": {
+      "1 item, 1k updates": {
+        "app": "one-item-many-updates",
+        "query": "&updates=1000&percentRandomAwait=0",
+        "url": "&updates=1000&percentRandomAwait=0",
+        "version": "6.1.0",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 53.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 55.89999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 49.799999952316284
+            },
+            {
+              "name": ":done",
+              "at": 59.39999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 47.5
+            },
+            {
+              "name": ":done",
+              "at": 52.299999952316284
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 48.799999952316284
+            },
+            {
+              "name": ":done",
+              "at": 52.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 48.200000047683716
+            },
+            {
+              "name": ":done",
+              "at": 51.700000047683716
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 47
+            },
+            {
+              "name": ":done",
+              "at": 52.39999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 46.799999952316284
+            },
+            {
+              "name": ":done",
+              "at": 53.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 46.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 51.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 47.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 54
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 48.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 55.799999952316284
+            }
+          ]
+        ]
+      }
+    }
+  }
+}

@@ -1,3 +1,4 @@
+import { FrameworkInfo } from '#components/framework-info.gts';
 import type { Model } from '#routes/results.ts';
 import type { Result, ResultData } from '#types';
 import { dataOf, getBenchNames, getFrameworks, round } from '#utils';
@@ -93,7 +94,9 @@ export default <template>
         <tr>
           <th></th>
           {{#each p.frameworks as |framework|}}
-            <th>{{framework}}</th>
+            <th>
+              <FrameworkInfo @name={{framework}} />
+            </th>
           {{/each}}
         </tr>
       </thead>
