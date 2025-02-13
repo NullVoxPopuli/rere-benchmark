@@ -19,7 +19,7 @@ const variants = [
   // { name: 'w/ manual batching', query: '?manualBatch=true' },
 ];
 
-const randomAwaitChance = 50;
+const randomAwaitChance = 100;
 const benchmarks = [
   {
     name: '1 item, 1k updates (async)',
