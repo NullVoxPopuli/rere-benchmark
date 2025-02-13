@@ -4,6 +4,7 @@ export interface Result {
   name: string;
   color: string;
   speed: number;
+  version: string;
 }
 
 export interface Mark {

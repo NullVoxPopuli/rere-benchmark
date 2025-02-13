@@ -1,7 +1,13 @@
 import { FrameworkInfo } from '#components/framework-info.gts';
 import type { Model } from '#routes/results.ts';
 import type { Result, ResultData } from '#types';
-import { dataOf, getBenchNames, getFrameworks, round } from '#utils';
+import {
+  dataOf,
+  getBenchNames,
+  getFrameworks,
+  getFrameworkVersion,
+  round,
+} from '#utils';
 import type { TOC } from '@ember/component/template-only';
 import { interpolate } from 'culori';
 
@@ -96,6 +102,9 @@ export default <template>
           {{#each p.frameworks as |framework|}}
             <th>
               <FrameworkInfo @name={{framework}} />
+              <span class="small">
+                {{getFrameworkVersion @model.data.results framework}}
+              </span>
             </th>
           {{/each}}
         </tr>

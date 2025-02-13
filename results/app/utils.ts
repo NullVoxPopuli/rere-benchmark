@@ -2,6 +2,10 @@ import { assert } from '@ember/debug';
 import type { Mark, ResultData } from '#types';
 import { frameworks } from './frameworks.ts';
 
+export function getFrameworkVersion(results: ResultData, framework: string) {
+  return Object.values(results[framework] ?? {})[0]?.version;
+}
+
 export function getFrameworks(results: ResultData): string[] {
   return Object.keys(results);
 }
@@ -78,6 +82,7 @@ export function dataOf(results: ResultData, benchName: string) {
       name: framework,
       speed: time,
       color: frameworkInfo.color,
+      version: benchData.version,
     });
   }
 

@@ -88,14 +88,12 @@ export async function prepareForResults(
   let existing = await getResults(filePath);
 
   let benchName = bench.name;
-  let query = bench.query;
   let version = await getVersion(framework, bench);
 
   existing[framework] ||= {};
   existing[framework][benchName] = {};
   existing[framework][benchName].app = bench.app;
   existing[framework][benchName].query = bench.query;
-  existing[framework][benchName].url = query;
   existing[framework][benchName].version = version;
   existing[framework][benchName].times = [];
 
