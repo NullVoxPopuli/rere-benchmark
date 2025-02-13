@@ -69,19 +69,29 @@ async function getBrowserInfo() {
   };
 }
 
+export async function getCommitSha() {
+  let { stdout } = await $`git rev-parse HEAD`;
+
+  return stdout;
+}
+
 export async function getInfo() {
-  let cpu = await si.cpu();
-  let graphics = await si.graphics();
-  let memory = await si.mem();
-  let os = await si.osInfo();
+  let [cpu, graphics, memory, os, browser, sha] = await Promise.all([
+    si.cpu(),
+    si.graphics(),
+    si.mem(),
+    si.osInfo(),
+    getBrowserInfo(),
+    getCommitSha(),
+  ]);
 
   let cpuName = normalizeCPUName(cpu);
   let osInfo = normalizeOS(os);
   let hz = getFastestDisplayHz(graphics);
-  let browser = await getBrowserInfo();
 
   let result = {
     date: yyyymmdd,
+    sha,
     environment: {
       machine: {
         os: {

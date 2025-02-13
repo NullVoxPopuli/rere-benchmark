@@ -7,7 +7,7 @@ function App() {
   const [count, setCount] = createSignal(test.getData())
 
   onMount(() => {
-    test.run((i) => setCount(i), batch);
+    test.doit((i) => setCount(i), batch);
   });
 
   return <output>{test.formatItem(count())}</output>

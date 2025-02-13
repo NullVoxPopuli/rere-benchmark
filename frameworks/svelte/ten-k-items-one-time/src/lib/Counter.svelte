@@ -5,7 +5,7 @@
   let items = $state(test.getData());
 
   $effect(() => {
-    test.run((i) => {
+    test.doit((i) => {
       items[i] = i;
     });
   });

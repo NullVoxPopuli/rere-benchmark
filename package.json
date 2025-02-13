@@ -25,5 +25,9 @@
     "puppeteer": "^24.2.0",
     "systeminformation": "^5.25.11",
     "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "package-ui": "^0.1.0",
+    "package-up": "^5.0.0"
   }
 }

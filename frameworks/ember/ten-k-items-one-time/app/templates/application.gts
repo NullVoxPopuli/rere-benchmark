@@ -69,7 +69,7 @@ class Test extends Component {
   items = trackedArray(test.getData());
 
   start = () => {
-    test.run((i) => this.items[i].set(i));
+    test.doit((i) => this.items[i].set(i));
   };
 
   // No spaces, like all the other frameworks (especially JSX)

@@ -4,6 +4,7 @@ export interface Result {
   name: string;
   color: string;
   speed: number;
+  version: string;
 }
 
 export interface Mark {
@@ -25,6 +26,7 @@ export interface ResultSet {
    * YYYY-MM-DD
    */
   date: string;
+  sha: string;
   environment: {
     machine: {
       os: {

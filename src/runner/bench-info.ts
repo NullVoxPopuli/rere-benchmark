@@ -1,8 +1,10 @@
-import { info, filePath } from './results.ts';
+import { info } from './results.ts';
+import { readdir } from 'node:fs/promises';
 import * as clack from '@clack/prompts';
 import { inspect } from 'node:util';
 import { frameworks } from './repo.ts';
 import * as args from './arg.ts';
+import { yyyymmdd } from './environment.ts';
 
 export interface BenchmarkInfo {
   name: string;
@@ -12,39 +14,72 @@ export interface BenchmarkInfo {
 
 const variants = [
   { name: '', query: '&manualBatch=false' },
+  // Batching is a fair technique, but I don't know if I want it always present.
+  // We'll see if I change my mind when Solid v2 comes out.
   // { name: 'w/ manual batching', query: '?manualBatch=true' },
 ];
 
+const randomAwaitChance = 100;
 const benchmarks = [
   {
-    name: '1 item, 10k updates',
+    name: '1 item, 1k updates (async)',
     app: 'one-item-many-updates',
-    query: '',
+    query: `&updates=1000&percentRandomAwait=${randomAwaitChance}`,
+  },
+  {
+    name: '1 item, 1k updates',
+    app: 'one-item-many-updates',
+    query: '&updates=1000&percentRandomAwait=0',
+  },
+  {
+    name: '1 item, 100k updates (async)',
+    app: 'one-item-many-updates',
+    query: `&updates=100000&percentRandomAwait=${randomAwaitChance}`,
   },
   {
     name: '1 item, 100k updates',
     app: 'one-item-many-updates',
-    query: '&updates=100000',
+    query: '&updates=100000&percentRandomAwait=0',
   },
   {
-    name: '1 item, 1 million updates',
+    name: '1 item, 1M updates (async)',
     app: 'one-item-many-updates',
-    query: '&updates=1000000',
+    query: `&updates=1000000&percentRandomAwait=${randomAwaitChance}`,
   },
   {
-    name: '10k items, 1 update each (sequentially)',
-    app: 'ten-k-items-one-time',
-    query: '',
+    name: '1 item, 1M updates',
+    app: 'one-item-many-updates',
+    query: '&updates=1000000&percentRandomAwait=0',
   },
   {
-    name: '10k items 1 update on 5% (random)',
+    name: '1k items, 1 update each (sequentially, async)',
     app: 'ten-k-items-one-time',
-    query: '&updates=500&random=true',
+    query: `&items=1000&updates=1000&percentRandomAwait=${randomAwaitChance}`,
   },
   {
-    name: '10k items 1 update on 25% (random)',
+    name: '1k items, 1 update each (sequentially)',
     app: 'ten-k-items-one-time',
-    query: '&updates=2500&random=true',
+    query: '&items=1000&updates=1000&percentRandomAwait=0',
+  },
+  {
+    name: '1k items 1 update on 5% (random, async)',
+    app: 'ten-k-items-one-time',
+    query: `&items=1000&updates=50&random=true&percentRandomAwait=${randomAwaitChance}`,
+  },
+  {
+    name: '1k items 1 update on 5% (random)',
+    app: 'ten-k-items-one-time',
+    query: '&items=1000&updates=50&random=true&percentRandomAwait=0',
+  },
+  {
+    name: '1k items 1 update on 25% (random, async)',
+    app: 'ten-k-items-one-time',
+    query: `&items=1000&updates=250&random=true&percentRandomAwait=${randomAwaitChance}`,
+  },
+  {
+    name: '1k items 1 update on 25% (random)',
+    app: 'ten-k-items-one-time',
+    query: '&items=1000&updates=250&random=true&percentRandomAwait=0',
   },
 ];
 
@@ -102,9 +137,35 @@ async function getBenches() {
   return selectedBenches;
 }
 
+async function getFilePath() {
+  let existing = await readdir(`./results/public/results/`);
+
+  let today = yyyymmdd.split('T')[0]!;
+
+  existing = existing.filter((x) => x.includes(today));
+
+  let result = await clack.select({
+    message: 'Where to save?',
+    options: [
+      { value: yyyymmdd + '.json', label: 'New file', hint: yyyymmdd },
+      ...existing.map((x) => {
+        return { value: x, label: x };
+      }),
+    ],
+  });
+
+  if (clack.isCancel(result)) {
+    clack.log.info('Cancelled');
+    process.exit(1);
+  }
+
+  return `./results/public/results/${result}`;
+}
+
 export async function getBenchInfo() {
   let selectedFrameworks = await getFrameworks();
   let selectedBenches = await getBenches();
+  let filePath = await getFilePath();
 
   console.info(inspect(info, { showHidden: false, depth: null, colors: true }));
   console.log(`
@@ -127,5 +188,6 @@ export async function getBenchInfo() {
     benches: selectedBenches,
     frameworks: selectedFrameworks,
     variants: variants,
+    filePath,
   };
 }

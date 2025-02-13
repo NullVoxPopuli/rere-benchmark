@@ -2,7 +2,6 @@ import puppeteer, { type Browser } from 'puppeteer';
 import * as clack from '@clack/prompts';
 import { $ } from 'execa';
 import { COUNT, HEADLESS, SKIP_BUILD } from './arg.ts';
-import { benchNames, frameworks } from './repo.ts';
 import { serve } from './serve.ts';
 import {
   addResult,
@@ -92,7 +91,7 @@ for (let framework of info.frameworks) {
     for (let bench of info.benches) {
       if (bench.app !== app) continue;
 
-      await prepareForResults(framework, bench);
+      await prepareForResults(framework, bench, info.filePath);
 
       for (let variant of info.variants) {
         let url = serverUrl + '/?' + bench.query + variant.query;
@@ -104,7 +103,7 @@ for (let framework of info.frameworks) {
             ? `${bench.name} ${variant.name}`
             : bench.name;
 
-          await addResult(framework, name, performanceMarks);
+          await addResult(framework, name, performanceMarks, info.filePath);
         }
       }
     }

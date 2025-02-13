@@ -12,7 +12,11 @@ export default <template>
     <LinkTo @route="results.boxplot">Boxplot</LinkTo>
   </nav>
 
-  <Info @date={{@model.data.date}} @env={{@model.data.environment}} />
+  <Info
+    @date={{@model.data.date}}
+    @sha={{@model.data.sha}}
+    @env={{@model.data.environment}}
+  />
 
   <div class="all-results">
     {{outlet}}

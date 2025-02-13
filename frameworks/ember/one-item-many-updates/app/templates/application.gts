@@ -9,7 +9,7 @@ class Test extends Component {
   @tracked value = test.getData();
 
   start = () => {
-    test.run((i) => (this.value = i));
+    test.doit((i) => (this.value = i));
   };
 
   <template>

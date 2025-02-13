@@ -5,7 +5,7 @@
   let count: number = $state(test.getData())
 
   $effect(() => {
-    test.run((i) => count = i);
+    test.doit((i) => count = i);
   });
 
   

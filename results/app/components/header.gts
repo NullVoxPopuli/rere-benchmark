@@ -31,8 +31,6 @@ export const Header = <template>
       justify-content: space-between;
       align-items: center;
       margin-bottom: 1rem;
-      background: white;
-      box-shadow: 0 4px 4px -4px rgba(0, 0, 0, 0.2);
     }
   </style>
 </template>;

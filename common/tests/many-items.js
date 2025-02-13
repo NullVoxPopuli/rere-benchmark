@@ -1,17 +1,23 @@
+import { BaseTest, RUN } from './base-test.js';
 import { qpBool, qpNum, qpPercent, tryVerify } from './utils.js';
-import { RUN, BaseTest } from './base-test.js';
 
 /**
- * @typedef {import('./types.ts').BenchTest<number>} NumberTest
+ * @typedef {import('./types.ts').BenchTest<Array<number | undefined>>} ArrayTest
  *
- * @implements {NumberTest}
+ * @implements {ArrayTest}
  */
-export class OneItem extends BaseTest {
-  /**
-   * @type {string}
-   */
-  name;
+export class ManyItems extends BaseTest {
+  name = '10k items, 1 update';
 
+  #num = qpNum('items', 10_000);
+  #totalUpdates;
+  #random;
+  #updateCount = 0;
+
+  /**
+   * @type {number | undefined}
+   */
+  #last;
   /**
    * @type {number}
    */
@@ -22,27 +28,20 @@ export class OneItem extends BaseTest {
    */
   #allowManualBatch = false;
 
-  /**
-   * @type {number}
-   */
-  #num;
-
-  #updateCount = 0;
-
-  constructor(num = qpNum('updates', 10_000)) {
+  constructor({
+    totalUpdates = qpNum('updates', 10_000),
+    random = qpBool('random', false),
+  } = {}) {
     super();
 
-    this.#num = num;
-    this.name = `1 Item, ${num / 1000}k updates`;
+    this.#totalUpdates = totalUpdates;
+    this.#random = random;
     this.#percentRandomAwait = qpPercent('percentRandomAwait', 0);
     this.#allowManualBatch = qpBool('manualBatch', false);
   }
 
-  /**
-   * @return {number}
-   */
   getData = () => {
-    return 0;
+    return Array(this.#num).fill(undefined);
   };
 
   /**
@@ -57,18 +56,19 @@ export class OneItem extends BaseTest {
   }
 
   verify = () => {
-    let result = document.querySelector('output')?.textContent?.trim() ?? '';
+    let result = document.body.textContent?.trim() ?? '';
 
-    let didRunEverything = this.#updateCount === this.#num;
-    let hasCorrectDOM = result.includes(`[${this.#num - 1}]`);
+    let didRunEverything = this.#updateCount === this.#totalUpdates;
+    let hasCorrectDOM = result.includes(`[${this.#last}]`);
 
     return didRunEverything && hasCorrectDOM;
   };
 
+  #randomNextValue = () => {
+    return Math.floor(Math.random() * this.#num);
+  };
+
   /**
-   * .run() is in teh base class, and just calls this function.
-   * (after making sure it can run twice)
-   *
    * @param {(nextValue: number) => unknown} set
    */
   async [RUN](set) {
@@ -77,7 +77,7 @@ export class OneItem extends BaseTest {
     console.time(name);
     performance.mark(`:start`);
 
-    for (let i = 0; i < this.#num; i++) {
+    for (let i = 0; i < this.#totalUpdates; i++) {
       if (this.#percentRandomAwait > 0) {
         if (
           this.#percentRandomAwait < 1 ||
@@ -86,8 +86,11 @@ export class OneItem extends BaseTest {
           await 0;
         }
       }
-      set(i);
+
+      let nextValue = this.#random ? this.#randomNextValue() : i;
+      set(nextValue);
       this.#updateCount++;
+      this.#last = nextValue;
     }
 
     tryVerify(name, this.verify);
