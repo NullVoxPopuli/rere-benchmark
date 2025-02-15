@@ -22,7 +22,10 @@ module.exports = {
           'ember-cli-htmlbars-inline-precompile',
           'htmlbars-inline-precompile',
         ],
-        transforms: [...templateCompatSupport()],
+        transforms: [
+          // Not needed
+          // ...templateCompatSupport()
+        ],
       },
     ],
     [
@@ -41,6 +44,9 @@ module.exports = {
         regenerator: false,
       },
     ],
+    // This can leave once
+    // https://github.com/embroider-build/embroider/pull/2249
+    // is merged
     ...babelCompatSupport(),
   ],
 
