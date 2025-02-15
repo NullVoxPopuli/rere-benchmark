@@ -56,7 +56,7 @@
     "@babel/plugin-transform-typescript": "^7.26.7",
     "@babel/runtime": "^7.26.7",
     "@ember/optional-features": "^2.2.0",
-    "@embroider/macros": "^1.16.10",
+    "@embroider/macros": "alpha",
     "@embroider/compat": "alpha",
     "@embroider/core": "alpha",
     "@embroider/vite": "alpha",
@@ -83,6 +83,7 @@
   },
   "pnpm": {
     "overrides": {
+      "@embroider/macros": "alpha",
       "@glimmer/component": "^2.0.0",
       "@ember/string": "^4.0.0",
       "tracked-built-ins": "^4.0.0"
