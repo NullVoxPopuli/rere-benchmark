@@ -48,12 +48,12 @@ function totalFor(data: Record<string, Result[]>, framework: string) {
 }
 
 function max(data: Result[]) {
-  const speeds = data.map((d) => d.speed);
+  const speeds = data.map((d) => d.speed).filter(Boolean);
 
   return Math.max(...speeds);
 }
 function min(data: Result[]) {
-  const speeds = data.map((d) => d.speed);
+  const speeds = data.map((d) => d.speed).filter(Boolean);
 
   return Math.min(...speeds);
 }
