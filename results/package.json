@@ -71,7 +71,7 @@
     "@types/rsvp": "^4.0.9",
     "babel-plugin-ember-template-compilation": "^2.3.0",
     "concurrently": "^9.1.2",
-    "ember-eslint": "^0.0.2",
+    "ember-eslint": "^0.1.0",
     "ember-template-lint": "^6.1.0",
     "eslint": "^9.19.0",
     "prettier": "github:prettier/prettier",

@@ -1,7 +1,4 @@
-const {
-  babelCompatSupport,
-  templateCompatSupport,
-} = require('@embroider/compat/babel');
+const { babelCompatSupport } = require('@embroider/compat/babel');
 
 module.exports = {
   plugins: [

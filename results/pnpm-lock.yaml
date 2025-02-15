@@ -109,8 +109,8 @@ importers:
         specifier: ^9.1.2
         version: 9.1.2
       ember-eslint:
-        specifier: ^0.0.2
-        version: 0.0.2(@babel/core@7.26.8)(@typescript-eslint/parser@8.23.0(eslint@9.20.0)(typescript@5.7.3))(eslint@9.20.0)(typescript@5.7.3)
+        specifier: ^0.1.0
+        version: 0.1.0(@babel/core@7.26.8)(@typescript-eslint/parser@8.23.0(eslint@9.20.0)(typescript@5.7.3))(eslint@9.20.0)(typescript@5.7.3)
       ember-template-lint:
         specifier: ^6.1.0
         version: 6.1.0
@@ -2499,8 +2499,8 @@ packages:
       '@typescript-eslint/parser':
         optional: true
 
-  ember-eslint@0.0.2:
-    resolution: {integrity: sha512-oOlnoDwUBWkuL3yUZn9UBcNYMq5NpzQifpdIBiDwvWO6i1p/3fizhgJuU2MweAsgvT1Uiv6sOYWXl6mWWEGaRQ==}
+  ember-eslint@0.1.0:
+    resolution: {integrity: sha512-pNDo96wT1bCNg7bcBXStNoqh+dTreEoKL/IP6OWIBHlo811/uSN53MBeX9DO1a3sxLW4zufTB0yfPQQ/7FGYtQ==}
 
   ember-modifier@4.2.0:
     resolution: {integrity: sha512-BJ48eTEGxD8J7+lofwVmee7xDgNDgpr5dd6+MSu4gk+I6xb35099RMNorXY5hjjwMJEyi/IRR6Yn3M7iJMz8Zw==}
@@ -8484,7 +8484,7 @@ snapshots:
     transitivePeerDependencies:
       - eslint
 
-  ember-eslint@0.0.2(@babel/core@7.26.8)(@typescript-eslint/parser@8.23.0(eslint@9.20.0)(typescript@5.7.3))(eslint@9.20.0)(typescript@5.7.3):
+  ember-eslint@0.1.0(@babel/core@7.26.8)(@typescript-eslint/parser@8.23.0(eslint@9.20.0)(typescript@5.7.3))(eslint@9.20.0)(typescript@5.7.3):
     dependencies:
       '@babel/eslint-parser': 7.26.8(@babel/core@7.26.8)(eslint@9.20.0)
       '@eslint/js': 9.20.0
