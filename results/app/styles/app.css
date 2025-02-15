@@ -131,4 +131,10 @@ table {
   td {
     padding: 0.25rem 0.5rem;
   }
+
+  .value {
+    color: white;
+    filter: contrast(0.4);
+    mix-blend-mode: difference;
+  }
 }

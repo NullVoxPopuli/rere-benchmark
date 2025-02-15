@@ -116,9 +116,9 @@ export default <template>
               <td style="text-align: right;">{{name}}</td>
               {{#each p.frameworks as |framework|}}
                 {{#let (speedFor data framework) as |speed|}}
-                  <td
-                    style="background: {{colorFor speed min max}}"
-                  >{{speed}}</td>
+                  <td style="background: {{colorFor speed min max}}"><span
+                      class="value"
+                    >{{speed}}</span></td>
                 {{/let}}
               {{/each}}
             </tr>
@@ -131,7 +131,7 @@ export default <template>
             {{#each p.frameworks as |framework|}}
               {{#let (totalFor p.rows framework) as |total|}}
                 <td style="background: {{colorFor total min max}}">
-                  {{total}}
+                  <span class="value">{{total}}</span>
                 </td>
               {{/let}}
             {{/each}}
