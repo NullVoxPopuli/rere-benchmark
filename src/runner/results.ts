@@ -54,7 +54,10 @@ async function getVersion(framework: string, bench: BenchmarkInfo) {
   let manifestPath = join(dir, 'package.json');
   let packageName = frameworks[framework]?.package;
 
-  assert(packageName, `Could not find framework in the frameworks.ts file`);
+  assert(
+    packageName,
+    `Could not find framework (${framework}) in the frameworks.ts file`,
+  );
 
   let entry: string;
   try {

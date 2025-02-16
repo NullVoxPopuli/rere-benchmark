@@ -31,6 +31,14 @@ export const frameworks: Record<string, FrameworkInfo> = {
     url: 'https://emberjs.com/',
     package: 'ember-source',
   },
+  // Temporary copy of 'ember', for testing performance changes
+  ['ember-canary']: {
+    color: '#E04E39',
+    logo: '/ember.svg',
+    name: 'Ember',
+    url: 'https://emberjs.com/',
+    package: 'ember-source',
+  },
   react: {
     color: '#61DBFB',
     logo: '/react.svg',
