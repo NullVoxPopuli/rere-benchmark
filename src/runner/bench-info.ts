@@ -137,12 +137,14 @@ async function getBenches() {
   return selectedBenches;
 }
 
+let yesterdayFull = new Date(Date.now() - 24 * 60 * 60 * 1000);
 async function getFilePath() {
   let existing = await readdir(`./results/public/results/`);
 
   let today = yyyymmdd.split('T')[0]!;
+  let yesterday = yesterdayFull.toJSON().split('T')[0]!;
 
-  existing = existing.filter((x) => x.includes(today));
+  existing = existing.filter((x) => x.includes(today) || x.includes(yesterday));
 
   let result = await clack.select({
     message: 'Where to save?',
