@@ -21,18 +21,25 @@ async function getMarks(browser: Browser, url: string) {
 
   // TODO: is there a way to wait for the page to calmn down?
   await page.waitForNetworkIdle();
-  await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  const performanceMarks = await page.evaluate(() => {
-    return performance.getEntriesByType('mark').map((entry) => ({
-      name: entry.name,
-      at: entry.startTime,
-    }));
-  });
+  let marks: Array<{ name: string; at: number }> = [];
+
+  let remainingWaitTIme = 60_000; // 1 minute
+  while (marks.length < 2 && remainingWaitTIme > 0) {
+    let m = await page.evaluate(() => {
+      return performance.getEntriesByType('mark').map((entry) => ({
+        name: entry.name,
+        at: entry.startTime,
+      }));
+    });
+    marks.push(...m);
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    remainingWaitTIme -= 100;
+  }
 
   page.close();
 
-  return performanceMarks;
+  return marks;
 }
 
 const browser = await puppeteer.launch({
