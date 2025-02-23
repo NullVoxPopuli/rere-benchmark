@@ -6,6 +6,8 @@
 
 ## TODOs
 
+- Vanilla JS implementation
+- Use `Worker` for benches, for better simulating of async / socket handling
 - More Benches:
   - db mon + chat + typing-responsiveness
 
