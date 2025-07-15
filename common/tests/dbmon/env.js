@@ -149,6 +149,7 @@ export function generateData() {
   }
 
   function updateData(callback) {
+    let changed = [];
     for (var i in data) {
       let row = data[i];
       if (!row.lastSample || Math.random() < mutations) {
@@ -156,8 +157,10 @@ export function generateData() {
 
         generateRow(row, counter);
         callback?.(row.dbname, row);
+        changed.push(row);
       }
     }
+    return changed;
   }
   updateData();
 

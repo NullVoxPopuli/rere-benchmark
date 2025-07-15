@@ -1,4 +1,17 @@
-import { generateData } from './dbmon/env.js';
+import { BaseTest, RUN } from './base-test.js';
+const dbWorker = new Worker(new URL('./dbmon/db-worker.js', import.meta.url), {
+  name: 'DB Monitor',
+  type: 'module',
+});
+
+const chatWorker = new Worker(
+  new URL('./dbmon/chat-worker.js', import.meta.url),
+  {
+    name: 'Live Chat',
+    type: 'module',
+  },
+);
+
 /**
  * @typedef {import('./dbmon/types.ts').Row} DBRow;
  *
@@ -6,17 +19,28 @@ import { generateData } from './dbmon/env.js';
  * @typedef {() => Data} GetData
  *
  * @typedef {import('./types.ts').BenchTest<Data>} DataTest
- *
+ *'t
  * @implements {DataTest}
  */
-export class DBMonWithChat {
-  #db = generateData();
+export class DBMonWithChat extends BaseTest {
   getData() {
     return {
-      db: this.#db.toArray(),
+      db: [],
       chats: [],
-      update: this.#db.updateData,
     };
+  }
+
+  /**
+   * @override
+   *
+   * @typedef {object} Options
+   * @property {(...args: unknown[]) => unknown} handleDbUpdate
+   * @property {(...args: unknown[]) => unknown} handleChat
+   */
+  doit({ handleDbUpdate, handleChat }) {
+    this.prepare(() => {
+      this.run({ updateDB: handleDbUpdate, addChat: handleChat });
+    });
   }
 
   /**
@@ -29,16 +53,34 @@ export class DBMonWithChat {
   }
 
   /**
+   * @override
+   *
    * TODO: start dbmon
    * TODO: start chat window
    *
-   * @param {GetData} getData
+   * @param {(...args: unknown[]) => unknown} updateDB
+   * @param {(...args: unknown[]) => unknown} addChat
    */
-  run(updateDB, addChat) {
-    let loop = () => {
-      this.#db.updateData(updateDB);
-      requestAnimationFrame(loop);
-    };
-    requestAnimationFrame(loop);
+  [RUN]({ updateDB, addChat }) {
+    dbWorker.addEventListener('message', (event) => {
+      updateDB(event.data);
+    });
+    chatWorker.addEventListener('message', (event) => {
+      addChat(event.data);
+    });
+
+    dbWorker.postMessage(
+      JSON.stringify({
+        action: 'start',
+        search: window.location.search,
+      }),
+    );
+
+    chatWorker.postMessage(
+      JSON.stringify({
+        action: 'start',
+        search: window.location.search,
+      }),
+    );
   }
 }

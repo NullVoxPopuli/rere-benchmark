@@ -41,11 +41,13 @@ export function tryVerify(label, check, attempts = 0) {
   );
 }
 
+const state = Symbol.for('worker:state');
+
 /**
  * @param {string} name
  */
 export function qp(name) {
-  let search = window.location.search;
+  let search = globalThis.location?.search ?? globalThis[state]?.search;
 
   let query = new URLSearchParams(search);
 
