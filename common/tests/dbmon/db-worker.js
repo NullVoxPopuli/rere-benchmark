@@ -35,7 +35,7 @@ function start() {
   });
 
   async function loop() {
-    let delay = Math.random() * 5;
+    let delay = Math.random() * 50;
     await new Promise((resolve) => setTimeout(resolve, delay));
 
     let changed = data.updateData();

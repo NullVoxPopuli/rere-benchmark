@@ -73,6 +73,7 @@
   },
   "dependencies": {
     "common": "link:../../../common",
+    "reactiveweb": "^1.7.0",
     "tracked-built-ins": "^4.0.0"
   },
   "pnpm": {

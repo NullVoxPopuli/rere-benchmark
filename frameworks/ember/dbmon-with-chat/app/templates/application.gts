@@ -3,6 +3,7 @@ import "common/dbmon.css";
 import { tracked } from "@glimmer/tracking";
 import Component from "@glimmer/component";
 import { helpers } from "common";
+import { FrameRate } from "reactiveweb/fps";
 
 import { TrackedMap, TrackedArray } from "tracked-built-ins";
 
@@ -31,12 +32,12 @@ export default class Test extends Component {
   start = () => {
     test.doit({
       handleDbUpdate: (eventData) => {
-        for (let d of eventData.data) {
+        for (const d of eventData.data) {
           this.db.set(d.dbname, d);
         }
       },
       handleChat: (eventData) => {
-        for (let d of eventData.data) {
+        for (const d of eventData.data) {
           this.chats.push(d);
         }
 
@@ -49,7 +50,11 @@ export default class Test extends Component {
 
   <template>
     {{this.updatesPerSecond}}
-    ups
+    ups |
+    {{#if this.updatesPerSecond}}
+      {{FrameRate}}
+      fps
+    {{/if}}
     <hr />
     <div class="layout">
       <table>
@@ -91,10 +96,16 @@ export default class Test extends Component {
             <p>{{chat.message}}</p>
           </div>
         {{/each}}
+        <div class="entry">
+          <textarea placeholder="send a message"></textarea>
+        </div>
       </div>
     </div>
 
     <style>
+      * {
+        box-sizing: border-box;
+      }
       .layout {
         display: grid;
         grid-template-columns: 3fr 1fr;
@@ -103,6 +114,23 @@ export default class Test extends Component {
 
         table {
           font-family: monospace;
+        }
+      }
+      .chats {
+        position: relative;
+        max-height: 600px;
+        overflow: auto;
+
+        .entry {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+
+          textarea {
+            width: 100%;
+            padding: 1rem;
+          }
         }
       }
       .chat {
