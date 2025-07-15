@@ -26,7 +26,7 @@ var first = true;
 var counter = 0;
 var data;
 var _base;
-let mutations = qpPercent('mutations', 0.5);
+let mutations = qpPercent('mutations', 0.15);
 let rows = qpNum('rows', 20);
 
 function formatElapsed(value) {
