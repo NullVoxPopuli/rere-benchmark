@@ -1,11 +1,11 @@
-import Route from 'ember-route-template';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+
 import { helpers } from 'common';
 
 const test = helpers.oneItem10kUpdates();
 
-class Test extends Component {
+export default class Test extends Component {
   @tracked value = test.getData();
 
   start = () => {
@@ -17,5 +17,3 @@ class Test extends Component {
     {{(this.start)}}
   </template>
 }
-
-export default Route(Test);
