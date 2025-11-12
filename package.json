@@ -7,9 +7,9 @@
     "copy": "node --experimental-strip-types ./src/runner/copy.ts",
     "bench": "node --experimental-strip-types ./src/runner/index.ts"
   },
-  "packageManager": "pnpm@10.2.0",
+  "packageManager": "pnpm@10.21.0",
   "engines": {
-    "node": ">= 22.11.0"
+    "node": ">= 22.19.0"
   },
   "devDependencies": {
     "@clack/prompts": "^0.10.0",
