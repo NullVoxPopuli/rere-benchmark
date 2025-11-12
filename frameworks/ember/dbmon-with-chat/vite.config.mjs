@@ -1,14 +1,17 @@
-import { defineConfig } from 'vite';
-import { extensions, classicEmberSupport, ember } from '@embroider/vite';
-import { babel } from '@rollup/plugin-babel';
+import { defineConfig, searchForWorkspaceRoot } from "vite";
+import { extensions, ember } from "@embroider/vite";
+import { babel } from "@rollup/plugin-babel";
 
 export default defineConfig({
+  server: {
+    fs: {
+      allow: [searchForWorkspaceRoot(process.cwd()), `../../../common`],
+    },
+  },
   plugins: [
-    classicEmberSupport(),
     ember(),
-    // extra plugins here
     babel({
-      babelHelpers: 'runtime',
+      babelHelpers: "runtime",
       extensions,
     }),
   ],

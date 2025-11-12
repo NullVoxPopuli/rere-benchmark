@@ -1,6 +1,7 @@
 {
   "name": "my-app",
   "version": "0.0.0",
+  "type": "module",
   "private": true,
   "description": "Small description for my-app goes here",
   "repository": "",
@@ -24,58 +25,34 @@
     "test:ember": "vite build --mode test && ember test --path dist"
   },
   "devDependencies": {
-    "@babel/core": "^7.26.7",
-    "@babel/eslint-parser": "^7.26.5",
-    "@babel/plugin-transform-runtime": "^7.25.9",
-    "@babel/plugin-transform-typescript": "^7.26.7",
-    "@babel/runtime": "^7.26.7",
+    "@babel/core": "^7.28.0",
+    "@babel/plugin-transform-runtime": "^7.28.0",
+    "@babel/plugin-transform-typescript": "^7.28.0",
+    "@babel/runtime": "^7.27.6",
+    "@ember/app-tsconfig": "^1.0.3",
     "@ember/optional-features": "^2.2.0",
-    "@embroider/compat": "3.8.1-unstable.0f6c294",
-    "@embroider/config-meta-loader": "0.0.1-unstable.0f6c294",
-    "@embroider/core": "3.5.1-unstable.0f6c294",
-    "@embroider/test-setup": "4.0.1-unstable.0f6c294",
-    "@embroider/vite": "0.2.2-unstable.0f6c294",
-    "@eslint/js": "^9.17.0",
-    "@glimmer/component": "^1.1.2",
-    "@glimmer/tracking": "^1.1.2",
-    "@glint/core": "1.4.1-unstable.34c4510",
-    "@glint/environment-ember-loose": "1.4.1-unstable.34c4510",
-    "@glint/environment-ember-template-imports": "1.4.1-unstable.34c4510",
-    "@glint/template": "1.4.1-unstable.34c4510",
+    "@embroider/core": "4.1.1",
+    "@embroider/vite": "1.1.5",
+    "@glimmer/component": "^2.0.0",
+    "@glint/core": "alpha",
+    "@glint/environment-ember-loose": "alpha",
+    "@glint/environment-ember-template-imports": "alpha",
+    "@glint/template": "alpha",
     "@rollup/plugin-babel": "^6.0.4",
-    "@tsconfig/ember": "^3.0.8",
-    "@types/eslint__js": "^8.42.3",
-    "@types/qunit": "^2.19.12",
     "@types/rsvp": "^4.0.9",
-    "@typescript-eslint/eslint-plugin": "^8.23.0",
-    "@typescript-eslint/parser": "^8.23.0",
     "babel-plugin-ember-template-compilation": "^2.3.0",
-    "concurrently": "^9.1.2",
+    "concurrently": "^9.2.0",
     "decorator-transforms": "^2.3.0",
-    "ember-auto-import": "^2.10.0",
-    "ember-cli": "~6.1.0",
-    "ember-cli-babel": "^8.2.0",
-    "ember-cli-htmlbars": "^6.3.0",
-    "ember-eslint-parser": "^0.5.9",
-    "ember-load-initializers": "^3.0.1",
-    "ember-modifier": "^4.2.0",
-    "ember-resolver": "^13.1.0",
-    "ember-route-template": "^1.0.3",
-    "ember-source": "~6.1.0",
-    "ember-template-lint": "^6.1.0",
-    "eslint": "^9.19.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-ember": "^12.5.0",
-    "eslint-plugin-n": "^17.15.1",
-    "eslint-plugin-prettier": "^5.2.1",
-    "eslint-plugin-qunit": "^8.1.2",
-    "globals": "^15.14.0",
-    "loader.js": "^4.7.0",
-    "prettier": "^3.4.2",
-    "prettier-plugin-ember-template-tag": "^2.0.4",
-    "typescript": "^5.5.4",
-    "typescript-eslint": "^8.23.0",
-    "vite": "^5.4.11"
+    "ember-eslint": "^0.5.0",
+    "ember-modifier": "^4.2.2",
+    "ember-resolver": "^13.1.1",
+    "ember-source": "~6.5.0",
+    "ember-template-lint": "^7.9.1",
+    "eslint": "^9.31.0",
+    "prettier": "^3.6.2",
+    "prettier-plugin-ember-template-tag": "^2.0.6",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
   },
   "engines": {
     "node": ">= 22"
@@ -87,12 +64,21 @@
     "type": "app",
     "version": 2
   },
+  "imports": {
+    "#app/*": "./app/*"
+  },
   "exports": {
     "./tests/*": "./tests/*",
     "./*": "./app/*"
   },
   "dependencies": {
     "common": "link:../../../common",
+    "reactiveweb": "^1.7.0",
     "tracked-built-ins": "^4.0.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "@glimmer/component": "^2.0.0"
+    }
   }
 }
