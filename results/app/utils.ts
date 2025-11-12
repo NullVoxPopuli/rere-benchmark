@@ -77,6 +77,10 @@ export function dataOf(results: ResultData, benchName: string) {
       frameworkInfo
     );
 
+    if (!benchData || !frameworkInfo) {
+      continue;
+    }
+
     const time = averageOf(benchData.times);
     list.push({
       name: framework,
