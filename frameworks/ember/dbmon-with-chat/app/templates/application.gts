@@ -6,18 +6,8 @@ import { helpers } from "common";
 import { FrameRate } from "reactiveweb/fps";
 
 import { TrackedMap, TrackedArray } from "tracked-built-ins";
-import { modifier } from "ember-modifier";
 
 const test = helpers.dbMonWithChat();
-
-const scrollToBottom = modifier((element: HTMLElement) => {
-  const observer = new MutationObserver(() => {
-    element.scrollTop = element.scrollHeight;
-  });
-  observer.observe(element, { childList: true, subtree: true });
-  element.scrollTop = element.scrollHeight;
-  return () => observer.disconnect();
-});
 
 export default class Test extends Component {
   db = new TrackedMap();
@@ -98,14 +88,16 @@ export default class Test extends Component {
       </table>
 
       <div class="chats">
-        <div class="messages" {{scrollToBottom}}>
-          {{#each this.chats as |chat|}}
-            {{(this.trackUpdate)}}
-            <div class="chat">
-              <div class="author">{{chat.author}}</div>
-              <p>{{chat.message}}</p>
-            </div>
-          {{/each}}
+        <div class="messages">
+          <div class="messages-inner">
+            {{#each this.chats as |chat|}}
+              {{(this.trackUpdate)}}
+              <div class="chat">
+                <div class="author">{{chat.author}}</div>
+                <p>{{chat.message}}</p>
+              </div>
+            {{/each}}
+          </div>
         </div>
         <div class="entry">
           <textarea placeholder="send a message"></textarea>
@@ -134,7 +126,9 @@ export default class Test extends Component {
 
         .messages {
           flex: 1;
-          overflow: auto;
+          overflow-y: auto;
+          display: flex;
+          flex-direction: column-reverse;
         }
 
         .entry {
