@@ -12,7 +12,7 @@ export class BaseTest {
   #isPreparing = false;
 
   /**
-   * @param {(...args: unknown[]) => unknown} updateCallback
+   * @param {unknown} updateCallback
    */
   doit(updateCallback) {
     this.prepare(() => {
@@ -38,7 +38,7 @@ export class BaseTest {
   }
 
   /**
-   * @param {(...args: unknown[]) => unknown} set
+   * @param {unknown} set
    * @return {unknown}
    */
   run(set) {

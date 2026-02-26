@@ -14,6 +14,7 @@ const chatWorker = new Worker(
 
 /**
  * @typedef {import('./dbmon/types.ts').Row} DBRow;
+ * @typedef {import('./dbmon/types.ts').ChatMessage} ChatMessage;
  *
  * @typedef {{ db: DBRow[], chats: ChatMessage[] }} Data
  * @typedef {() => Data} GetData
@@ -33,9 +34,9 @@ export class DBMonWithChat extends BaseTest {
   /**
    * @override
    *
-   * @typedef {object} Options
-   * @property {(...args: unknown[]) => unknown} handleDbUpdate
-   * @property {(...args: unknown[]) => unknown} handleChat
+   * @param {object} options
+   * @param {(...args: unknown[]) => unknown} options.handleDbUpdate
+   * @param {(...args: unknown[]) => unknown} options.handleChat
    */
   doit({ handleDbUpdate, handleChat }) {
     this.prepare(() => {
@@ -53,13 +54,10 @@ export class DBMonWithChat extends BaseTest {
   }
 
   /**
-   * @override
    *
-   * TODO: start dbmon
-   * TODO: start chat window
-   *
-   * @param {(...args: unknown[]) => unknown} updateDB
-   * @param {(...args: unknown[]) => unknown} addChat
+   * @param {object} options
+   * @param {(...args: unknown[]) => unknown} options.updateDB
+   * @param {(...args: unknown[]) => unknown} options.addChat
    */
   [RUN]({ updateDB, addChat }) {
     dbWorker.addEventListener('message', (event) => {
