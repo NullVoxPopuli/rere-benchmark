@@ -6,8 +6,18 @@ import { helpers } from "common";
 import { FrameRate } from "reactiveweb/fps";
 
 import { TrackedMap, TrackedArray } from "tracked-built-ins";
+import { modifier } from "ember-modifier";
 
 const test = helpers.dbMonWithChat();
+
+const scrollToBottom = modifier((element: HTMLElement) => {
+  const observer = new MutationObserver(() => {
+    element.scrollTop = element.scrollHeight;
+  });
+  observer.observe(element, { childList: true, subtree: true });
+  element.scrollTop = element.scrollHeight;
+  return () => observer.disconnect();
+});
 
 export default class Test extends Component {
   db = new TrackedMap();
@@ -62,7 +72,6 @@ export default class Test extends Component {
             <th>dbname</th>
             <th>queries</th>
             <th colspan="5">elapsed times</th>
-
           </tr></thead>
         <tbody>
           {{#each-in this.db as |id row|}}
@@ -89,13 +98,15 @@ export default class Test extends Component {
       </table>
 
       <div class="chats">
-        {{#each this.chats as |chat|}}
-          {{(this.trackUpdate)}}
-          <div class="chat">
-            <div class="author">{{chat.author}}</div>
-            <p>{{chat.message}}</p>
-          </div>
-        {{/each}}
+        <div class="messages" {{scrollToBottom}}>
+          {{#each this.chats as |chat|}}
+            {{(this.trackUpdate)}}
+            <div class="chat">
+              <div class="author">{{chat.author}}</div>
+              <p>{{chat.message}}</p>
+            </div>
+          {{/each}}
+        </div>
         <div class="entry">
           <textarea placeholder="send a message"></textarea>
         </div>
@@ -108,7 +119,7 @@ export default class Test extends Component {
       }
       .layout {
         display: grid;
-        grid-template-columns: 3fr 1fr;
+        grid-template-columns: 75% 25%;
         gap: 0.5rem;
         align-items: start;
 
@@ -117,15 +128,17 @@ export default class Test extends Component {
         }
       }
       .chats {
-        position: relative;
+        display: flex;
+        flex-direction: column;
         max-height: 600px;
-        overflow: auto;
+
+        .messages {
+          flex: 1;
+          overflow: auto;
+        }
 
         .entry {
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
+          flex-shrink: 0;
 
           textarea {
             width: 100%;
