@@ -109,20 +109,23 @@ main.error-page {
 .fw-info {
   display: grid;
   justify-items: center;
+  align-content: center;
+  gap: 0.25rem;
   text-decoration: none;
   color: currentColor;
-  max-height: 50px;
 
   &:hover {
     text-decoration: underline;
   }
 
   img {
-    max-width: 32px;
-    max-height: 32px;
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
   }
   span {
     font-size: 0.8rem;
+    white-space: nowrap;
   }
 }
 
@@ -130,6 +133,11 @@ table {
   th,
   td {
     padding: 0.25rem 0.5rem;
+  }
+
+  .fw-header {
+    text-align: center;
+    vertical-align: bottom;
   }
 
   .value {

@@ -100,7 +100,7 @@ export default <template>
         <tr>
           <th></th>
           {{#each p.frameworks as |framework|}}
-            <th>
+            <th class="fw-header">
               <FrameworkInfo @name={{framework}} />
               <span class="small">
                 {{getFrameworkVersion @model.data.results framework}}
