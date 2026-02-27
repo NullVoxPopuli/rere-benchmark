@@ -59,8 +59,8 @@ if (!SKIP_BUILD) {
       //       - folks could use a different package manager
       //       - different build command
       //       - different output directory
-      await $({ preferLocal: true, cwd: dir })`pnpm install`;
-      await $({ preferLocal: true, cwd: dir })`pnpm build`;
+      await $({ preferLocal: true, cwd: dir, stdio: 'inherit' })`pnpm install`;
+      await $({ preferLocal: true, cwd: dir, stdio: 'inherit' })`pnpm build`;
     }
   }
   clack.log.success('Building Done!');
