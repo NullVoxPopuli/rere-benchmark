@@ -25,33 +25,33 @@
     "test:ember": "vite build --mode test && ember test --path dist"
   },
   "devDependencies": {
-    "@babel/core": "^7.28.0",
-    "@babel/plugin-transform-runtime": "^7.28.0",
-    "@babel/plugin-transform-typescript": "^7.28.0",
-    "@babel/runtime": "^7.27.6",
-    "@ember/app-tsconfig": "^1.0.3",
-    "@ember/optional-features": "^2.2.0",
-    "@embroider/core": "4.1.1",
-    "@embroider/vite": "1.1.5",
+    "@babel/core": "^7.29.0",
+    "@babel/plugin-transform-runtime": "^7.29.0",
+    "@babel/plugin-transform-typescript": "^7.28.6",
+    "@babel/runtime": "^7.28.6",
+    "@ember/app-tsconfig": "^2.0.0",
+    "@ember/optional-features": "^3.0.0",
+    "@embroider/core": "4.4.4",
+    "@embroider/vite": "1.6.0",
     "@glimmer/component": "^2.0.0",
     "@glint/ember-tsc": "^1.1.1",
     "@glint/template": "^1.7.4",
     "@glint/tsserver-plugin": "^2.1.0",
-    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-babel": "^6.1.0",
     "@types/rsvp": "^4.0.9",
-    "babel-plugin-ember-template-compilation": "^2.3.0",
-    "concurrently": "^9.2.0",
-    "decorator-transforms": "^2.3.0",
-    "ember-eslint": "^0.5.0",
-    "ember-modifier": "^4.2.2",
-    "ember-resolver": "^13.1.1",
-    "ember-source": "~6.5.0",
-    "ember-template-lint": "^7.9.1",
+    "babel-plugin-ember-template-compilation": "^4.0.0",
+    "concurrently": "^9.2.1",
+    "decorator-transforms": "^2.3.1",
+    "ember-eslint": "^0.6.1",
+    "ember-modifier": "^4.3.0",
+    "ember-resolver": "^13.2.0",
+    "ember-source": "6.12.0-beta.1",
+    "ember-template-lint": "^7.9.3",
     "eslint": "^9.31.0",
-    "prettier": "^3.6.2",
-    "prettier-plugin-ember-template-tag": "^2.0.6",
-    "typescript": "^5.8.3",
-    "vite": "^6.3.5"
+    "prettier": "^3.8.1",
+    "prettier-plugin-ember-template-tag": "^2.1.3",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1"
   },
   "engines": {
     "node": ">= 22"
@@ -72,8 +72,7 @@
   },
   "dependencies": {
     "common": "link:../../../common",
-    "reactiveweb": "^1.7.0",
-    "tracked-built-ins": "^4.0.0"
+    "reactiveweb": "^1.9.1"
   },
   "pnpm": {
     "overrides": {

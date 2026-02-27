@@ -5,14 +5,14 @@ import Component from "@glimmer/component";
 import { helpers } from "common";
 import { FrameRate } from "reactiveweb/fps";
 
-import { TrackedMap, TrackedArray } from "tracked-built-ins";
+import { trackedMap, trackedArray } from "@ember/reactive/collections";
 
 const test = helpers.dbMonWithChat();
 
 export default class Test extends Component {
-  db = new TrackedMap();
+  db = trackedMap();
   // chats = new TrackedWindow();
-  chats = new TrackedArray();
+  chats = trackedArray();
 
   #started = false;
   #updates;
