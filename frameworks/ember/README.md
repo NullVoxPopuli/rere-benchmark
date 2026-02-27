@@ -2,7 +2,7 @@
 
 Creating new benches
 ```bash
-npx ember-cli@latest new app-name \
+pnpm dlx ember-cli@latest new app-name \
   --blueprint @embroider/app-blueprint \
   --pnpm \
   --typescript

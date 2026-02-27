@@ -2,6 +2,7 @@
 node_modules/
 
 # common output directories
+.log/
 dist/
 build/
 out/

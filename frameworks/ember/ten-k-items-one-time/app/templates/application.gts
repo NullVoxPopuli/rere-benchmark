@@ -1,15 +1,19 @@
 import Component from '@glimmer/component';
-import { trackedArray } from '@ember/reactive/collections';
+import { tracked } from '@glimmer/tracking';
 
 import { helpers } from 'common';
 
 const test = helpers.tenKitems1UpdateEach();
 
 export default class Test extends Component {
-  items = trackedArray(test.getData(), { equals: () => false });
+  @tracked items = test.getData();
 
   start = () => {
-    test.doit((i) => (this.items[i] = i));
+    test.doit((i) => {
+      this.items[i] = i;
+
+      this.items = this.items;
+    });
   };
 
   // No spaces, like all the other frameworks (especially JSX)

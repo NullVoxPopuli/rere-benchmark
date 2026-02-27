@@ -16,3 +16,8 @@ export interface Row {
     topFiveQueries: QueryInfo[];
   };
 }
+
+export interface ChatMessage {
+  author: string;
+  message: string;
+}

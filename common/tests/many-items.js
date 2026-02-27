@@ -9,8 +9,8 @@ import { qpBool, qpNum, qpPercent, tryVerify } from './utils.js';
 export class ManyItems extends BaseTest {
   name = '10k items, 1 update';
 
-  #num = qpNum('items', 10_000);
-  #totalUpdates;
+  #num = qpNum('items', 10_000) ?? 10_000;
+  #totalUpdates = 0;
   #random;
   #updateCount = 0;
 
@@ -23,21 +23,15 @@ export class ManyItems extends BaseTest {
    */
   #percentRandomAwait = 0;
 
-  /**
-   * @type {boolean}
-   */
-  #allowManualBatch = false;
-
   constructor({
     totalUpdates = qpNum('updates', 10_000),
     random = qpBool('random', false),
   } = {}) {
     super();
 
-    this.#totalUpdates = totalUpdates;
+    this.#totalUpdates = totalUpdates ?? -1;
     this.#random = random;
     this.#percentRandomAwait = qpPercent('percentRandomAwait', 0);
-    this.#allowManualBatch = qpBool('manualBatch', false);
   }
 
   getData = () => {
