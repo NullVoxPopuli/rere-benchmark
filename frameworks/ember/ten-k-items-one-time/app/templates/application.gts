@@ -1,18 +1,18 @@
 import Component from '@glimmer/component';
-import { trackedArray } from '@ember/reactive/collections';
+import { tracked } from '@glimmer/tracking';
 
 import { helpers } from 'common';
 
 const test = helpers.tenKitems1UpdateEach();
 
 export default class Test extends Component {
-  items = trackedArray([], { equals: () => false });
+  @tracked items = test.getData();
 
   start = () => {
-    console.log('start');
-    test.doit({
-      prepare: (data) => data.forEach((d, i) => (this.items[i] = d)),
-      set: (i) => (this.items[i] = i),
+    test.doit((i) => {
+      this.items[i] = i;
+
+      this.items = this.items;
     });
   };
 

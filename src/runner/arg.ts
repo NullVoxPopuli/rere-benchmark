@@ -7,7 +7,7 @@ export const BENCH_NAME = str('--bench');
 export const SKIP_BUILD = bool('--skip-build');
 
 console.log({
-  '--headdless': HEADLESS,
+  '--headless': HEADLESS,
   '--count': COUNT,
   '--framework': FRAMEWORK,
   '--bench': BENCH_NAME,
