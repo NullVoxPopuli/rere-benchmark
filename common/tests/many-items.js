@@ -9,7 +9,6 @@ import { qpBool, qpNum, qpPercent, tryVerify } from './utils.js';
 export class ManyItems extends BaseTest {
   name = '10k items, 1 update';
 
-  #num = qpNum('items', 10_000);
   #totalUpdates;
   #random;
   #updateCount = 0;
@@ -18,15 +17,6 @@ export class ManyItems extends BaseTest {
    * @type {number | undefined}
    */
   #last;
-  /**
-   * @type {number}
-   */
-  #percentRandomAwait = 0;
-
-  /**
-   * @type {boolean}
-   */
-  #allowManualBatch = false;
 
   constructor({
     totalUpdates = qpNum('updates', 10_000),
@@ -36,13 +26,7 @@ export class ManyItems extends BaseTest {
 
     this.#totalUpdates = totalUpdates;
     this.#random = random;
-    this.#percentRandomAwait = qpPercent('percentRandomAwait', 0);
-    this.#allowManualBatch = qpBool('manualBatch', false);
   }
-
-  getData = () => {
-    return Array(this.#num).fill(undefined);
-  };
 
   /**
    * We format so we can easily query the DOM for an item.
@@ -64,35 +48,53 @@ export class ManyItems extends BaseTest {
     return didRunEverything && hasCorrectDOM;
   };
 
-  #randomNextValue = () => {
-    return Math.floor(Math.random() * this.#num);
-  };
-
   /**
-   * @param {(nextValue: number) => unknown} set
+   * @param {{prepare: (initialData: number[]) => unknown,set: (nextValue: number) => unknown}} options
    */
-  async [RUN](set) {
+  async [RUN]({ prepare, set }) {
+    const worker = new Worker(
+      new URL('./many-items/worker.js', import.meta.url),
+      {
+        name: 'Many Items Generator',
+        type: 'module',
+      },
+    );
+
     let name = this.name;
 
     console.time(name);
     performance.mark(`:start`);
 
-    for (let i = 0; i < this.#totalUpdates; i++) {
-      if (this.#percentRandomAwait > 0) {
-        if (
-          this.#percentRandomAwait < 1 ||
-          Math.random() < this.#percentRandomAwait
-        ) {
-          await 0;
-        }
+    worker.addEventListener('message', (event) => {
+      if (event.data.when === 'initial') {
+        prepare(event.data.data);
+        return;
       }
 
-      let nextValue = this.#random ? this.#randomNextValue() : i;
+      if (event.data.when === 'finish') {
+        console.log('finish received');
+        tryVerify(name, this.verify);
+        return;
+      }
+
+      let nextValue = event.data;
       set(nextValue);
       this.#updateCount++;
       this.#last = nextValue;
-    }
+    });
 
-    tryVerify(name, this.verify);
+    worker.postMessage(
+      JSON.stringify({
+        action: 'start',
+        search: window.location.search,
+        options: {
+          num: qpNum('items', 10_000),
+          totalUpdates: this.#totalUpdates,
+          random: this.#random,
+          percentRandomAwait: qpPercent('percentRandomAwait', 0),
+          allowManualBatch: qpBool('manualBatch', false),
+        },
+      }),
+    );
   }
 }

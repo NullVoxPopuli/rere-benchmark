@@ -38,10 +38,10 @@ export class BaseTest {
   }
 
   /**
-   * @param {unknown} set
+   * @param {unknown} options
    * @return {unknown}
    */
-  run(set) {
+  run(options) {
     // Account for React's double-mount...
     //   (only occurs during dev mode tho)
     // Normally we'd hard error if this is called more than once.
@@ -50,6 +50,6 @@ export class BaseTest {
     this.#isRunning = true;
 
     // Don't let people await
-    this[RUN](set);
+    this[RUN](options);
   }
 }

@@ -1,17 +1,4 @@
 import { BaseTest, RUN } from './base-test.js';
-const dbWorker = new Worker(new URL('./dbmon/db-worker.js', import.meta.url), {
-  name: 'DB Monitor',
-  type: 'module',
-});
-
-const chatWorker = new Worker(
-  new URL('./dbmon/chat-worker.js', import.meta.url),
-  {
-    name: 'Live Chat',
-    type: 'module',
-  },
-);
-
 /**
  * @typedef {import('./dbmon/types.ts').Row} DBRow;
  * @typedef {import('./dbmon/types.ts').ChatMessage} ChatMessage;
@@ -60,6 +47,22 @@ export class DBMonWithChat extends BaseTest {
    * @param {(...args: unknown[]) => unknown} options.addChat
    */
   [RUN]({ updateDB, addChat }) {
+    const dbWorker = new Worker(
+      new URL('./dbmon/db-worker.js', import.meta.url),
+      {
+        name: 'DB Monitor',
+        type: 'module',
+      },
+    );
+
+    const chatWorker = new Worker(
+      new URL('./dbmon/chat-worker.js', import.meta.url),
+      {
+        name: 'Live Chat',
+        type: 'module',
+      },
+    );
+
     dbWorker.addEventListener('message', (event) => {
       updateDB(event.data);
     });
