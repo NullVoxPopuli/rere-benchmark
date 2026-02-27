@@ -12,19 +12,19 @@
     "node": ">= 22.19.0"
   },
   "devDependencies": {
-    "@clack/prompts": "^0.10.0",
-    "@tsconfig/node22": "^22.0.0",
-    "@tsconfig/strictest": "^2.0.5",
+    "@clack/prompts": "^1.0.1",
+    "@tsconfig/node22": "^22.0.5",
+    "@tsconfig/strictest": "^2.0.8",
     "@types/node": "^22.13.1",
     "byte-size": "^9.0.1",
     "cosmiconfig": "^9.0.0",
-    "execa": "^9.5.2",
-    "globby": "^14.0.2",
+    "execa": "^9.6.1",
+    "globby": "^16.1.1",
     "killable": "^1.0.1",
     "prettier": "github:prettier/prettier",
-    "puppeteer": "^24.2.0",
-    "systeminformation": "^5.25.11",
-    "typescript": "^5.7.3"
+    "puppeteer": "^24.37.5",
+    "systeminformation": "^5.31.1",
+    "typescript": "^5.9.3"
   },
   "dependencies": {
     "package-ui": "^0.1.0",

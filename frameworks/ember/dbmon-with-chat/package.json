@@ -71,12 +71,6 @@
     "./*": "./app/*"
   },
   "dependencies": {
-    "common": "link:../../../common",
-    "reactiveweb": "^1.9.1"
-  },
-  "pnpm": {
-    "overrides": {
-      "@glimmer/component": "^2.0.0"
-    }
+    "common": "link:../../../common"
   }
 }
