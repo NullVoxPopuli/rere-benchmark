@@ -44,8 +44,12 @@ async function getMarks(browser: Browser, url: string) {
 
   let remainingWaitTime = 60_000; // 1 minute
   while (remainingWaitTime > 0) {
-    let m = await page.evaluate(() => {
-      return performance.getEntriesByType('mark').map((entry) => {
+    let allMarks = await page.evaluate(() => {
+      return performance.getEntriesByType('mark');
+    });
+
+    if (allMarks.find((m) => m.name === ':done')) {
+      marks = allMarks.map((entry) => {
         let result: MarkEntry = {
           name: entry.name,
           at: entry.startTime,
@@ -57,13 +61,9 @@ async function getMarks(browser: Browser, url: string) {
 
         return result;
       });
-    });
-
-    marks.push(...m);
-
-    if (marks.find((m) => m.name === ':done')) {
       break;
     }
+
     await new Promise((resolve) => setTimeout(resolve, 100));
     remainingWaitTime -= 100;
   }
@@ -134,8 +134,11 @@ for (let framework of info.frameworks) {
       for (let variant of info.variants) {
         let url = serverUrl + '/?' + bench.query + variant.query;
 
+        clack.log.info(`\tVariant: ${url}`);
+
         let count = bench.ignoreCount ? 1 : COUNT;
         for (let i = 0; i < count; i++) {
+          clack.log.info(`\t\tRemaining: ${count - i}`);
           let performanceMarks = await getMarks(browser, url);
 
           let name = Boolean(variant.name)

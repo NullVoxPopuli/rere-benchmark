@@ -1,5 +1,6 @@
 import { BaseTest, RUN } from './base-test.js';
 import { setupFPS, get5sAverage } from '../fps.js';
+import { tryVerify } from './utils.js';
 
 const ms_5s = 5_000;
 
@@ -15,6 +16,8 @@ const ms_5s = 5_000;
  * @implements {DataTest}
  */
 export class DBMonWithChat extends BaseTest {
+  name = `DB Monitor w/ chat simulator`;
+
   getData() {
     return {
       db: [],
@@ -40,8 +43,11 @@ export class DBMonWithChat extends BaseTest {
   #startedAt = 0;
   #averages = [];
 
-  verify = () => {
-    console.log('verify');
+  check = () => {
+    return this.#averages.length === 4;
+  };
+
+  collectFPSSlidingWindow = () => {
     if (!this.#receivedChat) return;
     if (!this.#receivedDb) return;
     if (this.#averages.length >= 4) return true;
@@ -60,8 +66,9 @@ export class DBMonWithChat extends BaseTest {
       let fps = get5sAverage();
       performance.mark('fps', { detail: fps });
       this.#averages.push(fps);
-      if (this.#averages.length === 4) {
-        performance.mark(`:done`);
+
+      if (bucketsOf5s >= 4) {
+        tryVerify(this.name, this.check, 1);
       }
     }
   };
@@ -96,15 +103,13 @@ export class DBMonWithChat extends BaseTest {
     dbWorker.addEventListener('message', (event) => {
       updateDB(event.data);
       this.#receivedDb = true;
-      this.verify();
+      this.collectFPSSlidingWindow();
     });
     chatWorker.addEventListener('message', (event) => {
       addChat(event.data);
       this.#receivedChat = true;
-      this.verify();
+      this.collectFPSSlidingWindow();
     });
-
-    this.verify();
 
     dbWorker.postMessage(
       JSON.stringify({

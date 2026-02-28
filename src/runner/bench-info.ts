@@ -59,6 +59,11 @@ const benchmarks = [
     app: 'one-item-many-updates',
     query: '&updates=1000&percentRandomAwait=0',
   },
+  // {
+  //   name: '1 item, 1k updates, triggered by render',
+  //   app: 'one-item-many-updates',
+  //   query: '&updates=1000&percentRandomAwait=0',
+  // },
   {
     name: '1 item, 100k updates (async)',
     app: 'one-item-many-updates',
