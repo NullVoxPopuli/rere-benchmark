@@ -10,13 +10,15 @@ export interface Result {
 export interface Mark {
   name: string;
   at: number;
+  detail: number;
 }
 export interface ResultData {
   [framework: string]: {
     [benchName: string]: {
       url: string;
       version: string;
-      times: Array<[Mark, Mark]>;
+      measure?: string;
+      times: Array<Mark[]>;
     };
   };
 }

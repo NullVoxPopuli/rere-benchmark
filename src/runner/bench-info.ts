@@ -31,6 +31,16 @@ export interface BenchmarkInfo {
    * we are measuring "responsiveness" of the web page.
    */
   ignoreCount?: boolean;
+  /**
+   * All benchmarks emit a :start and :done mark.
+   * But for some benchmarks, we don't care about those,
+   * and instead want a different measurement.
+   *
+   * This option tells us which mark names to use for measurement.
+   * and when doing so, we'll use the "detail", instead of the at/startTime
+   *
+   */
+  measure?: string;
 }
 
 const variants = [
@@ -48,6 +58,7 @@ const benchmarks = [
     query: '',
     // This is a long running bench which we'll be taking multiple samples from
     ignoreCount: true,
+    measure: 'fps',
   },
   {
     name: '1 item, 1k updates (async)',

@@ -150,7 +150,13 @@ for (let framework of info.frameworks) {
             ? `${bench.name} ${variant.name}`
             : bench.name;
 
-          await addResult(framework, name, performanceMarks, info.filePath);
+          await addResult(
+            framework,
+            name,
+            performanceMarks,
+            info.filePath,
+            bench,
+          );
         }
       }
     }

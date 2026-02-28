@@ -108,6 +108,7 @@ export async function addResult(
   benchName: string,
   result: any,
   filePath: string,
+  benchInfo: BenchmarkInfo,
 ) {
   let existing = await getResults(filePath);
 
@@ -115,6 +116,10 @@ export async function addResult(
   existing[framework][benchName] ||= {};
   existing[framework][benchName].times ||= [];
   existing[framework][benchName].times.push(result);
+
+  if (benchInfo.measure) {
+    existing[framework][benchName].measure = benchInfo.measure;
+  }
 
   await saveResults(existing, filePath);
 }
