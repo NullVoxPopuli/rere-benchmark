@@ -1,9 +1,7 @@
 import "common/dbmon.css";
 
-import { tracked } from "@glimmer/tracking";
 import Component from "@glimmer/component";
 import { helpers } from "common";
-import { FrameRate } from "reactiveweb/fps";
 
 import { trackedMap, trackedArray } from "@ember/reactive/collections";
 
@@ -11,23 +9,7 @@ const test = helpers.dbMonWithChat();
 
 export default class Test extends Component {
   db = trackedMap();
-  // chats = new TrackedWindow();
   chats = trackedArray();
-
-  #started = false;
-  #updates;
-  @tracked updatesPerSecond;
-
-  trackUpdate = () => {
-    this.#updates++;
-    if (!this.#started) {
-      this.#started = true;
-      setInterval(() => {
-        this.updatesPerSecond = this.#updates;
-        this.#updates = 0;
-      }, 1_000);
-    }
-  };
 
   start = () => {
     test.doit({
@@ -49,13 +31,6 @@ export default class Test extends Component {
   };
 
   <template>
-    {{this.updatesPerSecond}}
-    ups |
-    {{#if this.updatesPerSecond}}
-      {{FrameRate}}
-      fps
-    {{/if}}
-    <hr />
     <div class="layout">
       <table>
         <thead><tr>
@@ -65,7 +40,6 @@ export default class Test extends Component {
           </tr></thead>
         <tbody>
           {{#each-in this.db as |id row|}}
-            {{(this.trackUpdate)}}
             <tr>
               <td class="dbname">
                 {{id}}
@@ -91,7 +65,6 @@ export default class Test extends Component {
         <div class="messages">
           <div class="messages-inner">
             {{#each this.chats as |chat|}}
-              {{(this.trackUpdate)}}
               <div class="chat">
                 <div class="author">{{chat.author}}</div>
                 <p>{{chat.message}}</p>

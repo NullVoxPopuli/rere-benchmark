@@ -27,10 +27,18 @@ async function getMarks(browser: Browser, url: string) {
   let remainingWaitTIme = 60_000; // 1 minute
   while (marks.length < 2 && remainingWaitTIme > 0) {
     let m = await page.evaluate(() => {
-      return performance.getEntriesByType('mark').map((entry) => ({
-        name: entry.name,
-        at: entry.startTime,
-      }));
+      return performance.getEntriesByType('mark').map((entry) => {
+        let result = {
+          name: entry.name,
+          at: entry.startTime,
+        };
+
+        if (entry.detail) {
+          result.detail = entry.detail;
+        }
+
+        return result;
+      });
     });
     marks.push(...m);
     await new Promise((resolve) => setTimeout(resolve, 100));

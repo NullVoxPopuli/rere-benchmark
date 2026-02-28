@@ -2,6 +2,13 @@
   "name": "common",
   "private": true,
   "type": "module",
+  "exports": {
+    ".": "./src/index.js",
+    "./dbmon.css": "./src/tests/dbmon/dbmon.css"
+  },
+  "files": [
+    "src"
+  ],
   "scripts": {
     "lint:types": "tsc --noEmit"
   },

@@ -1,4 +1,9 @@
 import { BaseTest, RUN } from './base-test.js';
+import { setupFPS, get5sAverage } from '../fps.js';
+import { tryVerify } from './utils.js';
+
+const ms_5s = 5_000;
+
 /**
  * @typedef {import('./dbmon/types.ts').Row} DBRow;
  * @typedef {import('./dbmon/types.ts').ChatMessage} ChatMessage;
@@ -31,14 +36,40 @@ export class DBMonWithChat extends BaseTest {
     });
   }
 
-  /**
-   * Type in the chat, send messages,
-   * TODO: find a way to measure lagginess
-   */
-  verify() {
-    // this may be tricky
-    return true;
-  }
+  #receivedDb = false;
+  #receivedChat = false;
+  #startedAt = 0;
+  #averages = [];
+
+  verify = () => {
+    console.log('verify');
+    if (!this.#receivedChat) return;
+    if (!this.#receivedDb) return;
+    if (this.#averages.length >= 4) return true;
+
+    if (!this.#startedAt) {
+      this.#startedAt = Date.now();
+      return;
+    }
+
+    let now = Date.now();
+    let bucketsOf5s = Math.floor((now - this.#startedAt) / ms_5s);
+    console.log({ now, bucketsOf5s });
+
+    if (bucketsOf5s === 0) return;
+    if (bucketsOf5s >= 5) return;
+
+    if (bucketsOf5s && this.#averages.length === bucketsOf5s - 1) {
+      let fps = get5sAverage();
+      console.log({ fps });
+      performance.mark('fps', { detail: fps });
+      this.#averages.push(fps);
+      if (this.#averages.length === 4) {
+        performance.mark(`:done`);
+        window.close();
+      }
+    }
+  };
 
   /**
    *
@@ -63,12 +94,20 @@ export class DBMonWithChat extends BaseTest {
       },
     );
 
+    setupFPS();
+
     dbWorker.addEventListener('message', (event) => {
       updateDB(event.data);
+      this.#receivedDb = true;
+      this.verify();
     });
     chatWorker.addEventListener('message', (event) => {
       addChat(event.data);
+      this.#receivedChat = true;
+      this.verify();
     });
+
+    this.verify();
 
     dbWorker.postMessage(
       JSON.stringify({

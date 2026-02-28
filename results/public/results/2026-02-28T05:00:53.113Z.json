@@ -1,0 +1,105 @@
+{
+  "date": "2026-02-28T05:00:53.113Z",
+  "sha": "710e60bd51d279657442987987f6f61686a81279",
+  "environment": {
+    "machine": {
+      "os": {
+        "name": "Ubuntu",
+        "version": "25.04"
+      },
+      "cpu": "AMD Ryzen 5 7640U w/ Radeon 760M Graphics",
+      "ram": "96.5 GB"
+    },
+    "monitor": {
+      "hz": 119
+    },
+    "browser": {
+      "name": "Google Chrome",
+      "version": "143.0.7499.169"
+    }
+  },
+  "results": {
+    "ember": {
+      "DB Monitor w/ chat simulation": {
+        "app": "dbmon-with-chat",
+        "query": "",
+        "version": "6.12.0-beta.1",
+        "times": [
+          [],
+          [
+            {
+              "name": "fps",
+              "at": 26858,
+              "detail": 114.7
+            },
+            {
+              "name": "fps",
+              "at": 26858,
+              "detail": 114.7
+            }
+          ],
+          [
+            {
+              "name": "fps",
+              "at": 7058.89999999851,
+              "detail": 118
+            },
+            {
+              "name": "fps",
+              "at": 7058.89999999851,
+              "detail": 118
+            }
+          ],
+          [
+            {
+              "name": "fps",
+              "at": 5088.79999999702,
+              "detail": 120
+            },
+            {
+              "name": "fps",
+              "at": 5088.79999999702,
+              "detail": 120
+            }
+          ],
+          [
+            {
+              "name": "fps",
+              "at": 15162.60000000149,
+              "detail": 119.5
+            },
+            {
+              "name": "fps",
+              "at": 15162.60000000149,
+              "detail": 119.5
+            }
+          ],
+          [
+            {
+              "name": "fps",
+              "at": 5090.4000000059605,
+              "detail": 105.4
+            },
+            {
+              "name": "fps",
+              "at": 5090.4000000059605,
+              "detail": 105.4
+            }
+          ],
+          [
+            {
+              "name": "fps",
+              "at": 17744.10000000149,
+              "detail": 119.5
+            },
+            {
+              "name": "fps",
+              "at": 17744.10000000149,
+              "detail": 119.5
+            }
+          ]
+        ]
+      }
+    }
+  }
+}

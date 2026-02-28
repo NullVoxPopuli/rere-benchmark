@@ -22,6 +22,11 @@ const variants = [
 const randomAwaitChance = 100;
 const benchmarks = [
   {
+    name: 'DB Monitor w/ chat simulation',
+    app: 'dbmon-with-chat',
+    query: '',
+  },
+  {
     name: '1 item, 1k updates (async)',
     app: 'one-item-many-updates',
     query: `&updates=1000&percentRandomAwait=${randomAwaitChance}`,
