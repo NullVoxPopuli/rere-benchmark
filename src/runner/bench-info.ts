@@ -7,9 +7,30 @@ import * as args from './arg.ts';
 import { yyyymmdd } from './environment.ts';
 
 export interface BenchmarkInfo {
+  /**
+   * The benchmark name.
+   */
   name: string;
+  /**
+   * The name of the app to launch.
+   * Every framework must have a matching app name
+   * for each benchmark.
+   */
   app: string;
+  /**
+   * Configuration passed to the benchmark via query params
+   */
   query: string;
+  /**
+   * Certain benchmarks intended to have observation, such as the dbmon bench -- where we take FPS samples of sliding window averages.
+   *
+   * Most benchmarks though will start a task and measure the time to completion of that task.
+   *
+   * The dbmon bench doesn't have completion,
+   * as instead of measuring "duration of a task",
+   * we are measuring "responsiveness" of the web page.
+   */
+  ignoreCount?: boolean;
 }
 
 const variants = [
@@ -25,6 +46,8 @@ const benchmarks = [
     name: 'DB Monitor w/ chat simulation',
     app: 'dbmon-with-chat',
     query: '',
+    // This is a long running bench which we'll be taking multiple samples from
+    ignoreCount: true,
   },
   {
     name: '1 item, 1k updates (async)',

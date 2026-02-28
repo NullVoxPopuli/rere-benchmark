@@ -1,6 +1,5 @@
 import { BaseTest, RUN } from './base-test.js';
 import { setupFPS, get5sAverage } from '../fps.js';
-import { tryVerify } from './utils.js';
 
 const ms_5s = 5_000;
 
@@ -54,19 +53,15 @@ export class DBMonWithChat extends BaseTest {
 
     let now = Date.now();
     let bucketsOf5s = Math.floor((now - this.#startedAt) / ms_5s);
-    console.log({ now, bucketsOf5s });
 
     if (bucketsOf5s === 0) return;
-    if (bucketsOf5s >= 5) return;
 
     if (bucketsOf5s && this.#averages.length === bucketsOf5s - 1) {
       let fps = get5sAverage();
-      console.log({ fps });
       performance.mark('fps', { detail: fps });
       this.#averages.push(fps);
       if (this.#averages.length === 4) {
         performance.mark(`:done`);
-        window.close();
       }
     }
   };
@@ -78,6 +73,8 @@ export class DBMonWithChat extends BaseTest {
    * @param {(...args: unknown[]) => unknown} options.addChat
    */
   [RUN]({ updateDB, addChat }) {
+    performance.mark(`:start`);
+
     const dbWorker = new Worker(
       new URL('./dbmon/db-worker.js', import.meta.url),
       {

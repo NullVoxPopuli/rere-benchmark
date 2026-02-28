@@ -14,6 +14,24 @@ import { join } from 'node:path';
 
 let info = await getBenchInfo();
 
+interface MarkEntry {
+  /**
+   * name of the performance.mark
+   */
+  name: string;
+  /**
+   * startTime of the perfromance.mark
+   */
+  at: number;
+
+  /**
+   * extra detail from the performance.mark
+   *
+   * (in the case of the dbmon test, this could be the FPS (for example))
+   */
+  detail?: unknown;
+}
+
 async function getMarks(browser: Browser, url: string) {
   const page = await browser.newPage();
 
@@ -22,13 +40,13 @@ async function getMarks(browser: Browser, url: string) {
   // TODO: is there a way to wait for the page to calmn down?
   await page.waitForNetworkIdle();
 
-  let marks: Array<{ name: string; at: number }> = [];
+  let marks: Array<MarkEntry> = [];
 
-  let remainingWaitTIme = 60_000; // 1 minute
-  while (marks.length < 2 && remainingWaitTIme > 0) {
+  let remainingWaitTime = 60_000; // 1 minute
+  while (remainingWaitTime > 0) {
     let m = await page.evaluate(() => {
       return performance.getEntriesByType('mark').map((entry) => {
-        let result = {
+        let result: MarkEntry = {
           name: entry.name,
           at: entry.startTime,
         };
@@ -40,9 +58,14 @@ async function getMarks(browser: Browser, url: string) {
         return result;
       });
     });
+
     marks.push(...m);
+
+    if (marks.find((m) => m.name === ':done')) {
+      break;
+    }
     await new Promise((resolve) => setTimeout(resolve, 100));
-    remainingWaitTIme -= 100;
+    remainingWaitTime -= 100;
   }
 
   page.close();
@@ -111,7 +134,8 @@ for (let framework of info.frameworks) {
       for (let variant of info.variants) {
         let url = serverUrl + '/?' + bench.query + variant.query;
 
-        for (let i = 0; i < COUNT; i++) {
+        let count = bench.ignoreCount ? 1 : COUNT;
+        for (let i = 0; i < count; i++) {
           let performanceMarks = await getMarks(browser, url);
 
           let name = Boolean(variant.name)
