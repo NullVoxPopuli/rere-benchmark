@@ -43,29 +43,34 @@ async function getMarks(browser: Browser, url: string) {
   let marks: Array<MarkEntry> = [];
 
   let remainingWaitTime = 60_000; // 1 minute
+
+  let progress = clack.progress({ style: 'light', max: remainingWaitTime });
   while (remainingWaitTime > 0) {
     let allMarks = await page.evaluate(() => {
-      return performance.getEntriesByType('mark');
+      return performance.getEntriesByType('mark').map((entry) => {
+        return {
+          name: entry.name,
+          at: entry.startTime,
+          detail: entry.detail,
+        };
+      });
     });
 
     if (allMarks.find((m) => m.name === ':done')) {
+      progress.stop(`Finished`);
       marks = allMarks.map((entry) => {
-        let result: MarkEntry = {
-          name: entry.name,
-          at: entry.startTime,
-        };
-
-        if (entry.detail) {
-          result.detail = entry.detail;
+        if (!entry.detail) {
+          delete entry.detail;
         }
 
-        return result;
+        return entry as MarkEntry;
       });
       break;
     }
 
     await new Promise((resolve) => setTimeout(resolve, 100));
     remainingWaitTime -= 100;
+    progress.advance(100);
   }
 
   page.close();

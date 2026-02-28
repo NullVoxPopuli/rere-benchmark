@@ -32,7 +32,7 @@ export class OneItem extends BaseTest {
   constructor(num = qpNum('updates', 10_000)) {
     super();
 
-    this.num = num;
+    this.#num = num;
     this.name = `1 Item, ${num / 1000}k updates`;
     this.#percentRandomAwait = qpPercent('percentRandomAwait', 0);
     this.#allowManualBatch = qpBool('manualBatch', false);
