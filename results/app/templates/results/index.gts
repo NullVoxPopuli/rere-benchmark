@@ -194,7 +194,7 @@ export default class Table extends Component<{
             <td style="text-align: right;" class="benchmark-name">
               {{name}}{{unitsFor data}}
               {{#if this.isBiggerBetter}}
-                <span class="which-is-better">bigger is better</span>
+                <span class="which-is-better">higher is better</span>
               {{/if}}
             </td>
             {{#each this.frameworks as |framework|}}
