@@ -7,37 +7,36 @@ import { BoxPlotChart } from '@sgratzl/chartjs-chart-boxplot';
 import { frameworks } from '#frameworks';
 
 function boxData(file: ResultSet, benchInfo: BenchmarkInfo) {
-  const labels = [];
-  const datasets = [];
+  const labels: string[] = [];
+  const data: number[][] = [];
+  const backgroundColor: string[] = [];
+  const borderColor: string[] = [];
 
   for (const framework of file.selections.frameworks) {
     labels.push(framework);
     const marks = file.results[framework]?.[benchInfo.name]?.times;
-    const baseColor = frameworks[framework]?.color;
-    let data: number[] = [];
+    const baseColor = frameworks[framework]?.color ?? '#888';
+    let frameworkData: number[] = [];
 
     if (benchInfo.whatsBetter === 'bigger') {
-      data = marks
+      frameworkData = marks
         .flat()
         .filter((mark) => mark.name === benchInfo.measure)
         .map((mark) => mark.detail);
     } else {
-      data = marks
+      frameworkData = marks
         ?.filter((x) => x.length === 2)
         .map((x) => x[1]!.at - x[0]!.at);
     }
 
-    console.log({ framework, data, marks });
+    console.log({ framework, data: frameworkData, marks });
 
-    datasets.push({
-      label: framework,
-      data: [data],
-      borderColor: 'gray',
-      medianColor: '#99ff99',
-      lowerBackgroundColor: baseColor,
-      outlierBackgroundColor: 'black',
-    });
+    data.push(frameworkData);
+    backgroundColor.push(baseColor);
+    borderColor.push(baseColor);
   }
+
+  const datasets = [{ label: '', data, backgroundColor, borderColor }];
 
   console.log(datasets);
 
@@ -52,20 +51,12 @@ const renderChart = modifier(function boxplot(
   // https://www.sgratzl.com/chartjs-chart-boxplot/examples/styling.html
   const chart = new BoxPlotChart(element, {
     data: {
-      labels: ['frameworks'],
+      labels,
       datasets,
     },
     options: {
+      indexAxis: 'y',
       responsive: true,
-      interaction: {
-        mode: 'y',
-      },
-      elements: {
-        boxandwhiskers: {
-          itemRadius: 2,
-          itemHitRadius: 4,
-        },
-      },
       transitions: {
         show: {
           animations: {
@@ -81,7 +72,9 @@ const renderChart = modifier(function boxplot(
         },
       },
       plugins: {
-        legend: {},
+        legend: {
+          display: false,
+        },
       },
     },
   });
@@ -125,8 +118,19 @@ export default class Boxplat extends Component<{
   <template>
     {{#each this.benchmarkInfo as |benchInfo|}}
       <section>
-        <h2>{{benchInfo.name}}</h2>
-        <span class="small">{{benchInfo.units}}</span>
+        <header class="boxplot-header">
+          <h2>{{benchInfo.name}}</h2>
+          <div class="right">
+            <span class="small">{{benchInfo.units}}</span>
+            <span class="which-is-better">
+              {{#if (isBiggerBetter benchInfo)}}
+                higher is better
+              {{else}}
+                lower is better
+              {{/if}}
+            </span>
+          </div>
+        </header>
 
         <canvas
           style="height:500px; max-width: 90dvw;"
@@ -134,5 +138,27 @@ export default class Boxplat extends Component<{
         ></canvas>
       </section>
     {{/each}}
+
+    <style scoped>
+      .boxplot-header {
+        display: flex;
+        align-items: center;
+
+        h2 {
+          flex: 1;
+        }
+
+        .right {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 0.25rem;
+        }
+      }
+    </style>
   </template>
+}
+
+function isBiggerBetter(benchInfo: BenchmarkInfo) {
+  return benchInfo.whatsBetter === 'bigger';
 }
