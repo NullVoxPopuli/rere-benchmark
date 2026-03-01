@@ -9,7 +9,6 @@ import {
   getFrameworkVersion,
   round,
 } from '#utils';
-import type { TOC } from '@ember/component/template-only';
 import { interpolate } from 'culori';
 import { cached } from '@glimmer/tracking';
 
