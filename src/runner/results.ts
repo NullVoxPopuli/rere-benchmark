@@ -59,35 +59,17 @@ export async function saveBenchmarkInfo(
 ) {
   const file = await read(filePath);
 
-  const better = new Set();
-
-  const smaller = [];
-  const bigger = [];
-
-  for (const bench of info.benches) {
-    const kind = bench.whatsBetter || 'smaller';
-
-    if (kind === 'smaller') {
-      smaller.push(bench.name);
-    }
-
-    if (kind === 'bigger') {
-      bigger.push(bench.name);
-    }
-
-    better.add(kind);
-  }
-
-  assert(
-    better.size === 1,
-    `Expected only one type of bench comparison in selected set of benchmarks. Cannot both measure both smaller being better while also wanting bigger measurements to be better. Smaller: ${smaller.join(', ')} -- Bigger: ${bigger.join(', ')}`,
-  );
-
-  file.whatsBetter = [...better.values()][0];
   file.selections = {
     benches: info.benches.map((bench) => bench.name),
     frameworks: info.frameworks,
   };
+
+  file.benchmarkInfo = info.benches.map((bench) => {
+    // ignoreCount is only used for the runner
+    const { ignoreCount: _, ...rest } = bench;
+
+    return rest;
+  });
 
   await write(file, filePath);
 }

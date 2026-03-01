@@ -56,7 +56,7 @@ function averageOf(arrayOfMarks: Array<Mark[]>) {
 
   let total = 0;
   durations.forEach((d) => (total += d));
-  return total / durations.length;
+  return round(total / durations.length);
 }
 
 function averageOfNamedMark(sampleBuckets: Array<Mark[]>, name: string) {
@@ -72,10 +72,14 @@ function averageOfNamedMark(sampleBuckets: Array<Mark[]>, name: string) {
 
   let total = 0;
   fps.forEach((f) => (total += f));
-  return total / fps.length;
+
+  return round(total / fps.length);
 }
 
-function timeFromMarks(times: Array<Mark[]>, measure: string | undefined) {
+export function timeFromMarks(
+  times: Array<Mark[]>,
+  measure: string | undefined
+) {
   if (measure) {
     return averageOfNamedMark(times, measure);
   }

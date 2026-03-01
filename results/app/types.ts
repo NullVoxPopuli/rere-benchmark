@@ -25,13 +25,26 @@ export interface ResultData {
   };
 }
 
+export interface BenchmarkInfo {
+  name: string;
+  app: string;
+  query: string;
+  measure?: string;
+  whatsBetter: 'bigger' | 'smaller';
+  units: string;
+}
+
 export interface ResultSet {
   /**
    * YYYY-MM-DD
    */
   date: string;
   sha: string;
-  whatsBetter: 'smaller' | 'bigger';
+  selections: {
+    benches: string[];
+    frameworks: string[];
+  };
+  benchmarkInfo: BenchmarkInfo[];
   environment: {
     machine: {
       os: {

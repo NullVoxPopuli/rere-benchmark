@@ -5,7 +5,7 @@ import * as clack from '@clack/prompts';
 import { $ } from 'execa';
 import puppeteer, { type Browser } from 'puppeteer';
 
-import { COUNT, HEADLESS, SKIP_BUILD } from './arg.ts';
+import { COUNT, CPU_THROTTLE, HEADLESS, SKIP_BUILD } from './arg.ts';
 import { getBenchInfo } from './bench-info.ts';
 import { chromeLocation } from './environment.ts';
 import {
@@ -36,6 +36,10 @@ interface MarkEntry {
 
 async function getMarks(browser: Browser, url: string) {
   const page = await browser.newPage();
+
+  if (CPU_THROTTLE !== 1) {
+    page.emulateCPUThrottling(CPU_THROTTLE);
+  }
 
   await page.goto(url, { waitUntil: 'load' });
 
