@@ -1,49 +1,60 @@
 import Component from '@glimmer/component';
 import { modifier } from 'ember-modifier';
 import type { Model } from '#routes/results.ts';
-import type { BenchmarkInfo, ResultData, ResultSet } from '#types';
+import type { BenchmarkInfo, ResultSet } from '#types';
 // https://github.com/sgratzl/chartjs-chart-boxplot
 import { BoxPlotChart } from '@sgratzl/chartjs-chart-boxplot';
 import { frameworks } from '#frameworks';
 
-function boxData(results: ResultData, name: string) {
+function boxData(file: ResultSet, benchInfo: BenchmarkInfo) {
   const labels = [];
   const datasets = [];
-  const datas = [];
-  for (const [framework, benchmarks] of Object.entries(results)) {
-    labels.push(framework);
-    const baseColor = frameworks[framework]?.color;
 
-    for (const [benchName, benchData] of Object.entries(benchmarks)) {
-      if (benchName !== name) continue;
-      const times = benchData.times
-        .filter((x) => x.length === 2)
+  for (const framework of file.selections.frameworks) {
+    labels.push(framework);
+    const marks = file.results[framework]?.[benchInfo.name]?.times;
+    const baseColor = frameworks[framework]?.color;
+    let data: number[] = [];
+
+    if (benchInfo.whatsBetter === 'bigger') {
+      data = marks
+        .flat()
+        .filter((mark) => mark.name === benchInfo.measure)
+        .map((mark) => mark.detail);
+    } else {
+      data = marks
+        ?.filter((x) => x.length === 2)
         .map((x) => x[1]!.at - x[0]!.at);
-      datas.push(times);
     }
+
+    console.log({ framework, data, marks });
+
+    datasets.push({
+      label: framework,
+      data: [data],
+      borderColor: 'gray',
+      medianColor: '#99ff99',
+      lowerBackgroundColor: baseColor,
+      outlierBackgroundColor: 'black',
+    });
   }
 
-  datasets.push({
-    label: name,
-    data: datas,
-    borderColor: 'gray',
-    medianColor: '#99ff99',
-    lowerBackgroundColor: '#77ff77',
-    outlierBackgroundColor: 'black',
-  });
+  console.log(datasets);
 
-  return { labels, datasets };
+  return { datasets, labels };
 }
 
 const renderChart = modifier(function boxplot(
   element: HTMLCanvasElement,
   [file, benchInfo]: [ResultSet, BenchmarkInfo]
 ) {
-  const name = benchInfo.name;
-  const data = boxData(results, name);
+  const { datasets, labels } = boxData(file, benchInfo);
   // https://www.sgratzl.com/chartjs-chart-boxplot/examples/styling.html
   const chart = new BoxPlotChart(element, {
-    data,
+    data: {
+      labels: ['frameworks'],
+      datasets,
+    },
     options: {
       responsive: true,
       interaction: {
@@ -62,6 +73,11 @@ const renderChart = modifier(function boxplot(
               from: 0,
             },
           },
+        },
+      },
+      scales: {
+        y: {
+          beginAtZero: false,
         },
       },
       plugins: {
