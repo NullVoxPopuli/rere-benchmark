@@ -7,10 +7,15 @@ import { BoxPlotChart } from '@sgratzl/chartjs-chart-boxplot';
 import { frameworks } from '#frameworks';
 
 function boxData(file: ResultSet, benchInfo: BenchmarkInfo) {
+  // Why is chartjs like this?
+  // managing this many arrays in sync across indicies is annoying
   const labels: string[] = [];
   const data: number[][] = [];
   const backgroundColor: string[] = [];
   const borderColor: string[] = [];
+  const meanBorderColor: string[] = [];
+  const medianColor: string[] = [];
+  const lowerBackgroundColor: string[] = [];
 
   for (const framework of file.selections.frameworks) {
     labels.push(framework);
@@ -34,9 +39,28 @@ function boxData(file: ResultSet, benchInfo: BenchmarkInfo) {
     data.push(frameworkData);
     backgroundColor.push(baseColor);
     borderColor.push(baseColor);
+
+    // TODO: darken theme color
+    meanBorderColor.push('black');
+    medianColor.push('black');
+    // meanBackgroundColor
+
+    // TODO: brighten
+    lowerBackgroundColor.push('gray');
   }
 
-  const datasets = [{ label: '', data, backgroundColor, borderColor }];
+  const datasets = [
+    {
+      label: '',
+      data,
+      backgroundColor,
+      borderColor,
+      meanBorderWidth: 3,
+      meanBorderColor,
+      medianColor,
+      lowerBackgroundColor,
+    },
+  ];
 
   console.log(datasets);
 
