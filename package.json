@@ -1,6 +1,7 @@
 {
   "name": "rere-benchmark",
   "type": "module",
+  "license": "GPL 3",
   "scripts": {
     "prepare": "pnpm install:common; pnpm install:results",
     "install:common": "cd common; pnpm install",

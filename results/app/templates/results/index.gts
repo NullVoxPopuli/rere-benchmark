@@ -94,7 +94,6 @@ function colorFor(speed: number | undefined, min: number, max: number) {
 }
 
 export default <template>
-  {{log @model.data}}
   {{#let (pivot @model.data.results) as |p|}}
     <table>
       <thead>
@@ -112,7 +111,6 @@ export default <template>
       </thead>
       <tbody>
         {{#each-in p.rows as |name data|}}
-          {{log data}}
           {{#let (max data) (min data) as |max min|}}
             <tr>
               <td style="text-align: right;">{{name}}</td>
