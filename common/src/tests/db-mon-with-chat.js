@@ -4,6 +4,8 @@ import { tryVerify } from './utils.js';
 
 const ms_5s = 5_000;
 
+const SAMPLES = 5;
+
 /**
  * @typedef {import('./dbmon/types.ts').Row} DBRow;
  * @typedef {import('./dbmon/types.ts').ChatMessage} ChatMessage;
@@ -45,13 +47,13 @@ export class DBMonWithChat extends BaseTest {
   #averages = [];
 
   verify = () => {
-    return this.#averages.length === 4;
+    return this.#averages.length === SAMPLES;
   };
 
   collectFPSSlidingWindow = () => {
     if (!this.#receivedChat) return;
     if (!this.#receivedDb) return;
-    if (this.#averages.length >= 4) return true;
+    if (this.#averages.length >= SAMPLES) return true;
 
     if (!this.#startedAt) {
       this.#startedAt = Date.now();
@@ -68,7 +70,7 @@ export class DBMonWithChat extends BaseTest {
       performance.mark('fps', { detail: fps });
       this.#averages.push(fps);
 
-      if (bucketsOf5s >= 4) {
+      if (bucketsOf5s >= SAMPLES) {
         tryVerify(this.name, this.verify, 1);
       }
     }
