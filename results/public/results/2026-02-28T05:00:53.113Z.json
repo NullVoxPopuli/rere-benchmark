@@ -28,31 +28,162 @@
           [
             {
               "name": ":start",
-              "at": 4953.4000000059605
+              "at": 54.79999999701977
             },
             {
               "name": "fps",
-              "at": 10002.20000000298,
-              "detail": 118.3
+              "at": 5106.79999999702,
+              "detail": 118
             },
             {
               "name": "fps",
-              "at": 15008.800000011921,
-              "detail": 119.6
+              "at": 10107.39999999106,
+              "detail": 120
             },
             {
               "name": "fps",
-              "at": 20000.80000001192,
-              "detail": 119.8
+              "at": 15108,
+              "detail": 120
             },
             {
               "name": "fps",
-              "at": 25007.60000000894,
+              "at": 20110.79999999702,
               "detail": 120
             },
             {
               "name": ":done",
-              "at": 25008.5
+              "at": 20112.20000000298
+            }
+          ]
+        ],
+        "measure": "fps"
+      }
+    },
+    "react": {
+      "DB Monitor w/ chat simulation": {
+        "app": "dbmon-with-chat",
+        "query": "",
+        "version": "19.2.0",
+        "times": [
+          []
+        ],
+        "measure": "fps"
+      }
+    },
+    "solid": {
+      "DB Monitor w/ chat simulation": {
+        "app": "dbmon-with-chat",
+        "query": "",
+        "version": "1.9.10",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 31.30000001192093
+            },
+            {
+              "name": "fps",
+              "at": 5057.5,
+              "detail": 119.8
+            },
+            {
+              "name": "fps",
+              "at": 10056.10000000894,
+              "detail": 113.2
+            },
+            {
+              "name": "fps",
+              "at": 15056.90000000596,
+              "detail": 119.6
+            },
+            {
+              "name": "fps",
+              "at": 20061.60000000894,
+              "detail": 118.6
+            },
+            {
+              "name": ":done",
+              "at": 20062.10000000894
+            }
+          ]
+        ],
+        "measure": "fps"
+      }
+    },
+    "svelte": {
+      "DB Monitor w/ chat simulation": {
+        "app": "dbmon-with-chat",
+        "query": "",
+        "version": "5.43.6",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 36.29999999701977
+            },
+            {
+              "name": "fps",
+              "at": 5068.70000000298,
+              "detail": 120
+            },
+            {
+              "name": "fps",
+              "at": 10065,
+              "detail": 114.2
+            },
+            {
+              "name": "fps",
+              "at": 15071.70000000298,
+              "detail": 120
+            },
+            {
+              "name": "fps",
+              "at": 20061.89999999106,
+              "detail": 118.4
+            },
+            {
+              "name": ":done",
+              "at": 20062.29999999702
+            }
+          ]
+        ],
+        "measure": "fps"
+      }
+    },
+    "vue": {
+      "DB Monitor w/ chat simulation": {
+        "app": "dbmon-with-chat",
+        "query": "",
+        "version": "3.5.24",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 34.29999999701977
+            },
+            {
+              "name": "fps",
+              "at": 5064.0999999940395,
+              "detail": 119.2
+            },
+            {
+              "name": "fps",
+              "at": 10061.70000000298,
+              "detail": 109
+            },
+            {
+              "name": "fps",
+              "at": 15070.59999999404,
+              "detail": 116.4
+            },
+            {
+              "name": "fps",
+              "at": 20066.29999999702,
+              "detail": 116.4
+            },
+            {
+              "name": ":done",
+              "at": 20067.09999999404
             }
           ]
         ],
