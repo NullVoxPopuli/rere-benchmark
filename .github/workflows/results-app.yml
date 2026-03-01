@@ -1,4 +1,4 @@
-name: CI Results App
+name: "Results App"
 
 on:
   push:
