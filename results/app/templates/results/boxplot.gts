@@ -1,10 +1,10 @@
-import { getBenchNames } from '#utils';
+import Component from '@glimmer/component';
 import { modifier } from 'ember-modifier';
 import type { Model } from '#routes/results.ts';
-import type { TOC } from '@ember/component/template-only';
-import type { ResultData } from '#types';
+import type { BenchmarkInfo, ResultData, ResultSet } from '#types';
 // https://github.com/sgratzl/chartjs-chart-boxplot
 import { BoxPlotChart } from '@sgratzl/chartjs-chart-boxplot';
+import { frameworks } from '#frameworks';
 
 function boxData(results: ResultData, name: string) {
   const labels = [];
@@ -12,6 +12,7 @@ function boxData(results: ResultData, name: string) {
   const datas = [];
   for (const [framework, benchmarks] of Object.entries(results)) {
     labels.push(framework);
+    const baseColor = frameworks[framework]?.color;
 
     for (const [benchName, benchData] of Object.entries(benchmarks)) {
       if (benchName !== name) continue;
@@ -25,6 +26,10 @@ function boxData(results: ResultData, name: string) {
   datasets.push({
     label: name,
     data: datas,
+    borderColor: 'gray',
+    medianColor: '#99ff99',
+    lowerBackgroundColor: '#77ff77',
+    outlierBackgroundColor: 'black',
   });
 
   return { labels, datasets };
@@ -32,8 +37,9 @@ function boxData(results: ResultData, name: string) {
 
 const renderChart = modifier(function boxplot(
   element: HTMLCanvasElement,
-  [results, name]: [ResultData, string]
+  [file, benchInfo]: [ResultSet, BenchmarkInfo]
 ) {
+  const name = benchInfo.name;
   const data = boxData(results, name);
   // https://www.sgratzl.com/chartjs-chart-boxplot/examples/styling.html
   const chart = new BoxPlotChart(element, {
@@ -87,16 +93,30 @@ const renderChart = modifier(function boxplot(
  *     -----   <- min
  */
 
-export default <template>
-  {{#each (getBenchNames @model.data.results) as |name|}}
-    <section>
-      <h2>{{name}}</h2>
-      <span class="small">times in milliseconds</span>
+export default class Boxplat extends Component<{
+  model: Model;
+}> {
+  get benchmarkInfo() {
+    return this.args.model.data.benchmarkInfo
+      .toSorted()
+      .toSorted(
+        (a, b) =>
+          (a.name.includes('async') ? 1 : 0) -
+          (b.name.includes('async') ? 1 : 0)
+      );
+  }
 
-      <canvas
-        style="height:500px"
-        {{renderChart @model.data.results name}}
-      ></canvas>
-    </section>
-  {{/each}}
-</template> satisfies TOC<{ model: Model }>;
+  <template>
+    {{#each this.benchmarkInfo as |benchInfo|}}
+      <section>
+        <h2>{{benchInfo.name}}</h2>
+        <span class="small">{{benchInfo.units}}</span>
+
+        <canvas
+          style="height:500px; max-width: 90dvw;"
+          {{renderChart @model.data benchInfo}}
+        ></canvas>
+      </section>
+    {{/each}}
+  </template>
+}

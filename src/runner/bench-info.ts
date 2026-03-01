@@ -119,20 +119,6 @@ const benchmarks: BenchmarkInfo[] = [
     units: 'ms',
   },
   {
-    name: '1 item, 1M updates (async)',
-    app: 'one-item-many-updates',
-    query: `&updates=1000000&percentRandomAwait=${randomAwaitChance}`,
-    whatsBetter: 'smaller',
-    units: 'ms',
-  },
-  {
-    name: '1 item, 1M updates',
-    app: 'one-item-many-updates',
-    query: '&updates=1000000&percentRandomAwait=0',
-    whatsBetter: 'smaller',
-    units: 'ms',
-  },
-  {
     name: '1k items, 1 update each (sequentially, async)',
     app: 'ten-k-items-one-time',
     query: `&items=1000&updates=1000&percentRandomAwait=${randomAwaitChance}`,
