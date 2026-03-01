@@ -105,36 +105,36 @@
       "DB Monitor w/ chat simulation": {
         "app": "dbmon-with-chat",
         "query": "",
-        "version": "1.9.10",
+        "version": "1.9.11",
         "times": [
           [
             {
               "name": ":start",
-              "at": 27204.20000000298
+              "at": 35
             },
             {
               "name": "fps",
-              "at": 32246.40000000596,
-              "detail": 114.9
+              "at": 5073.79999999702,
+              "detail": 116.5
             },
             {
               "name": "fps",
-              "at": 37245.10000000894,
-              "detail": 114.9
+              "at": 10072.70000000298,
+              "detail": 116.5
             },
             {
               "name": "fps",
-              "at": 42236.29999999702,
-              "detail": 52.2
+              "at": 15073.90000000596,
+              "detail": 116.5
             },
             {
               "name": "fps",
-              "at": 47248,
-              "detail": 119.4
+              "at": 20068,
+              "detail": 116.5
             },
             {
               "name": ":done",
-              "at": 47248.5
+              "at": 20068.29999999702
             }
           ]
         ],
@@ -231,9 +231,7 @@
       "DB Monitor w/ chat simulation"
     ],
     "frameworks": [
-      "solid",
-      "svelte",
-      "vue"
+      "solid"
     ]
   }
 }
