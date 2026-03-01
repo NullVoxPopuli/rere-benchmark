@@ -10,6 +10,7 @@ body {
   background: var(--light-bg);
   color: var(--light-fg);
 }
+
 header {
   background: var(--light-bg);
   color: var(--light-fg);
@@ -36,7 +37,7 @@ header {
   }
 }
 
-@media (width <= 450px) {
+@media (width <=450px) {
   .hide-sm {
     display: none;
   }
@@ -94,6 +95,7 @@ main.error-page {
   h1 {
     margin: 0;
   }
+
   h2 {
     margin: 0;
     font-size: 1.25rem;
@@ -123,6 +125,7 @@ main.error-page {
     height: 32px;
     object-fit: contain;
   }
+
   span {
     font-size: 0.8rem;
     white-space: nowrap;
@@ -130,6 +133,7 @@ main.error-page {
 }
 
 table {
+
   th,
   td {
     padding: 0.25rem 0.5rem;
@@ -138,6 +142,18 @@ table {
   .fw-header {
     text-align: center;
     vertical-align: bottom;
+  }
+
+  .benchmark-name {
+    display: flex;
+    position: relative;
+
+    .which-is-better {
+      position: absolute;
+      font-size: 0.5rem;
+      right: 0.5rem;
+      bottom: -0.25rem;
+    }
   }
 
   .value {

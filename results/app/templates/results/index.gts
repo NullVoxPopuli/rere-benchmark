@@ -118,6 +118,13 @@ function getColor(
   return colorFor(speed, rmin, rmax);
 }
 
+function unitsFor(data: Result[]) {
+  const value = Object.values(data)[0]?.units;
+  if (!value) return;
+
+  return ` ( ${value} )`;
+}
+
 /**
  * NOTE: we can only render one type of bench at a time
  * -    better = bigger
@@ -184,7 +191,12 @@ export default class Table extends Component<{
       <tbody>
         {{#each-in this.pivotedData.rows as |name data|}}
           <tr>
-            <td style="text-align: right;">{{name}}</td>
+            <td style="text-align: right;" class="benchmark-name">
+              {{name}}{{unitsFor data}}
+              {{#if this.isBiggerBetter}}
+                <span class="which-is-better">bigger is better</span>
+              {{/if}}
+            </td>
             {{#each this.frameworks as |framework|}}
               {{#let (speedFor data framework) as |speed|}}
                 <td style="background: {{getColor this.data data speed}};"><span
