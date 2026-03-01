@@ -8,7 +8,7 @@ on:
   pull_request: {}
 
 concurrency:
-  group: ci-results-app-${{ github.head_ref || github.ref }}
+  group: ci-common-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
 jobs:
