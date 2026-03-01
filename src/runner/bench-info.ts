@@ -1,10 +1,13 @@
-import { info } from './results.ts';
+import assert from 'node:assert';
 import { readdir } from 'node:fs/promises';
-import * as clack from '@clack/prompts';
 import { inspect } from 'node:util';
-import { frameworks } from './repo.ts';
+
+import * as clack from '@clack/prompts';
+
 import * as args from './arg.ts';
 import { yyyymmdd } from './environment.ts';
+import { frameworks } from './repo.ts';
+import { info, saveBenchmarkInfo } from './results.ts';
 
 export interface BenchmarkInfo {
   /**
@@ -41,6 +44,11 @@ export interface BenchmarkInfo {
    *
    */
   measure?: string;
+
+  /**
+   * For the measured value, assume smaller values are better unless this is set to bigger.
+   */
+  whatsBetter?: 'bigger';
 }
 
 const variants = [
@@ -51,6 +59,11 @@ const variants = [
 ];
 
 const randomAwaitChance = 100;
+
+/**
+ * TODO: make the bigger is better benchmark mutually exclusive
+ *       to the smaller is better benchmarks
+ */
 const benchmarks = [
   {
     name: 'DB Monitor w/ chat simulation',
@@ -59,6 +72,7 @@ const benchmarks = [
     // This is a long running bench which we'll be taking multiple samples from
     ignoreCount: true,
     measure: 'fps',
+    whatsBetter: 'bigger',
   },
   {
     name: '1 item, 1k updates (async)',
@@ -133,7 +147,7 @@ async function getFrameworks() {
     : undefined;
 
   if (!selectedFrameworks) {
-    let result = await clack.multiselect({
+    const result = await clack.multiselect({
       message: 'Which frameworks?',
       options: [...frameworks.values()].map((fw) => {
         return { value: fw, label: fw };
@@ -163,7 +177,7 @@ async function getBenches() {
     : undefined;
 
   if (!selectedBenches) {
-    let result = await clack.multiselect({
+    const result = await clack.multiselect({
       message: 'Which benchmarks?',
       options: benchmarks.map((b) => {
         return { value: b, label: b.name };
@@ -181,16 +195,17 @@ async function getBenches() {
   return selectedBenches;
 }
 
-let yesterdayFull = new Date(Date.now() - 24 * 60 * 60 * 1000);
+const yesterdayFull = new Date(Date.now() - 24 * 60 * 60 * 1000);
+
 async function getFilePath() {
   let existing = await readdir(`./results/public/results/`);
 
-  let today = yyyymmdd.split('T')[0]!;
-  let yesterday = yesterdayFull.toJSON().split('T')[0]!;
+  const today = yyyymmdd.split('T')[0]!;
+  const yesterday = yesterdayFull.toJSON().split('T')[0]!;
 
   existing = existing.filter((x) => x.includes(today) || x.includes(yesterday));
 
-  let result = await clack.select({
+  const result = await clack.select({
     message: 'Where to save?',
     options: [
       { value: yyyymmdd + '.json', label: 'New file', hint: yyyymmdd },
@@ -209,16 +224,16 @@ async function getFilePath() {
 }
 
 export async function getBenchInfo() {
-  let selectedFrameworks = await getFrameworks();
-  let selectedBenches = await getBenches();
-  let filePath = await getFilePath();
+  const selectedFrameworks = await getFrameworks();
+  const selectedBenches = await getBenches();
+  const filePath = await getFilePath();
 
   console.info(inspect(info, { showHidden: false, depth: null, colors: true }));
   console.log(`
     Results will be written to ${filePath}
   `);
 
-  let letsgo = await clack.confirm({
+  const letsgo = await clack.confirm({
     message: 'Does this information look correct?',
   });
 
@@ -227,7 +242,18 @@ export async function getBenchInfo() {
     process.exit(1);
   }
 
-  let apps = new Set(selectedBenches.map((b) => b.app));
+  assert(selectedBenches, `Must select at least one benchmark`);
+  assert(selectedBenches.length > 0, `Must select at least one benchmark`);
+
+  const apps = new Set(selectedBenches.map((b) => b.app));
+
+  await saveBenchmarkInfo(
+    {
+      benches: selectedBenches,
+      frameworks: selectedFrameworks,
+    },
+    filePath,
+  );
 
   return {
     apps,

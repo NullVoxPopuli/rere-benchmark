@@ -1,6 +1,7 @@
+import Component from '@glimmer/component';
 import { FrameworkInfo } from '#components/framework-info.gts';
 import type { Model } from '#routes/results.ts';
-import type { Result, ResultData } from '#types';
+import type { Result, ResultData, ResultSet } from '#types';
 import {
   dataOf,
   getBenchNames,
@@ -8,8 +9,8 @@ import {
   getFrameworkVersion,
   round,
 } from '#utils';
-import type { TOC } from '@ember/component/template-only';
 import { interpolate } from 'culori';
+import { cached } from '@glimmer/tracking';
 
 function pivot(data: ResultData) {
   const frameworks = getFrameworks(data);
@@ -83,9 +84,17 @@ function minTotal({
 
 const start = '#ff7777';
 const end = '#77ff77';
-function colorFor(speed: number | undefined, min: number, max: number) {
+function colorFor(
+  speed: number | undefined,
+  min: number,
+  max: number,
+  reverse = false
+) {
   if (!speed) return;
-  const interpolation = interpolate([end, start], 'oklch');
+  const interpolation = interpolate(
+    reverse ? [start, end] : [end, start],
+    'oklch'
+  );
 
   const normalized = (speed - min) / (max - min);
   const color = interpolation(normalized);
@@ -93,53 +102,118 @@ function colorFor(speed: number | undefined, min: number, max: number) {
   return `oklch(${color.l} ${color.c} ${color.h}deg)`;
 }
 
-export default <template>
-  {{#let (pivot @model.data.results) as |p|}}
+function getColor(
+  data: ResultSet,
+  results: Result[],
+  speed: number | undefined
+) {
+  if (!speed) return;
+
+  const rmin = min(results);
+  const rmax = max(results);
+
+  if (data.whatsBetter === 'bigger') {
+    return colorFor(speed, rmin, rmax, true);
+  }
+  return colorFor(speed, rmin, rmax);
+}
+
+/**
+ * NOTE: we can only render one type of bench at a time
+ * -    better = bigger
+ * - or better = smaller
+ *
+ * This is for visual communication reasons,
+ * not any technical reasons.
+ */
+export default class Table extends Component<{
+  model: Model;
+}> {
+  get data() {
+    return this.args.model.data;
+  }
+
+  get results() {
+    return this.data.results;
+  }
+
+  @cached
+  get pivotedData() {
+    return pivot(this.results);
+  }
+
+  get rows() {
+    return this.pivotedData.rows;
+  }
+
+  get frameworks() {
+    return this.pivotedData.frameworks;
+  }
+
+  @cached
+  get totals() {
+    return {
+      max: maxTotal(this.pivotedData),
+      min: minTotal(this.pivotedData),
+    };
+  }
+
+  get shouldShowTotals() {
+    return Object.keys(this.pivotedData.rows).length > 1;
+  }
+
+  get isBiggerBetter() {
+    return this.args.model.data.whatsBetter === 'bigger';
+  }
+
+  <template>
     <table>
       <thead>
         <tr>
           <th></th>
-          {{#each p.frameworks as |framework|}}
+          {{#each this.frameworks as |framework|}}
             <th class="fw-header">
               <FrameworkInfo @name={{framework}} />
               <span class="small">
-                {{getFrameworkVersion @model.data.results framework}}
+                {{getFrameworkVersion this.results framework}}
               </span>
             </th>
           {{/each}}
         </tr>
       </thead>
       <tbody>
-        {{#each-in p.rows as |name data|}}
-          {{#let (max data) (min data) as |max min|}}
-            <tr>
-              <td style="text-align: right;">{{name}}</td>
-              {{#each p.frameworks as |framework|}}
-                {{#let (speedFor data framework) as |speed|}}
-                  <td style="background: {{colorFor speed min max}}"><span
-                      class="value"
-                    >{{speed}}</span></td>
-                {{/let}}
-              {{/each}}
-            </tr>
-          {{/let}}
+        {{#each-in this.pivotedData.rows as |name data|}}
+          <tr>
+            <td style="text-align: right;">{{name}}</td>
+            {{#each this.frameworks as |framework|}}
+              {{#let (speedFor data framework) as |speed|}}
+                <td style="background: {{getColor this.data data speed}};"><span
+                    class="value"
+                  >{{speed}}</span></td>
+              {{/let}}
+            {{/each}}
+          </tr>
         {{/each-in}}
       </tbody>
-      <tfoot>
-        <tr><th style="text-align: right">Total</th>
-          {{#let (maxTotal p) (minTotal p) as |max min|}}
-            {{#each p.frameworks as |framework|}}
-              {{#let (totalFor p.rows framework) as |total|}}
-                <td style="background: {{colorFor total min max}}">
+      {{#if this.shouldShowTotals}}
+        <tfoot>
+          <tr><th style="text-align: right">Total</th>
+            {{#each this.frameworks as |framework|}}
+              {{#let (totalFor this.pivotedData.rows framework) as |total|}}
+                <td
+                  style="background: {{colorFor
+                    total
+                    this.totals.min
+                    this.totals.max
+                  }}"
+                >
                   <span class="value">{{total}}</span>
                 </td>
               {{/let}}
             {{/each}}
-          {{/let}}
-        </tr>
-      </tfoot>
+          </tr>
+        </tfoot>
+      {{/if}}
     </table>
-  {{/let}}
-</template> satisfies TOC<{
-  model: Model;
-}>;
+  </template>
+}

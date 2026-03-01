@@ -1,10 +1,11 @@
-import { $ } from 'execa';
-import * as si from 'systeminformation';
+import assert from 'node:assert';
+import { realpathSync } from 'node:fs';
+
 // SAFETY: the types for byte-size are not correct
 // @ts-expect-error
 import bs from 'byte-size';
-import assert from 'node:assert';
-import { realpathSync } from 'node:fs';
+import { $ } from 'execa';
+import * as si from 'systeminformation';
 
 const whichGoogleChrome = await $`which google-chrome`;
 
@@ -16,9 +17,9 @@ export const yyyymmdd = new Date().toJSON();
 assert(yyyymmdd, `Failed to find date`);
 
 function normalizeCPUName(cpu: si.Systeminformation.CpuData) {
-  let { brand, manufacturer } = cpu;
+  const { brand, manufacturer } = cpu;
 
-  let normalizedBrand = brand
+  const normalizedBrand = brand
     .replace('Processor', '')
     .replace(/\d+-Core/, '')
     .trim();
@@ -27,9 +28,9 @@ function normalizeCPUName(cpu: si.Systeminformation.CpuData) {
 }
 
 function normalizeOS(os: si.Systeminformation.OsData) {
-  let { distro, release } = os;
+  const { distro, release } = os;
 
-  let version = release.replace('LTS', '').trim();
+  const version = release.replace('LTS', '').trim();
 
   return {
     name: distro,
@@ -42,9 +43,9 @@ function normalizeOS(os: si.Systeminformation.OsData) {
  * you're going to want to run on the fastest display you have available.
  */
 function getFastestDisplayHz(graphics: si.Systeminformation.GraphicsData) {
-  let { displays } = graphics;
+  const { displays } = graphics;
   // fastest -> slowest
-  let [fastestDisplay] = displays.sort(
+  const [fastestDisplay] = displays.sort(
     (a, b) => (b.currentRefreshRate || 0) - (a.currentRefreshRate || 0),
   );
 
@@ -59,12 +60,12 @@ function getFastestDisplayHz(graphics: si.Systeminformation.GraphicsData) {
 async function getBrowserInfo() {
   const { stdout } = await $`${chromeLocation} --version`;
 
-  let str = stdout.trim();
-  let chars = str.split('');
-  let firstNumber = chars.findIndex((c) => c.match(/\d/));
+  const str = stdout.trim();
+  const chars = str.split('');
+  const firstNumber = chars.findIndex((c) => c.match(/\d/));
   // Probably
-  let name = str.slice(0, firstNumber).trim();
-  let version = str.slice(firstNumber);
+  const name = str.slice(0, firstNumber).trim();
+  const version = str.slice(firstNumber);
 
   return {
     name,
@@ -73,13 +74,13 @@ async function getBrowserInfo() {
 }
 
 export async function getCommitSha() {
-  let { stdout } = await $`git rev-parse HEAD`;
+  const { stdout } = await $`git rev-parse HEAD`;
 
   return stdout;
 }
 
 export async function getInfo() {
-  let [cpu, graphics, memory, os, browser, sha] = await Promise.all([
+  const [cpu, graphics, memory, os, browser, sha] = await Promise.all([
     si.cpu(),
     si.graphics(),
     si.mem(),
@@ -88,11 +89,11 @@ export async function getInfo() {
     getCommitSha(),
   ]);
 
-  let cpuName = normalizeCPUName(cpu);
-  let osInfo = normalizeOS(os);
-  let hz = getFastestDisplayHz(graphics);
+  const cpuName = normalizeCPUName(cpu);
+  const osInfo = normalizeOS(os);
+  const hz = getFastestDisplayHz(graphics);
 
-  let result = {
+  const result = {
     date: yyyymmdd,
     sha,
     environment: {

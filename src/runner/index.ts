@@ -1,18 +1,20 @@
-import puppeteer, { type Browser } from 'puppeteer';
+import assert from 'node:assert';
+import { join } from 'node:path';
+
 import * as clack from '@clack/prompts';
 import { $ } from 'execa';
+import puppeteer, { type Browser } from 'puppeteer';
+
 import { COUNT, HEADLESS, SKIP_BUILD } from './arg.ts';
-import { serve } from './serve.ts';
+import { getBenchInfo } from './bench-info.ts';
+import { chromeLocation } from './environment.ts';
 import {
   addResult,
   prepareForResults as prepareForResults,
 } from './results.ts';
-import assert from 'node:assert';
-import { chromeLocation } from './environment.ts';
-import { getBenchInfo } from './bench-info.ts';
-import { join } from 'node:path';
+import { serve } from './serve.ts';
 
-let info = await getBenchInfo();
+const info = await getBenchInfo();
 
 interface MarkEntry {
   /**
@@ -44,9 +46,10 @@ async function getMarks(browser: Browser, url: string) {
 
   let remainingWaitTime = 60_000; // 1 minute
 
-  let progress = clack.progress({ style: 'light', max: remainingWaitTime });
+  const progress = clack.progress({ style: 'light', max: remainingWaitTime });
+
   while (remainingWaitTime > 0) {
-    let allMarks = await page.evaluate(() => {
+    const allMarks = await page.evaluate(() => {
       return performance.getEntriesByType('mark').map((entry) => {
         return {
           name: entry.name,
@@ -65,6 +68,7 @@ async function getMarks(browser: Browser, url: string) {
 
         return entry as MarkEntry;
       });
+
       break;
     }
 
@@ -74,6 +78,10 @@ async function getMarks(browser: Browser, url: string) {
   }
 
   page.close();
+
+  if (marks.length === 0) {
+    clack.log.warn(`No marks recorded`);
+  }
 
   return marks;
 }
@@ -85,9 +93,10 @@ const browser = await puppeteer.launch({
 
 if (!SKIP_BUILD) {
   clack.log.info(`Building Projects`);
-  for (let framework of info.frameworks) {
-    for (let app of info.apps) {
-      let dir = join('frameworks', framework, app);
+
+  for (const framework of info.frameworks) {
+    for (const app of info.apps) {
+      const dir = join('frameworks', framework, app);
 
       console.info(`Building in ${dir}`);
 
@@ -99,54 +108,62 @@ if (!SKIP_BUILD) {
       await $({ preferLocal: true, cwd: dir, stdio: 'inherit' })`pnpm build`;
     }
   }
+
   clack.log.success('Building Done!');
 }
 
 clack.log.info('Starting Benchmark Runs');
 
-for (let framework of info.frameworks) {
+for (const framework of info.frameworks) {
   clack.log.info(`Benchmarking ${framework}`);
 
   /**
    * Iterating on the apps allows us to boot one server for a whose suite of tests
    */
-  for (let app of info.apps) {
-    let dir = join('frameworks', framework, app);
+  for (const app of info.apps) {
+    const dir = join('frameworks', framework, app);
 
     clack.log.info(`Starting server for ${app} in ${dir}/dist`);
 
     // TODO: make the output directory configurable
-    let server = await serve(`${dir}/dist`);
-    let address = server.address();
+    const server = await serve(`${dir}/dist`);
+    const address = server.address();
 
     assert(
       address,
       `Server for ${framework}, (in ${app}) does not have an address!`,
     );
 
-    let serverUrl =
+    const serverUrl =
       typeof address === 'string'
         ? address
         : `http://${address.address === '::' ? 'localhost' : address.address}:${address.port}`;
 
     clack.log.info(`Server up at ${serverUrl}`);
 
-    for (let bench of info.benches) {
+    if (!info.benches) {
+      clack.log.error(`No benches selected`);
+      process.exit(1);
+    }
+
+    for (const bench of info.benches) {
       if (bench.app !== app) continue;
 
       await prepareForResults(framework, bench, info.filePath);
 
-      for (let variant of info.variants) {
-        let url = serverUrl + '/?' + bench.query + variant.query;
+      for (const variant of info.variants) {
+        const url = serverUrl + '/?' + bench.query + variant.query;
 
         clack.log.info(`\tVariant: ${url}`);
 
-        let count = bench.ignoreCount ? 1 : COUNT;
+        const count = bench.ignoreCount ? 1 : COUNT;
+
         for (let i = 0; i < count; i++) {
           clack.log.info(`\t\tRemaining: ${count - i}`);
-          let performanceMarks = await getMarks(browser, url);
 
-          let name = Boolean(variant.name)
+          const performanceMarks = await getMarks(browser, url);
+
+          const name = variant.name
             ? `${bench.name} ${variant.name}`
             : bench.name;
 
@@ -161,7 +178,7 @@ for (let framework of info.frameworks) {
       }
     }
 
-    let promise = new Promise((resolve) => {
+    const promise = new Promise((resolve) => {
       server.on('close', resolve);
     });
 

@@ -5,6 +5,7 @@ export interface Result {
   color: string;
   speed: number;
   version: string;
+  units: string;
 }
 
 export interface Mark {
@@ -18,6 +19,7 @@ export interface ResultData {
       url: string;
       version: string;
       measure?: string;
+      whatsBetter?: 'bigger';
       times: Array<Mark[]>;
     };
   };
@@ -29,6 +31,7 @@ export interface ResultSet {
    */
   date: string;
   sha: string;
+  whatsBetter: 'smaller' | 'bigger';
   environment: {
     machine: {
       os: {

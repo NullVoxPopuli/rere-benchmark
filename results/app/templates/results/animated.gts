@@ -5,6 +5,10 @@ import type { TOC } from '@ember/component/template-only';
 
 export default <template>
   {{#each (getBenchNames @model.data.results) as |name|}}
-    <Visualize @name={{name}} @results={{dataOf @model.data.results name}} />
+    <Visualize
+      @name={{name}}
+      @data={{@model.data}}
+      @results={{dataOf @model.data.results name}}
+    />
   {{/each}}
 </template> satisfies TOC<{ model: Model }>;

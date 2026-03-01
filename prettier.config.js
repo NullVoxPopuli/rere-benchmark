@@ -3,7 +3,7 @@
  * @type {import("prettier").Config}
  */
 const config = {
-    singleQuote: true,
-}
+  singleQuote: true,
+};
 
-export default config
+export default config;
