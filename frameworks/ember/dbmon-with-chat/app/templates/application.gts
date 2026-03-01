@@ -1,24 +1,30 @@
 import "common/dbmon.css";
 
 import Component from "@glimmer/component";
-import { helpers } from "common";
+import {
+  helpers,
+  type DBRow,
+  type ChatMessage,
+  type DBUpdate,
+  type ChatUpdate,
+} from "common";
 
 import { trackedMap, trackedArray } from "@ember/reactive/collections";
 
 const test = helpers.dbMonWithChat();
 
 export default class Test extends Component {
-  db = trackedMap();
-  chats = trackedArray();
+  db = trackedMap<string, DBRow>();
+  chats = trackedArray<ChatMessage>();
 
   start = () => {
     test.doit({
-      handleDbUpdate: (eventData) => {
+      handleDbUpdate: (eventData: DBUpdate) => {
         for (const d of eventData.data) {
           this.db.set(d.dbname, d);
         }
       },
-      handleChat: (eventData) => {
+      handleChat: (eventData: ChatUpdate) => {
         for (const d of eventData.data) {
           this.chats.push(d);
         }

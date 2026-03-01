@@ -21,3 +21,12 @@ export interface ChatMessage {
   author: string;
   message: string;
 }
+
+export interface DBUpdate {
+  data: Row[];
+}
+
+export interface ChatUpdate {
+  data: ChatMessage[];
+}
+
