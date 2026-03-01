@@ -2,7 +2,10 @@ import fs from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { getInfo } from './environment.ts';
 import type { BenchmarkInfo } from './bench-info.ts';
-import { frameworks } from '../../results/app/frameworks.ts';
+import {
+  type FrameworkInfo,
+  frameworks,
+} from '../../results/app/frameworks.ts';
 import { join } from 'node:path';
 import assert from 'node:assert';
 import { createRequire } from 'node:module';
@@ -39,6 +42,45 @@ async function saveResults(results: any, filePath: string) {
   let file = await read(filePath);
 
   file.results = results;
+
+  await write(file, filePath);
+}
+
+export async function saveBenchmarkInfo(
+  info: {
+    benches: BenchmarkInfo[];
+    frameworks: FrameworkInfo[];
+  },
+  filePath: string,
+) {
+  let file = await read(filePath);
+
+  let better = new Set();
+
+  let smaller = [];
+  let bigger = [];
+  for (let bench of info.benches) {
+    let kind = bench.whatsBetter || 'smaller';
+    if (kind === 'smaller') {
+      smaller.push(bench.name);
+    }
+    if (kind === 'bigger') {
+      bigger.push(bench.name);
+    }
+
+    better.add(kind);
+  }
+
+  assert(
+    better.size === 1,
+    `Expected only one type of bench comparison in selected set of benchmarks. Cannot both measure both smaller being better while also wanting bigger measurements to be better. Smaller: ${smaller.join(', ')} -- Bigger: ${bigger.join(', ')}`,
+  );
+
+  file.whatsBetter = [...better.values()][0];
+  file.selections = {
+    benches: info.benches.map((bench) => bench.name),
+    frameworks: info.frameworks,
+  };
 
   await write(file, filePath);
 }

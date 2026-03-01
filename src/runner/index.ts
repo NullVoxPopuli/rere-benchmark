@@ -75,6 +75,10 @@ async function getMarks(browser: Browser, url: string) {
 
   page.close();
 
+  if (marks.length === 0) {
+    clack.log.warn(`No marks recorded`);
+  }
+
   return marks;
 }
 
@@ -130,6 +134,11 @@ for (let framework of info.frameworks) {
         : `http://${address.address === '::' ? 'localhost' : address.address}:${address.port}`;
 
     clack.log.info(`Server up at ${serverUrl}`);
+
+    if (!info.benches) {
+      clack.log.error(`No benches selected`);
+      process.exit(1);
+    }
 
     for (let bench of info.benches) {
       if (bench.app !== app) continue;

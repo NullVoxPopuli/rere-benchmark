@@ -83,6 +83,10 @@ function timeFromMarks(times: Array<Mark[]>, measure: string | undefined) {
   return averageOf(times);
 }
 
+export function isBiggerBetter(results: { whatsBetter: string }): boolean {
+  return results.whatsBetter === 'bigger';
+}
+
 export function dataOf(results: ResultData, benchName: string) {
   const list = [];
 
@@ -111,7 +115,7 @@ export function dataOf(results: ResultData, benchName: string) {
       speed: time,
       color: frameworkInfo.color,
       version: benchData.version,
-      whatsBetter: benchData.whatsBetter,
+      units: benchData.measure ?? 'ms',
     });
   }
 

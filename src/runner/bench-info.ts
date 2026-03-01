@@ -1,10 +1,11 @@
-import { info } from './results.ts';
+import { info, saveBenchmarkInfo } from './results.ts';
 import { readdir } from 'node:fs/promises';
 import * as clack from '@clack/prompts';
 import { inspect } from 'node:util';
 import { frameworks } from './repo.ts';
 import * as args from './arg.ts';
 import { yyyymmdd } from './environment.ts';
+import assert from 'node:assert';
 
 export interface BenchmarkInfo {
   /**
@@ -56,6 +57,11 @@ const variants = [
 ];
 
 const randomAwaitChance = 100;
+
+/**
+ * TODO: make the bigger is better benchmark mutually exclusive
+ *       to the smaller is better benchmarks
+ */
 const benchmarks = [
   {
     name: 'DB Monitor w/ chat simulation',
@@ -233,7 +239,18 @@ export async function getBenchInfo() {
     process.exit(1);
   }
 
+  assert(selectedBenches, `Must select at least one benchmark`);
+  assert(selectedBenches.length > 0, `Must select at least one benchmark`);
+
   let apps = new Set(selectedBenches.map((b) => b.app));
+
+  await saveBenchmarkInfo(
+    {
+      benches: selectedBenches,
+      frameworks: selectedFrameworks,
+    },
+    filePath,
+  );
 
   return {
     apps,
