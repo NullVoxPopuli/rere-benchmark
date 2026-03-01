@@ -19,21 +19,21 @@ function bool(name: string) {
 }
 
 function str(name: string) {
-  let arg = args.find((a) => a.startsWith(name));
+  const arg = args.find((a) => a.startsWith(name));
 
   return arg?.split('=')[1];
 }
 
 function int(name: string, defaultValue: number) {
-  let arg = args.find((a) => a.startsWith(name));
+  const arg = args.find((a) => a.startsWith(name));
 
   if (!arg) return defaultValue;
 
-  let str = arg.split('=')[1];
+  const str = arg.split('=')[1];
 
   if (!str) return defaultValue;
 
-  let num = parseInt(str, 10);
+  const num = parseInt(str, 10);
 
   if (isNaN(num)) return defaultValue;
 

@@ -1,15 +1,18 @@
-import fs from 'node:fs/promises';
+import assert from 'node:assert';
 import { existsSync } from 'node:fs';
-import { getInfo } from './environment.ts';
-import type { BenchmarkInfo } from './bench-info.ts';
+import fs from 'node:fs/promises';
+import { createRequire } from 'node:module';
+import { join } from 'node:path';
+
+import { packageUp } from 'package-up';
+
 import {
   type FrameworkInfo,
   frameworks,
 } from '../../results/app/frameworks.ts';
-import { join } from 'node:path';
-import assert from 'node:assert';
-import { createRequire } from 'node:module';
-import { packageUp } from 'package-up';
+import { getInfo } from './environment.ts';
+
+import type { BenchmarkInfo } from './bench-info.ts';
 
 const require = createRequire(import.meta.url);
 
@@ -23,8 +26,8 @@ async function read(filePath: string) {
     };
   }
 
-  let buffer = await fs.readFile(filePath);
-  let json = JSON.parse(buffer.toString());
+  const buffer = await fs.readFile(filePath);
+  const json = JSON.parse(buffer.toString());
 
   return json;
 }
@@ -34,12 +37,13 @@ async function write(json: any, filePath: string) {
 }
 
 async function getResults(filePath: string) {
-  let json = await read(filePath);
+  const json = await read(filePath);
+
   return json.results;
 }
 
 async function saveResults(results: any, filePath: string) {
-  let file = await read(filePath);
+  const file = await read(filePath);
 
   file.results = results;
 
@@ -53,17 +57,20 @@ export async function saveBenchmarkInfo(
   },
   filePath: string,
 ) {
-  let file = await read(filePath);
+  const file = await read(filePath);
 
-  let better = new Set();
+  const better = new Set();
 
-  let smaller = [];
-  let bigger = [];
-  for (let bench of info.benches) {
-    let kind = bench.whatsBetter || 'smaller';
+  const smaller = [];
+  const bigger = [];
+
+  for (const bench of info.benches) {
+    const kind = bench.whatsBetter || 'smaller';
+
     if (kind === 'smaller') {
       smaller.push(bench.name);
     }
+
     if (kind === 'bigger') {
       bigger.push(bench.name);
     }
@@ -86,15 +93,16 @@ export async function saveBenchmarkInfo(
 }
 
 async function readJSON(filePath: string) {
-  let buffer = await fs.readFile(filePath);
-  let json = JSON.parse(buffer.toString());
+  const buffer = await fs.readFile(filePath);
+  const json = JSON.parse(buffer.toString());
+
   return json;
 }
 
 async function getVersion(framework: string, bench: BenchmarkInfo) {
-  let dir = join('frameworks', framework, bench.app);
-  let manifestPath = join(dir, 'package.json');
-  let packageName = frameworks[framework]?.package;
+  const dir = join('frameworks', framework, bench.app);
+  const manifestPath = join(dir, 'package.json');
+  const packageName = frameworks[framework]?.package;
 
   assert(
     packageName,
@@ -102,20 +110,23 @@ async function getVersion(framework: string, bench: BenchmarkInfo) {
   );
 
   let entry: string;
+
   try {
     entry = require.resolve(packageName, { paths: [dir] });
-  } catch (e) {
+  } catch {
     // if the '.' is not listed in exports, the above will fail
     entry = require.resolve(`${packageName}/package.json`, { paths: [dir] });
   }
 
-  let packageManifestPath = await packageUp({ cwd: entry });
+  const packageManifestPath = await packageUp({ cwd: entry });
+
   assert(
     packageManifestPath,
     `The package, ${packageName}, does not have a package.json. This is required.`,
   );
-  let dependencyManifest = await readJSON(packageManifestPath);
-  let version = dependencyManifest.version;
+
+  const dependencyManifest = await readJSON(packageManifestPath);
+  const version = dependencyManifest.version;
 
   assert(
     version,
@@ -130,10 +141,10 @@ export async function prepareForResults(
   bench: BenchmarkInfo,
   filePath: string,
 ) {
-  let existing = await getResults(filePath);
+  const existing = await getResults(filePath);
 
-  let benchName = bench.name;
-  let version = await getVersion(framework, bench);
+  const benchName = bench.name;
+  const version = await getVersion(framework, bench);
 
   existing[framework] ||= {};
   existing[framework][benchName] = {};
@@ -152,7 +163,7 @@ export async function addResult(
   filePath: string,
   benchInfo: BenchmarkInfo,
 ) {
-  let existing = await getResults(filePath);
+  const existing = await getResults(filePath);
 
   existing[framework] ||= {};
   existing[framework][benchName] ||= {};

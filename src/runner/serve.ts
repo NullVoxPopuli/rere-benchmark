@@ -1,6 +1,7 @@
-import http from 'node:http';
 import fs from 'node:fs';
+import http from 'node:http';
 import path from 'node:path';
+
 // Come on, node
 import killable from 'killable';
 
@@ -29,18 +30,21 @@ export function serve(directory: string, port = 3000): Promise<http.Server> {
       throw new Error(`No request url?`);
     }
 
-    let url = req.url.split('?')[0]!;
-    let filePath = path.join(directory, url === '/' ? 'index.html' : url);
-    let extname = path.extname(filePath).toLowerCase();
+    const url = req.url.split('?')[0]!;
+    const filePath = path.join(directory, url === '/' ? 'index.html' : url);
+    const extname = path.extname(filePath).toLowerCase();
 
     fs.readFile(filePath, (err, content) => {
       if (err) {
         res.writeHead(404, { 'Content-Type': 'text/plain' });
+
         return res.end('404 Not Found');
       }
 
       const contentType = mimeTypes[extname] || 'application/octet-stream';
+
       res.writeHead(200, { 'Content-Type': contentType });
+
       return res.end(content);
     });
   });
