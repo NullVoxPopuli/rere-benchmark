@@ -1,0 +1,63 @@
+{
+  "date": "2026-02-28T05:00:53.113Z",
+  "sha": "710e60bd51d279657442987987f6f61686a81279",
+  "environment": {
+    "machine": {
+      "os": {
+        "name": "Ubuntu",
+        "version": "25.04"
+      },
+      "cpu": "AMD Ryzen 5 7640U w/ Radeon 760M Graphics",
+      "ram": "96.5 GB"
+    },
+    "monitor": {
+      "hz": 119
+    },
+    "browser": {
+      "name": "Google Chrome",
+      "version": "143.0.7499.169"
+    }
+  },
+  "results": {
+    "ember": {
+      "DB Monitor w/ chat simulation": {
+        "app": "dbmon-with-chat",
+        "query": "",
+        "version": "6.12.0-beta.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 4953.4000000059605
+            },
+            {
+              "name": "fps",
+              "at": 10002.20000000298,
+              "detail": 118.3
+            },
+            {
+              "name": "fps",
+              "at": 15008.800000011921,
+              "detail": 119.6
+            },
+            {
+              "name": "fps",
+              "at": 20000.80000001192,
+              "detail": 119.8
+            },
+            {
+              "name": "fps",
+              "at": 25007.60000000894,
+              "detail": 120
+            },
+            {
+              "name": ":done",
+              "at": 25008.5
+            }
+          ]
+        ],
+        "measure": "fps"
+      }
+    }
+  }
+}

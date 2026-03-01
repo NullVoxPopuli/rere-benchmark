@@ -1,7 +1,11 @@
 {
   "name": "rere-benchmark",
   "type": "module",
+  "license": "GPL 3",
   "scripts": {
+    "prepare": "pnpm install:common; pnpm install:results",
+    "install:common": "cd common; pnpm install",
+    "install:results": "cd results; pnpm install",
     "start": "cd ./results; pnpm start",
     "cli": "node --experimental-strip-types ./src/runner/cli.ts",
     "copy": "node --experimental-strip-types ./src/runner/copy.ts",
@@ -9,7 +13,7 @@
   },
   "packageManager": "pnpm@10.21.0",
   "engines": {
-    "node": ">= 22.19.0"
+    "node": "^22.19.0 || ^24.0.0"
   },
   "devDependencies": {
     "@clack/prompts": "^1.0.1",

@@ -48,7 +48,7 @@ async function start() {
   for (let i = 0; i < state.totalUpdates; i++) {
     let nextValue = state.random ? randomNextValue() : i;
 
-    postMessage(nextValue, [nextValue]);
+    postMessage(nextValue);
   }
 
   console.timeEnd(label);

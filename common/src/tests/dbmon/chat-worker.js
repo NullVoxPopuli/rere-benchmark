@@ -1,6 +1,6 @@
 let isRunning = false;
 
-const state = Symbol.for('worker:state');
+import { globalState } from '../utils.js';
 
 addEventListener('message', function handleMessage(event) {
   let data = JSON.parse(event.data);
@@ -8,9 +8,7 @@ addEventListener('message', function handleMessage(event) {
     case 'start': {
       if (isRunning) throw new Error(`Worker is already started`);
 
-      globalThis[state] ||= {
-        search: data.search,
-      };
+      globalState().search ??= data.search;
       start();
 
       return;

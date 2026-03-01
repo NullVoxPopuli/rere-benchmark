@@ -4,10 +4,13 @@ import * as si from 'systeminformation';
 // @ts-expect-error
 import bs from 'byte-size';
 import assert from 'node:assert';
+import { realpathSync } from 'node:fs';
 
 const whichGoogleChrome = await $`which google-chrome`;
 
-export const chromeLocation = whichGoogleChrome.stdout.trim();
+// Resolve symlinks so Chrome can find its framework files
+// (e.g. a symlink at ~/Applications/google-chrome -> /Applications/Google Chrome.app/...)
+export const chromeLocation = realpathSync(whichGoogleChrome.stdout.trim());
 export const yyyymmdd = new Date().toJSON();
 
 assert(yyyymmdd, `Failed to find date`);
@@ -54,7 +57,7 @@ function getFastestDisplayHz(graphics: si.Systeminformation.GraphicsData) {
  * This is a hack entirely based on convention of current mainstream browsers
  */
 async function getBrowserInfo() {
-  const { stdout } = await $`google-chrome --version`;
+  const { stdout } = await $`${chromeLocation} --version`;
 
   let str = stdout.trim();
   let chars = str.split('');

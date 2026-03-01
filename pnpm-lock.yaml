@@ -55,6 +55,22 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
+  common:
+    dependencies:
+      '@faker-js/faker':
+        specifier: ^9.9.0
+        version: 9.9.0
+    devDependencies:
+      '@tsconfig/strictest':
+        specifier: ^2.0.8
+        version: 2.0.8
+      expect-type:
+        specifier: ^1.3.0
+        version: 1.3.0
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
 packages:
 
   '@angular/compiler@19.1.2':
@@ -92,6 +108,10 @@ packages:
 
   '@clack/prompts@1.0.1':
     resolution: {integrity: sha512-/42G73JkuYdyWZ6m8d/CJtBrGl1Hegyc7Fy78m5Ob+jF85TOUmLR5XLce/U3LxYAw0kJ8CT5aI99RIvPHcGp/Q==}
+
+  '@faker-js/faker@9.9.0':
+    resolution: {integrity: sha512-OEl393iCOoo/z8bMezRlJu+GlRGlsKbUAN7jKB6LhnKoqKve5DXRpalbItIIcwnCjs1k/FOPjFzcA6Qn+H+YbA==}
+    engines: {node: '>=18.0.0', npm: '>=9.0.0'}
 
   '@glimmer/interfaces@0.94.1':
     resolution: {integrity: sha512-QmbZuv05CmiMT6ngRbOlQcRaIS2SFrpZHHpAS5Ctcys671sp0+g59TUuziylBqDiXyaVadZa/7zQYG/r1VKLdQ==}
@@ -487,6 +507,10 @@ packages:
   execa@9.6.1:
     resolution: {integrity: sha512-9Be3ZoN4LmYR90tUoVu2te2BsbzHfhJyfEiAVfz7N5/zv+jduIfLrV2xdQXOHbaD6KgpGdO9PRPM1Y4Q9QkPkA==}
     engines: {node: ^18.19.0 || >=20.5.0}
+
+  expect-type@1.3.0:
+    resolution: {integrity: sha512-knvyeauYhqjOYvQ66MznSMs83wmHrCycNEN6Ao+2AeYEfxUIkuiVxdEa1qlGEPK+We3n0THiDciYSsCcgW/DoA==}
+    engines: {node: '>=12.0.0'}
 
   extend@3.0.2:
     resolution: {integrity: sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==}
@@ -1309,6 +1333,8 @@ snapshots:
       picocolors: 1.1.1
       sisteransi: 1.0.5
 
+  '@faker-js/faker@9.9.0': {}
+
   '@glimmer/interfaces@0.94.1':
     dependencies:
       '@simple-dom/interface': 1.4.0
@@ -1675,6 +1701,8 @@ snapshots:
       signal-exit: 4.1.0
       strip-final-newline: 4.0.0
       yoctocolors: 2.1.2
+
+  expect-type@1.3.0: {}
 
   extend@3.0.2: {}
 

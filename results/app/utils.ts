@@ -38,7 +38,7 @@ export function msOfFrameAt(hz: number) {
   return Math.round(result * 100) / 100;
 }
 
-function averageOf(arrayOfMarks: Array<[Mark, Mark]>) {
+function averageOf(arrayOfMarks: Array<Mark[]>) {
   const durations = [];
 
   for (const pair of arrayOfMarks) {
@@ -57,6 +57,30 @@ function averageOf(arrayOfMarks: Array<[Mark, Mark]>) {
   let total = 0;
   durations.forEach((d) => (total += d));
   return total / durations.length;
+}
+
+function averageOfNamedMark(sampleBuckets: Array<Mark[]>, name: string) {
+  const fps = [];
+
+  for (const list of sampleBuckets) {
+    for (const mark of list) {
+      if (mark.name === name) {
+        fps.push(mark.detail);
+      }
+    }
+  }
+
+  let total = 0;
+  fps.forEach((f) => (total += f));
+  return total / fps.length;
+}
+
+function timeFromMarks(times: Array<Mark[]>, measure: string | undefined) {
+  if (measure) {
+    return averageOfNamedMark(times, measure);
+  }
+
+  return averageOf(times);
 }
 
 export function dataOf(results: ResultData, benchName: string) {
@@ -81,7 +105,7 @@ export function dataOf(results: ResultData, benchName: string) {
       continue;
     }
 
-    const time = averageOf(benchData.times);
+    const time = timeFromMarks(benchData.times, benchData.measure);
     list.push({
       name: framework,
       speed: time,

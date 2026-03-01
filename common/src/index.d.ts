@@ -7,3 +7,10 @@ export const helpers: {
   tenKitems1UpdateEach: () => TenKItems;
   dbMonWithChat: () => DBMonWithChat;
 };
+
+export type {
+  Row as DBRow,
+  ChatMessage,
+  DBUpdate,
+  ChatUpdate,
+} from './tests/dbmon/types.ts';

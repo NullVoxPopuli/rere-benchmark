@@ -1,4 +1,4 @@
-import { qpBool, qpNum, qpPercent, tryVerify } from './utils.js';
+import { qpNum, qpPercent, tryVerify } from './utils.js';
 import { RUN, BaseTest } from './base-test.js';
 
 /**
@@ -18,11 +18,6 @@ export class OneItem extends BaseTest {
   #percentRandomAwait = 0;
 
   /**
-   * @type {boolean}
-   */
-  #allowManualBatch = false;
-
-  /**
    * @type {number}
    */
   #num;
@@ -35,7 +30,6 @@ export class OneItem extends BaseTest {
     this.#num = num;
     this.name = `1 Item, ${num / 1000}k updates`;
     this.#percentRandomAwait = qpPercent('percentRandomAwait', 0);
-    this.#allowManualBatch = qpBool('manualBatch', false);
   }
 
   /**
@@ -66,6 +60,8 @@ export class OneItem extends BaseTest {
   };
 
   /**
+   * @override
+   *
    * .run() is in teh base class, and just calls this function.
    * (after making sure it can run twice)
    *
@@ -74,7 +70,6 @@ export class OneItem extends BaseTest {
   async [RUN](set) {
     let name = this.name;
 
-    console.time(name);
     performance.mark(`:start`);
 
     for (let i = 0; i < this.#num; i++) {

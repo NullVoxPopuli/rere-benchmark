@@ -7,9 +7,40 @@ import * as args from './arg.ts';
 import { yyyymmdd } from './environment.ts';
 
 export interface BenchmarkInfo {
+  /**
+   * The benchmark name.
+   */
   name: string;
+  /**
+   * The name of the app to launch.
+   * Every framework must have a matching app name
+   * for each benchmark.
+   */
   app: string;
+  /**
+   * Configuration passed to the benchmark via query params
+   */
   query: string;
+  /**
+   * Certain benchmarks intended to have observation, such as the dbmon bench -- where we take FPS samples of sliding window averages.
+   *
+   * Most benchmarks though will start a task and measure the time to completion of that task.
+   *
+   * The dbmon bench doesn't have completion,
+   * as instead of measuring "duration of a task",
+   * we are measuring "responsiveness" of the web page.
+   */
+  ignoreCount?: boolean;
+  /**
+   * All benchmarks emit a :start and :done mark.
+   * But for some benchmarks, we don't care about those,
+   * and instead want a different measurement.
+   *
+   * This option tells us which mark names to use for measurement.
+   * and when doing so, we'll use the "detail", instead of the at/startTime
+   *
+   */
+  measure?: string;
 }
 
 const variants = [
@@ -22,6 +53,14 @@ const variants = [
 const randomAwaitChance = 100;
 const benchmarks = [
   {
+    name: 'DB Monitor w/ chat simulation',
+    app: 'dbmon-with-chat',
+    query: '',
+    // This is a long running bench which we'll be taking multiple samples from
+    ignoreCount: true,
+    measure: 'fps',
+  },
+  {
     name: '1 item, 1k updates (async)',
     app: 'one-item-many-updates',
     query: `&updates=1000&percentRandomAwait=${randomAwaitChance}`,
@@ -31,6 +70,11 @@ const benchmarks = [
     app: 'one-item-many-updates',
     query: '&updates=1000&percentRandomAwait=0',
   },
+  // {
+  //   name: '1 item, 1k updates, triggered by render',
+  //   app: 'one-item-many-updates',
+  //   query: '&updates=1000&percentRandomAwait=0',
+  // },
   {
     name: '1 item, 100k updates (async)',
     app: 'one-item-many-updates',

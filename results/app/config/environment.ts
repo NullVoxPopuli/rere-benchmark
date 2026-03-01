@@ -5,15 +5,14 @@ const ENV = {
   locationType: 'history',
   EmberENV: {
     EXTEND_PROTOTYPES: false,
-    FEATURES: {
-      // Here you can enable experimental features on an ember canary build
-      // e.g. EMBER_NATIVE_DECORATOR_SUPPORT: true
-    },
+    FEATURES: {},
   },
-  APP: {
-    // Here you can pass flags/options to your application instance
-    // when it is created
-  },
+  APP: {},
+} as {
+  environment: string;
+  locationType: 'history' | 'hash' | 'none';
+  rootURL: string;
+  APP: Record<string, unknown>;
 };
 
 export default ENV;

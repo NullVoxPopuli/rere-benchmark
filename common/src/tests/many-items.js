@@ -63,6 +63,8 @@ export class ManyItems extends BaseTest {
   };
 
   /**
+   * @override
+   *
    * @param {(nextValue: number) => unknown} set
    */
   async [RUN](set) {

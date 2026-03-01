@@ -17,7 +17,7 @@ function boxData(results: ResultData, name: string) {
       if (benchName !== name) continue;
       const times = benchData.times
         .filter((x) => x.length === 2)
-        .map((x) => x[1].at - x[0].at);
+        .map((x) => x[1]!.at - x[0]!.at);
       datas.push(times);
     }
   }

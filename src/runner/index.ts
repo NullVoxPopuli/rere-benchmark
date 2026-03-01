@@ -14,6 +14,24 @@ import { join } from 'node:path';
 
 let info = await getBenchInfo();
 
+interface MarkEntry {
+  /**
+   * name of the performance.mark
+   */
+  name: string;
+  /**
+   * startTime of the perfromance.mark
+   */
+  at: number;
+
+  /**
+   * extra detail from the performance.mark
+   *
+   * (in the case of the dbmon test, this could be the FPS (for example))
+   */
+  detail?: unknown;
+}
+
 async function getMarks(browser: Browser, url: string) {
   const page = await browser.newPage();
 
@@ -22,19 +40,37 @@ async function getMarks(browser: Browser, url: string) {
   // TODO: is there a way to wait for the page to calmn down?
   await page.waitForNetworkIdle();
 
-  let marks: Array<{ name: string; at: number }> = [];
+  let marks: Array<MarkEntry> = [];
 
-  let remainingWaitTIme = 60_000; // 1 minute
-  while (marks.length < 2 && remainingWaitTIme > 0) {
-    let m = await page.evaluate(() => {
-      return performance.getEntriesByType('mark').map((entry) => ({
-        name: entry.name,
-        at: entry.startTime,
-      }));
+  let remainingWaitTime = 60_000; // 1 minute
+
+  let progress = clack.progress({ style: 'light', max: remainingWaitTime });
+  while (remainingWaitTime > 0) {
+    let allMarks = await page.evaluate(() => {
+      return performance.getEntriesByType('mark').map((entry) => {
+        return {
+          name: entry.name,
+          at: entry.startTime,
+          detail: entry.detail,
+        };
+      });
     });
-    marks.push(...m);
+
+    if (allMarks.find((m) => m.name === ':done')) {
+      progress.stop(`Finished`);
+      marks = allMarks.map((entry) => {
+        if (!entry.detail) {
+          delete entry.detail;
+        }
+
+        return entry as MarkEntry;
+      });
+      break;
+    }
+
     await new Promise((resolve) => setTimeout(resolve, 100));
-    remainingWaitTIme -= 100;
+    remainingWaitTime -= 100;
+    progress.advance(100);
   }
 
   page.close();
@@ -59,8 +95,8 @@ if (!SKIP_BUILD) {
       //       - folks could use a different package manager
       //       - different build command
       //       - different output directory
-      await $({ preferLocal: true, cwd: dir })`pnpm install`;
-      await $({ preferLocal: true, cwd: dir })`pnpm build`;
+      await $({ preferLocal: true, cwd: dir, stdio: 'inherit' })`pnpm install`;
+      await $({ preferLocal: true, cwd: dir, stdio: 'inherit' })`pnpm build`;
     }
   }
   clack.log.success('Building Done!');
@@ -103,14 +139,24 @@ for (let framework of info.frameworks) {
       for (let variant of info.variants) {
         let url = serverUrl + '/?' + bench.query + variant.query;
 
-        for (let i = 0; i < COUNT; i++) {
+        clack.log.info(`\tVariant: ${url}`);
+
+        let count = bench.ignoreCount ? 1 : COUNT;
+        for (let i = 0; i < count; i++) {
+          clack.log.info(`\t\tRemaining: ${count - i}`);
           let performanceMarks = await getMarks(browser, url);
 
           let name = Boolean(variant.name)
             ? `${bench.name} ${variant.name}`
             : bench.name;
 
-          await addResult(framework, name, performanceMarks, info.filePath);
+          await addResult(
+            framework,
+            name,
+            performanceMarks,
+            info.filePath,
+            bench,
+          );
         }
       }
     }
