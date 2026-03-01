@@ -83,9 +83,17 @@ function minTotal({
 
 const start = '#ff7777';
 const end = '#77ff77';
-function colorFor(speed: number | undefined, min: number, max: number) {
+function colorFor(
+  speed: number | undefined,
+  min: number,
+  max: number,
+  reverse = false
+) {
   if (!speed) return;
-  const interpolation = interpolate([end, start], 'oklch');
+  const interpolation = interpolate(
+    reverse ? [start, end] : [end, start],
+    'oklch'
+  );
 
   const normalized = (speed - min) / (max - min);
   const color = interpolation(normalized);
@@ -93,8 +101,21 @@ function colorFor(speed: number | undefined, min: number, max: number) {
   return `oklch(${color.l} ${color.c} ${color.h}deg)`;
 }
 
+function getColor(data, speed, framework) {
+  if (!speed) return;
+
+  const relevant = data.find((d) => d.name === framework);
+
+  let rmin = min(data);
+  let rmax = max(data);
+
+  if (relevant.whatsBetter === 'bigger') {
+    return colorFor(speed, rmin, rmax, true);
+  }
+  return colorFor(speed, rmin, rmax);
+}
+
 export default <template>
-  {{log @model.data}}
   {{#let (pivot @model.data.results) as |p|}}
     <table>
       <thead>
@@ -117,9 +138,13 @@ export default <template>
               <td style="text-align: right;">{{name}}</td>
               {{#each p.frameworks as |framework|}}
                 {{#let (speedFor data framework) as |speed|}}
-                  <td style="background: {{colorFor speed min max}}"><span
-                      class="value"
-                    >{{speed}}</span></td>
+                  <td
+                    style="background: {{colorFor speed min max}}; {{getColor
+                      data
+                      speed
+                      framework
+                    }}"
+                  ><span class="value">{{speed}}</span></td>
                 {{/let}}
               {{/each}}
             </tr>

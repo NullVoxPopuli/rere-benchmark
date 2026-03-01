@@ -111,6 +111,7 @@ export function dataOf(results: ResultData, benchName: string) {
       speed: time,
       color: frameworkInfo.color,
       version: benchData.version,
+      whatsBetter: benchData.whatsBetter,
     });
   }
 
