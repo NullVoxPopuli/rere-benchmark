@@ -1,0 +1,47 @@
+name: CI Results App
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request: {}
+
+concurrency:
+  group: ci-results-app-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: "Lint"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install
+        working-directory: common
+      - run: pnpm lint
+        working-directory: common
+
+  test:
+    name: "Test"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install
+        working-directory: common
+      - run: pnpm test
+        working-directory: common

@@ -1,4 +1,4 @@
-name: CI
+name: CI Results App
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
   pull_request: {}
 
 concurrency:
-  group: ci-${{ github.head_ref || github.ref }}
+  group: ci-results-app-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -25,7 +25,9 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install
+        working-directory: results
       - run: pnpm lint
+        working-directory: results
 
   test:
     name: "Test"
@@ -39,5 +41,7 @@ jobs:
         with:
           node-version: 24
           cache: pnpm
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm install
+        working-directory: results
       - run: pnpm test
+        working-directory: results
