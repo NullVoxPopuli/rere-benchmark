@@ -29,4 +29,3 @@ export interface DBUpdate {
 export interface ChatUpdate {
   data: ChatMessage[];
 }
-

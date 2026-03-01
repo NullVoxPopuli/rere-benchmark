@@ -12,6 +12,15 @@ export class BaseTest {
   #isPreparing = false;
 
   /**
+   * @abstract
+   * @param {unknown} options
+   * @return {unknown}
+   */
+  [RUN](options) {
+    throw new Error('Not implemented');
+  }
+
+  /**
    * @param {unknown} updateCallback
    */
   doit(updateCallback) {

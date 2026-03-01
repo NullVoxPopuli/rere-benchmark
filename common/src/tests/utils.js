@@ -43,11 +43,17 @@ export function tryVerify(label, check, attempts = 0) {
 
 const state = Symbol.for('worker:state');
 
+export function globalState() {
+  /** @type {any} */ (globalThis)[state] ??= {};
+
+  return /** @type {any} */ (globalThis)[state];
+}
+
 /**
  * @param {string} name
  */
 export function qp(name) {
-  let search = globalThis.location?.search ?? globalThis[state]?.search;
+  let search = globalThis.location?.search ?? globalState()?.search;
 
   let query = new URLSearchParams(search);
 
@@ -55,8 +61,20 @@ export function qp(name) {
 }
 
 /**
+ * @overload
  * @param {string} name
- * @param {number} [ fallback ]
+ * @param {number} fallback
+ * @returns {number}
+ */
+/**
+ * @overload
+ * @param {string} name
+ * @param {undefined} [fallback]
+ * @returns {number | undefined}
+ */
+/**
+ * @param {string} name
+ * @param {number} [fallback]
  */
 export function qpNum(name, fallback) {
   let q = qp(name);

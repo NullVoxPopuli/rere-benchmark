@@ -7,7 +7,8 @@
     "checkJs": true,
     "skipLibCheck": true,
     "lib": ["dom", "dom.iterable", "esnext"],
-     // Linting
+    // Linting
     "noImplicitReturns": false,
+    "noUnusedParameters": false
   }
 }

@@ -41,9 +41,10 @@ export class DBMonWithChat extends BaseTest {
   #receivedDb = false;
   #receivedChat = false;
   #startedAt = 0;
+  /** @type {number[]} */
   #averages = [];
 
-  check = () => {
+  verify = () => {
     return this.#averages.length === 4;
   };
 
@@ -68,12 +69,13 @@ export class DBMonWithChat extends BaseTest {
       this.#averages.push(fps);
 
       if (bucketsOf5s >= 4) {
-        tryVerify(this.name, this.check, 1);
+        tryVerify(this.name, this.verify, 1);
       }
     }
   };
 
   /**
+   * @override
    *
    * @param {object} options
    * @param {(...args: unknown[]) => unknown} options.updateDB
