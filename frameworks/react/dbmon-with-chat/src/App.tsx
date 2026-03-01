@@ -1,4 +1,5 @@
 import 'common/dbmon.css';
+import './layout.css';
 import { useState, useEffect, useRef } from 'react';
 import { helpers, type DBRow, type ChatMessage, type DBUpdate, type ChatUpdate } from 'common';
 

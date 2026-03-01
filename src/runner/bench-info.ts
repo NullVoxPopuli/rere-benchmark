@@ -41,6 +41,11 @@ export interface BenchmarkInfo {
    *
    */
   measure?: string;
+
+  /**
+   * For the measured value, assume smaller values are better unless this is set to bigger.
+   */
+  whatsBetter?: 'bigger';
 }
 
 const variants = [
@@ -59,6 +64,7 @@ const benchmarks = [
     // This is a long running bench which we'll be taking multiple samples from
     ignoreCount: true,
     measure: 'fps',
+    whatsBetter: 'bigger',
   },
   {
     name: '1 item, 1k updates (async)',

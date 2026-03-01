@@ -18,6 +18,7 @@ export interface ResultData {
       url: string;
       version: string;
       measure?: string;
+      whatsBetter?: 'bigger';
       times: Array<Mark[]>;
     };
   };

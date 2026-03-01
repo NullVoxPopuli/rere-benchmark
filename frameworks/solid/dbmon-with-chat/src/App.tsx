@@ -1,4 +1,5 @@
 import 'common/dbmon.css';
+import './layout.css';
 import { createSignal, onMount, For } from 'solid-js';
 import { helpers, type DBRow, type ChatMessage, type DBUpdate, type ChatUpdate } from 'common';
 

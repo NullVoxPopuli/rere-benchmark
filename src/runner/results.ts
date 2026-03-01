@@ -121,5 +121,9 @@ export async function addResult(
     existing[framework][benchName].measure = benchInfo.measure;
   }
 
+  if (benchInfo.whatsBetter) {
+    existing[framework][benchName].whatsBetter = benchInfo.whatsBetter;
+  }
+
   await saveResults(existing, filePath);
 }
