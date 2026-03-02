@@ -84,6 +84,13 @@ const benchmarks: BenchmarkInfo[] = [
     units: 'FPS',
   },
   {
+    name: 'Incrementing Render Effect',
+    app: 'incrementing-render-effect',
+    query: '',
+    whatsBetter: 'smaller',
+    units: 'ms',
+  },
+  {
     name: '1 item, 1k updates (async)',
     app: 'one-item-many-updates',
     query: `&updates=1000&percentRandomAwait=${randomAwaitChance}`,
