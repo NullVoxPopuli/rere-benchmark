@@ -27,26 +27,25 @@ function boxData(file: ResultSet, benchInfo: BenchmarkInfo) {
     const marks = file.results[framework]?.[benchInfo.name]?.times;
     let frameworkData: number[] = [];
 
-    if (benchInfo.whatsBetter === 'bigger') {
-      frameworkData = marks
-        .flat()
-        .filter((mark) => mark.name === benchInfo.measure)
-        .map((mark) => mark.detail);
-    } else {
-      frameworkData = marks
-        ?.filter((x) => x.length === 2)
-        .map((x) => x[1]!.at - x[0]!.at);
+    if (marks) {
+      if (benchInfo.whatsBetter === 'bigger') {
+        frameworkData = marks
+          .flat()
+          .filter((mark) => mark.name === benchInfo.measure)
+          .map((mark) => mark.detail);
+      } else {
+        frameworkData = marks
+          ?.filter((x) => x.length === 2)
+          .map((x) => x[1]!.at - x[0]!.at);
+      }
     }
 
     data.push(frameworkData);
 
     const baseColor = frameworks[framework]?.color ?? '#888';
-    const parsed = parse(baseColor);
-    const hsl = HSL(baseColor);
+    const hsl = HSL(baseColor)!;
     const brighter = formatCss(BRIGHTEN(hsl));
     const darker = formatCss(DARKEN(hsl));
-
-    console.log(parsed, hsl);
 
     backgroundColor.push(baseColor);
     borderColor.push(baseColor);
