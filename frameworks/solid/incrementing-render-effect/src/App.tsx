@@ -1,16 +1,26 @@
-import { createSignal, batch, onMount } from 'solid-js'
+import { createSignal, createEffect } from 'solid-js'
 import { helpers } from 'common';
 
-let test = helpers.oneItem10kUpdates();
+const test = helpers.incrementingRenderEffect();
 
 function App() {
-  const [count, setCount] = createSignal(test.getData())
+  const [output, setOutput] = createSignal(-1);
+  let advancer: (() => void) | undefined;
 
-  onMount(() => {
-    test.doit((i) => setCount(i), batch);
+  createEffect(() => {
+    if (advancer) {
+      advancer();
+      return;
+    }
+
+    test.doit({
+      get: () => output(),
+      set: (value: number) => setOutput(value),
+      setupAdvancer: (fn: () => void) => { advancer = fn; },
+    });
   });
 
-  return <output>{test.formatItem(count())}</output>
+  return <output>{output()}</output>
 }
 
 export default App

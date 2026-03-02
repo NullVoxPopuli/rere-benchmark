@@ -2,15 +2,25 @@
 import { ref, watchEffect } from 'vue'
 import { helpers } from 'common';
 
-const test = helpers.oneItem10kUpdates();
-const count = ref(test.getData())
+const test = helpers.incrementingRenderEffect();
+const output = ref(-1);
+let advancer: (() => void) | undefined;
 
 watchEffect(() => {
-  test.doit((i) => count.value = i)
-})
+  if (advancer) {
+    advancer();
+    return;
+  }
+
+  test.doit({
+    get: () => output.value,
+    set: (value: number) => output.value = value,
+    setupAdvancer: (fn: () => void) => { advancer = fn; },
+  });
+});
 </script>
 
 <template>
-  <output>{{test.formatItem(count)}}</output>
+  <output>{{ output }}</output>
 </template>
 

@@ -1,19 +1,28 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { helpers } from 'common';
 
-let test = helpers.oneItem10kUpdates();
+const test = helpers.incrementingRenderEffect();
 
 function App() {
-  const [count, setCount] = useState(test.getData());
+  const [output, setOutput] = useState(-1);
+  const advancerRef = useRef<(() => void) | undefined>();
+  const outputRef = useRef(-1);
+  outputRef.current = output;
 
   useEffect(() => {
-    test.doit((i: number) => {
-      setCount(i)
+    if (advancerRef.current) {
+      advancerRef.current();
+      return;
     }
-    );
-  }, [])
 
-  return <output>{test.formatItem(count)}</output>
+    test.doit({
+      get: () => outputRef.current,
+      set: (value: number) => setOutput(value),
+      setupAdvancer: (fn: () => void) => { advancerRef.current = fn; },
+    });
+  });
+
+  return <output>{output}</output>
 }
 
 export default App
