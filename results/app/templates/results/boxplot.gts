@@ -5,6 +5,11 @@ import type { BenchmarkInfo, ResultSet } from '#types';
 // https://github.com/sgratzl/chartjs-chart-boxplot
 import { BoxPlotChart } from '@sgratzl/chartjs-chart-boxplot';
 import { frameworks } from '#frameworks';
+import { parse, converter, filterBrightness, formatCss } from 'culori';
+
+const HSL = converter('hsl');
+const BRIGHTEN = filterBrightness(1.5, 'lrgb');
+const DARKEN = filterBrightness(0.5, 'lrgb');
 
 function boxData(file: ResultSet, benchInfo: BenchmarkInfo) {
   // Why is chartjs like this?
@@ -20,7 +25,6 @@ function boxData(file: ResultSet, benchInfo: BenchmarkInfo) {
   for (const framework of file.selections.frameworks) {
     labels.push(framework);
     const marks = file.results[framework]?.[benchInfo.name]?.times;
-    const baseColor = frameworks[framework]?.color ?? '#888';
     let frameworkData: number[] = [];
 
     if (benchInfo.whatsBetter === 'bigger') {
@@ -34,19 +38,24 @@ function boxData(file: ResultSet, benchInfo: BenchmarkInfo) {
         .map((x) => x[1]!.at - x[0]!.at);
     }
 
-    console.log({ framework, data: frameworkData, marks });
-
     data.push(frameworkData);
+
+    const baseColor = frameworks[framework]?.color ?? '#888';
+    const parsed = parse(baseColor);
+    const hsl = HSL(baseColor);
+    const brighter = formatCss(BRIGHTEN(hsl));
+    const darker = formatCss(DARKEN(hsl));
+
+    console.log(parsed, hsl);
+
     backgroundColor.push(baseColor);
     borderColor.push(baseColor);
 
-    // TODO: darken theme color
-    meanBorderColor.push('black');
-    medianColor.push('black');
+    meanBorderColor.push(darker);
+    medianColor.push(darker);
     // meanBackgroundColor
 
-    // TODO: brighten
-    lowerBackgroundColor.push('gray');
+    lowerBackgroundColor.push(brighter);
   }
 
   const datasets = [
@@ -94,6 +103,9 @@ const renderChart = modifier(function boxplot(
         y: {
           beginAtZero: false,
         },
+        x: {
+          beginAtZero: false,
+        },
       },
       plugins: {
         legend: {
@@ -139,6 +151,14 @@ export default class Boxplat extends Component<{
       );
   }
 
+  get frameworks() {
+    return this.args.model.data.selections.frameworks;
+  }
+
+  get height() {
+    return 70 * this.frameworks.length;
+  }
+
   <template>
     {{#each this.benchmarkInfo as |benchInfo|}}
       <section>
@@ -157,7 +177,7 @@ export default class Boxplat extends Component<{
         </header>
 
         <canvas
-          style="height:500px; max-width: 90dvw;"
+          style="height:{{this.height}}px; max-width: 90dvw;"
           {{renderChart @model.data benchInfo}}
         ></canvas>
       </section>
