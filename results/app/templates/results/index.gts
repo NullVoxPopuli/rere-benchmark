@@ -13,11 +13,11 @@ const start = '#ff7777';
 const end = '#77ff77';
 function colorFor(
   speed: number | undefined,
-  min: number,
-  max: number,
+  min: number | undefined,
+  max: number | undefined,
   reverse = false
 ) {
-  if (!speed) return;
+  if (!speed || !min || !max) return;
   const interpolation = interpolate(
     reverse ? [start, end] : [end, start],
     'oklch'

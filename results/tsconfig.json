@@ -1,6 +1,12 @@
 {
   "extends": "@ember/app-tsconfig",
+  "include": ["app", "tests", "types"],
   "compilerOptions": {
-    "types": ["ember-source/types", "vite/client", "@glint/ember-tsc/types"]
+    "types": [
+      "ember-source/types",
+      "vite/client",
+      "@glint/ember-tsc/types",
+      "@embroider/core/virtual"
+    ]
   }
 }
