@@ -5,7 +5,7 @@ import type { BenchmarkInfo, ResultSet } from '#types';
 // https://github.com/sgratzl/chartjs-chart-boxplot
 import { BoxPlotChart } from '@sgratzl/chartjs-chart-boxplot';
 import { frameworks } from '#frameworks';
-import { parse, converter, filterBrightness, formatCss } from 'culori';
+import { converter, filterBrightness, formatCss } from 'culori';
 
 const HSL = converter('hsl');
 const BRIGHTEN = filterBrightness(1.5, 'lrgb');
