@@ -48,14 +48,22 @@ export interface BenchmarkInfo {
   /**
    * For the measured value, assume smaller values are better unless this is set to bigger.
    */
-  whatsBetter?: 'bigger';
+  whatsBetter: 'bigger' | 'smaller';
+
+  /**
+   * What units are measured? this will be displayed in the UI
+   */
+  units: string;
 }
 
 const variants = [
-  { name: '', query: '&manualBatch=false' },
-  // Batching is a fair technique, but I don't know if I want it always present.
+  // Batching is a fair (low-level) technique, but I don't know if I want it always present.
   // We'll see if I change my mind when Solid v2 comes out.
-  // { name: 'w/ manual batching', query: '?manualBatch=true' },
+  //
+  // I don't think users should have to think about whether or not to use batching.
+  // This is why by defaultl it is "off"
+  { name: '', query: '' },
+  // { name: 'w/ manual batching', query: '&manualBatch=true' },
 ];
 
 const randomAwaitChance = 100;
@@ -64,7 +72,7 @@ const randomAwaitChance = 100;
  * TODO: make the bigger is better benchmark mutually exclusive
  *       to the smaller is better benchmarks
  */
-const benchmarks = [
+const benchmarks: BenchmarkInfo[] = [
   {
     name: 'DB Monitor w/ chat simulation',
     app: 'dbmon-with-chat',
@@ -73,71 +81,84 @@ const benchmarks = [
     ignoreCount: true,
     measure: 'fps',
     whatsBetter: 'bigger',
+    units: 'FPS',
   },
   {
     name: '1 item, 1k updates (async)',
     app: 'one-item-many-updates',
     query: `&updates=1000&percentRandomAwait=${randomAwaitChance}`,
+    whatsBetter: 'smaller',
+    units: 'ms',
   },
   {
     name: '1 item, 1k updates',
     app: 'one-item-many-updates',
     query: '&updates=1000&percentRandomAwait=0',
+    whatsBetter: 'smaller',
+    units: 'ms',
   },
   // {
   //   name: '1 item, 1k updates, triggered by render',
   //   app: 'one-item-many-updates',
   //   query: '&updates=1000&percentRandomAwait=0',
+  // whatsBetter: 'smaller',
+  // units: 'ms',
   // },
   {
     name: '1 item, 100k updates (async)',
     app: 'one-item-many-updates',
     query: `&updates=100000&percentRandomAwait=${randomAwaitChance}`,
+    whatsBetter: 'smaller',
+    units: 'ms',
   },
   {
     name: '1 item, 100k updates',
     app: 'one-item-many-updates',
     query: '&updates=100000&percentRandomAwait=0',
-  },
-  {
-    name: '1 item, 1M updates (async)',
-    app: 'one-item-many-updates',
-    query: `&updates=1000000&percentRandomAwait=${randomAwaitChance}`,
-  },
-  {
-    name: '1 item, 1M updates',
-    app: 'one-item-many-updates',
-    query: '&updates=1000000&percentRandomAwait=0',
+    whatsBetter: 'smaller',
+    units: 'ms',
   },
   {
     name: '1k items, 1 update each (sequentially, async)',
     app: 'ten-k-items-one-time',
     query: `&items=1000&updates=1000&percentRandomAwait=${randomAwaitChance}`,
+    whatsBetter: 'smaller',
+    units: 'ms',
   },
   {
     name: '1k items, 1 update each (sequentially)',
     app: 'ten-k-items-one-time',
     query: '&items=1000&updates=1000&percentRandomAwait=0',
+    whatsBetter: 'smaller',
+    units: 'ms',
   },
   {
     name: '1k items 1 update on 5% (random, async)',
     app: 'ten-k-items-one-time',
     query: `&items=1000&updates=50&random=true&percentRandomAwait=${randomAwaitChance}`,
+    whatsBetter: 'smaller',
+    units: 'ms',
   },
   {
     name: '1k items 1 update on 5% (random)',
     app: 'ten-k-items-one-time',
     query: '&items=1000&updates=50&random=true&percentRandomAwait=0',
+    whatsBetter: 'smaller',
+    units: 'ms',
   },
   {
     name: '1k items 1 update on 25% (random, async)',
     app: 'ten-k-items-one-time',
     query: `&items=1000&updates=250&random=true&percentRandomAwait=${randomAwaitChance}`,
+    whatsBetter: 'smaller',
+    units: 'ms',
   },
   {
     name: '1k items 1 update on 25% (random)',
     app: 'ten-k-items-one-time',
     query: '&items=1000&updates=250&random=true&percentRandomAwait=0',
+    whatsBetter: 'smaller',
+    units: 'ms',
   },
 ];
 

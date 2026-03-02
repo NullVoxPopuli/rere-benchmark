@@ -1,86 +1,13 @@
 import Component from '@glimmer/component';
 import { FrameworkInfo } from '#components/framework-info.gts';
 import type { Model } from '#routes/results.ts';
-import type { Result, ResultData, ResultSet } from '#types';
-import {
-  dataOf,
-  getBenchNames,
-  getFrameworks,
-  getFrameworkVersion,
-  round,
-} from '#utils';
+import type { BenchmarkInfo, ResultSet } from '#types';
+import { round, timeFromMarks } from '#utils';
 import { interpolate } from 'culori';
 import { cached } from '@glimmer/tracking';
-
-function pivot(data: ResultData) {
-  const frameworks = getFrameworks(data);
-
-  const benchNames = [...getBenchNames(data)];
-  benchNames.sort();
-  benchNames.sort(
-    (a, b) => (a.includes('async') ? 1 : 0) - (b.includes('async') ? 1 : 0)
-  );
-
-  const result: Record<string, Result[]> = {};
-
-  benchNames.forEach((x) => (result[x] = dataOf(data, x)));
-
-  return { rows: result, frameworks };
-}
-
-function speedFor(data: Result[], framework: string) {
-  const speed = data.find((d) => d.name === framework)?.speed;
-
-  if (!speed) return;
-
-  return round(speed);
-}
-
-function totalFor(data: Record<string, Result[]>, framework: string) {
-  let total = 0;
-
-  Object.entries(data).forEach(([, data]) => {
-    const speed = speedFor(data, framework);
-
-    total += speed || 0;
-  });
-
-  return round(total);
-}
-
-function max(data: Result[]) {
-  const speeds = data.map((d) => d.speed).filter(Boolean);
-
-  return Math.max(...speeds);
-}
-function min(data: Result[]) {
-  const speeds = data.map((d) => d.speed).filter(Boolean);
-
-  return Math.min(...speeds);
-}
-
-function maxTotal({
-  rows,
-  frameworks,
-}: {
-  rows: Record<string, Result[]>;
-  frameworks: string[];
-}) {
-  const totals = frameworks.map((fw) => totalFor(rows, fw));
-
-  return Math.max(...totals);
-}
-function minTotal({
-  rows,
-  frameworks,
-}: {
-  rows: Record<string, Result[]>;
-  frameworks: string[];
-}) {
-  const totals = frameworks.map((fw) => totalFor(rows, fw));
-
-  return Math.min(...totals);
-}
+import { warn } from '@ember/debug';
+import type Owner from '@ember/owner';
+import { get } from '@ember/helper';
 
 const start = '#ff7777';
 const end = '#77ff77';
@@ -102,130 +29,237 @@ function colorFor(
   return `oklch(${color.l} ${color.c} ${color.h}deg)`;
 }
 
-function getColor(
-  data: ResultSet,
-  results: Result[],
-  speed: number | undefined
-) {
-  if (!speed) return;
-
-  const rmin = min(results);
-  const rmax = max(results);
-
-  if (data.whatsBetter === 'bigger') {
-    return colorFor(speed, rmin, rmax, true);
-  }
-  return colorFor(speed, rmin, rmax);
-}
-
-function unitsFor(data: Result[]) {
-  const value = Object.values(data)[0]?.units;
-  if (!value) return;
-
-  return ` ( ${value} )`;
-}
-
-/**
- * NOTE: we can only render one type of bench at a time
- * -    better = bigger
- * - or better = smaller
- *
- * This is for visual communication reasons,
- * not any technical reasons.
- */
-export default class Table extends Component<{
-  model: Model;
+class TableRow extends Component<{
+  file: ResultSet;
+  benchInfo: BenchmarkInfo;
+  frameworkNames: string[];
 }> {
-  get data() {
-    return this.args.model.data;
+  declare speeds: Record<string, number | undefined>;
+  declare colors: Record<string, string | undefined>;
+  max = -Infinity;
+  min = Infinity;
+
+  constructor(
+    owner: Owner,
+    args: {
+      file: ResultSet;
+      benchInfo: BenchmarkInfo;
+      frameworkNames: string[];
+    }
+  ) {
+    super(owner, args);
+
+    this.speeds = {};
+    this.colors = {};
+
+    for (const framework of args.frameworkNames) {
+      const test = args.file.results[framework]?.[args.benchInfo.name];
+
+      if (!test) continue;
+
+      const time = timeFromMarks(test.times, this.args.benchInfo.measure);
+
+      this.speeds[framework] = time;
+
+      if (time > this.max) this.max = time;
+      if (time < this.min) this.min = time;
+    }
+
+    for (const framework of args.frameworkNames) {
+      const time = this.speeds[framework];
+
+      this.colors[framework] = colorFor(
+        time,
+        this.min,
+        this.max,
+        args.benchInfo.whatsBetter === 'bigger'
+      );
+    }
   }
 
-  get results() {
-    return this.data.results;
+  <template>
+    <tr>
+      <td class="benchmark-name">
+        {{@benchInfo.name}}
+        <span class="units">
+          (
+          {{@benchInfo.units}}
+          )
+        </span>
+      </td>
+
+      {{#each @frameworkNames as |framework|}}
+        <td style="background: {{get this.colors framework}};"><span
+            class="value"
+          >{{get this.speeds framework}}</span></td>
+      {{/each}}
+    </tr>
+  </template>
+}
+
+class Table extends Component<{
+  benches: BenchmarkInfo[];
+  file: ResultSet;
+}> {
+  shouldShowTotals = false;
+  totals: Record<string, number> = {};
+
+  constructor(
+    owner: Owner,
+    args: {
+      benches: BenchmarkInfo[];
+      file: ResultSet;
+    }
+  ) {
+    super(owner, args);
+
+    this.shouldShowTotals = this.args.benches.length > 1;
+
+    if (this.shouldShowTotals) {
+      for (const bench of args.benches) {
+        for (const framework of args.file.selections.frameworks) {
+          this.totals[framework] ??= 0;
+
+          const test = args.file.results[framework]?.[bench.name];
+
+          if (!test) continue;
+
+          const time = timeFromMarks(test.times, bench.measure);
+
+          this.totals[framework] += time;
+        }
+      }
+
+      let max = -Infinity;
+      let min = Infinity;
+      for (const [key, value] of Object.entries(this.totals)) {
+        this.totals[key] = round(value);
+
+        if (value > max) max = value;
+        if (value < min) min = value;
+      }
+
+      this.totals.max = max;
+      this.totals.min = min;
+    }
   }
 
-  @cached
-  get pivotedData() {
-    return pivot(this.results);
+  get frameworkNames() {
+    return this.args.file.selections.frameworks;
   }
 
-  get rows() {
-    return this.pivotedData.rows;
-  }
+  versionFor = (framework: string) => {
+    /**
+     * Because each bench mark is a different app, it is possible the versions diverge
+     */
+    const versions = Object.values(this.args.file.results[framework] ?? {}).map(
+      (result) => result.version
+    );
 
-  get frameworks() {
-    return this.pivotedData.frameworks;
-  }
+    const versionSet = new Set(versions);
 
-  @cached
-  get totals() {
-    return {
-      max: maxTotal(this.pivotedData),
-      min: minTotal(this.pivotedData),
-    };
-  }
+    warn(
+      `There is more than one version for ${framework}. You need to do some upgrading to get the benchmark apps for ${framework} in sync. Found ${[...versionSet].join(', ')}`,
+      versionSet.size > 1,
+      {
+        id: 'benchmark-app-maintenance-needed-version-divergence',
+      }
+    );
 
-  get shouldShowTotals() {
-    return Object.keys(this.pivotedData.rows).length > 1;
-  }
-
-  get isBiggerBetter() {
-    return this.args.model.data.whatsBetter === 'bigger';
-  }
+    return [...versionSet][0];
+  };
 
   <template>
     <table>
       <thead>
         <tr>
           <th></th>
-          {{#each this.frameworks as |framework|}}
+          {{#each this.frameworkNames as |framework|}}
             <th class="fw-header">
               <FrameworkInfo @name={{framework}} />
               <span class="small">
-                {{getFrameworkVersion this.results framework}}
+                {{this.versionFor framework}}
               </span>
             </th>
           {{/each}}
         </tr>
       </thead>
       <tbody>
-        {{#each-in this.pivotedData.rows as |name data|}}
-          <tr>
-            <td style="text-align: right;" class="benchmark-name">
-              {{name}}{{unitsFor data}}
-              {{#if this.isBiggerBetter}}
-                <span class="which-is-better">higher is better</span>
-              {{/if}}
-            </td>
-            {{#each this.frameworks as |framework|}}
-              {{#let (speedFor data framework) as |speed|}}
-                <td style="background: {{getColor this.data data speed}};"><span
-                    class="value"
-                  >{{speed}}</span></td>
-              {{/let}}
-            {{/each}}
-          </tr>
-        {{/each-in}}
+        {{#each @benches as |bench|}}
+          <TableRow
+            @file={{@file}}
+            @benchInfo={{bench}}
+            @frameworkNames={{this.frameworkNames}}
+          />
+        {{/each}}
       </tbody>
+
       {{#if this.shouldShowTotals}}
         <tfoot>
           <tr><th style="text-align: right">Total</th>
-            {{#each this.frameworks as |framework|}}
-              {{#let (totalFor this.pivotedData.rows framework) as |total|}}
-                <td
-                  style="background: {{colorFor
-                    total
-                    this.totals.min
-                    this.totals.max
-                  }}"
-                >
-                  <span class="value">{{total}}</span>
-                </td>
-              {{/let}}
+            {{#each this.frameworkNames as |framework|}}
+              <td
+                style="background: {{colorFor
+                  (get this.totals framework)
+                  this.totals.min
+                  this.totals.max
+                }}"
+              >
+                <span class="value">{{get this.totals framework}}</span>
+              </td>
             {{/each}}
           </tr>
         </tfoot>
       {{/if}}
     </table>
+  </template>
+}
+
+export default class ResultsTables extends Component<{
+  model: Model;
+}> {
+  get file() {
+    return this.args.model.data;
+  }
+
+  get benchmarkInfo() {
+    return this.args.model.data.benchmarkInfo;
+  }
+
+  @cached
+  get higherBenches() {
+    return this.benchmarkInfo.filter((bench) => bench.whatsBetter === 'bigger');
+  }
+
+  @cached
+  get lowerBenches() {
+    return this.benchmarkInfo
+      .filter((bench) => bench.whatsBetter !== 'bigger')
+      .toSorted()
+      .toSorted(
+        (a, b) =>
+          (a.name.includes('async') ? 1 : 0) -
+          (b.name.includes('async') ? 1 : 0)
+      );
+  }
+
+  <template>
+    {{#if this.higherBenches.length}}
+      <h2>higher is better</h2>
+
+      <Table @benches={{this.higherBenches}} @file={{this.file}} />
+      <br />
+      <br />
+      <br />
+    {{/if}}
+
+    {{#if this.lowerBenches.length}}
+      <h2>lower is better</h2>
+
+      <Table @benches={{this.lowerBenches}} @file={{this.file}} />
+      <br />
+      <br />
+      <br />
+    {{/if}}
   </template>
 }

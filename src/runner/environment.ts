@@ -7,6 +7,15 @@ import bs from 'byte-size';
 import { $ } from 'execa';
 import * as si from 'systeminformation';
 
+import {
+  BENCH_NAME,
+  COUNT,
+  CPU_THROTTLE,
+  FRAMEWORK,
+  HEADLESS,
+  SKIP_BUILD,
+} from './arg.ts';
+
 const whichGoogleChrome = await $`which google-chrome`;
 
 // Resolve symlinks so Chrome can find its framework files
@@ -96,6 +105,14 @@ export async function getInfo() {
   const result = {
     date: yyyymmdd,
     sha,
+    args: {
+      SKIP_BUILD,
+      CPU_THROTTLE,
+      HEADLESS,
+      COUNT,
+      FRAMEWORK,
+      BENCH_NAME,
+    },
     environment: {
       machine: {
         os: {

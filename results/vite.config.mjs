@@ -4,6 +4,7 @@ import { extensions, ember } from '@embroider/vite';
 import { babel } from '@rollup/plugin-babel';
 import virtual from 'vite-plugin-virtual';
 import fullReload from 'vite-plugin-full-reload';
+import { scopedCSS } from 'ember-scoped-css/rollup';
 
 export default defineConfig({
   plugins: [
@@ -12,6 +13,7 @@ export default defineConfig({
       babelHelpers: 'runtime',
       extensions,
     }),
+    scopedCSS(),
     fullReload(['./public/results/**/*'], { always: true }),
     virtual({
       'virtual:result-sets': () => {

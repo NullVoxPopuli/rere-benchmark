@@ -145,10 +145,13 @@ table {
   }
 
   .benchmark-name {
+    text-align: right;
     display: flex;
     position: relative;
+    justify-content: end;
 
-    .which-is-better {
+
+    .units {
       position: absolute;
       font-size: 0.5rem;
       right: 0.5rem;

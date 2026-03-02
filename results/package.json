@@ -33,6 +33,7 @@
     "./*": "./app/*"
   },
   "dependencies": {
+    "@embroider/legacy-inspector-support": "^0.1.3",
     "@glimmer/component": "^2.0.0",
     "@sgratzl/chartjs-chart-boxplot": "^4.4.5",
     "chart.js": "^4.5.1",
@@ -63,6 +64,7 @@
     "babel-plugin-ember-template-compilation": "^4.0.0",
     "concurrently": "^9.2.1",
     "ember-eslint": "^0.6.1",
+    "ember-scoped-css": "^2.1.0",
     "ember-template-lint": "^7.9.3",
     "eslint": "^9.19.0",
     "prettier": "^3.8.1",
