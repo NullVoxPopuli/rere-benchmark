@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { FrameworkInfo } from '#components/framework-info.gts';
 import type { Model } from '#routes/results.ts';
 import type { BenchmarkInfo, ResultSet } from '#types';
-import { timeFromMarks } from '#utils';
+import { round, timeFromMarks } from '#utils';
 import { interpolate } from 'culori';
 import { cached } from '@glimmer/tracking';
 import { warn } from '@ember/debug';
@@ -101,12 +101,51 @@ class Table extends Component<{
   benches: BenchmarkInfo[];
   file: ResultSet;
 }> {
-  get frameworkNames() {
-    return this.args.file.selections.frameworks;
+  shouldShowTotals = false;
+  totals: Record<string, number> = {};
+
+  constructor(
+    owner: Owner,
+    args: {
+      benches: BenchmarkInfo[];
+      file: ResultSet;
+    }
+  ) {
+    super(owner, args);
+
+    this.shouldShowTotals = this.args.benches.length > 1;
+
+    if (this.shouldShowTotals) {
+      for (const bench of args.benches) {
+        for (const framework of args.file.selections.frameworks) {
+          this.totals[framework] ??= 0;
+
+          const test = args.file.results[framework]?.[bench.name];
+
+          if (!test) continue;
+
+          const time = timeFromMarks(test.times, bench.measure);
+
+          this.totals[framework] += time;
+        }
+      }
+
+      let max = -Infinity;
+      let min = Infinity;
+      for (const [key, value] of Object.entries(this.totals)) {
+        this.totals[key] = round(value);
+
+        if (value > max) max = value;
+        if (value < min) min = value;
+      }
+
+      this.totals.max = max;
+      this.totals.min = min;
+    }
   }
 
-  get shouldShowTotals() {
-    return this.args.benches.length > 1;
+  get frameworkNames() {
+    return this.args.file.selections.frameworks;
   }
 
   versionFor = (framework: string) => {
@@ -154,6 +193,24 @@ class Table extends Component<{
           />
         {{/each}}
       </tbody>
+
+      {{#if this.shouldShowTotals}}
+        <tfoot>
+          <tr><th style="text-align: right">Total</th>
+            {{#each this.frameworkNames as |framework|}}
+              <td
+                style="background: {{colorFor
+                  (get this.totals framework)
+                  this.totals.min
+                  this.totals.max
+                }}"
+              >
+                <span class="value">{{get this.totals framework}}</span>
+              </td>
+            {{/each}}
+          </tr>
+        </tfoot>
+      {{/if}}
     </table>
   </template>
 }
