@@ -86,7 +86,7 @@ const benchmarks: BenchmarkInfo[] = [
   {
     name: 'Incrementing Render Effect',
     app: 'incrementing-render-effect',
-    query: '',
+    query: '&updates=100000',
     whatsBetter: 'smaller',
     units: 'ms',
   },

@@ -1,8 +1,10 @@
 import { BaseTest, RUN } from './base-test.js';
-import { tryVerify } from './utils.js';
+import { qpNum, tryVerify } from './utils.js';
 
 export class IncrementingRenderEffect extends BaseTest {
   name = `Incrementing Render Effect`;
+
+  #num = qpNum('updates', 100_000);
 
   getData() {
     return {
@@ -31,7 +33,7 @@ export class IncrementingRenderEffect extends BaseTest {
   verify = () => {
     let result = document.querySelector('output')?.textContent?.trim() ?? '';
 
-    return result === '1000';
+    return result === String(this.#num);
   };
 
   /**
@@ -46,7 +48,7 @@ export class IncrementingRenderEffect extends BaseTest {
     let name = this.name;
     performance.mark(`:start`);
 
-    let limit = 1000;
+    let limit = this.#num;
 
     /**
      * This is sort of an infinite loop maker

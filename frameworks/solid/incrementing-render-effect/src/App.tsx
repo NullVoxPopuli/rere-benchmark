@@ -1,4 +1,4 @@
-import { createSignal, createEffect } from 'solid-js'
+import { createSignal, createRenderEffect } from 'solid-js'
 import { helpers } from 'common';
 
 const test = helpers.incrementingRenderEffect();
@@ -7,7 +7,7 @@ function App() {
   const [output, setOutput] = createSignal(-1);
   let advancer: (() => void) | undefined;
 
-  createEffect(() => {
+  createRenderEffect(() => {
     if (advancer) {
       advancer();
       return;
