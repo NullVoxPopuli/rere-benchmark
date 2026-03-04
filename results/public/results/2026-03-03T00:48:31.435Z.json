@@ -1,0 +1,600 @@
+{
+  "date": "2026-03-03T00:48:31.435Z",
+  "sha": "9f77573c584bd609524debf347474c1383fa1b76",
+  "args": {
+    "SKIP_BUILD": false,
+    "CPU_THROTTLE": 1,
+    "HEADLESS": false,
+    "COUNT": 10
+  },
+  "environment": {
+    "machine": {
+      "os": {
+        "name": "Ubuntu",
+        "version": "25.04"
+      },
+      "cpu": "AMD Ryzen 5 7640U w/ Radeon 760M Graphics",
+      "ram": "96.5 GB"
+    },
+    "monitor": {
+      "hz": 119
+    },
+    "browser": {
+      "name": "Google Chrome",
+      "version": "143.0.7499.169"
+    }
+  },
+  "results": {
+    "ember": {
+      "Incrementing Render Effect": {
+        "app": "incrementing-render-effect",
+        "query": "&updates=100000",
+        "version": "6.12.0-beta.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 57
+            },
+            {
+              "name": ":done",
+              "at": 456.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 53.399999998509884
+            },
+            {
+              "name": ":done",
+              "at": 489.6000000014901
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 46.599999994039536
+            },
+            {
+              "name": ":done",
+              "at": 423.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 48.29999999701977
+            },
+            {
+              "name": ":done",
+              "at": 439.79999999701977
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 51.5
+            },
+            {
+              "name": ":done",
+              "at": 455.20000000298023
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 53.399999998509884
+            },
+            {
+              "name": ":done",
+              "at": 444.19999999552965
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 45.80000000447035
+            },
+            {
+              "name": ":done",
+              "at": 443.20000000298023
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 46.29999999701977
+            },
+            {
+              "name": ":done",
+              "at": 435.69999999552965
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 50
+            },
+            {
+              "name": ":done",
+              "at": 458.20000000298023
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 45.80000000447035
+            },
+            {
+              "name": ":done",
+              "at": 457
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      }
+    },
+    "react": {
+      "Incrementing Render Effect": {
+        "app": "incrementing-render-effect",
+        "query": "&updates=100000",
+        "version": "19.2.0",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 43.69999999552965
+            },
+            {
+              "name": ":done",
+              "at": 1445.8999999985099
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 34.599999994039536
+            },
+            {
+              "name": ":done",
+              "at": 1428.2999999970198
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 35.100000001490116
+            },
+            {
+              "name": ":done",
+              "at": 1424.6000000014901
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 33
+            },
+            {
+              "name": ":done",
+              "at": 1459.8999999985099
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 32.20000000298023
+            },
+            {
+              "name": ":done",
+              "at": 1411.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 34.899999998509884
+            },
+            {
+              "name": ":done",
+              "at": 1436.6999999955297
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 49.29999999701977
+            },
+            {
+              "name": ":done",
+              "at": 1381.6999999955297
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 39.5
+            },
+            {
+              "name": ":done",
+              "at": 1421.7000000029802
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 35.399999998509884
+            },
+            {
+              "name": ":done",
+              "at": 1402.6000000014901
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 38.79999999701977
+            },
+            {
+              "name": ":done",
+              "at": 1449.1000000014901
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      }
+    },
+    "solid": {
+      "Incrementing Render Effect": {
+        "app": "incrementing-render-effect",
+        "query": "&updates=100000",
+        "version": "1.9.10",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 33.20000000298023
+            },
+            {
+              "name": ":done",
+              "at": 176.79999999701977
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 11.699999995529652
+            },
+            {
+              "name": ":done",
+              "at": 151.69999999552965
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 17.19999999552965
+            },
+            {
+              "name": ":done",
+              "at": 161
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 16.5
+            },
+            {
+              "name": ":done",
+              "at": 167
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 14.299999997019768
+            },
+            {
+              "name": ":done",
+              "at": 160.79999999701977
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 17.5
+            },
+            {
+              "name": ":done",
+              "at": 167.19999999552965
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 20.19999999552965
+            },
+            {
+              "name": ":done",
+              "at": 163.59999999403954
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 13.300000004470348
+            },
+            {
+              "name": ":done",
+              "at": 164.40000000596046
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 13.200000002980232
+            },
+            {
+              "name": ":done",
+              "at": 161.80000000447035
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 13.100000001490116
+            },
+            {
+              "name": ":done",
+              "at": 152.10000000149012
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      }
+    },
+    "vue": {
+      "Incrementing Render Effect": {
+        "app": "incrementing-render-effect",
+        "query": "&updates=100000",
+        "version": "3.5.24",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 23.299999997019768
+            },
+            {
+              "name": ":done",
+              "at": 331.8999999985099
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 19
+            },
+            {
+              "name": ":done",
+              "at": 305.1000000014901
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 18.299999997019768
+            },
+            {
+              "name": ":done",
+              "at": 287.8999999985099
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 19
+            },
+            {
+              "name": ":done",
+              "at": 299.6000000014901
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 17.799999997019768
+            },
+            {
+              "name": ":done",
+              "at": 288.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 20.299999997019768
+            },
+            {
+              "name": ":done",
+              "at": 293
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 18.5
+            },
+            {
+              "name": ":done",
+              "at": 262.3999999985099
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 16.5
+            },
+            {
+              "name": ":done",
+              "at": 273
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 19.200000002980232
+            },
+            {
+              "name": ":done",
+              "at": 304.20000000298023
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 17.600000001490116
+            },
+            {
+              "name": ":done",
+              "at": 292.1000000014901
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      }
+    },
+    "svelte": {
+      "Incrementing Render Effect": {
+        "app": "incrementing-render-effect",
+        "query": "&updates=100000",
+        "version": "5.43.6",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 31.69999999552965
+            },
+            {
+              "name": ":done",
+              "at": 379.8999999985099
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 19.899999998509884
+            },
+            {
+              "name": ":done",
+              "at": 358.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 18.700000002980232
+            },
+            {
+              "name": ":done",
+              "at": 356.6000000014901
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 16.299999997019768
+            },
+            {
+              "name": ":done",
+              "at": 362.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 19.100000001490116
+            },
+            {
+              "name": ":done",
+              "at": 369.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 17.399999998509884
+            },
+            {
+              "name": ":done",
+              "at": 356
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 16.899999998509884
+            },
+            {
+              "name": ":done",
+              "at": 347.6000000014901
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 17.299999997019768
+            },
+            {
+              "name": ":done",
+              "at": 352.8999999985099
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 15.100000001490116
+            },
+            {
+              "name": ":done",
+              "at": 318.79999999701977
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 30.899999998509884
+            },
+            {
+              "name": ":done",
+              "at": 386.5
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      }
+    }
+  },
+  "selections": {
+    "benches": [
+      "Incrementing Render Effect"
+    ],
+    "frameworks": [
+      "ember",
+      "react",
+      "solid",
+      "svelte",
+      "vue"
+    ]
+  },
+  "benchmarkInfo": [
+    {
+      "name": "Incrementing Render Effect",
+      "app": "incrementing-render-effect",
+      "query": "&updates=100000",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    }
+  ]
+}

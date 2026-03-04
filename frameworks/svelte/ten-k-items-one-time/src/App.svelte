@@ -1,7 +1,14 @@
 <script lang="ts">
-  import Counter from './lib/Counter.svelte'
+  import { helpers } from 'common';
+
+  let test = helpers.tenKitems1UpdateEach();
+  let items = $state(test.getData());
+
+  $effect(() => {
+    test.doit((i) => {
+      items[i] = i;
+    });
+  });
 </script>
 
-<main>
-    <Counter />
-</main>
+{#each items as item}{test.formatItem(item)}{/each}
