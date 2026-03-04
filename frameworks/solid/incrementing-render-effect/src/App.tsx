@@ -1,26 +1,25 @@
-import { createSignal, createRenderEffect } from 'solid-js'
+import { createSignal } from 'solid-js'
 import { helpers } from 'common';
 
 const test = helpers.incrementingRenderEffect();
 
 function App() {
-  const [output, setOutput] = createSignal(-1);
-  let advancer: (() => void) | undefined;
+  const [output, setOutput] = createSignal(0);
+  const [advancer, setAdvancer] = createSignal<(() => void) | undefined>();
 
-  createRenderEffect(() => {
-    if (advancer) {
-      advancer();
-      return;
-    }
+  function run() {
+    let value = output();
+    advancer()?.();
+    return value;
+  }
 
-    test.doit({
-      get: () => output(),
-      set: (value: number) => setOutput(value),
-      setupAdvancer: (fn: () => void) => { advancer = fn; },
-    });
+  test.doit({
+    get: () => output(),
+    set: (value: number) => setOutput(value),
+    setupAdvancer: (fn: () => void) => setAdvancer(() => fn),
   });
 
-  return <output>{output()}</output>
+  return <output>{run()}</output>
 }
 
 export default App

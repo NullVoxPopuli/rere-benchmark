@@ -2,21 +2,20 @@
   import { helpers } from 'common';
 
   const test = helpers.incrementingRenderEffect();
-  let output: number = $state(-1);
-  let advancer: (() => void) | undefined;
+  let output: number = $state(0);
+  let advancer: (() => void) | undefined = $state();
 
-  $effect(() => {
-    if (advancer) {
-      advancer();
-      return;
-    }
+  function run() {
+    let value = output;
+    advancer?.();
+    return value;
+  }
 
-    test.doit({
-      get: () => output,
-      set: (value: number) => output = value,
-      setupAdvancer: (fn: () => void) => { advancer = fn; },
-    });
+  test.doit({
+    get: () => output,
+    set: (value: number) => output = value,
+    setupAdvancer: (fn: () => void) => { advancer = fn; },
   });
 </script>
 
-<output>{output}</output>
+<output>{run()}</output>
