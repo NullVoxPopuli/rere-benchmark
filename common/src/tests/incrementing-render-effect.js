@@ -21,12 +21,12 @@ export class IncrementingRenderEffect extends BaseTest {
    * @param {(num: number) => void} options.set
    * @param {(fn: () => void) => void} options.setupAdvancer
    */
-  doit({ get, set, setupAdvancer }) {
+  doit({ get, set, setupAdvancer, element }) {
     // Entangle!
     get();
 
     this.prepare(() => {
-      this.run({ get, set, setupAdvancer });
+      this.run({ get, set, setupAdvancer, element });
     });
   }
 
@@ -44,18 +44,23 @@ export class IncrementingRenderEffect extends BaseTest {
    * @param {(num: number) => void} options.set
    * @param {(fn: () => void) => void} options.setupAdvancer
    */
-  [RUN]({ get, set, setupAdvancer }) {
+  [RUN]({ get, set, setupAdvancer, element }) {
     let name = this.name;
     performance.mark(`:start`);
 
     let limit = this.#num;
 
+    let last = 0;
     /**
      * This is sort of an infinite loop maker
      */
     setupAdvancer(async () => {
       // entangle auto-tracking
       let value = get();
+
+      if (String(last) !== element.textContent) {
+        throw new Error(`DOM is not in sync`);
+      }
 
       if (value >= limit) {
         tryVerify(name, this.verify);
@@ -65,7 +70,9 @@ export class IncrementingRenderEffect extends BaseTest {
       // detach from auto-tracking
       await Promise.resolve();
 
-      set(value + 1);
+      last = value + 1;
+
+      set(last);
     });
 
     // Begin!

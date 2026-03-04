@@ -1,21 +1,25 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { helpers } from 'common';
 
   const test = helpers.incrementingRenderEffect();
-  let output: number = $state(0);
-  let advancer: (() => void) | undefined = $state();
+  let output: number = $state(-1);
+  let el: HTMLOutputElement;
+  let advancer: (() => void) | undefined;
 
-  function run() {
-    let value = output;
+  $effect(() => {
+    output;
     advancer?.();
-    return value;
-  }
+  });
 
-  test.doit({
-    get: () => output,
-    set: (value: number) => output = value,
-    setupAdvancer: (fn: () => void) => { advancer = fn; },
+  onMount(() => {
+    test.doit({
+      element: el,
+      get: () => output,
+      set: (value: number) => output = value,
+      setupAdvancer: (fn: () => void) => { advancer = fn; },
+    });
   });
 </script>
 
-<output>{run()}</output>
+<output bind:this={el}>{output}</output>

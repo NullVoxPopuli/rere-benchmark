@@ -1,27 +1,29 @@
 import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
 import { helpers } from "common";
+import { modifier } from "ember-modifier";
 
 const test = helpers.incrementingRenderEffect();
 
 export default class Test extends Component {
-  @tracked output = 0;
+  @tracked out = 0;
 
   #advancer: (() => void) | undefined;
-  advance = () => {
+  setup = modifier((element) => {
     if (this.#advancer) {
       this.#advancer();
       return;
     }
 
     test.doit({
-      get: () => this.output,
-      set: (value: number) => (this.output = value),
+      element,
+      get: () => this.out,
+      set: (value: number) => (this.out = value),
       setupAdvancer: (advancer: () => void) => (this.#advancer = advancer),
     });
-  };
+  });
 
   <template>
-    <output>{{this.output}}</output>{{(this.advance)}}
+    <output {{this.setup}}>{{this.out}}</output>
   </template>
 }
