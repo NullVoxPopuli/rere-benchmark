@@ -101,6 +101,19 @@ websocket.on('message', updateRow);
 
 Where you don't control the frequency of the updates, and they could happen at any speed. In this bench, we test if the message event is so fast, it's synchronous. And then measure the time it takes for the framework to render those schanges. 
 
+#### One value, many consumers (fan out)
+
+This test renders a single reactive value in many places at once, and then updates that value in bursts.
+
+It's kinda similar to having this in your app:
+```js 
+websocket.on('message', (ticks) => ticks.forEach(updateSharedValue));
+```
+
+Think: a live exchange rate, "users online" count, or shared cursor position that appears all over a dashboard. Each socket message (a macrotask) carries a burst of updates, and only the last value in a burst ever needs to hit the DOM.
+
+This stresses the cost of *writing* to the reactive system (pull-based systems bump a revision, push-based systems visit subscribers), the ability to coalesce a burst of writes into one render, and the cost of updating many consumers of the same value in that render.
+
 #### DB Monitoring + Live Chat + interactivity retention
 
 Since we're all making apps, this benchmark is arguably the most important, as it measures the ability for users to feel like the site is still responsive while data is updating on the page.
