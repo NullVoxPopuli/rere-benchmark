@@ -160,6 +160,27 @@ const benchmarks: BenchmarkInfo[] = [
     whatsBetter: 'smaller',
     units: 'ms',
   },
+  {
+    name: '1 value, 1k consumers, 10k updates (bursts of 100)',
+    app: 'fan-out',
+    query: '&consumers=1000&updates=10000&burstSize=100',
+    whatsBetter: 'smaller',
+    units: 'ms',
+  },
+  {
+    name: '1 value, 1k consumers, 10k updates (bursts of 1000)',
+    app: 'fan-out',
+    query: '&consumers=1000&updates=10000&burstSize=1000',
+    whatsBetter: 'smaller',
+    units: 'ms',
+  },
+  {
+    name: '1 value, 1k consumers, 10k updates (single burst)',
+    app: 'fan-out',
+    query: '&consumers=1000&updates=10000&burstSize=10000',
+    whatsBetter: 'smaller',
+    units: 'ms',
+  },
 ];
 
 async function getFrameworks() {
