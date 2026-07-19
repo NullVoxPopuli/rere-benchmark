@@ -98,6 +98,17 @@ const browser = await puppeteer.launch({
 if (!SKIP_BUILD) {
   clack.log.info(`Building Projects`);
 
+  /**
+   * The apps depend on `common` via the link: protocol,
+   * and pnpm does not install dependencies *of* linked packages --
+   * so without this, every app build fails to resolve
+   * `@faker-js/faker` (imported by the dbmon chat-worker,
+   * which vite bundles for every app, because common's index
+   * imports every test).
+   */
+  console.info(`Installing dependencies of the linked \`common\` package`);
+  await $({ preferLocal: true, cwd: 'common', stdio: 'inherit' })`pnpm install`;
+
   for (const framework of info.frameworks) {
     for (const app of info.apps) {
       const dir = join('frameworks', framework, app);
