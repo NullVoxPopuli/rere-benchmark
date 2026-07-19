@@ -110,7 +110,7 @@ It's kinda similar to having this in your app:
 websocket.on('message', (ticks) => ticks.forEach(updateSharedValue));
 ```
 
-Think: a live exchange rate, "users online" count, or shared cursor position that appears all over a dashboard. Each socket message (a macrotask) carries a burst of updates, and only the last value in a burst ever needs to hit the DOM.
+it is maybe emulating a live exchange rate, "users online" count, or shared cursor position that appears all over a dashboard. Each socket message (a macrotask) carries a burst of updates, and only the last value in a burst ever needs to hit the DOM.
 
 This stresses the cost of *writing* to the reactive system (pull-based systems bump a revision, push-based systems visit subscribers), the ability to coalesce a burst of writes into one render, and the cost of updating many consumers of the same value in that render.
 
