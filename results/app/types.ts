@@ -40,6 +40,31 @@ export interface ResultSet {
    */
   date: string;
   sha: string;
+  args?: {
+    SKIP_BUILD?: boolean;
+    /**
+     * The CPU slowdown multiplier applied during the run.
+     * 1 (or unset) means no throttling.
+     */
+    CPU_THROTTLE?: number;
+    HEADLESS?: boolean;
+    COUNT?: number;
+  };
+  timing?: {
+    /**
+     * Wall-clock time (ms) spent installing + building all apps.
+     * Omitted when the build was skipped.
+     */
+    buildMs?: number;
+    /**
+     * Wall-clock time (ms) spent running the benchmark suite.
+     */
+    benchmarkMs: number;
+    /**
+     * Total wall-clock time (ms) for the whole run, build + benchmark.
+     */
+    totalMs: number;
+  };
   selections: {
     benches: string[];
     frameworks: string[];

@@ -1,4 +1,4 @@
-import { msOfFrameAt } from '#utils';
+import { formatDuration, msOfFrameAt } from '#utils';
 import type { ResultSet } from '#types';
 import type { TOC } from '@ember/component/template-only';
 
@@ -8,6 +8,10 @@ function first8(str: string) {
 
 function dateOf(datetime: string) {
   return new Intl.DateTimeFormat('en-CA').format(new Date(datetime));
+}
+
+function isThrottled(cpuThrottle: number | undefined) {
+  return typeof cpuThrottle === 'number' && cpuThrottle > 1;
 }
 
 export const Info = <template>
@@ -47,10 +51,30 @@ export const Info = <template>
         {{@env.monitor.hz}}hz Monitor (1 frame =
         {{msOfFrameAt @env.monitor.hz}}ms)
       </li>
+      {{#if (isThrottled @cpuThrottle)}}
+        <li>
+          {{@cpuThrottle}}x CPU slowdown
+        </li>
+      {{/if}}
+      {{#if @timing}}
+        <li>
+          Ran in
+          {{formatDuration @timing.totalMs}}
+          {{#if @timing.buildMs}}
+            (build:
+            {{formatDuration @timing.buildMs}}, benchmark:
+            {{formatDuration @timing.benchmarkMs}})
+          {{else}}
+            (benchmark only; build skipped)
+          {{/if}}
+        </li>
+      {{/if}}
     </ul>
   </div>
 </template> satisfies TOC<{
   date: string;
   sha: string;
   env: ResultSet['environment'];
+  cpuThrottle: number | undefined;
+  timing: ResultSet['timing'];
 }>;

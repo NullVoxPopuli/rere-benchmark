@@ -16,6 +16,8 @@ export default <template>
     @date={{@model.data.date}}
     @sha={{@model.data.sha}}
     @env={{@model.data.environment}}
+    @cpuThrottle={{@model.data.args.CPU_THROTTLE}}
+    @timing={{@model.data.timing}}
   />
 
   <div class="all-results">
