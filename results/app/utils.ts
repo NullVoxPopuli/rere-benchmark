@@ -30,6 +30,23 @@ export function round(ms: number) {
   return Math.round(ms * 100) / 100;
 }
 
+/**
+ * Format a millisecond duration as a human-readable string,
+ * e.g. 45200 -> "45.2s", 754000 -> "12m 34s".
+ */
+export function formatDuration(ms: number): string {
+  const totalSeconds = ms / 1000;
+
+  if (totalSeconds < 60) {
+    return `${round(totalSeconds)}s`;
+  }
+
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = Math.round(totalSeconds % 60);
+
+  return `${minutes}m ${seconds}s`;
+}
+
 const msInOneHz = 1_000;
 
 export function msOfFrameAt(hz: number) {

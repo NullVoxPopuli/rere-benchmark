@@ -50,6 +50,21 @@ export interface ResultSet {
     HEADLESS?: boolean;
     COUNT?: number;
   };
+  timing?: {
+    /**
+     * Wall-clock time (ms) spent installing + building all apps.
+     * Omitted when the build was skipped.
+     */
+    buildMs?: number;
+    /**
+     * Wall-clock time (ms) spent running the benchmark suite.
+     */
+    benchmarkMs: number;
+    /**
+     * Total wall-clock time (ms) for the whole run, build + benchmark.
+     */
+    totalMs: number;
+  };
   selections: {
     benches: string[];
     frameworks: string[];

@@ -50,6 +50,31 @@ async function saveResults(results: any, filePath: string) {
   await write(file, filePath);
 }
 
+export interface Timing {
+  /**
+   * Wall-clock time (ms) spent installing + building all apps.
+   * Omitted when SKIP_BUILD is set (no build ran).
+   */
+  buildMs?: number;
+  /**
+   * Wall-clock time (ms) spent running the benchmark suite
+   * (does not include build time).
+   */
+  benchmarkMs: number;
+  /**
+   * Total wall-clock time (ms) for the whole run, build + benchmark.
+   */
+  totalMs: number;
+}
+
+export async function saveTiming(timing: Timing, filePath: string) {
+  const file = await read(filePath);
+
+  file.timing = timing;
+
+  await write(file, filePath);
+}
+
 export async function saveBenchmarkInfo(
   info: {
     benches: BenchmarkInfo[];

@@ -11,6 +11,7 @@ import { chromeLocation } from './environment.ts';
 import {
   addResult,
   prepareForResults as prepareForResults,
+  saveTiming,
 } from './results.ts';
 import { serve } from './serve.ts';
 
@@ -95,7 +96,12 @@ const browser = await puppeteer.launch({
   headless: HEADLESS,
 });
 
+const runStart = Date.now();
+let buildMs: number | undefined;
+
 if (!SKIP_BUILD) {
+  const buildStart = Date.now();
+
   clack.log.info(`Building Projects`);
 
   /**
@@ -124,10 +130,13 @@ if (!SKIP_BUILD) {
     }
   }
 
+  buildMs = Date.now() - buildStart;
   clack.log.success('Building Done!');
 }
 
 clack.log.info('Starting Benchmark Runs');
+
+const benchmarkStart = Date.now();
 
 for (const framework of info.frameworks) {
   clack.log.info(`Benchmarking ${framework}`);
@@ -205,5 +214,24 @@ for (const framework of info.frameworks) {
     await promise;
   }
 }
+
+const now = Date.now();
+const benchmarkMs = now - benchmarkStart;
+const totalMs = now - runStart;
+
+await saveTiming(
+  {
+    ...(buildMs !== undefined ? { buildMs } : {}),
+    benchmarkMs,
+    totalMs,
+  },
+  info.filePath,
+);
+
+clack.log.info(
+  buildMs !== undefined
+    ? `Total: ${(totalMs / 1000).toFixed(1)}s (build: ${(buildMs / 1000).toFixed(1)}s, benchmark: ${(benchmarkMs / 1000).toFixed(1)}s)`
+    : `Total: ${(totalMs / 1000).toFixed(1)}s (benchmark only; build skipped)`,
+);
 
 await browser.close();

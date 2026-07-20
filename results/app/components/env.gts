@@ -1,4 +1,4 @@
-import { msOfFrameAt } from '#utils';
+import { formatDuration, msOfFrameAt } from '#utils';
 import type { ResultSet } from '#types';
 import type { TOC } from '@ember/component/template-only';
 
@@ -56,6 +56,19 @@ export const Info = <template>
           {{@cpuThrottle}}x CPU slowdown
         </li>
       {{/if}}
+      {{#if @timing}}
+        <li>
+          Ran in
+          {{formatDuration @timing.totalMs}}
+          {{#if @timing.buildMs}}
+            (build:
+            {{formatDuration @timing.buildMs}}, benchmark:
+            {{formatDuration @timing.benchmarkMs}})
+          {{else}}
+            (benchmark only; build skipped)
+          {{/if}}
+        </li>
+      {{/if}}
     </ul>
   </div>
 </template> satisfies TOC<{
@@ -63,4 +76,5 @@ export const Info = <template>
   sha: string;
   env: ResultSet['environment'];
   cpuThrottle: number | undefined;
+  timing: ResultSet['timing'];
 }>;
