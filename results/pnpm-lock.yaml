@@ -123,9 +123,6 @@ importers:
       vite-plugin-full-reload:
         specifier: ^1.2.0
         version: 1.2.0
-      vite-plugin-virtual:
-        specifier: ^0.5.0
-        version: 0.5.0(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1)(terser@5.46.0))
 
 packages:
 
@@ -4010,11 +4007,6 @@ packages:
 
   vite-plugin-full-reload@1.2.0:
     resolution: {integrity: sha512-kz18NW79x0IHbxRSHm0jttP4zoO9P9gXh+n6UTwlNKnviTTEpOlum6oS9SmecrTtSr+muHEn5TUuC75UovQzcA==}
-
-  vite-plugin-virtual@0.5.0:
-    resolution: {integrity: sha512-vKqZRK1k67VvMeUyvXNAboVwBHcdNuULR/+s7x+WVohM/i2kz2ZiCuHlp4JdQe2DjQ0Cnb9wZJH95BgpZ3lJvw==}
-    peerDependencies:
-      vite: ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0
 
   vite@7.3.1:
     resolution: {integrity: sha512-w+N7Hifpc3gRjZ63vYBXA56dvvRlNWRczTdmCBBa+CotUzAPf5b7YMdMR/8CQoeYE5LX3W4wj6RYTgonm1b9DA==}
@@ -8586,10 +8578,6 @@ snapshots:
     dependencies:
       picocolors: 1.1.1
       picomatch: 2.3.1
-
-  vite-plugin-virtual@0.5.0(vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1)(terser@5.46.0)):
-    dependencies:
-      vite: 7.3.1(@types/node@25.3.3)(jiti@2.6.1)(terser@5.46.0)
 
   vite@7.3.1(@types/node@25.3.3)(jiti@2.6.1)(terser@5.46.0):
     dependencies:
