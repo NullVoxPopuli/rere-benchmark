@@ -31,8 +31,8 @@ export class DBMonWithChat extends BaseTest {
    * @override
    *
    * @param {object} options
-   * @param {(...args: unknown[]) => unknown} options.handleDbUpdate
-   * @param {(...args: unknown[]) => unknown} options.handleChat
+   * @param {(update: import('./dbmon/types.ts').DBUpdate) => unknown} options.handleDbUpdate
+   * @param {(update: import('./dbmon/types.ts').ChatUpdate) => unknown} options.handleChat
    */
   doit({ handleDbUpdate, handleChat }) {
     this.prepare(() => {

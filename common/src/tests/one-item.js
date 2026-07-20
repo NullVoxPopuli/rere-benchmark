@@ -4,6 +4,7 @@ import { RUN, BaseTest } from './base-test.js';
 /**
  * @typedef {import('./types.ts').BenchTest<number>} NumberTest
  *
+ * @extends {BaseTest<(value: number) => unknown>}
  * @implements {NumberTest}
  */
 export class OneItem extends BaseTest {

@@ -19,7 +19,7 @@ export interface ResultData {
       url: string;
       version: string;
       measure?: string;
-      whatsBetter?: 'bigger';
+      whatsBetter?: "bigger";
       times: Array<Mark[]>;
     };
   };
@@ -30,7 +30,7 @@ export interface BenchmarkInfo {
   app: string;
   query: string;
   measure?: string;
-  whatsBetter: 'bigger' | 'smaller';
+  whatsBetter: "bigger" | "smaller";
   units: string;
 }
 

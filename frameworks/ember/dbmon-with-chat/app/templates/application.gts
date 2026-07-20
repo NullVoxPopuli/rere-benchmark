@@ -1,15 +1,9 @@
 import "common/dbmon.css";
 
 import Component from "@glimmer/component";
-import {
-  helpers,
-  type DBRow,
-  type ChatMessage,
-  type DBUpdate,
-  type ChatUpdate,
-} from "common";
+import { trackedArray, trackedMap } from "@ember/reactive/collections";
 
-import { trackedMap, trackedArray } from "@ember/reactive/collections";
+import { type ChatMessage, type ChatUpdate, type DBRow, type DBUpdate, helpers } from "common";
 
 const test = helpers.dbMonWithChat();
 

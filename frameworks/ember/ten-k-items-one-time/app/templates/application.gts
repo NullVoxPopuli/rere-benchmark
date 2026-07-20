@@ -1,7 +1,7 @@
-import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
+import Component from "@glimmer/component";
+import { tracked } from "@glimmer/tracking";
 
-import { helpers } from 'common';
+import { helpers } from "common";
 
 const test = helpers.tenKitems1UpdateEach();
 
@@ -12,6 +12,8 @@ export default class Test extends Component {
     test.doit((i) => {
       this.items[i] = i;
 
+      // signal to the @tracked property that the array's contents changed
+      // eslint-disable-next-line no-self-assign
       this.items = this.items;
     });
   };

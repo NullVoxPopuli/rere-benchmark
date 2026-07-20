@@ -6,6 +6,8 @@ export const RUN = Symbol('__run__');
  *
  * I don't want to make mistakes, and having shared
  * behavior in a base class is super useful.
+ *
+ * @template [UpdateCallback=unknown]
  */
 export class BaseTest {
   #isRunning = false;
@@ -21,7 +23,7 @@ export class BaseTest {
   }
 
   /**
-   * @param {unknown} updateCallback
+   * @param {UpdateCallback} updateCallback
    */
   doit(updateCallback) {
     this.prepare(() => {

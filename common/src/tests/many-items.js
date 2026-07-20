@@ -4,6 +4,7 @@ import { qpBool, qpNum, qpPercent, tryVerify } from './utils.js';
 /**
  * @typedef {import('./types.ts').BenchTest<Array<number | undefined>>} ArrayTest
  *
+ * @extends {BaseTest<(index: number) => unknown>}
  * @implements {ArrayTest}
  */
 export class ManyItems extends BaseTest {

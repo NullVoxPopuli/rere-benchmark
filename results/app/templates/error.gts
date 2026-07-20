@@ -1,8 +1,9 @@
-import { LinkTo } from '@ember/routing';
+import { LinkTo } from "@ember/routing";
 
 function getError() {
   const qps = new URLSearchParams(window.location.search);
-  return qps.get('error');
+
+  return qps.get("error");
 }
 <template>
   <main class="error-page">

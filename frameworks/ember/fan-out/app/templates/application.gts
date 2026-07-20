@@ -1,7 +1,7 @@
-import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
+import Component from "@glimmer/component";
+import { tracked } from "@glimmer/tracking";
 
-import { helpers } from 'common';
+import { helpers } from "common";
 
 const test = helpers.fanOut();
 

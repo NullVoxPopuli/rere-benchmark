@@ -1,12 +1,12 @@
-import { dataOf } from '#utils';
-import Component from '@glimmer/component';
+import Component from "@glimmer/component";
+import { cached } from "@glimmer/tracking";
+import { assert } from "@ember/debug";
 
-import type { BenchmarkInfo, Results, ResultSet } from '#types';
-import { assert } from '@ember/debug';
-import { FrameworkInfo } from '#components/framework-info.gts';
-import { round } from '#utils';
-import { cached } from '@glimmer/tracking';
-import type { Model } from '#routes/results.ts';
+import { FrameworkInfo } from "#components/framework-info.gts";
+import { dataOf, round } from "#utils";
+
+import type { Model } from "#routes/results.ts";
+import type { BenchmarkInfo, Results, ResultSet } from "#types";
 
 export default class Animated extends Component<{
   model: Model;
@@ -14,11 +14,7 @@ export default class Animated extends Component<{
   get benchmarkInfo() {
     return this.args.model.data.benchmarkInfo
       .toSorted()
-      .toSorted(
-        (a, b) =>
-          (a.name.includes('async') ? 1 : 0) -
-          (b.name.includes('async') ? 1 : 0)
-      );
+      .toSorted((a, b) => (a.name.includes("async") ? 1 : 0) - (b.name.includes("async") ? 1 : 0));
   }
 
   <template>
@@ -34,18 +30,22 @@ export default class Animated extends Component<{
 
 function scaleFactor(results: Results) {
   const fastest = results[0];
+
   assert(`Results are empty`, fastest);
 
   const scale = fastest.speed;
+
   return (ms: number) => ms / scale;
 }
 
 function scaleFromBigger(results: Results) {
   const max = Math.max(...results.map((r) => r.speed));
+
   assert(`Results are empty`, max);
 
   return (ms: number) => {
     const result = max / ms;
+
     // console.log({ ms, max, result });
     return result;
   };
@@ -66,7 +66,7 @@ export class Visualize extends Component<{
 }> {
   @cached
   get scaleTime() {
-    if (this.args.benchInfo.whatsBetter === 'bigger') {
+    if (this.args.benchInfo.whatsBetter === "bigger") {
       return scaleFromBigger(this.args.results);
     }
 
@@ -75,7 +75,7 @@ export class Visualize extends Component<{
 
   @cached
   get sorted() {
-    if (this.args.benchInfo.whatsBetter === 'bigger') {
+    if (this.args.benchInfo.whatsBetter === "bigger") {
       return sortBigger(this.args.results);
     }
 
@@ -83,7 +83,7 @@ export class Visualize extends Component<{
   }
 
   get isBiggerBetter() {
-    return this.args.benchInfo.whatsBetter === 'bigger';
+    return this.args.benchInfo.whatsBetter === "bigger";
   }
 
   <template>

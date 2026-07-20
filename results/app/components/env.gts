@@ -1,17 +1,18 @@
-import { formatDuration, msOfFrameAt } from '#utils';
-import type { ResultSet } from '#types';
-import type { TOC } from '@ember/component/template-only';
+import { formatDuration, msOfFrameAt } from "#utils";
+
+import type { TOC } from "@ember/component/template-only";
+import type { ResultSet } from "#types";
 
 function first8(str: string) {
   return str.slice(0, 8);
 }
 
 function dateOf(datetime: string) {
-  return new Intl.DateTimeFormat('en-CA').format(new Date(datetime));
+  return new Intl.DateTimeFormat("en-CA").format(new Date(datetime));
 }
 
 function isThrottled(cpuThrottle: number | undefined) {
-  return typeof cpuThrottle === 'number' && cpuThrottle > 1;
+  return typeof cpuThrottle === "number" && cpuThrottle > 1;
 }
 
 export const Info = <template>
@@ -74,7 +75,7 @@ export const Info = <template>
 </template> satisfies TOC<{
   date: string;
   sha: string;
-  env: ResultSet['environment'];
+  env: ResultSet["environment"];
   cpuThrottle: number | undefined;
-  timing: ResultSet['timing'];
+  timing: ResultSet["timing"];
 }>;

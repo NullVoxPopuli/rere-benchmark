@@ -18,6 +18,7 @@ import { nextMacrotask, qpNum, tryVerify } from './utils.js';
  *
  * @typedef {import('./types.ts').BenchTest<number>} NumberTest
  *
+ * @extends {BaseTest<(value: number) => unknown>}
  * @implements {NumberTest}
  */
 export class FanOut extends BaseTest {

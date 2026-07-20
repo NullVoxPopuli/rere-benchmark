@@ -1,8 +1,9 @@
-import type { ResultSet } from '#types';
-import Route from '@ember/routing/route';
-import type RouterService from '@ember/routing/router-service';
-import type Transition from '@ember/routing/transition';
-import { service } from '@ember/service';
+import Route from "@ember/routing/route";
+import { service } from "@ember/service";
+
+import type RouterService from "@ember/routing/router-service";
+import type Transition from "@ember/routing/transition";
+import type { ResultSet } from "#types";
 
 interface Params {
   q: string;
@@ -21,10 +22,11 @@ export default class Results extends Route<Model> {
 
   beforeModel(transition: Transition) {
     const { to } = transition;
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
     if (!(to as any)?.queryParams?.q) {
       transition.abort();
-      this.router.transitionTo('error', {
+      this.router.transitionTo("error", {
         queryParams: {
           error: `Missing 'q' param when trying to visit the 'results' route.`,
         },
@@ -51,7 +53,7 @@ export default class Results extends Route<Model> {
       // SAFETY: don't care -- the fact that people can throw non-errors is a mistake
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      this.router.transitionTo('error', { queryParams: { error: e.message } });
+      this.router.transitionTo("error", { queryParams: { error: e.message } });
     }
   }
 }
