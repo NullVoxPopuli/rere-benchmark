@@ -1,7 +1,14 @@
 <script lang="ts">
-  import Counter from './lib/Counter.svelte'
+  import { helpers } from 'common';
+
+  let test = helpers.oneItem10kUpdates();
+  let count: number = $state(test.getData())
+
+  $effect(() => {
+    test.doit((i) => count = i);
+  });
+
+
 </script>
 
-<main>
-    <Counter />
-</main>
+<output>{test.formatItem(count)}</output>

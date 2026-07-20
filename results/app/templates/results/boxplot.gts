@@ -89,6 +89,9 @@ const renderChart = modifier(function boxplot(
     options: {
       indexAxis: 'y',
       responsive: true,
+      // without this, chart.js picks its own height and the per-framework
+      // rows get squashed until most axis labels are dropped
+      maintainAspectRatio: false,
       transitions: {
         show: {
           animations: {
@@ -175,10 +178,11 @@ export default class Boxplat extends Component<{
           </div>
         </header>
 
-        <canvas
-          style="height:{{this.height}}px; max-width: 90dvw;"
-          {{renderChart @model.data benchInfo}}
-        ></canvas>
+        {{! chart.js responsive sizing tracks the parent element,
+            so the fixed height goes on a wrapper, not the canvas }}
+        <div style="position: relative; height:{{this.height}}px;">
+          <canvas {{renderChart @model.data benchInfo}}></canvas>
+        </div>
       </section>
     {{/each}}
 

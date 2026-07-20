@@ -1,0 +1,4665 @@
+{
+  "date": "2026-07-20T15:49:06.571Z",
+  "sha": "d5d7e5e1f9fe3540e3d016d10c29b070f4b1ed8d",
+  "args": {
+    "SKIP_BUILD": false,
+    "CPU_THROTTLE": 1,
+    "HEADLESS": false,
+    "COUNT": 10
+  },
+  "environment": {
+    "machine": {
+      "os": {
+        "name": "Ubuntu",
+        "version": "26.04"
+      },
+      "cpu": "AMD Ryzen 5 7640U w/ Radeon 760M Graphics",
+      "ram": "96.5 GB"
+    },
+    "monitor": {
+      "hz": 119
+    },
+    "browser": {
+      "name": "Google Chrome",
+      "version": "143.0.7499.169"
+    }
+  },
+  "results": {
+    "ember": {
+      "DB Monitor w/ chat simulation": {
+        "app": "dbmon-with-chat",
+        "query": "",
+        "version": "6.12.0-beta.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 86.20000004768372
+            },
+            {
+              "name": "fps",
+              "at": 5134.200000047684,
+              "detail": 119.6
+            },
+            {
+              "name": "fps",
+              "at": 10133.100000023842,
+              "detail": 118.8
+            },
+            {
+              "name": "fps",
+              "at": 15142.5,
+              "detail": 119.8
+            },
+            {
+              "name": "fps",
+              "at": 20138.300000071526,
+              "detail": 118.6
+            },
+            {
+              "name": "fps",
+              "at": 25133.900000095367,
+              "detail": 120
+            },
+            {
+              "name": ":done",
+              "at": 25135.400000095367
+            }
+          ]
+        ],
+        "measure": "fps",
+        "whatsBetter": "bigger"
+      },
+      "Incrementing Render Effect": {
+        "app": "incrementing-render-effect",
+        "query": "&updates=100000",
+        "version": "6.12.0-beta.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 61.5
+            },
+            {
+              "name": ":done",
+              "at": 651
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 61.5
+            },
+            {
+              "name": ":done",
+              "at": 650.2000000476837
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 63
+            },
+            {
+              "name": ":done",
+              "at": 641
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 61.699999928474426
+            },
+            {
+              "name": ":done",
+              "at": 643.6000000238419
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 58.799999952316284
+            },
+            {
+              "name": ":done",
+              "at": 625.6000000238419
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 62.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 665.1999999284744
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 62.300000071525574
+            },
+            {
+              "name": ":done",
+              "at": 633.8000000715256
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 66.5
+            },
+            {
+              "name": ":done",
+              "at": 651
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 62.800000071525574
+            },
+            {
+              "name": ":done",
+              "at": 653.2000000476837
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 61.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 641.6000000238419
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 value, 1k consumers, 10k updates (bursts of 1000)": {
+        "app": "fan-out",
+        "query": "&consumers=1000&updates=10000&burstSize=1000",
+        "version": "6.12.0-beta.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 92.30000007152557
+            },
+            {
+              "name": ":done",
+              "at": 129.20000004768372
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 95.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 142.29999995231628
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 90.20000004768372
+            },
+            {
+              "name": ":done",
+              "at": 135.70000004768372
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 92.70000004768372
+            },
+            {
+              "name": ":done",
+              "at": 125.89999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 87.79999995231628
+            },
+            {
+              "name": ":done",
+              "at": 132.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 90.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 131.29999995231628
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 93.70000004768372
+            },
+            {
+              "name": ":done",
+              "at": 138.10000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 91.19999992847443
+            },
+            {
+              "name": ":done",
+              "at": 130
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 93.29999995231628
+            },
+            {
+              "name": ":done",
+              "at": 131.39999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 86.69999992847443
+            },
+            {
+              "name": ":done",
+              "at": 125.39999997615814
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 value, 1k consumers, 10k updates (bursts of 100)": {
+        "app": "fan-out",
+        "query": "&consumers=1000&updates=10000&burstSize=100",
+        "version": "6.12.0-beta.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 93.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 288.2000000476837
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 95.20000004768372
+            },
+            {
+              "name": ":done",
+              "at": 298
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 91.80000007152557
+            },
+            {
+              "name": ":done",
+              "at": 268.90000009536743
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 93.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 281.2999999523163
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 94.5
+            },
+            {
+              "name": ":done",
+              "at": 269.2999999523163
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 105.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 273.89999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 96.70000004768372
+            },
+            {
+              "name": ":done",
+              "at": 337.60000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 98.20000004768372
+            },
+            {
+              "name": ":done",
+              "at": 326.10000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 101
+            },
+            {
+              "name": ":done",
+              "at": 267.7000000476837
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 88.29999995231628
+            },
+            {
+              "name": ":done",
+              "at": 262.2000000476837
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 item, 100k updates": {
+        "app": "one-item-many-updates",
+        "query": "&updates=100000&percentRandomAwait=0",
+        "version": "6.12.0-beta.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 65.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 75.79999995231628
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 63.299999952316284
+            },
+            {
+              "name": ":done",
+              "at": 72.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 64.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 74.79999995231628
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 63.700000047683716
+            },
+            {
+              "name": ":done",
+              "at": 73.20000004768372
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 62.200000047683716
+            },
+            {
+              "name": ":done",
+              "at": 71.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 63.799999952316284
+            },
+            {
+              "name": ":done",
+              "at": 72.39999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 62.199999928474426
+            },
+            {
+              "name": ":done",
+              "at": 71.10000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 64
+            },
+            {
+              "name": ":done",
+              "at": 72.79999995231628
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 69.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 78.80000007152557
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 63.699999928474426
+            },
+            {
+              "name": ":done",
+              "at": 73.5
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 item, 1k updates": {
+        "app": "one-item-many-updates",
+        "query": "&updates=1000&percentRandomAwait=0",
+        "version": "6.12.0-beta.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 64.79999995231628
+            },
+            {
+              "name": ":done",
+              "at": 70.19999992847443
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 63.299999952316284
+            },
+            {
+              "name": ":done",
+              "at": 68.79999995231628
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 62.299999952316284
+            },
+            {
+              "name": ":done",
+              "at": 70.09999990463257
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 64.19999992847443
+            },
+            {
+              "name": ":done",
+              "at": 70.69999992847443
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 64.5
+            },
+            {
+              "name": ":done",
+              "at": 73
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 66.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 68.80000007152557
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 65.09999990463257
+            },
+            {
+              "name": ":done",
+              "at": 70.59999990463257
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 63.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 69.29999995231628
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 61.300000071525574
+            },
+            {
+              "name": ":done",
+              "at": 70.39999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 62.5
+            },
+            {
+              "name": ":done",
+              "at": 65.89999997615814
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1k items 1 update on 25% (random)": {
+        "app": "ten-k-items-one-time",
+        "query": "&items=1000&updates=250&random=true&percentRandomAwait=0",
+        "version": "6.12.0-beta.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 97.69999992847443
+            },
+            {
+              "name": ":done",
+              "at": 122.39999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 98.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 137
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 101.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 126.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 101.69999992847443
+            },
+            {
+              "name": ":done",
+              "at": 132
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 98.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 123.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 100.69999992847443
+            },
+            {
+              "name": ":done",
+              "at": 130.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 98.69999992847443
+            },
+            {
+              "name": ":done",
+              "at": 124.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 100.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 125.69999992847443
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 107.90000009536743
+            },
+            {
+              "name": ":done",
+              "at": 137.10000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 101.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 131.30000007152557
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1k items 1 update on 5% (random)": {
+        "app": "ten-k-items-one-time",
+        "query": "&items=1000&updates=50&random=true&percentRandomAwait=0",
+        "version": "6.12.0-beta.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 104.09999990463257
+            },
+            {
+              "name": ":done",
+              "at": 121.79999995231628
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 100.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 119.60000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 97
+            },
+            {
+              "name": ":done",
+              "at": 112.39999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 105.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 127.90000009536743
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 98.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 123
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 109.79999995231628
+            },
+            {
+              "name": ":done",
+              "at": 134.60000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 120.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 144.89999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 123.5
+            },
+            {
+              "name": ":done",
+              "at": 147.59999990463257
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 119.19999992847443
+            },
+            {
+              "name": ":done",
+              "at": 142
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 123
+            },
+            {
+              "name": ":done",
+              "at": 148.79999995231628
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1k items, 1 update each (sequentially)": {
+        "app": "ten-k-items-one-time",
+        "query": "&items=1000&updates=1000&percentRandomAwait=0",
+        "version": "6.12.0-beta.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 111.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 165.39999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 108.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 165.19999992847443
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 103.09999990463257
+            },
+            {
+              "name": ":done",
+              "at": 152.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 101.29999995231628
+            },
+            {
+              "name": ":done",
+              "at": 151.89999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 104.70000004768372
+            },
+            {
+              "name": ":done",
+              "at": 161.10000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 103
+            },
+            {
+              "name": ":done",
+              "at": 153.30000007152557
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 104.70000004768372
+            },
+            {
+              "name": ":done",
+              "at": 151.20000004768372
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 100.5
+            },
+            {
+              "name": ":done",
+              "at": 148.09999990463257
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 101.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 155.69999992847443
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 101.90000009536743
+            },
+            {
+              "name": ":done",
+              "at": 148.80000007152557
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      }
+    },
+    "react": {
+      "DB Monitor w/ chat simulation": {
+        "app": "dbmon-with-chat",
+        "query": "",
+        "version": "19.2.0",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 46.10000002384186
+            },
+            {
+              "name": "fps",
+              "at": 5093.900000095367,
+              "detail": 120
+            },
+            {
+              "name": "fps",
+              "at": 10099.200000047684,
+              "detail": 119
+            },
+            {
+              "name": "fps",
+              "at": 15099.5,
+              "detail": 120
+            },
+            {
+              "name": "fps",
+              "at": 20096.700000047684,
+              "detail": 120
+            },
+            {
+              "name": "fps",
+              "at": 25097.5,
+              "detail": 118.8
+            },
+            {
+              "name": ":done",
+              "at": 25098.600000023842
+            }
+          ]
+        ],
+        "measure": "fps",
+        "whatsBetter": "bigger"
+      },
+      "Incrementing Render Effect": {
+        "app": "incrementing-render-effect",
+        "query": "&updates=100000",
+        "version": "19.2.0",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 43.800000071525574
+            },
+            {
+              "name": ":done",
+              "at": 2233.9000000953674
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 40.699999928474426
+            },
+            {
+              "name": ":done",
+              "at": 2257.5999999046326
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 43.200000047683716
+            },
+            {
+              "name": ":done",
+              "at": 2250.899999976158
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 42.5
+            },
+            {
+              "name": ":done",
+              "at": 2274.2000000476837
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 43.299999952316284
+            },
+            {
+              "name": ":done",
+              "at": 2239.6999999284744
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 42.59999990463257
+            },
+            {
+              "name": ":done",
+              "at": 2275.7999999523163
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 45.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 2287.600000023842
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 42.700000047683716
+            },
+            {
+              "name": ":done",
+              "at": 2185.600000023842
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 47.799999952316284
+            },
+            {
+              "name": ":done",
+              "at": 2302.7999999523163
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 41.5
+            },
+            {
+              "name": ":done",
+              "at": 2236
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 value, 1k consumers, 10k updates (bursts of 1000)": {
+        "app": "fan-out",
+        "query": "&consumers=1000&updates=10000&burstSize=1000",
+        "version": "19.2.0",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 55.200000047683716
+            },
+            {
+              "name": ":done",
+              "at": 104.70000004768372
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 54.200000047683716
+            },
+            {
+              "name": ":done",
+              "at": 116.89999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 53.299999952316284
+            },
+            {
+              "name": ":done",
+              "at": 105.60000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 52.5
+            },
+            {
+              "name": ":done",
+              "at": 111.70000004768372
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 53.799999952316284
+            },
+            {
+              "name": ":done",
+              "at": 109.10000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 51.299999952316284
+            },
+            {
+              "name": ":done",
+              "at": 104.20000004768372
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 57.5
+            },
+            {
+              "name": ":done",
+              "at": 114.69999992847443
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 52.199999928474426
+            },
+            {
+              "name": ":done",
+              "at": 105.29999995231628
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 54.300000071525574
+            },
+            {
+              "name": ":done",
+              "at": 111.30000007152557
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 54.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 108.10000002384186
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 value, 1k consumers, 10k updates (bursts of 100)": {
+        "app": "fan-out",
+        "query": "&consumers=1000&updates=10000&burstSize=100",
+        "version": "19.2.0",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 56.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 251.89999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 52.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 233.79999995231628
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 52.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 259.39999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 51.200000047683716
+            },
+            {
+              "name": ":done",
+              "at": 244
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 52.299999952316284
+            },
+            {
+              "name": ":done",
+              "at": 218.29999995231628
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 53.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 257.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 52.699999928474426
+            },
+            {
+              "name": ":done",
+              "at": 236.69999992847443
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 54.300000071525574
+            },
+            {
+              "name": ":done",
+              "at": 260.7000000476837
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 55
+            },
+            {
+              "name": ":done",
+              "at": 242.90000009536743
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 53.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 234.59999990463257
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 item, 100k updates": {
+        "app": "one-item-many-updates",
+        "query": "&updates=100000&percentRandomAwait=0",
+        "version": "19.2.0",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 51.5
+            },
+            {
+              "name": ":done",
+              "at": 95.19999992847443
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 43.199999928474426
+            },
+            {
+              "name": ":done",
+              "at": 91.39999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 43
+            },
+            {
+              "name": ":done",
+              "at": 85.80000007152557
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 42.700000047683716
+            },
+            {
+              "name": ":done",
+              "at": 91.89999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 42.800000071525574
+            },
+            {
+              "name": ":done",
+              "at": 86.70000004768372
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 43.700000047683716
+            },
+            {
+              "name": ":done",
+              "at": 87
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 44.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 88.60000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 44.800000071525574
+            },
+            {
+              "name": ":done",
+              "at": 92.10000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 43.5
+            },
+            {
+              "name": ":done",
+              "at": 90.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 42.5
+            },
+            {
+              "name": ":done",
+              "at": 94.89999997615814
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 item, 1k updates": {
+        "app": "one-item-many-updates",
+        "query": "&updates=1000&percentRandomAwait=0",
+        "version": "19.2.0",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 42.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 47.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 46.700000047683716
+            },
+            {
+              "name": ":done",
+              "at": 55.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 45.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 53.40000009536743
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 44.700000047683716
+            },
+            {
+              "name": ":done",
+              "at": 53.60000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 44.199999928474426
+            },
+            {
+              "name": ":done",
+              "at": 49.60000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 42.199999928474426
+            },
+            {
+              "name": ":done",
+              "at": 47
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 41.5
+            },
+            {
+              "name": ":done",
+              "at": 50.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 46.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 55.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 43.59999990463257
+            },
+            {
+              "name": ":done",
+              "at": 52.39999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 40.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 47.200000047683716
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1k items 1 update on 25% (random)": {
+        "app": "ten-k-items-one-time",
+        "query": "&items=1000&updates=250&random=true&percentRandomAwait=0",
+        "version": "19.2.0",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 52.800000071525574
+            },
+            {
+              "name": ":done",
+              "at": 78.60000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 52.59999990463257
+            },
+            {
+              "name": ":done",
+              "at": 69.59999990463257
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 50.90000009536743
+            },
+            {
+              "name": ":done",
+              "at": 66.90000009536743
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 50.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 65.80000007152557
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 55.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 72
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 51.299999952316284
+            },
+            {
+              "name": ":done",
+              "at": 67
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 50.199999928474426
+            },
+            {
+              "name": ":done",
+              "at": 65.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 53.200000047683716
+            },
+            {
+              "name": ":done",
+              "at": 68.60000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 51.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 66.89999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 51
+            },
+            {
+              "name": ":done",
+              "at": 70
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1k items 1 update on 5% (random)": {
+        "app": "ten-k-items-one-time",
+        "query": "&items=1000&updates=50&random=true&percentRandomAwait=0",
+        "version": "19.2.0",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 53.200000047683716
+            },
+            {
+              "name": ":done",
+              "at": 67.10000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 52.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 65.80000007152557
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 52.5
+            },
+            {
+              "name": ":done",
+              "at": 65.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 53.59999990463257
+            },
+            {
+              "name": ":done",
+              "at": 67.19999992847443
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 50.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 65.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 52
+            },
+            {
+              "name": ":done",
+              "at": 64.10000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 51.5
+            },
+            {
+              "name": ":done",
+              "at": 65.10000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 53.5
+            },
+            {
+              "name": ":done",
+              "at": 69
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 53.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 67.60000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 55.5
+            },
+            {
+              "name": ":done",
+              "at": 71.30000007152557
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1k items, 1 update each (sequentially)": {
+        "app": "ten-k-items-one-time",
+        "query": "&items=1000&updates=1000&percentRandomAwait=0",
+        "version": "19.2.0",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 50.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 73.10000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 49.09999990463257
+            },
+            {
+              "name": ":done",
+              "at": 74.19999992847443
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 52.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 81.89999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 51.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 79.10000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 53.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 80.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 49.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 80.59999990463257
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 52.300000071525574
+            },
+            {
+              "name": ":done",
+              "at": 78.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 51.299999952316284
+            },
+            {
+              "name": ":done",
+              "at": 79.89999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 54
+            },
+            {
+              "name": ":done",
+              "at": 126.10000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 52.799999952316284
+            },
+            {
+              "name": ":done",
+              "at": 79.89999997615814
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      }
+    },
+    "solid": {
+      "DB Monitor w/ chat simulation": {
+        "app": "dbmon-with-chat",
+        "query": "",
+        "version": "1.9.11",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 30
+            },
+            {
+              "name": "fps",
+              "at": 5069.699999928474,
+              "detail": 120
+            },
+            {
+              "name": "fps",
+              "at": 10071.5,
+              "detail": 119.2
+            },
+            {
+              "name": "fps",
+              "at": 15072.799999952316,
+              "detail": 120
+            },
+            {
+              "name": "fps",
+              "at": 20075.199999928474,
+              "detail": 118.8
+            },
+            {
+              "name": "fps",
+              "at": 25073.5,
+              "detail": 120
+            },
+            {
+              "name": ":done",
+              "at": 25073.799999952316
+            }
+          ]
+        ],
+        "measure": "fps",
+        "whatsBetter": "bigger"
+      },
+      "Incrementing Render Effect": {
+        "app": "incrementing-render-effect",
+        "query": "&updates=100000",
+        "version": "1.9.10",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 18.899999976158142
+            },
+            {
+              "name": ":done",
+              "at": 199.89999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 16.600000023841858
+            },
+            {
+              "name": ":done",
+              "at": 209.30000007152557
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 18
+            },
+            {
+              "name": ":done",
+              "at": 202.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 17.399999976158142
+            },
+            {
+              "name": ":done",
+              "at": 214.19999992847443
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 18.299999952316284
+            },
+            {
+              "name": ":done",
+              "at": 235.29999995231628
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 16.90000009536743
+            },
+            {
+              "name": ":done",
+              "at": 216.60000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 17.5
+            },
+            {
+              "name": ":done",
+              "at": 205.10000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 17.5
+            },
+            {
+              "name": ":done",
+              "at": 223.19999992847443
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 20.700000047683716
+            },
+            {
+              "name": ":done",
+              "at": 223.30000007152557
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 20
+            },
+            {
+              "name": ":done",
+              "at": 216
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 value, 1k consumers, 10k updates (bursts of 1000)": {
+        "app": "fan-out",
+        "query": "&consumers=1000&updates=10000&burstSize=1000",
+        "version": "1.9.10",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 27.59999990463257
+            },
+            {
+              "name": ":done",
+              "at": 5306
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 28.800000071525574
+            },
+            {
+              "name": ":done",
+              "at": 5110.300000071526
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 30.100000023841858
+            },
+            {
+              "name": ":done",
+              "at": 5221.800000071526
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 30.799999952316284
+            },
+            {
+              "name": ":done",
+              "at": 5111.599999904633
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 28.199999928474426
+            },
+            {
+              "name": ":done",
+              "at": 5153.299999952316
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 28.399999976158142
+            },
+            {
+              "name": ":done",
+              "at": 5305.200000047684
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 30.399999976158142
+            },
+            {
+              "name": ":done",
+              "at": 4992.299999952316
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 29.200000047683716
+            },
+            {
+              "name": ":done",
+              "at": 5063.700000047684
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 30.899999976158142
+            },
+            {
+              "name": ":done",
+              "at": 5173.199999928474
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 29.5
+            },
+            {
+              "name": ":done",
+              "at": 5169.099999904633
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 value, 1k consumers, 10k updates (bursts of 100)": {
+        "app": "fan-out",
+        "query": "&consumers=1000&updates=10000&burstSize=100",
+        "version": "1.9.10",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 30.300000071525574
+            },
+            {
+              "name": ":done",
+              "at": 5850.200000047684
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 31.200000047683716
+            },
+            {
+              "name": ":done",
+              "at": 5712.899999976158
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 30.299999952316284
+            },
+            {
+              "name": ":done",
+              "at": 5765.899999976158
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 30.299999952316284
+            },
+            {
+              "name": ":done",
+              "at": 5704.199999928474
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 27
+            },
+            {
+              "name": ":done",
+              "at": 5883.100000023842
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 30.899999976158142
+            },
+            {
+              "name": ":done",
+              "at": 5816.399999976158
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 27.700000047683716
+            },
+            {
+              "name": ":done",
+              "at": 5813
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 30.699999928474426
+            },
+            {
+              "name": ":done",
+              "at": 5737.899999976158
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 29.5
+            },
+            {
+              "name": ":done",
+              "at": 5570.600000023842
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 27.700000047683716
+            },
+            {
+              "name": ":done",
+              "at": 5818.200000047684
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 item, 100k updates": {
+        "app": "one-item-many-updates",
+        "query": "&updates=100000&percentRandomAwait=0",
+        "version": "1.9.10",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 27.200000047683716
+            },
+            {
+              "name": ":done",
+              "at": 98.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 17.300000071525574
+            },
+            {
+              "name": ":done",
+              "at": 88.60000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 18
+            },
+            {
+              "name": ":done",
+              "at": 88.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 18.5
+            },
+            {
+              "name": ":done",
+              "at": 85.19999992847443
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 17.09999990463257
+            },
+            {
+              "name": ":done",
+              "at": 87.59999990463257
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 17.100000023841858
+            },
+            {
+              "name": ":done",
+              "at": 88.20000004768372
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 19.399999976158142
+            },
+            {
+              "name": ":done",
+              "at": 90.10000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 17.100000023841858
+            },
+            {
+              "name": ":done",
+              "at": 89.79999995231628
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 19.800000071525574
+            },
+            {
+              "name": ":done",
+              "at": 90.89999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 16.600000023841858
+            },
+            {
+              "name": ":done",
+              "at": 87.19999992847443
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 item, 1k updates": {
+        "app": "one-item-many-updates",
+        "query": "&updates=1000&percentRandomAwait=0",
+        "version": "1.9.10",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 27
+            },
+            {
+              "name": ":done",
+              "at": 32.200000047683716
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 17.59999990463257
+            },
+            {
+              "name": ":done",
+              "at": 22.299999952316284
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 16.799999952316284
+            },
+            {
+              "name": ":done",
+              "at": 21.299999952316284
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 17
+            },
+            {
+              "name": ":done",
+              "at": 20.899999976158142
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 20.600000023841858
+            },
+            {
+              "name": ":done",
+              "at": 29
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 17.199999928474426
+            },
+            {
+              "name": ":done",
+              "at": 22.299999952316284
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 17.600000023841858
+            },
+            {
+              "name": ":done",
+              "at": 22.100000023841858
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 16.399999976158142
+            },
+            {
+              "name": ":done",
+              "at": 20.299999952316284
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 20.100000023841858
+            },
+            {
+              "name": ":done",
+              "at": 25
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 16.700000047683716
+            },
+            {
+              "name": ":done",
+              "at": 24.200000047683716
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1k items 1 update on 25% (random)": {
+        "app": "ten-k-items-one-time",
+        "query": "&items=1000&updates=250&random=true&percentRandomAwait=0",
+        "version": "1.9.10",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 26.399999976158142
+            },
+            {
+              "name": ":done",
+              "at": 46.10000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 25.800000071525574
+            },
+            {
+              "name": ":done",
+              "at": 39.90000009536743
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 24.600000023841858
+            },
+            {
+              "name": ":done",
+              "at": 37
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 25.899999976158142
+            },
+            {
+              "name": ":done",
+              "at": 39.700000047683716
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 26.700000047683716
+            },
+            {
+              "name": ":done",
+              "at": 38.89999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 26.5
+            },
+            {
+              "name": ":done",
+              "at": 38.299999952316284
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 25.399999976158142
+            },
+            {
+              "name": ":done",
+              "at": 44.799999952316284
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 24.600000023841858
+            },
+            {
+              "name": ":done",
+              "at": 36.200000047683716
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 26.5
+            },
+            {
+              "name": ":done",
+              "at": 40.299999952316284
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 27.200000047683716
+            },
+            {
+              "name": ":done",
+              "at": 42.5
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1k items 1 update on 5% (random)": {
+        "app": "ten-k-items-one-time",
+        "query": "&items=1000&updates=50&random=true&percentRandomAwait=0",
+        "version": "1.9.10",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 26
+            },
+            {
+              "name": ":done",
+              "at": 42.200000047683716
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 28.299999952316284
+            },
+            {
+              "name": ":done",
+              "at": 42.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 26.600000023841858
+            },
+            {
+              "name": ":done",
+              "at": 36.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 24.600000023841858
+            },
+            {
+              "name": ":done",
+              "at": 35.60000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 25.299999952316284
+            },
+            {
+              "name": ":done",
+              "at": 35.699999928474426
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 25.699999928474426
+            },
+            {
+              "name": ":done",
+              "at": 36
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 28.399999976158142
+            },
+            {
+              "name": ":done",
+              "at": 42.10000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 27.299999952316284
+            },
+            {
+              "name": ":done",
+              "at": 41.200000047683716
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 26.399999976158142
+            },
+            {
+              "name": ":done",
+              "at": 36.299999952316284
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 26
+            },
+            {
+              "name": ":done",
+              "at": 36.799999952316284
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1k items, 1 update each (sequentially)": {
+        "app": "ten-k-items-one-time",
+        "query": "&items=1000&updates=1000&percentRandomAwait=0",
+        "version": "1.9.10",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 25.40000009536743
+            },
+            {
+              "name": ":done",
+              "at": 41.90000009536743
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 26.399999976158142
+            },
+            {
+              "name": ":done",
+              "at": 43.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 25.899999976158142
+            },
+            {
+              "name": ":done",
+              "at": 39.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 25.5
+            },
+            {
+              "name": ":done",
+              "at": 39.699999928474426
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 29.200000047683716
+            },
+            {
+              "name": ":done",
+              "at": 43.60000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 26.399999976158142
+            },
+            {
+              "name": ":done",
+              "at": 42.199999928474426
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 30.799999952316284
+            },
+            {
+              "name": ":done",
+              "at": 52.200000047683716
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 24.899999976158142
+            },
+            {
+              "name": ":done",
+              "at": 46.89999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 29.300000071525574
+            },
+            {
+              "name": ":done",
+              "at": 44.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 28.399999976158142
+            },
+            {
+              "name": ":done",
+              "at": 42.39999997615814
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      }
+    },
+    "svelte": {
+      "DB Monitor w/ chat simulation": {
+        "app": "dbmon-with-chat",
+        "query": "",
+        "version": "5.43.6",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 25
+            },
+            {
+              "name": "fps",
+              "at": 5066.5,
+              "detail": 120
+            },
+            {
+              "name": "fps",
+              "at": 10064.800000071526,
+              "detail": 119.2
+            },
+            {
+              "name": "fps",
+              "at": 15065.600000023842,
+              "detail": 120
+            },
+            {
+              "name": "fps",
+              "at": 20062.300000071526,
+              "detail": 120
+            },
+            {
+              "name": "fps",
+              "at": 25062,
+              "detail": 120
+            },
+            {
+              "name": ":done",
+              "at": 25062.400000095367
+            }
+          ]
+        ],
+        "measure": "fps",
+        "whatsBetter": "bigger"
+      },
+      "Incrementing Render Effect": {
+        "app": "incrementing-render-effect",
+        "query": "&updates=100000",
+        "version": "5.43.6",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 22
+            },
+            {
+              "name": ":done",
+              "at": 495.89999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 51.799999952316284
+            },
+            {
+              "name": ":done",
+              "at": 521.6000000238419
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 20.5
+            },
+            {
+              "name": ":done",
+              "at": 499.10000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 21.399999976158142
+            },
+            {
+              "name": ":done",
+              "at": 501.8000000715256
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 21.700000047683716
+            },
+            {
+              "name": ":done",
+              "at": 491
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 20.699999928474426
+            },
+            {
+              "name": ":done",
+              "at": 490.89999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 19.90000009536743
+            },
+            {
+              "name": ":done",
+              "at": 498
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 19.600000023841858
+            },
+            {
+              "name": ":done",
+              "at": 483.2000000476837
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 19.399999976158142
+            },
+            {
+              "name": ":done",
+              "at": 485.89999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 20.600000023841858
+            },
+            {
+              "name": ":done",
+              "at": 490.1999999284744
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 value, 1k consumers, 10k updates (bursts of 1000)": {
+        "app": "fan-out",
+        "query": "&consumers=1000&updates=10000&burstSize=1000",
+        "version": "5.43.6",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 44.200000047683716
+            },
+            {
+              "name": ":done",
+              "at": 131.40000009536743
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 36.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 124.39999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 39.90000009536743
+            },
+            {
+              "name": ":done",
+              "at": 127.80000007152557
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 37.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 136.89999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 40.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 134.89999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 37.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 121.09999990463257
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 48.200000047683716
+            },
+            {
+              "name": ":done",
+              "at": 138.60000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 39.800000071525574
+            },
+            {
+              "name": ":done",
+              "at": 127.90000009536743
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 40.799999952316284
+            },
+            {
+              "name": ":done",
+              "at": 126.39999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 38.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 124.59999990463257
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 value, 1k consumers, 10k updates (bursts of 100)": {
+        "app": "fan-out",
+        "query": "&consumers=1000&updates=10000&burstSize=100",
+        "version": "5.43.6",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 38.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 305.6999999284744
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 37.199999928474426
+            },
+            {
+              "name": ":done",
+              "at": 293.89999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 36.299999952316284
+            },
+            {
+              "name": ":done",
+              "at": 304.60000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 38
+            },
+            {
+              "name": ":done",
+              "at": 308.10000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 37.59999990463257
+            },
+            {
+              "name": ":done",
+              "at": 313.39999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 37.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 329.89999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 36.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 317.39999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 37.5
+            },
+            {
+              "name": ":done",
+              "at": 291.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 36.200000047683716
+            },
+            {
+              "name": ":done",
+              "at": 301
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 38.59999990463257
+            },
+            {
+              "name": ":done",
+              "at": 315.59999990463257
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 item, 100k updates": {
+        "app": "one-item-many-updates",
+        "query": "&updates=100000&percentRandomAwait=0",
+        "version": "5.43.6",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 22.399999976158142
+            },
+            {
+              "name": ":done",
+              "at": 34.89999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 19.899999976158142
+            },
+            {
+              "name": ":done",
+              "at": 29.100000023841858
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 19.899999976158142
+            },
+            {
+              "name": ":done",
+              "at": 31.399999976158142
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 20.899999976158142
+            },
+            {
+              "name": ":done",
+              "at": 31.200000047683716
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 21.300000071525574
+            },
+            {
+              "name": ":done",
+              "at": 34.40000009536743
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 20.5
+            },
+            {
+              "name": ":done",
+              "at": 34.200000047683716
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 21.199999928474426
+            },
+            {
+              "name": ":done",
+              "at": 34.39999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 20.5
+            },
+            {
+              "name": ":done",
+              "at": 34.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 20.699999928474426
+            },
+            {
+              "name": ":done",
+              "at": 33.699999928474426
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 19.600000023841858
+            },
+            {
+              "name": ":done",
+              "at": 31.699999928474426
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 item, 1k updates": {
+        "app": "one-item-many-updates",
+        "query": "&updates=1000&percentRandomAwait=0",
+        "version": "5.43.6",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 20.899999976158142
+            },
+            {
+              "name": ":done",
+              "at": 27.799999952316284
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 20.09999990463257
+            },
+            {
+              "name": ":done",
+              "at": 22.59999990463257
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 20.699999928474426
+            },
+            {
+              "name": ":done",
+              "at": 28.199999928474426
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 21.399999976158142
+            },
+            {
+              "name": ":done",
+              "at": 28.600000023841858
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 20.800000071525574
+            },
+            {
+              "name": ":done",
+              "at": 29.100000023841858
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 20.40000009536743
+            },
+            {
+              "name": ":done",
+              "at": 25.600000023841858
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 20.899999976158142
+            },
+            {
+              "name": ":done",
+              "at": 28
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 19.5
+            },
+            {
+              "name": ":done",
+              "at": 23.399999976158142
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 21.700000047683716
+            },
+            {
+              "name": ":done",
+              "at": 27.100000023841858
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 20.700000047683716
+            },
+            {
+              "name": ":done",
+              "at": 27.899999976158142
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1k items 1 update on 25% (random)": {
+        "app": "ten-k-items-one-time",
+        "query": "&items=1000&updates=250&random=true&percentRandomAwait=0",
+        "version": "5.43.6",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 52.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 69.30000007152557
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 40.699999928474426
+            },
+            {
+              "name": ":done",
+              "at": 50.799999952316284
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 41.90000009536743
+            },
+            {
+              "name": ":done",
+              "at": 53.10000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 37.300000071525574
+            },
+            {
+              "name": ":done",
+              "at": 49.200000047683716
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 41.40000009536743
+            },
+            {
+              "name": ":done",
+              "at": 50.40000009536743
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 37.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 48.300000071525574
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 46
+            },
+            {
+              "name": ":done",
+              "at": 62.60000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 36
+            },
+            {
+              "name": ":done",
+              "at": 55.39999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 36.300000071525574
+            },
+            {
+              "name": ":done",
+              "at": 54.800000071525574
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 38.90000009536743
+            },
+            {
+              "name": ":done",
+              "at": 48.700000047683716
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1k items 1 update on 5% (random)": {
+        "app": "ten-k-items-one-time",
+        "query": "&items=1000&updates=50&random=true&percentRandomAwait=0",
+        "version": "5.43.6",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 37.700000047683716
+            },
+            {
+              "name": ":done",
+              "at": 54.700000047683716
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 38.40000009536743
+            },
+            {
+              "name": ":done",
+              "at": 49.700000047683716
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 40.799999952316284
+            },
+            {
+              "name": ":done",
+              "at": 51.10000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 38.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 46.60000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 39.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 50.40000009536743
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 36.700000047683716
+            },
+            {
+              "name": ":done",
+              "at": 48.800000071525574
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 35.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 46.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 39.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 52.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 39.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 49.799999952316284
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 44.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 52.700000047683716
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1k items, 1 update each (sequentially)": {
+        "app": "ten-k-items-one-time",
+        "query": "&items=1000&updates=1000&percentRandomAwait=0",
+        "version": "5.43.6",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 40.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 54.10000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 39
+            },
+            {
+              "name": ":done",
+              "at": 51.699999928474426
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 39.40000009536743
+            },
+            {
+              "name": ":done",
+              "at": 48.60000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 39.300000071525574
+            },
+            {
+              "name": ":done",
+              "at": 53.800000071525574
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 37.40000009536743
+            },
+            {
+              "name": ":done",
+              "at": 53.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 37.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 48.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 37.09999990463257
+            },
+            {
+              "name": ":done",
+              "at": 54.09999990463257
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 39.200000047683716
+            },
+            {
+              "name": ":done",
+              "at": 60.10000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 38.90000009536743
+            },
+            {
+              "name": ":done",
+              "at": 47.300000071525574
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 39.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 54.10000002384186
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      }
+    },
+    "vue": {
+      "DB Monitor w/ chat simulation": {
+        "app": "dbmon-with-chat",
+        "query": "",
+        "version": "3.5.24",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 34.39999997615814
+            },
+            {
+              "name": "fps",
+              "at": 5085.399999976158,
+              "detail": 120
+            },
+            {
+              "name": "fps",
+              "at": 10086.600000023842,
+              "detail": 119.2
+            },
+            {
+              "name": "fps",
+              "at": 15083.100000023842,
+              "detail": 120
+            },
+            {
+              "name": "fps",
+              "at": 20087.100000023842,
+              "detail": 120
+            },
+            {
+              "name": "fps",
+              "at": 25090,
+              "detail": 119
+            },
+            {
+              "name": ":done",
+              "at": 25090.800000071526
+            }
+          ]
+        ],
+        "measure": "fps",
+        "whatsBetter": "bigger"
+      },
+      "Incrementing Render Effect": {
+        "app": "incrementing-render-effect",
+        "query": "&updates=100000",
+        "version": "3.5.24",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 25.59999990463257
+            },
+            {
+              "name": ":done",
+              "at": 395.59999990463257
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 24.600000023841858
+            },
+            {
+              "name": ":done",
+              "at": 399.2000000476837
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 22.5
+            },
+            {
+              "name": ":done",
+              "at": 390.2999999523163
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 23.300000071525574
+            },
+            {
+              "name": ":done",
+              "at": 391.39999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 23.700000047683716
+            },
+            {
+              "name": ":done",
+              "at": 383
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 22.90000009536743
+            },
+            {
+              "name": ":done",
+              "at": 393
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 22.799999952316284
+            },
+            {
+              "name": ":done",
+              "at": 390.60000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 31.799999952316284
+            },
+            {
+              "name": ":done",
+              "at": 397.7999999523163
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 28.600000023841858
+            },
+            {
+              "name": ":done",
+              "at": 387.7000000476837
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 22.899999976158142
+            },
+            {
+              "name": ":done",
+              "at": 401.60000002384186
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 value, 1k consumers, 10k updates (bursts of 1000)": {
+        "app": "fan-out",
+        "query": "&consumers=1000&updates=10000&burstSize=1000",
+        "version": "3.5.24",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 32.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 173.29999995231628
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 33.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 176.79999995231628
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 31.800000071525574
+            },
+            {
+              "name": ":done",
+              "at": 172
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 34.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 173.60000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 34
+            },
+            {
+              "name": ":done",
+              "at": 177
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 31.700000047683716
+            },
+            {
+              "name": ":done",
+              "at": 166.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 32.699999928474426
+            },
+            {
+              "name": ":done",
+              "at": 175.09999990463257
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 34.200000047683716
+            },
+            {
+              "name": ":done",
+              "at": 178.70000004768372
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 32.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 186.60000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 32.800000071525574
+            },
+            {
+              "name": ":done",
+              "at": 170.40000009536743
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 value, 1k consumers, 10k updates (bursts of 100)": {
+        "app": "fan-out",
+        "query": "&consumers=1000&updates=10000&burstSize=100",
+        "version": "3.5.24",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 32.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 1410
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 33.5
+            },
+            {
+              "name": ":done",
+              "at": 1433.1999999284744
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 37
+            },
+            {
+              "name": ":done",
+              "at": 1412.3000000715256
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 34.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 1418.2000000476837
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 34.5
+            },
+            {
+              "name": ":done",
+              "at": 1405.5999999046326
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 32.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 887.6999999284744
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 34.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 1441.2000000476837
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 32
+            },
+            {
+              "name": ":done",
+              "at": 1413.1999999284744
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 33.200000047683716
+            },
+            {
+              "name": ":done",
+              "at": 1423.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 34.40000009536743
+            },
+            {
+              "name": ":done",
+              "at": 1419.8000000715256
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 item, 100k updates": {
+        "app": "one-item-many-updates",
+        "query": "&updates=100000&percentRandomAwait=0",
+        "version": "3.5.24",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 25.799999952316284
+            },
+            {
+              "name": ":done",
+              "at": 35.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 23
+            },
+            {
+              "name": ":done",
+              "at": 36.700000047683716
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 26.5
+            },
+            {
+              "name": ":done",
+              "at": 36.60000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 25.100000023841858
+            },
+            {
+              "name": ":done",
+              "at": 35.39999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 22.899999976158142
+            },
+            {
+              "name": ":done",
+              "at": 35
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 28.09999990463257
+            },
+            {
+              "name": ":done",
+              "at": 40
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 23.399999976158142
+            },
+            {
+              "name": ":done",
+              "at": 32.60000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 25.200000047683716
+            },
+            {
+              "name": ":done",
+              "at": 37.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 23.100000023841858
+            },
+            {
+              "name": ":done",
+              "at": 35
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 23.699999928474426
+            },
+            {
+              "name": ":done",
+              "at": 33.699999928474426
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 item, 1k updates": {
+        "app": "one-item-many-updates",
+        "query": "&updates=1000&percentRandomAwait=0",
+        "version": "3.5.24",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 24.299999952316284
+            },
+            {
+              "name": ":done",
+              "at": 31.699999928474426
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 22.799999952316284
+            },
+            {
+              "name": ":done",
+              "at": 30.600000023841858
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 23.899999976158142
+            },
+            {
+              "name": ":done",
+              "at": 30.100000023841858
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 32.300000071525574
+            },
+            {
+              "name": ":done",
+              "at": 36.40000009536743
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 23
+            },
+            {
+              "name": ":done",
+              "at": 27.399999976158142
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 23.40000009536743
+            },
+            {
+              "name": ":done",
+              "at": 35.10000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 23
+            },
+            {
+              "name": ":done",
+              "at": 30.399999976158142
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 22.899999976158142
+            },
+            {
+              "name": ":done",
+              "at": 27.199999928474426
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 23.700000047683716
+            },
+            {
+              "name": ":done",
+              "at": 28.700000047683716
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 23.299999952316284
+            },
+            {
+              "name": ":done",
+              "at": 27.200000047683716
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1k items 1 update on 25% (random)": {
+        "app": "ten-k-items-one-time",
+        "query": "&items=1000&updates=250&random=true&percentRandomAwait=0",
+        "version": "3.5.24",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 31.799999952316284
+            },
+            {
+              "name": ":done",
+              "at": 51.39999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 33.700000047683716
+            },
+            {
+              "name": ":done",
+              "at": 46.40000009536743
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 33.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 45.60000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 35.300000071525574
+            },
+            {
+              "name": ":done",
+              "at": 48.300000071525574
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 36.40000009536743
+            },
+            {
+              "name": ":done",
+              "at": 49.200000047683716
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 34
+            },
+            {
+              "name": ":done",
+              "at": 48.300000071525574
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 37
+            },
+            {
+              "name": ":done",
+              "at": 49.40000009536743
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 33.700000047683716
+            },
+            {
+              "name": ":done",
+              "at": 45.700000047683716
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 32.299999952316284
+            },
+            {
+              "name": ":done",
+              "at": 44.39999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 35.5
+            },
+            {
+              "name": ":done",
+              "at": 47.89999997615814
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1k items 1 update on 5% (random)": {
+        "app": "ten-k-items-one-time",
+        "query": "&items=1000&updates=50&random=true&percentRandomAwait=0",
+        "version": "3.5.24",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 32.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 44.299999952316284
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 38
+            },
+            {
+              "name": ":done",
+              "at": 51.10000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 35.09999990463257
+            },
+            {
+              "name": ":done",
+              "at": 47.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 32.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 44.89999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 33.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 45.60000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 32.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 43.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 42.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 59.299999952316284
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 32.200000047683716
+            },
+            {
+              "name": ":done",
+              "at": 43.60000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 36
+            },
+            {
+              "name": ":done",
+              "at": 49
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 33.800000071525574
+            },
+            {
+              "name": ":done",
+              "at": 46.90000009536743
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1k items, 1 update each (sequentially)": {
+        "app": "ten-k-items-one-time",
+        "query": "&items=1000&updates=1000&percentRandomAwait=0",
+        "version": "3.5.24",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 341.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 353.89999997615814
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 33.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 46.60000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 33.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 48.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 31.600000023841858
+            },
+            {
+              "name": ":done",
+              "at": 44.699999928474426
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 32.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 47.200000047683716
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 34.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 55
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 32
+            },
+            {
+              "name": ":done",
+              "at": 47
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 31.5
+            },
+            {
+              "name": ":done",
+              "at": 44.5
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 30.800000071525574
+            },
+            {
+              "name": ":done",
+              "at": 49.10000002384186
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 31.699999928474426
+            },
+            {
+              "name": ":done",
+              "at": 45.199999928474426
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      }
+    }
+  },
+  "selections": {
+    "benches": [
+      "DB Monitor w/ chat simulation",
+      "Incrementing Render Effect",
+      "1 value, 1k consumers, 10k updates (bursts of 1000)",
+      "1 value, 1k consumers, 10k updates (bursts of 100)",
+      "1 item, 100k updates",
+      "1 item, 1k updates",
+      "1k items 1 update on 25% (random)",
+      "1k items 1 update on 5% (random)",
+      "1k items, 1 update each (sequentially)"
+    ],
+    "frameworks": [
+      "ember",
+      "react",
+      "solid",
+      "svelte",
+      "vue"
+    ]
+  },
+  "benchmarkInfo": [
+    {
+      "name": "DB Monitor w/ chat simulation",
+      "app": "dbmon-with-chat",
+      "query": "",
+      "measure": "fps",
+      "whatsBetter": "bigger",
+      "units": "FPS"
+    },
+    {
+      "name": "Incrementing Render Effect",
+      "app": "incrementing-render-effect",
+      "query": "&updates=100000",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1 value, 1k consumers, 10k updates (bursts of 1000)",
+      "app": "fan-out",
+      "query": "&consumers=1000&updates=10000&burstSize=1000",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1 value, 1k consumers, 10k updates (bursts of 100)",
+      "app": "fan-out",
+      "query": "&consumers=1000&updates=10000&burstSize=100",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1 item, 100k updates",
+      "app": "one-item-many-updates",
+      "query": "&updates=100000&percentRandomAwait=0",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1 item, 1k updates",
+      "app": "one-item-many-updates",
+      "query": "&updates=1000&percentRandomAwait=0",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1k items 1 update on 25% (random)",
+      "app": "ten-k-items-one-time",
+      "query": "&items=1000&updates=250&random=true&percentRandomAwait=0",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1k items 1 update on 5% (random)",
+      "app": "ten-k-items-one-time",
+      "query": "&items=1000&updates=50&random=true&percentRandomAwait=0",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1k items, 1 update each (sequentially)",
+      "app": "ten-k-items-one-time",
+      "query": "&items=1000&updates=1000&percentRandomAwait=0",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    }
+  ]
+}
