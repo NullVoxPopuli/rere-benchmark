@@ -40,6 +40,16 @@ export interface ResultSet {
    */
   date: string;
   sha: string;
+  args?: {
+    SKIP_BUILD?: boolean;
+    /**
+     * The CPU slowdown multiplier applied during the run.
+     * 1 (or unset) means no throttling.
+     */
+    CPU_THROTTLE?: number;
+    HEADLESS?: boolean;
+    COUNT?: number;
+  };
   selections: {
     benches: string[];
     frameworks: string[];

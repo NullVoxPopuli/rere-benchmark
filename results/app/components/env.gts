@@ -10,6 +10,10 @@ function dateOf(datetime: string) {
   return new Intl.DateTimeFormat('en-CA').format(new Date(datetime));
 }
 
+function isThrottled(cpuThrottle: number | undefined) {
+  return typeof cpuThrottle === 'number' && cpuThrottle > 1;
+}
+
 export const Info = <template>
   <div class="env-info">
     Tested on
@@ -47,10 +51,16 @@ export const Info = <template>
         {{@env.monitor.hz}}hz Monitor (1 frame =
         {{msOfFrameAt @env.monitor.hz}}ms)
       </li>
+      {{#if (isThrottled @cpuThrottle)}}
+        <li>
+          {{@cpuThrottle}}x CPU slowdown
+        </li>
+      {{/if}}
     </ul>
   </div>
 </template> satisfies TOC<{
   date: string;
   sha: string;
   env: ResultSet['environment'];
+  cpuThrottle: number | undefined;
 }>;
