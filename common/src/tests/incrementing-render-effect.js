@@ -59,7 +59,9 @@ export class IncrementingRenderEffect extends BaseTest {
       let value = get();
 
       if (String(last) !== element.textContent) {
-        throw new Error(`DOM is not in sync`);
+        throw new Error(
+          `DOM is not in sync. Expcted "${last}", received: "${element.textContent}"`,
+        );
       }
 
       if (value >= limit) {

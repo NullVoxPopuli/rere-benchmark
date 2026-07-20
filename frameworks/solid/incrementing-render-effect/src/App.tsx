@@ -3,27 +3,28 @@ import { helpers } from 'common';
 
 const test = helpers.incrementingRenderEffect();
 
+
 function App() {
   const [output, setOutput] = createSignal(0);
-  const [advancer, setAdvancer] = createSignal<(() => void) | undefined>();
   let el!: HTMLOutputElement;
+  let advancer;
 
 
-  createRenderEffect(() => {
-    output();
-    advancer()?.();
-  });
+  const read =() => {
+    advancer?.();
+    return output();
+  };
 
   onMount(() => {
     test.doit({
       element: el,
       get: () => output(),
       set: (value: number) => setOutput(value),
-      setupAdvancer: (fn: () => void) => setAdvancer(() => fn),
+      setupAdvancer: (fn: () => void) => void (advancer = fn),
     });
   });
 
-  return <output ref={el}>{output()}</output>;
+  return <output ref={el}>{read()}</output>;
 }
 
 export default App
