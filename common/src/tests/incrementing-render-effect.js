@@ -20,6 +20,7 @@ export class IncrementingRenderEffect extends BaseTest {
    * @param {() => number} options.get
    * @param {(num: number) => void} options.set
    * @param {(fn: () => void) => void} options.setupAdvancer
+   * @param {Element} options.element
    */
   doit({ get, set, setupAdvancer, element }) {
     // Entangle!
@@ -43,6 +44,7 @@ export class IncrementingRenderEffect extends BaseTest {
    * @param {() => number} options.get
    * @param {(num: number) => void} options.set
    * @param {(fn: () => void) => void} options.setupAdvancer
+   * @param {Element} options.element
    */
   [RUN]({ get, set, setupAdvancer, element }) {
     let name = this.name;
