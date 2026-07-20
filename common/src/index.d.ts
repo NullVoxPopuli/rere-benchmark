@@ -2,12 +2,14 @@ import { OneItem } from './tests/one-item.js';
 import { TenKItems } from './tests/ten-k-items.js';
 import { DBMonWithChat } from './tests/db-mon-with-chat.js';
 import { IncrementingRenderEffect } from './tests/incrementing-render-effect.js';
+import { FanOut } from './tests/fan-out.js';
 
 export const helpers: {
   oneItem10kUpdates: () => OneItem;
   tenKitems1UpdateEach: () => TenKItems;
   dbMonWithChat: () => DBMonWithChat;
   incrementingRenderEffect: () => IncrementingRenderEffect;
+  fanOut: () => FanOut;
 };
 
 export type {

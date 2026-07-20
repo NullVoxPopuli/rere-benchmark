@@ -133,7 +133,6 @@ main.error-page {
 }
 
 table {
-
   th,
   td {
     padding: 0.25rem 0.5rem;
@@ -149,7 +148,6 @@ table {
     display: flex;
     position: relative;
     justify-content: end;
-
 
     .units {
       position: absolute;

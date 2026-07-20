@@ -41,6 +41,21 @@ export function tryVerify(label, check, attempts = 0) {
   );
 }
 
+const macrotaskChannel = new MessageChannel();
+
+/**
+ * Resolves in a new macrotask, without setTimeout's clamping.
+ *
+ * This is how socket messages arrive: each one is its own task,
+ * not a microtask -- so frameworks get a chance to render between them.
+ */
+export function nextMacrotask() {
+  return new Promise((resolve) => {
+    macrotaskChannel.port1.onmessage = () => resolve(undefined);
+    macrotaskChannel.port2.postMessage(null);
+  });
+}
+
 const state = Symbol.for('worker:state');
 
 export function globalState() {
