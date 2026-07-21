@@ -128,39 +128,58 @@ export async function startDevServer(
   port: number,
 ): Promise<{ url: string; stop: () => Promise<void> }> {
   const child: ChildProcess = spawn(
-    'pnpm',
-    ['vite', '--port', String(port), '--strictPort'],
+    // the app's own vite binary: no package-manager indirection to differ
+    // between local and CI
+    join(dir, 'node_modules', '.bin', 'vite'),
+    // explicit IPv4 host: on CI runners `localhost` can resolve to ::1
+    // first, leaving 127.0.0.1 refusing connections
+    ['--port', String(port), '--strictPort', '--host', '127.0.0.1'],
     {
       cwd: dir,
-      stdio: 'ignore',
+      stdio: ['ignore', 'pipe', 'pipe'],
       detached: true,
     },
   );
+
+  let output = '';
+
+  child.stdout?.on('data', (chunk: Buffer) => (output += chunk.toString()));
+  child.stderr?.on('data', (chunk: Buffer) => (output += chunk.toString()));
+
+  let exited = false;
+
+  child.on('exit', () => (exited = true));
+
+  const stop = async () => {
+    if (child.pid) {
+      try {
+        process.kill(-child.pid, 'SIGTERM');
+      } catch {
+        child.kill('SIGTERM');
+      }
+    }
+  };
 
   const url = `http://127.0.0.1:${port}`;
   const deadline = Date.now() + 60_000;
 
   while (Date.now() < deadline) {
+    if (exited) {
+      throw new Error(
+        `vite dev for ${dir} exited before listening:\n${output}`,
+      );
+    }
+
     try {
       const response = await fetch(url);
 
-      if (response.ok) break;
+      if (response.ok) return { url, stop };
     } catch {
       // not up yet
     }
     await new Promise((resolve) => setTimeout(resolve, 250));
   }
 
-  return {
-    url,
-    stop: async () => {
-      if (child.pid) {
-        try {
-          process.kill(-child.pid, 'SIGTERM');
-        } catch {
-          child.kill('SIGTERM');
-        }
-      }
-    },
-  };
+  await stop();
+  throw new Error(`vite dev for ${dir} never answered on ${url}:\n${output}`);
 }
