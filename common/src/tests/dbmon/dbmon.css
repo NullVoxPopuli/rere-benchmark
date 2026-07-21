@@ -1,9 +1,9 @@
-.table>thead>tr>th,
-.table>tbody>tr>th,
-.table>tfoot>tr>th,
-.table>thead>tr>td,
-.table>tbody>tr>td,
-.table>tfoot>tr>td {
+.table > thead > tr > th,
+.table > tbody > tr > th,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td,
+.table > tfoot > tr > td {
   border-top: 1px solid #ddd;
   line-height: 1.42857143;
   padding: 8px;
@@ -14,8 +14,8 @@
   width: 100%;
 }
 
-.table-striped>tbody>tr:nth-child(odd)>td,
-.table-striped>tbody>tr:nth-child(odd)>th {
+.table-striped > tbody > tr:nth-child(odd) > td,
+.table-striped > tbody > tr:nth-child(odd) > th {
   background: #f9f9f9;
 }
 
@@ -58,7 +58,7 @@
   z-index: 1010;
 }
 
-.popover>.arrow:after {
+.popover > .arrow:after {
   border-width: 10px;
   content: '';
 }
@@ -67,7 +67,7 @@
   margin-left: -10px;
 }
 
-.popover.left>.arrow {
+.popover.left > .arrow {
   border-right-width: 0;
   border-left-color: rgba(0, 0, 0, 0.25);
   margin-top: -11px;
@@ -75,7 +75,7 @@
   top: 50%;
 }
 
-.popover.left>.arrow:after {
+.popover.left > .arrow:after {
   border-left-color: #fff;
   border-right-width: 0;
   bottom: -10px;
@@ -83,12 +83,12 @@
   right: 1px;
 }
 
-.popover>.arrow {
+.popover > .arrow {
   border-width: 11px;
 }
 
-.popover>.arrow,
-.popover>.arrow:after {
+.popover > .arrow,
+.popover > .arrow:after {
   border-color: transparent;
   border-style: solid;
   display: block;
