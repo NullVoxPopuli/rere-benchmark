@@ -33,7 +33,7 @@ function colorFor(
   return `oklch(${color.l} ${color.c} ${color.h}deg)`;
 }
 
-type ValueMode = "raw" | "linear" | "log" | "ranking";
+type ValueMode = "raw" | "linear" | "log" | "ranking" | "times";
 
 /**
  * The same normalization the cell colors use, as a displayable value.
@@ -103,6 +103,26 @@ function rankFor(
   }
 
   return 1 + better;
+}
+
+/**
+ * How many times worse than the row's best this value is: 1 for the
+ * best, 1.1 for 10% worse, etc. Always >= 1 regardless of direction.
+ */
+function timesBestFor(
+  speed: number | undefined,
+  min: number | undefined,
+  max: number | undefined,
+  bestIsMax: boolean,
+) {
+  if (speed === undefined || min === undefined || max === undefined) return;
+  if (speed <= 0 || min <= 0) return;
+
+  return bestIsMax ? max / speed : speed / min;
+}
+
+function formatTimes(ratio: number) {
+  return `${Math.round(ratio * 100) / 100}x`;
 }
 
 function speedsFor(file: ResultSet, benchInfo: BenchmarkInfo, frameworkNames: string[]) {
@@ -180,6 +200,12 @@ class TableRow extends Component<{
         const rank = rankFor(this.speeds, this.args.frameworkNames, framework, bestIsMax);
 
         return rank === undefined ? undefined : ordinal(rank);
+      }
+
+      case "times": {
+        const ratio = timesBestFor(speed, this.min, this.max, bestIsMax);
+
+        return ratio === undefined ? undefined : formatTimes(ratio);
       }
 
       default:
@@ -288,6 +314,43 @@ class Table extends Component<{
     return sums;
   }
 
+  /**
+   * Weighted geometric mean of each framework's times-best multipliers
+   * across this table's benches: exp(sum(w * ln(ratio)) / sum(w)).
+   * Every bench currently weighs 1 (BenchmarkInfo.weight is the seam).
+   */
+  @cached
+  get timesTotals(): Record<string, number | undefined> {
+    const logSums: Record<string, number> = {};
+    const weightSums: Record<string, number> = {};
+
+    for (const bench of this.args.benches) {
+      const weight = bench.weight ?? 1;
+      const { speeds, min, max } = speedsFor(this.args.file, bench, this.frameworkNames);
+
+      for (const framework of this.frameworkNames) {
+        const ratio = timesBestFor(speeds[framework], min, max, bench.whatsBetter === "bigger");
+
+        if (ratio === undefined) continue;
+
+        logSums[framework] = (logSums[framework] ?? 0) + weight * Math.log(ratio);
+        weightSums[framework] = (weightSums[framework] ?? 0) + weight;
+      }
+    }
+
+    const means: Record<string, number | undefined> = {};
+
+    for (const framework of this.frameworkNames) {
+      const weightSum = weightSums[framework];
+
+      if (!weightSum) continue;
+
+      means[framework] = Math.exp((logSums[framework] ?? 0) / weightSum);
+    }
+
+    return means;
+  }
+
   totalValue = (framework: string) => {
     const total = this.totals[framework];
 
@@ -306,6 +369,12 @@ class Table extends Component<{
         const rank = rankFor(this.rankTotals, this.frameworkNames, framework, false);
 
         return rank === undefined ? undefined : ordinal(rank);
+      }
+
+      case "times": {
+        const mean = this.timesTotals[framework];
+
+        return mean === undefined ? undefined : formatTimes(mean);
       }
 
       default:
@@ -389,7 +458,9 @@ export default class ResultsTables extends Component<{
   get mode(): ValueMode {
     const mode = this.router.currentRoute?.queryParams["mode"];
 
-    return mode === "linear" || mode === "log" || mode === "ranking" ? mode : "raw";
+    return mode === "linear" || mode === "log" || mode === "ranking" || mode === "times"
+      ? mode
+      : "raw";
   }
 
   setMode = (mode: ValueMode) => {
@@ -460,6 +531,16 @@ export default class ResultsTables extends Component<{
         />
         ranking
         <span class="units">(1st is best)</span>
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="value-mode"
+          checked={{this.isMode "times"}}
+          {{on "change" (fn this.setMode "times")}}
+        />
+        times best
+        <span class="units">(1x is best)</span>
       </label>
     </fieldset>
 

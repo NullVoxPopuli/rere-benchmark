@@ -32,6 +32,11 @@ export interface BenchmarkInfo {
   measure?: string;
   whatsBetter: "bigger" | "smaller";
   units: string;
+  /**
+   * Relative importance in cross-bench aggregations (e.g. the "times
+   * best" total's weighted geometric mean). Defaults to 1.
+   */
+  weight?: number;
 }
 
 export interface ResultSet {
