@@ -31,6 +31,8 @@ function colorFor(
   return `oklch(${color.l} ${color.c} ${color.h}deg)`;
 }
 
+type ValueMode = "raw" | "linear" | "log";
+
 /**
  * The same normalization the cell colors use, as a displayable value.
  */
@@ -41,11 +43,38 @@ function scoreFor(speed: number | undefined, min: number | undefined, max: numbe
   return ((speed - min) / (max - min)).toFixed(2);
 }
 
+/**
+ * One decade of spread: distances from best map like log10(1 + 9u).
+ */
+const LOG_SCALE = 9;
+
+/**
+ * Like scoreFor, but warped so the steep part of the log sits at the
+ * "best" end: frameworks close to the best spread apart, differences
+ * among the slowest compress. Orientation matches the linear score
+ * (and the colors): best is 1 when bigger is better, 0 otherwise.
+ */
+function logScoreFor(
+  speed: number | undefined,
+  min: number | undefined,
+  max: number | undefined,
+  bestIsMax: boolean,
+) {
+  if (speed === undefined || min === undefined || max === undefined) return;
+  if (max === min) return (bestIsMax ? 1 : 0).toFixed(2);
+
+  const linear = (speed - min) / (max - min);
+  const distanceFromBest = bestIsMax ? 1 - linear : linear;
+  const warped = Math.log1p(LOG_SCALE * distanceFromBest) / Math.log1p(LOG_SCALE);
+
+  return (bestIsMax ? 1 - warped : warped).toFixed(2);
+}
+
 class TableRow extends Component<{
   file: ResultSet;
   benchInfo: BenchmarkInfo;
   frameworkNames: string[];
-  showScores: boolean;
+  mode: ValueMode;
 }> {
   declare speeds: Record<string, number | undefined>;
   declare colors: Record<string, string | undefined>;
@@ -58,7 +87,7 @@ class TableRow extends Component<{
       file: ResultSet;
       benchInfo: BenchmarkInfo;
       frameworkNames: string[];
-      showScores: boolean;
+      mode: ValueMode;
     },
   ) {
     super(owner, args);
@@ -91,8 +120,17 @@ class TableRow extends Component<{
     }
   }
 
-  score = (framework: string) => {
-    return scoreFor(this.speeds[framework], this.min, this.max);
+  value = (framework: string) => {
+    const speed = this.speeds[framework];
+
+    switch (this.args.mode) {
+      case "linear":
+        return scoreFor(speed, this.min, this.max);
+      case "log":
+        return logScoreFor(speed, this.min, this.max, this.args.benchInfo.whatsBetter === "bigger");
+      default:
+        return speed;
+    }
   };
 
   <template>
@@ -107,9 +145,9 @@ class TableRow extends Component<{
       </td>
 
       {{#each @frameworkNames as |framework|}}
-        <td style="background: {{get this.colors framework}};"><span class="value">{{#if
-              @showScores
-            }}{{this.score framework}}{{else}}{{get this.speeds framework}}{{/if}}</span></td>
+        <td style="background: {{get this.colors framework}};"><span class="value">{{this.value
+              framework
+            }}</span></td>
       {{/each}}
     </tr>
   </template>
@@ -118,7 +156,7 @@ class TableRow extends Component<{
 class Table extends Component<{
   benches: BenchmarkInfo[];
   file: ResultSet;
-  showScores: boolean;
+  mode: ValueMode;
 }> {
   shouldShowTotals = false;
   totals: Record<string, number> = {};
@@ -128,7 +166,7 @@ class Table extends Component<{
     args: {
       benches: BenchmarkInfo[];
       file: ResultSet;
-      showScores: boolean;
+      mode: ValueMode;
     },
   ) {
     super(owner, args);
@@ -169,8 +207,22 @@ class Table extends Component<{
     return this.args.file.selections.frameworks;
   }
 
-  totalScore = (framework: string) => {
-    return scoreFor(this.totals[framework], this.totals.min, this.totals.max);
+  totalValue = (framework: string) => {
+    const total = this.totals[framework];
+
+    switch (this.args.mode) {
+      case "linear":
+        return scoreFor(total, this.totals.min, this.totals.max);
+      case "log":
+        return logScoreFor(
+          total,
+          this.totals.min,
+          this.totals.max,
+          this.args.benches[0]?.whatsBetter === "bigger",
+        );
+      default:
+        return total;
+    }
   };
 
   versionFor = (framework: string) => {
@@ -215,7 +267,7 @@ class Table extends Component<{
             @file={{@file}}
             @benchInfo={{bench}}
             @frameworkNames={{this.frameworkNames}}
-            @showScores={{@showScores}}
+            @mode={{@mode}}
           />
         {{/each}}
       </tbody>
@@ -231,10 +283,7 @@ class Table extends Component<{
                   this.totals.max
                 }}"
               >
-                <span class="value">{{#if @showScores}}{{this.totalScore framework}}{{else}}{{get
-                      this.totals
-                      framework
-                    }}{{/if}}</span>
+                <span class="value">{{this.totalValue framework}}</span>
               </td>
             {{/each}}
           </tr>
@@ -247,10 +296,10 @@ class Table extends Component<{
 export default class ResultsTables extends Component<{
   model: Model;
 }> {
-  @tracked showScores = false;
+  @tracked mode: ValueMode = "raw";
 
-  showRawValues = () => (this.showScores = false);
-  showScoreValues = () => (this.showScores = true);
+  setMode = (mode: ValueMode) => (this.mode = mode);
+  isMode = (mode: ValueMode) => this.mode === mode;
 
   get file() {
     return this.args.model.data;
@@ -280,8 +329,8 @@ export default class ResultsTables extends Component<{
         <input
           type="radio"
           name="value-mode"
-          checked={{unless this.showScores true}}
-          {{on "change" this.showRawValues}}
+          checked={{this.isMode "raw"}}
+          {{on "change" (fn this.setMode "raw")}}
         />
         raw
       </label>
@@ -289,18 +338,28 @@ export default class ResultsTables extends Component<{
         <input
           type="radio"
           name="value-mode"
-          checked={{this.showScores}}
-          {{on "change" this.showScoreValues}}
+          checked={{this.isMode "linear"}}
+          {{on "change" (fn this.setMode "linear")}}
         />
         score
         <span class="units">(normalized 0 to 1)</span>
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="value-mode"
+          checked={{this.isMode "log"}}
+          {{on "change" (fn this.setMode "log")}}
+        />
+        log score
+        <span class="units">(more variance near best)</span>
       </label>
     </fieldset>
 
     {{#if this.higherBenches.length}}
       <h2>higher is better</h2>
 
-      <Table @benches={{this.higherBenches}} @file={{this.file}} @showScores={{this.showScores}} />
+      <Table @benches={{this.higherBenches}} @file={{this.file}} @mode={{this.mode}} />
       <br />
       <br />
       <br />
@@ -309,7 +368,7 @@ export default class ResultsTables extends Component<{
     {{#if this.lowerBenches.length}}
       <h2>lower is better</h2>
 
-      <Table @benches={{this.lowerBenches}} @file={{this.file}} @showScores={{this.showScores}} />
+      <Table @benches={{this.lowerBenches}} @file={{this.file}} @mode={{this.mode}} />
       <br />
       <br />
       <br />
