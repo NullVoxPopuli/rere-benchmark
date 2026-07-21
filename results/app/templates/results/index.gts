@@ -1,5 +1,5 @@
 import Component from "@glimmer/component";
-import { cached } from "@glimmer/tracking";
+import { cached, tracked } from "@glimmer/tracking";
 import { warn } from "@ember/debug";
 import { get } from "@ember/helper";
 
@@ -31,10 +31,21 @@ function colorFor(
   return `oklch(${color.l} ${color.c} ${color.h}deg)`;
 }
 
+/**
+ * The same normalization the cell colors use, as a displayable value.
+ */
+function scoreFor(speed: number | undefined, min: number | undefined, max: number | undefined) {
+  if (speed === undefined || min === undefined || max === undefined) return;
+  if (max === min) return (1).toFixed(2);
+
+  return ((speed - min) / (max - min)).toFixed(2);
+}
+
 class TableRow extends Component<{
   file: ResultSet;
   benchInfo: BenchmarkInfo;
   frameworkNames: string[];
+  showScores: boolean;
 }> {
   declare speeds: Record<string, number | undefined>;
   declare colors: Record<string, string | undefined>;
@@ -47,6 +58,7 @@ class TableRow extends Component<{
       file: ResultSet;
       benchInfo: BenchmarkInfo;
       frameworkNames: string[];
+      showScores: boolean;
     },
   ) {
     super(owner, args);
@@ -79,6 +91,10 @@ class TableRow extends Component<{
     }
   }
 
+  score = (framework: string) => {
+    return scoreFor(this.speeds[framework], this.min, this.max);
+  };
+
   <template>
     <tr>
       <td class="benchmark-name">
@@ -91,10 +107,9 @@ class TableRow extends Component<{
       </td>
 
       {{#each @frameworkNames as |framework|}}
-        <td style="background: {{get this.colors framework}};"><span class="value">{{get
-              this.speeds
-              framework
-            }}</span></td>
+        <td style="background: {{get this.colors framework}};"><span class="value">{{#if
+              @showScores
+            }}{{this.score framework}}{{else}}{{get this.speeds framework}}{{/if}}</span></td>
       {{/each}}
     </tr>
   </template>
@@ -103,6 +118,7 @@ class TableRow extends Component<{
 class Table extends Component<{
   benches: BenchmarkInfo[];
   file: ResultSet;
+  showScores: boolean;
 }> {
   shouldShowTotals = false;
   totals: Record<string, number> = {};
@@ -112,6 +128,7 @@ class Table extends Component<{
     args: {
       benches: BenchmarkInfo[];
       file: ResultSet;
+      showScores: boolean;
     },
   ) {
     super(owner, args);
@@ -152,6 +169,10 @@ class Table extends Component<{
     return this.args.file.selections.frameworks;
   }
 
+  totalScore = (framework: string) => {
+    return scoreFor(this.totals[framework], this.totals.min, this.totals.max);
+  };
+
   versionFor = (framework: string) => {
     /**
      * Because each bench mark is a different app, it is possible the versions diverge
@@ -190,7 +211,12 @@ class Table extends Component<{
       </thead>
       <tbody>
         {{#each @benches as |bench|}}
-          <TableRow @file={{@file}} @benchInfo={{bench}} @frameworkNames={{this.frameworkNames}} />
+          <TableRow
+            @file={{@file}}
+            @benchInfo={{bench}}
+            @frameworkNames={{this.frameworkNames}}
+            @showScores={{@showScores}}
+          />
         {{/each}}
       </tbody>
 
@@ -205,7 +231,10 @@ class Table extends Component<{
                   this.totals.max
                 }}"
               >
-                <span class="value">{{get this.totals framework}}</span>
+                <span class="value">{{#if @showScores}}{{this.totalScore framework}}{{else}}{{get
+                      this.totals
+                      framework
+                    }}{{/if}}</span>
               </td>
             {{/each}}
           </tr>
@@ -218,6 +247,11 @@ class Table extends Component<{
 export default class ResultsTables extends Component<{
   model: Model;
 }> {
+  @tracked showScores = false;
+
+  showRawValues = () => (this.showScores = false);
+  showScoreValues = () => (this.showScores = true);
+
   get file() {
     return this.args.model.data;
   }
@@ -240,10 +274,33 @@ export default class ResultsTables extends Component<{
   }
 
   <template>
+    <fieldset class="value-mode">
+      <legend>values</legend>
+      <label>
+        <input
+          type="radio"
+          name="value-mode"
+          checked={{unless this.showScores true}}
+          {{on "change" this.showRawValues}}
+        />
+        raw
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="value-mode"
+          checked={{this.showScores}}
+          {{on "change" this.showScoreValues}}
+        />
+        score
+        <span class="units">(normalized 0 to 1)</span>
+      </label>
+    </fieldset>
+
     {{#if this.higherBenches.length}}
       <h2>higher is better</h2>
 
-      <Table @benches={{this.higherBenches}} @file={{this.file}} />
+      <Table @benches={{this.higherBenches}} @file={{this.file}} @showScores={{this.showScores}} />
       <br />
       <br />
       <br />
@@ -252,7 +309,7 @@ export default class ResultsTables extends Component<{
     {{#if this.lowerBenches.length}}
       <h2>lower is better</h2>
 
-      <Table @benches={{this.lowerBenches}} @file={{this.file}} />
+      <Table @benches={{this.lowerBenches}} @file={{this.file}} @showScores={{this.showScores}} />
       <br />
       <br />
       <br />

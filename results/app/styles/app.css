@@ -163,3 +163,23 @@ table {
     mix-blend-mode: difference;
   }
 }
+
+.value-mode {
+  display: inline-flex;
+  gap: 1rem;
+  border: 1px solid lightgray;
+  padding: 0.25rem 0.75rem;
+
+  legend {
+    font-size: 0.8rem;
+  }
+
+  label {
+    cursor: pointer;
+
+    .units {
+      font-size: 0.8rem;
+      color: gray;
+    }
+  }
+}
