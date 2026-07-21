@@ -5,7 +5,7 @@ const test = helpers.incrementingRenderEffect();
 
 function App() {
   const [output, setOutput] = useState(-1);
-  const advancerRef = useRef<(() => void) | undefined>();
+  const advancerRef = useRef<(() => void) | undefined>(undefined);
   const outputRef = useRef(-1);
   const elRef = useRef<HTMLOutputElement>(null);
   outputRef.current = output;
