@@ -1,0 +1,45 @@
+name: "Framework Apps"
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request: {}
+
+concurrency:
+  group: ci-framework-apps-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: "Playwright (every framework x every bench)"
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+      # the apps' workers live in common/, which has no tsconfig of its
+      # own: vite/rolldown tsconfig discovery walks up to the repo root
+      # tsconfig.json, whose `extends` resolves from root node_modules
+      - run: pnpm install
+      - run: pnpm install
+        working-directory: tests
+      - run: pnpm exec playwright install --with-deps chromium
+        working-directory: tests
+      # global-setup installs and builds all 25 apps (and common)
+      - run: pnpm test
+        working-directory: tests
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            tests/playwright-report/
+            tests/test-results/
+          retention-days: 7
