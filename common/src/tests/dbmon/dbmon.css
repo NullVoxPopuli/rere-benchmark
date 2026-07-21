@@ -9,9 +9,11 @@
   padding: 8px;
   vertical-align: top;
 }
+
 .table {
   width: 100%;
 }
+
 .table-striped > tbody > tr:nth-child(odd) > td,
 .table-striped > tbody > tr:nth-child(odd) > th {
   background: #f9f9f9;
@@ -29,9 +31,11 @@
   vertical-align: baseline;
   white-space: nowrap;
 }
+
 .label-success {
   background-color: #5cb85c;
 }
+
 .label-warning {
   background-color: #f0ad4e;
 }
@@ -53,13 +57,16 @@
   white-space: normal;
   z-index: 1010;
 }
+
 .popover > .arrow:after {
   border-width: 10px;
   content: '';
 }
+
 .popover.left {
   margin-left: -10px;
 }
+
 .popover.left > .arrow {
   border-right-width: 0;
   border-left-color: rgba(0, 0, 0, 0.25);
@@ -67,6 +74,7 @@
   right: -11px;
   top: 50%;
 }
+
 .popover.left > .arrow:after {
   border-left-color: #fff;
   border-right-width: 0;
@@ -74,9 +82,11 @@
   content: ' ';
   right: 1px;
 }
+
 .popover > .arrow {
   border-width: 11px;
 }
+
 .popover > .arrow,
 .popover > .arrow:after {
   border-color: transparent;
@@ -94,8 +104,38 @@
 .Query {
   position: relative;
 }
+
 .Query:hover .popover {
   display: block;
   left: -100%;
   width: 100%;
+}
+
+/**
+* Normaliization to try to make layout/paint not part of the benchmark
+*/
+html {
+  overflow: hidden;
+}
+
+table td {
+  width: 75px;
+  max-width: 75px;
+  text-overflow: clip;
+  overflow: hidden;
+}
+
+table tr {
+  content-visibility: auto;
+}
+
+.messages {
+  will-change: transform;
+}
+
+.chat {
+  contain: layout style;
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 72px;
+  /* Providing an estimated size helps scrollbar stability */
 }
