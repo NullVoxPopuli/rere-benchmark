@@ -1,12 +1,8 @@
-import Application from '@ember/application';
-import compatModules from '@embroider/virtual/compat-modules';
-
-import Resolver from 'ember-resolver';
-
-import config from './config/environment';
+import Application from "ember-strict-application-resolver";
 
 export default class App extends Application {
-  modulePrefix = config.modulePrefix;
-  podModulePrefix = config.podModulePrefix;
-  Resolver = Resolver.withModules(compatModules);
+  modules = {
+    ...import.meta.glob("./router.*", { eager: true }),
+    ...import.meta.glob("./templates/**/*", { eager: true }),
+  };
 }

@@ -1,5 +1,6 @@
 import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
+
 import { helpers } from "common";
 import { modifier } from "ember-modifier";
 
@@ -12,6 +13,7 @@ export default class Test extends Component {
   setup = modifier((element) => {
     if (this.#advancer) {
       this.#advancer();
+
       return;
     }
 

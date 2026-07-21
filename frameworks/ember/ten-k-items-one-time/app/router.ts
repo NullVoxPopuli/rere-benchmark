@@ -1,12 +1,10 @@
-import EmberRouter from '@ember/routing/router';
+import EmbroiderRouter from "@embroider/router";
 
-import config from 'my-app/config/environment';
+import config from "#config";
 
-export default class Router extends EmberRouter {
+export default class Router extends EmbroiderRouter {
   location = config.locationType;
   rootURL = config.rootURL;
 }
 
-Router.map(function () {
-  // Add route declarations here
-});
+Router.map(function () {});

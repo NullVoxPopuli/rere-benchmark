@@ -1,8 +1,8 @@
 const ENV = {
-  modulePrefix: 'results',
-  environment: import.meta.env.DEV ? 'development' : 'production',
-  rootURL: '/',
-  locationType: 'history',
+  modulePrefix: "results",
+  environment: import.meta.env.DEV ? "development" : "production",
+  rootURL: "/",
+  locationType: "history",
   EmberENV: {
     EXTEND_PROTOTYPES: false,
     FEATURES: {},
@@ -10,7 +10,7 @@ const ENV = {
   APP: {},
 } as {
   environment: string;
-  locationType: 'history' | 'hash' | 'none';
+  locationType: "history" | "hash" | "none";
   rootURL: string;
   APP: Record<string, unknown>;
 };
@@ -18,7 +18,7 @@ const ENV = {
 export default ENV;
 
 export function enterTestMode() {
-  ENV.locationType = 'none';
-  ENV.APP.rootElement = '#ember-testing';
+  ENV.locationType = "none";
+  ENV.APP.rootElement = "#ember-testing";
   ENV.APP.autoboot = false;
 }

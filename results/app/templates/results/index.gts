@@ -1,27 +1,29 @@
-import Component from '@glimmer/component';
-import { FrameworkInfo } from '#components/framework-info.gts';
-import type { Model } from '#routes/results.ts';
-import type { BenchmarkInfo, ResultSet } from '#types';
-import { round, timeFromMarks } from '#utils';
-import { interpolate } from 'culori';
-import { cached } from '@glimmer/tracking';
-import { warn } from '@ember/debug';
-import type Owner from '@ember/owner';
-import { get } from '@ember/helper';
+import Component from "@glimmer/component";
+import { cached } from "@glimmer/tracking";
+import { warn } from "@ember/debug";
+import { get } from "@ember/helper";
 
-const start = '#ff7777';
-const end = '#77ff77';
+import { interpolate } from "culori";
+
+import { FrameworkInfo } from "#components/framework-info.gts";
+import { round, timeFromMarks } from "#utils";
+
+import type Owner from "@ember/owner";
+import type { Model } from "#routes/results.ts";
+import type { BenchmarkInfo, ResultSet } from "#types";
+
+const start = "#ff7777";
+const end = "#77ff77";
+
 function colorFor(
   speed: number | undefined,
   min: number | undefined,
   max: number | undefined,
-  reverse = false
+  reverse = false,
 ) {
   if (!speed || !min || !max) return;
-  const interpolation = interpolate(
-    reverse ? [start, end] : [end, start],
-    'oklch'
-  );
+
+  const interpolation = interpolate(reverse ? [start, end] : [end, start], "oklch");
 
   const normalized = (speed - min) / (max - min);
   const color = interpolation(normalized);
@@ -45,7 +47,7 @@ class TableRow extends Component<{
       file: ResultSet;
       benchInfo: BenchmarkInfo;
       frameworkNames: string[];
-    }
+    },
   ) {
     super(owner, args);
 
@@ -72,7 +74,7 @@ class TableRow extends Component<{
         time,
         this.min,
         this.max,
-        args.benchInfo.whatsBetter === 'bigger'
+        args.benchInfo.whatsBetter === "bigger",
       );
     }
   }
@@ -89,9 +91,10 @@ class TableRow extends Component<{
       </td>
 
       {{#each @frameworkNames as |framework|}}
-        <td style="background: {{get this.colors framework}};"><span
-            class="value"
-          >{{get this.speeds framework}}</span></td>
+        <td style="background: {{get this.colors framework}};"><span class="value">{{get
+              this.speeds
+              framework
+            }}</span></td>
       {{/each}}
     </tr>
   </template>
@@ -109,7 +112,7 @@ class Table extends Component<{
     args: {
       benches: BenchmarkInfo[];
       file: ResultSet;
-    }
+    },
   ) {
     super(owner, args);
 
@@ -132,6 +135,7 @@ class Table extends Component<{
 
       let max = -Infinity;
       let min = Infinity;
+
       for (const [key, value] of Object.entries(this.totals)) {
         this.totals[key] = round(value);
 
@@ -153,17 +157,17 @@ class Table extends Component<{
      * Because each bench mark is a different app, it is possible the versions diverge
      */
     const versions = Object.values(this.args.file.results[framework] ?? {}).map(
-      (result) => result.version
+      (result) => result.version,
     );
 
     const versionSet = new Set(versions);
 
     warn(
-      `There is more than one version for ${framework}. You need to do some upgrading to get the benchmark apps for ${framework} in sync. Found ${[...versionSet].join(', ')}`,
+      `There is more than one version for ${framework}. You need to do some upgrading to get the benchmark apps for ${framework} in sync. Found ${[...versionSet].join(", ")}`,
       versionSet.size > 1,
       {
-        id: 'benchmark-app-maintenance-needed-version-divergence',
-      }
+        id: "benchmark-app-maintenance-needed-version-divergence",
+      },
     );
 
     return [...versionSet][0];
@@ -186,11 +190,7 @@ class Table extends Component<{
       </thead>
       <tbody>
         {{#each @benches as |bench|}}
-          <TableRow
-            @file={{@file}}
-            @benchInfo={{bench}}
-            @frameworkNames={{this.frameworkNames}}
-          />
+          <TableRow @file={{@file}} @benchInfo={{bench}} @frameworkNames={{this.frameworkNames}} />
         {{/each}}
       </tbody>
 
@@ -228,19 +228,15 @@ export default class ResultsTables extends Component<{
 
   @cached
   get higherBenches() {
-    return this.benchmarkInfo.filter((bench) => bench.whatsBetter === 'bigger');
+    return this.benchmarkInfo.filter((bench) => bench.whatsBetter === "bigger");
   }
 
   @cached
   get lowerBenches() {
     return this.benchmarkInfo
-      .filter((bench) => bench.whatsBetter !== 'bigger')
+      .filter((bench) => bench.whatsBetter !== "bigger")
       .toSorted()
-      .toSorted(
-        (a, b) =>
-          (a.name.includes('async') ? 1 : 0) -
-          (b.name.includes('async') ? 1 : 0)
-      );
+      .toSorted((a, b) => (a.name.includes("async") ? 1 : 0) - (b.name.includes("async") ? 1 : 0));
   }
 
   <template>

@@ -1,3 +1,3 @@
-declare module 'virtual:result-sets' {
+declare module "virtual:result-sets" {
   export const results: string[];
 }

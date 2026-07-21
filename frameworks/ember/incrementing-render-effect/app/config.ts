@@ -1,25 +1,17 @@
-const ENV = {
-  modulePrefix: 'my-app',
-  environment: import.meta.env.DEV ? 'development' : 'production',
-  rootURL: '/',
-  locationType: 'history',
-  EmberENV: {
-    EXTEND_PROTOTYPES: false,
-    FEATURES: {
-      // Here you can enable experimental features on an ember canary build
-      // e.g. EMBER_NATIVE_DECORATOR_SUPPORT: true
-    },
-  },
-  APP: {
-    // Here you can pass flags/options to your application instance
-    // when it is created
-  } as { autoboot?: boolean; rootElement?: string },
+interface Config {
+  environment: "development" | "production";
+  locationType: "history" | "hash" | "none" | "auto";
+  rootURL: string;
+  EmberENV?: Record<string, unknown>;
+  APP: Record<string, unknown> & { rootElement?: string; autoboot?: boolean };
+}
+
+const ENV: Config = {
+  environment: import.meta.env.DEV ? "development" : "production",
+  rootURL: "/",
+  locationType: "history",
+  EmberENV: {},
+  APP: {},
 };
 
 export default ENV;
-
-export function enterTestMode() {
-  ENV.locationType = 'none';
-  ENV.APP.rootElement = '#ember-testing';
-  ENV.APP.autoboot = false;
-}

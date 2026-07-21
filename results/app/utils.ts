@@ -1,6 +1,8 @@
-import { assert } from '@ember/debug';
-import type { Mark, ResultData } from '#types';
-import { frameworks } from './frameworks.ts';
+import { assert } from "@ember/debug";
+
+import { frameworks } from "./frameworks.ts";
+
+import type { Mark, ResultData } from "#types";
 
 export function getFrameworkVersion(results: ResultData, framework: string) {
   return Object.values(results[framework] ?? {})[0]?.version;
@@ -59,20 +61,24 @@ function averageOf(arrayOfMarks: Array<Mark[]>) {
   const durations = [];
 
   for (const pair of arrayOfMarks) {
-    const start = pair.find((x) => x.name.endsWith('start'));
-    const done = pair.find((x) => x.name.endsWith('done'));
+    const start = pair.find((x) => x.name.endsWith("start"));
+    const done = pair.find((x) => x.name.endsWith("done"));
 
     if (!done || !start) {
       console.warn(`Dataset could have missing data`);
-      console.log(arrayOfMarks);
+      console.debug(arrayOfMarks);
       continue;
     }
+
     const duration = done.at - start.at;
+
     durations.push(duration);
   }
 
   let total = 0;
+
   durations.forEach((d) => (total += d));
+
   return round(total / durations.length);
 }
 
@@ -88,15 +94,13 @@ function averageOfNamedMark(sampleBuckets: Array<Mark[]>, name: string) {
   }
 
   let total = 0;
+
   fps.forEach((f) => (total += f));
 
   return round(total / fps.length);
 }
 
-export function timeFromMarks(
-  times: Array<Mark[]>,
-  measure: string | undefined
-) {
+export function timeFromMarks(times: Array<Mark[]>, measure: string | undefined) {
   if (measure) {
     return averageOfNamedMark(times, measure);
   }
@@ -105,7 +109,7 @@ export function timeFromMarks(
 }
 
 export function isBiggerBetter(results: { whatsBetter: string }): boolean {
-  return results.whatsBetter === 'bigger';
+  return results.whatsBetter === "bigger";
 }
 
 export function dataOf(results: ResultData, benchName: string) {
@@ -117,13 +121,13 @@ export function dataOf(results: ResultData, benchName: string) {
 
     assert(
       `Could not find bench data for bench ${benchName} and framework ${framework}`,
-      benchData
+      benchData,
     );
     assert(
       `Could not find framework information for the framework named ${framework}. Available known frameworks: ${Object.keys(
-        frameworks
-      ).join(', ')}`,
-      frameworkInfo
+        frameworks,
+      ).join(", ")}`,
+      frameworkInfo,
     );
 
     if (!benchData || !frameworkInfo) {
@@ -131,12 +135,13 @@ export function dataOf(results: ResultData, benchName: string) {
     }
 
     const time = timeFromMarks(benchData.times, benchData.measure);
+
     list.push({
       name: framework,
       speed: time,
       color: frameworkInfo.color,
       version: benchData.version,
-      units: benchData.measure ?? 'ms',
+      units: benchData.measure ?? "ms",
     });
   }
 

@@ -1,13 +1,8 @@
-import Application from '@ember/application';
-import Resolver from 'ember-resolver';
-import config from './config.ts';
-import Router from './router.ts';
-import Entrypoint from './templates/application.gts';
+import Application from "ember-strict-application-resolver";
 
 export default class App extends Application {
-  modulePrefix = config.modulePrefix;
-  Resolver = Resolver.withModules({
-    'my-app/router': { default: Router },
-    'my-app/templates/application': { default: Entrypoint },
-  });
+  modules = {
+    ...import.meta.glob("./router.*", { eager: true }),
+    ...import.meta.glob("./templates/**/*", { eager: true }),
+  };
 }

@@ -1,7 +1,7 @@
-import { pageTitle } from 'ember-page-title';
-import { LinkTo } from '@ember/routing';
+import { LinkTo } from "@ember/routing";
 
-import { results } from 'virtual:result-sets';
+import { pageTitle } from "ember-page-title";
+import { results } from "virtual:result-sets";
 
 function qp(resultName: string) {
   return { q: resultName };

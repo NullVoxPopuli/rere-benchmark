@@ -1,15 +1,18 @@
-import Component from '@glimmer/component';
-import { modifier } from 'ember-modifier';
-import type { Model } from '#routes/results.ts';
-import type { BenchmarkInfo, ResultSet } from '#types';
-// https://github.com/sgratzl/chartjs-chart-boxplot
-import { BoxPlotChart } from '@sgratzl/chartjs-chart-boxplot';
-import { frameworks } from '#frameworks';
-import { converter, filterBrightness, formatCss } from 'culori';
+import Component from "@glimmer/component";
 
-const HSL = converter('hsl');
-const BRIGHTEN = filterBrightness(1.5, 'lrgb');
-const DARKEN = filterBrightness(0.5, 'lrgb');
+// https://github.com/sgratzl/chartjs-chart-boxplot
+import { BoxPlotChart } from "@sgratzl/chartjs-chart-boxplot";
+import { converter, filterBrightness, formatCss } from "culori";
+import { modifier } from "ember-modifier";
+
+import { frameworks } from "#frameworks";
+
+import type { Model } from "#routes/results.ts";
+import type { BenchmarkInfo, ResultSet } from "#types";
+
+const HSL = converter("hsl");
+const BRIGHTEN = filterBrightness(1.5, "lrgb");
+const DARKEN = filterBrightness(0.5, "lrgb");
 
 function boxData(file: ResultSet, benchInfo: BenchmarkInfo) {
   // Why is chartjs like this?
@@ -24,26 +27,32 @@ function boxData(file: ResultSet, benchInfo: BenchmarkInfo) {
 
   for (const framework of file.selections.frameworks) {
     labels.push(framework);
+
     const marks = file.results[framework]?.[benchInfo.name]?.times;
     let frameworkData: number[] = [];
 
     if (marks) {
-      if (benchInfo.whatsBetter === 'bigger') {
+      if (benchInfo.whatsBetter === "bigger") {
         frameworkData = marks
           .flat()
           .filter((mark) => mark.name === benchInfo.measure)
           .map((mark) => mark.detail);
       } else {
         frameworkData = marks
-          ?.filter((x) => x.length === 2)
-          .map((x) => x[1]!.at - x[0]!.at);
+          .map(([start, end]) => (start && end ? end.at - start.at : undefined))
+          .filter((duration) => duration !== undefined);
       }
     }
 
     data.push(frameworkData);
 
-    const baseColor = frameworks[framework]?.color ?? '#888';
-    const hsl = HSL(baseColor)!;
+    const baseColor = frameworks[framework]?.color ?? "#888";
+    const hsl = HSL(baseColor);
+
+    if (!hsl) {
+      throw new Error(`Could not parse color: ${baseColor}`);
+    }
+
     const brighter = formatCss(BRIGHTEN(hsl));
     const darker = formatCss(DARKEN(hsl));
 
@@ -59,7 +68,7 @@ function boxData(file: ResultSet, benchInfo: BenchmarkInfo) {
 
   const datasets = [
     {
-      label: '',
+      label: "",
       data,
       backgroundColor,
       borderColor,
@@ -70,14 +79,14 @@ function boxData(file: ResultSet, benchInfo: BenchmarkInfo) {
     },
   ];
 
-  console.log(datasets);
+  console.debug(datasets);
 
   return { datasets, labels };
 }
 
 const renderChart = modifier(function boxplot(
   element: HTMLCanvasElement,
-  [file, benchInfo]: [ResultSet, BenchmarkInfo]
+  [file, benchInfo]: [ResultSet, BenchmarkInfo],
 ) {
   const { datasets, labels } = boxData(file, benchInfo);
   // https://www.sgratzl.com/chartjs-chart-boxplot/examples/styling.html
@@ -87,7 +96,7 @@ const renderChart = modifier(function boxplot(
       datasets,
     },
     options: {
-      indexAxis: 'y',
+      indexAxis: "y",
       responsive: true,
       // without this, chart.js picks its own height and the per-framework
       // rows get squashed until most axis labels are dropped
@@ -146,11 +155,7 @@ export default class Boxplat extends Component<{
   get benchmarkInfo() {
     return this.args.model.data.benchmarkInfo
       .toSorted()
-      .toSorted(
-        (a, b) =>
-          (a.name.includes('async') ? 1 : 0) -
-          (b.name.includes('async') ? 1 : 0)
-      );
+      .toSorted((a, b) => (a.name.includes("async") ? 1 : 0) - (b.name.includes("async") ? 1 : 0));
   }
 
   get frameworks() {
@@ -207,5 +212,5 @@ export default class Boxplat extends Component<{
 }
 
 function isBiggerBetter(benchInfo: BenchmarkInfo) {
-  return benchInfo.whatsBetter === 'bigger';
+  return benchInfo.whatsBetter === "bigger";
 }

@@ -1,13 +1,22 @@
-# unconventional js
-/blueprints/*/files/
+# unconventionally formatted files
+/.changeset
 
 # compiled output
 /dist/
+/tmp/
+
+# dependencies
+/node_modules/
+
+# lockfiles
+pnpm-lock.yaml
+package-lock.json
 
 # misc
-/coverage/
-!.*
-.*/
+/.env*
+/.vite/
+/.pnp*
+.pnp.*
 
 # ember-try
 /.node_modules.ember-try/

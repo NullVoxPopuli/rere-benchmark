@@ -1,4 +1,4 @@
-import { LinkTo } from '@ember/routing';
+import { LinkTo } from "@ember/routing";
 
 export const Header = <template>
   <header>

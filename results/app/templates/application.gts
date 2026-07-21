@@ -1,6 +1,6 @@
-import { pageTitle } from 'ember-page-title';
+import { pageTitle } from "ember-page-title";
 
-import { Header } from '#components/header.gts';
+import { Header } from "#components/header.gts";
 
 <template>
   {{pageTitle "Reactivity + Rendering Benchmark"}}
