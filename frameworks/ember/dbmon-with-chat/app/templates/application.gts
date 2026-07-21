@@ -11,6 +11,12 @@ export default class Test extends Component {
   db = trackedMap<string, DBRow>();
   chats = trackedArray<ChatMessage>();
 
+  // rendered with a keyed {{#each}}: {{#each-in}} tears down and rebuilds
+  // every row on any map change (~4x fps difference on this bench)
+  get rows() {
+    return Array.from(this.db.values());
+  }
+
   start = () => {
     test.doit({
       handleDbUpdate: (eventData: DBUpdate) => {
@@ -39,10 +45,10 @@ export default class Test extends Component {
             <th colspan="5">elapsed times</th>
           </tr></thead>
         <tbody>
-          {{#each-in this.db as |id row|}}
+          {{#each this.rows key="dbname" as |row|}}
             <tr>
               <td class="dbname">
-                {{id}}
+                {{row.dbname}}
               </td>
               <td class="query-count">
                 <span class="{{row.lastSample.countClassName}}">
@@ -57,7 +63,7 @@ export default class Test extends Component {
                 </div>
               {{/each}}
             </tr>
-          {{/each-in}}
+          {{/each}}
         </tbody>
       </table>
 
