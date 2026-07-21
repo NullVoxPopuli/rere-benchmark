@@ -33,7 +33,7 @@ function colorFor(
   return `oklch(${color.l} ${color.c} ${color.h}deg)`;
 }
 
-type ValueMode = "raw" | "linear" | "log";
+type ValueMode = "raw" | "linear" | "log" | "ranking";
 
 /**
  * The same normalization the cell colors use, as a displayable value.
@@ -72,6 +72,60 @@ function logScoreFor(
   return (bestIsMax ? 1 - warped : warped).toFixed(2);
 }
 
+const ORDINAL_RULES = new Intl.PluralRules("en", { type: "ordinal" });
+const ORDINAL_SUFFIXES: Record<string, string> = { one: "st", two: "nd", few: "rd", other: "th" };
+
+function ordinal(rank: number) {
+  return `${rank}${ORDINAL_SUFFIXES[ORDINAL_RULES.select(rank)]}`;
+}
+
+/**
+ * Competition ranking: 1 + the number of strictly better values, so
+ * ties share a rank.
+ */
+function rankFor(
+  values: Record<string, number | undefined>,
+  names: string[],
+  name: string,
+  bestIsMax: boolean,
+) {
+  const value = values[name];
+
+  if (value === undefined) return;
+
+  let better = 0;
+
+  for (const other of names) {
+    const otherValue = values[other];
+
+    if (otherValue === undefined) continue;
+    if (bestIsMax ? otherValue > value : otherValue < value) better++;
+  }
+
+  return 1 + better;
+}
+
+function speedsFor(file: ResultSet, benchInfo: BenchmarkInfo, frameworkNames: string[]) {
+  const speeds: Record<string, number | undefined> = {};
+  let min = Infinity;
+  let max = -Infinity;
+
+  for (const framework of frameworkNames) {
+    const test = file.results[framework]?.[benchInfo.name];
+
+    if (!test) continue;
+
+    const time = timeFromMarks(test.times, benchInfo.measure);
+
+    speeds[framework] = time;
+
+    if (time > max) max = time;
+    if (time < min) min = time;
+  }
+
+  return { speeds, min, max };
+}
+
 class TableRow extends Component<{
   file: ResultSet;
   benchInfo: BenchmarkInfo;
@@ -94,21 +148,12 @@ class TableRow extends Component<{
   ) {
     super(owner, args);
 
-    this.speeds = {};
+    const { speeds, min, max } = speedsFor(args.file, args.benchInfo, args.frameworkNames);
+
+    this.speeds = speeds;
+    this.min = min;
+    this.max = max;
     this.colors = {};
-
-    for (const framework of args.frameworkNames) {
-      const test = args.file.results[framework]?.[args.benchInfo.name];
-
-      if (!test) continue;
-
-      const time = timeFromMarks(test.times, this.args.benchInfo.measure);
-
-      this.speeds[framework] = time;
-
-      if (time > this.max) this.max = time;
-      if (time < this.min) this.min = time;
-    }
 
     for (const framework of args.frameworkNames) {
       const time = this.speeds[framework];
@@ -124,12 +169,19 @@ class TableRow extends Component<{
 
   value = (framework: string) => {
     const speed = this.speeds[framework];
+    const bestIsMax = this.args.benchInfo.whatsBetter === "bigger";
 
     switch (this.args.mode) {
       case "linear":
         return scoreFor(speed, this.min, this.max);
       case "log":
-        return logScoreFor(speed, this.min, this.max, this.args.benchInfo.whatsBetter === "bigger");
+        return logScoreFor(speed, this.min, this.max, bestIsMax);
+      case "ranking": {
+        const rank = rankFor(this.speeds, this.args.frameworkNames, framework, bestIsMax);
+
+        return rank === undefined ? undefined : ordinal(rank);
+      }
+
       default:
         return speed;
     }
@@ -209,6 +261,33 @@ class Table extends Component<{
     return this.args.file.selections.frameworks;
   }
 
+  /**
+   * Each framework's ranks across this table's benches, summed.
+   */
+  @cached
+  get rankTotals(): Record<string, number | undefined> {
+    const sums: Record<string, number | undefined> = {};
+
+    for (const bench of this.args.benches) {
+      const { speeds } = speedsFor(this.args.file, bench, this.frameworkNames);
+
+      for (const framework of this.frameworkNames) {
+        const rank = rankFor(
+          speeds,
+          this.frameworkNames,
+          framework,
+          bench.whatsBetter === "bigger",
+        );
+
+        if (rank === undefined) continue;
+
+        sums[framework] = (sums[framework] ?? 0) + rank;
+      }
+    }
+
+    return sums;
+  }
+
   totalValue = (framework: string) => {
     const total = this.totals[framework];
 
@@ -222,6 +301,13 @@ class Table extends Component<{
           this.totals.max,
           this.args.benches[0]?.whatsBetter === "bigger",
         );
+      case "ranking": {
+        // lowest rank sum is the overall winner
+        const rank = rankFor(this.rankTotals, this.frameworkNames, framework, false);
+
+        return rank === undefined ? undefined : ordinal(rank);
+      }
+
       default:
         return total;
     }
@@ -303,7 +389,7 @@ export default class ResultsTables extends Component<{
   get mode(): ValueMode {
     const mode = this.router.currentRoute?.queryParams["mode"];
 
-    return mode === "linear" || mode === "log" ? mode : "raw";
+    return mode === "linear" || mode === "log" || mode === "ranking" ? mode : "raw";
   }
 
   setMode = (mode: ValueMode) => {
@@ -364,6 +450,16 @@ export default class ResultsTables extends Component<{
         />
         log score
         <span class="units">(more variance near best)</span>
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="value-mode"
+          checked={{this.isMode "ranking"}}
+          {{on "change" (fn this.setMode "ranking")}}
+        />
+        ranking
+        <span class="units">(1st is best)</span>
       </label>
     </fieldset>
 
