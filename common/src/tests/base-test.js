@@ -49,7 +49,7 @@ export class BaseTest {
   }
 
   /**
-   * @param {unknown} options
+   * @param {UpdateCallback} options
    * @return {unknown}
    */
   run(options) {
