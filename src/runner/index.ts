@@ -94,6 +94,8 @@ async function getMarks(browser: Browser, url: string) {
 const browser = await puppeteer.launch({
   executablePath: chromeLocation,
   headless: HEADLESS,
+  defaultViewport: { width: 1280, height: 720 },
+  args: ['--window-size=1280,800'],
 });
 
 const runStart = Date.now();
