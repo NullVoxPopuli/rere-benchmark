@@ -1,7 +1,8 @@
 import Component from "@glimmer/component";
-import { cached, tracked } from "@glimmer/tracking";
+import { cached } from "@glimmer/tracking";
 import { warn } from "@ember/debug";
 import { get } from "@ember/helper";
+import { service } from "@ember/service";
 
 import { interpolate } from "culori";
 
@@ -9,6 +10,7 @@ import { FrameworkInfo } from "#components/framework-info.gts";
 import { round, timeFromMarks } from "#utils";
 
 import type Owner from "@ember/owner";
+import type RouterService from "@ember/routing/router-service";
 import type { Model } from "#routes/results.ts";
 import type { BenchmarkInfo, ResultSet } from "#types";
 
@@ -296,9 +298,18 @@ class Table extends Component<{
 export default class ResultsTables extends Component<{
   model: Model;
 }> {
-  @tracked mode: ValueMode = "raw";
+  @service declare router: RouterService;
 
-  setMode = (mode: ValueMode) => (this.mode = mode);
+  get mode(): ValueMode {
+    const mode = this.router.currentRoute?.queryParams["mode"];
+
+    return mode === "linear" || mode === "log" ? mode : "raw";
+  }
+
+  setMode = (mode: ValueMode) => {
+    this.router.transitionTo({ queryParams: { mode } });
+  };
+
   isMode = (mode: ValueMode) => this.mode === mode;
 
   get file() {
