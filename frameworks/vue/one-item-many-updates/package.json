@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "common": "link:../../../common",
-    "vue": "^3.5.39"
+    "vue": "3.6.0-rc.1"
   },
   "devDependencies": {
     "@types/node": "^24.13.2",

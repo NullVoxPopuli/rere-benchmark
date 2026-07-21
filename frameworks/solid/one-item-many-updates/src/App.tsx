@@ -1,4 +1,4 @@
-import { createSignal, onMount } from 'solid-js'
+import { createEffect, createSignal } from 'solid-js'
 import { helpers } from 'common';
 
 let test = helpers.oneItem10kUpdates();
@@ -6,7 +6,9 @@ let test = helpers.oneItem10kUpdates();
 function App() {
   const [count, setCount] = createSignal(test.getData())
 
-  onMount(() => {
+  // no more onMount in solid 2: an effect with an empty compute runs
+  // once after the first render
+  createEffect(() => {}, () => {
     test.doit((i) => setCount(i));
   });
 

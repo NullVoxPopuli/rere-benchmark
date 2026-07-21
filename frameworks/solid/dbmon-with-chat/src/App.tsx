@@ -1,6 +1,6 @@
 import 'common/dbmon.css';
 import './layout.css';
-import { createSignal, onMount, For } from 'solid-js';
+import { createEffect, createSignal, For } from 'solid-js';
 import { helpers, type DBRow, type ChatMessage, type DBUpdate, type ChatUpdate } from 'common';
 
 const test = helpers.dbMonWithChat();
@@ -9,7 +9,9 @@ function App() {
   const [db, setDb] = createSignal<Map<string, DBRow>>(new Map());
   const [chats, setChats] = createSignal<ChatMessage[]>([]);
 
-  onMount(() => {
+  // no more onMount in solid 2: an effect with an empty compute runs
+  // once after the first render
+  createEffect(() => {}, () => {
     test.doit({
       handleDbUpdate: (eventData: DBUpdate) => {
         setDb(prev => {
@@ -36,7 +38,7 @@ function App() {
           <tr>
             <th>dbname</th>
             <th>queries</th>
-            <th colSpan={5}>elapsed times</th>
+            <th colspan={5}>elapsed times</th>
           </tr>
         </thead>
         <tbody>

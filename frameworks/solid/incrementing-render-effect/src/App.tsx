@@ -1,4 +1,4 @@
-import { createSignal, createEffect, onMount } from 'solid-js'
+import { createSignal, createEffect } from 'solid-js'
 import { helpers } from 'common';
 
 const test = helpers.incrementingRenderEffect();
@@ -9,14 +9,18 @@ function App() {
   let el!: HTMLOutputElement;
   let advancer: (() => void) | undefined;
 
-  // createEffect runs after the DOM has been updated
-  // (createRenderEffect / reading during render would run too early)
-  createEffect(() => {
-    output();
-    advancer?.();
-  });
+  // solid 2 split effects: the compute tracks `output`, the effect fn
+  // runs after the DOM has been updated
+  createEffect(
+    () => output(),
+    () => {
+      advancer?.();
+    },
+  );
 
-  onMount(() => {
+  // no more onMount in solid 2: an effect with an empty compute runs
+  // once after the first render
+  createEffect(() => {}, () => {
     test.doit({
       element: el,
       get: () => output(),
