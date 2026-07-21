@@ -1,0 +1,17 @@
+{
+  "name": "app-tests",
+  "private": true,
+  "type": "module",
+  "description": "Playwright tests that every framework implementation of every bench actually works",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.1",
+    "@types/node": "^24.13.2"
+  },
+  "engines": {
+    "node": ">= 24"
+  }
+}

@@ -3,3 +3,5 @@
 *.md
 results/
 frameworks/
+tests/test-results/
+tests/playwright-report/
