@@ -24,6 +24,10 @@ jobs:
         with:
           node-version: 24
           cache: pnpm
+      # the apps' workers live in common/, which has no tsconfig of its
+      # own: vite/rolldown tsconfig discovery walks up to the repo root
+      # tsconfig.json, whose `extends` resolves from root node_modules
+      - run: pnpm install
       - run: pnpm install
         working-directory: tests
       - run: pnpm exec playwright install --with-deps chromium
