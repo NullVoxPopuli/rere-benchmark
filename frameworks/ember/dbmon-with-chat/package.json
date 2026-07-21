@@ -35,7 +35,7 @@
     "@glimmer/component": "2.1.1",
     "common": "link:../../../common",
     "decorator-transforms": "2.4.0",
-    "ember-source": "7.1.0",
+    "ember-source": "7.3.0-alpha.5",
     "ember-strict-application-resolver": "0.1.1"
   },
   "devDependencies": {
