@@ -1,4 +1,4 @@
-import { createSignal, batch, onMount } from 'solid-js'
+import { createSignal, onMount } from 'solid-js'
 import { helpers } from 'common';
 
 let test = helpers.oneItem10kUpdates();
@@ -7,7 +7,7 @@ function App() {
   const [count, setCount] = createSignal(test.getData())
 
   onMount(() => {
-    test.doit((i) => setCount(i), batch);
+    test.doit((i) => setCount(i));
   });
 
   return <output>{test.formatItem(count())}</output>
