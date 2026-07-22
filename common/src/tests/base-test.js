@@ -42,9 +42,14 @@ export class BaseTest {
 
     this.#isPreparing = true;
     requestAnimationFrame(() => {
-      requestIdleCallback(() => {
-        callback();
-      });
+      // timeout required: a bare requestIdleCallback may never fire in
+      // an idle headless page, hollow-booting the bench
+      requestIdleCallback(
+        () => {
+          callback();
+        },
+        { timeout: 500 },
+      );
     });
   }
 
