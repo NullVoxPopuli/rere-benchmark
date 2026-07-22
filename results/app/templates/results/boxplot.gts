@@ -192,6 +192,13 @@ export default class Boxplat extends Component<{
     {{/each}}
 
     <style scoped>
+      section {
+        /* the .all-results grid centers items at their content width,
+           so without a definite width each chart shrink-wraps to its
+           heading text and every chart ends up a different width */
+        width: min(90vw, 60rem);
+      }
+
       .boxplot-header {
         display: flex;
         align-items: center;
