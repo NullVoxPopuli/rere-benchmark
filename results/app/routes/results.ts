@@ -18,6 +18,8 @@ export default class Results extends Route<Model> {
 
   queryParams = {
     q: { refreshModel: true },
+    // display mode for the tables page (raw | linear | log); no model impact
+    mode: {},
   };
 
   beforeModel(transition: Transition) {

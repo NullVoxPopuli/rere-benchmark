@@ -2,6 +2,7 @@ import Component from "@glimmer/component";
 import { cached } from "@glimmer/tracking";
 import { warn } from "@ember/debug";
 import { get } from "@ember/helper";
+import { service } from "@ember/service";
 
 import { interpolate } from "culori";
 
@@ -9,6 +10,7 @@ import { FrameworkInfo } from "#components/framework-info.gts";
 import { round, timeFromMarks } from "#utils";
 
 import type Owner from "@ember/owner";
+import type RouterService from "@ember/routing/router-service";
 import type { Model } from "#routes/results.ts";
 import type { BenchmarkInfo, ResultSet } from "#types";
 
@@ -31,11 +33,76 @@ function colorFor(
   return `oklch(${color.l} ${color.c} ${color.h}deg)`;
 }
 
+type ValueMode = "raw" | "linear" | "times";
+
+/**
+ * The ?mode= query param, wherever a component needs it.
+ * router.currentRoute is tracked, so reads stay live across transitions.
+ */
+function modeFrom(router: RouterService): ValueMode {
+  const mode = router.currentRoute?.queryParams["mode"];
+
+  return mode === "linear" || mode === "times" ? mode : "raw";
+}
+
+/**
+ * The same normalization the cell colors use, as a displayable value.
+ */
+function scoreFor(speed: number | undefined, min: number | undefined, max: number | undefined) {
+  if (speed === undefined || min === undefined || max === undefined) return;
+  if (max === min) return (1).toFixed(2);
+
+  return ((speed - min) / (max - min)).toFixed(2);
+}
+
+/**
+ * How many times worse than the row's best this value is: 1 for the
+ * best, 1.1 for 10% worse, etc. Always >= 1 regardless of direction.
+ */
+function timesBestFor(
+  speed: number | undefined,
+  min: number | undefined,
+  max: number | undefined,
+  bestIsMax: boolean,
+) {
+  if (speed === undefined || min === undefined || max === undefined) return;
+  if (speed <= 0 || min <= 0) return;
+
+  return bestIsMax ? max / speed : speed / min;
+}
+
+function formatTimes(ratio: number) {
+  return `${Math.round(ratio * 100) / 100}x`;
+}
+
+function speedsFor(file: ResultSet, benchInfo: BenchmarkInfo, frameworkNames: string[]) {
+  const speeds: Record<string, number | undefined> = {};
+  let min = Infinity;
+  let max = -Infinity;
+
+  for (const framework of frameworkNames) {
+    const test = file.results[framework]?.[benchInfo.name];
+
+    if (!test) continue;
+
+    const time = timeFromMarks(test.times, benchInfo.measure);
+
+    speeds[framework] = time;
+
+    if (time > max) max = time;
+    if (time < min) min = time;
+  }
+
+  return { speeds, min, max };
+}
+
 class TableRow extends Component<{
   file: ResultSet;
   benchInfo: BenchmarkInfo;
   frameworkNames: string[];
 }> {
+  @service declare router: RouterService;
+
   declare speeds: Record<string, number | undefined>;
   declare colors: Record<string, string | undefined>;
   max = -Infinity;
@@ -51,21 +118,12 @@ class TableRow extends Component<{
   ) {
     super(owner, args);
 
-    this.speeds = {};
+    const { speeds, min, max } = speedsFor(args.file, args.benchInfo, args.frameworkNames);
+
+    this.speeds = speeds;
+    this.min = min;
+    this.max = max;
     this.colors = {};
-
-    for (const framework of args.frameworkNames) {
-      const test = args.file.results[framework]?.[args.benchInfo.name];
-
-      if (!test) continue;
-
-      const time = timeFromMarks(test.times, this.args.benchInfo.measure);
-
-      this.speeds[framework] = time;
-
-      if (time > this.max) this.max = time;
-      if (time < this.min) this.min = time;
-    }
 
     for (const framework of args.frameworkNames) {
       const time = this.speeds[framework];
@@ -79,6 +137,24 @@ class TableRow extends Component<{
     }
   }
 
+  value = (framework: string) => {
+    const speed = this.speeds[framework];
+    const bestIsMax = this.args.benchInfo.whatsBetter === "bigger";
+
+    switch (modeFrom(this.router)) {
+      case "linear":
+        return scoreFor(speed, this.min, this.max);
+      case "times": {
+        const ratio = timesBestFor(speed, this.min, this.max, bestIsMax);
+
+        return ratio === undefined ? undefined : formatTimes(ratio);
+      }
+
+      default:
+        return speed;
+    }
+  };
+
   <template>
     <tr>
       <td class="benchmark-name">
@@ -91,8 +167,7 @@ class TableRow extends Component<{
       </td>
 
       {{#each @frameworkNames as |framework|}}
-        <td style="background: {{get this.colors framework}};"><span class="value">{{get
-              this.speeds
+        <td style="background: {{get this.colors framework}};"><span class="value">{{this.value
               framework
             }}</span></td>
       {{/each}}
@@ -104,6 +179,8 @@ class Table extends Component<{
   benches: BenchmarkInfo[];
   file: ResultSet;
 }> {
+  @service declare router: RouterService;
+
   shouldShowTotals = false;
   totals: Record<string, number> = {};
 
@@ -151,6 +228,29 @@ class Table extends Component<{
   get frameworkNames() {
     return this.args.file.selections.frameworks;
   }
+
+  totalValue = (framework: string) => {
+    const total = this.totals[framework];
+
+    switch (modeFrom(this.router)) {
+      case "linear":
+        return scoreFor(total, this.totals.min, this.totals.max);
+      case "times": {
+        // times-best of the raw totals, so the best column reads 1x
+        const ratio = timesBestFor(
+          total,
+          this.totals.min,
+          this.totals.max,
+          this.args.benches[0]?.whatsBetter === "bigger",
+        );
+
+        return ratio === undefined ? undefined : formatTimes(ratio);
+      }
+
+      default:
+        return total;
+    }
+  };
 
   versionFor = (framework: string) => {
     /**
@@ -205,7 +305,7 @@ class Table extends Component<{
                   this.totals.max
                 }}"
               >
-                <span class="value">{{get this.totals framework}}</span>
+                <span class="value">{{this.totalValue framework}}</span>
               </td>
             {{/each}}
           </tr>
@@ -218,6 +318,18 @@ class Table extends Component<{
 export default class ResultsTables extends Component<{
   model: Model;
 }> {
+  @service declare router: RouterService;
+
+  get mode(): ValueMode {
+    return modeFrom(this.router);
+  }
+
+  setMode = (mode: ValueMode) => {
+    this.router.transitionTo({ queryParams: { mode } });
+  };
+
+  isMode = (mode: ValueMode) => this.mode === mode;
+
   get file() {
     return this.args.model.data;
   }
@@ -240,6 +352,39 @@ export default class ResultsTables extends Component<{
   }
 
   <template>
+    <fieldset class="value-mode">
+      <legend>values</legend>
+      <label>
+        <input
+          type="radio"
+          name="value-mode"
+          checked={{this.isMode "raw"}}
+          {{on "change" (fn this.setMode "raw")}}
+        />
+        raw
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="value-mode"
+          checked={{this.isMode "linear"}}
+          {{on "change" (fn this.setMode "linear")}}
+        />
+        score
+        <span class="units">(normalized 0 to 1)</span>
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="value-mode"
+          checked={{this.isMode "times"}}
+          {{on "change" (fn this.setMode "times")}}
+        />
+        times best
+        <span class="units">(1x is best)</span>
+      </label>
+    </fieldset>
+
     {{#if this.higherBenches.length}}
       <h2>higher is better</h2>
 
