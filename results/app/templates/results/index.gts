@@ -36,6 +36,16 @@ function colorFor(
 type ValueMode = "raw" | "linear" | "times";
 
 /**
+ * The ?mode= query param, wherever a component needs it.
+ * router.currentRoute is tracked, so reads stay live across transitions.
+ */
+function modeFrom(router: RouterService): ValueMode {
+  const mode = router.currentRoute?.queryParams["mode"];
+
+  return mode === "linear" || mode === "times" ? mode : "raw";
+}
+
+/**
  * The same normalization the cell colors use, as a displayable value.
  */
 function scoreFor(speed: number | undefined, min: number | undefined, max: number | undefined) {
@@ -90,8 +100,9 @@ class TableRow extends Component<{
   file: ResultSet;
   benchInfo: BenchmarkInfo;
   frameworkNames: string[];
-  mode: ValueMode;
 }> {
+  @service declare router: RouterService;
+
   declare speeds: Record<string, number | undefined>;
   declare colors: Record<string, string | undefined>;
   max = -Infinity;
@@ -103,7 +114,6 @@ class TableRow extends Component<{
       file: ResultSet;
       benchInfo: BenchmarkInfo;
       frameworkNames: string[];
-      mode: ValueMode;
     },
   ) {
     super(owner, args);
@@ -131,7 +141,7 @@ class TableRow extends Component<{
     const speed = this.speeds[framework];
     const bestIsMax = this.args.benchInfo.whatsBetter === "bigger";
 
-    switch (this.args.mode) {
+    switch (modeFrom(this.router)) {
       case "linear":
         return scoreFor(speed, this.min, this.max);
       case "times": {
@@ -168,8 +178,9 @@ class TableRow extends Component<{
 class Table extends Component<{
   benches: BenchmarkInfo[];
   file: ResultSet;
-  mode: ValueMode;
 }> {
+  @service declare router: RouterService;
+
   shouldShowTotals = false;
   totals: Record<string, number> = {};
 
@@ -178,7 +189,6 @@ class Table extends Component<{
     args: {
       benches: BenchmarkInfo[];
       file: ResultSet;
-      mode: ValueMode;
     },
   ) {
     super(owner, args);
@@ -222,7 +232,7 @@ class Table extends Component<{
   totalValue = (framework: string) => {
     const total = this.totals[framework];
 
-    switch (this.args.mode) {
+    switch (modeFrom(this.router)) {
       case "linear":
         return scoreFor(total, this.totals.min, this.totals.max);
       case "times": {
@@ -280,12 +290,7 @@ class Table extends Component<{
       </thead>
       <tbody>
         {{#each @benches as |bench|}}
-          <TableRow
-            @file={{@file}}
-            @benchInfo={{bench}}
-            @frameworkNames={{this.frameworkNames}}
-            @mode={{@mode}}
-          />
+          <TableRow @file={{@file}} @benchInfo={{bench}} @frameworkNames={{this.frameworkNames}} />
         {{/each}}
       </tbody>
 
@@ -316,9 +321,7 @@ export default class ResultsTables extends Component<{
   @service declare router: RouterService;
 
   get mode(): ValueMode {
-    const mode = this.router.currentRoute?.queryParams["mode"];
-
-    return mode === "linear" || mode === "times" ? mode : "raw";
+    return modeFrom(this.router);
   }
 
   setMode = (mode: ValueMode) => {
@@ -385,7 +388,7 @@ export default class ResultsTables extends Component<{
     {{#if this.higherBenches.length}}
       <h2>higher is better</h2>
 
-      <Table @benches={{this.higherBenches}} @file={{this.file}} @mode={{this.mode}} />
+      <Table @benches={{this.higherBenches}} @file={{this.file}} />
       <br />
       <br />
       <br />
@@ -394,7 +397,7 @@ export default class ResultsTables extends Component<{
     {{#if this.lowerBenches.length}}
       <h2>lower is better</h2>
 
-      <Table @benches={{this.lowerBenches}} @file={{this.file}} @mode={{this.mode}} />
+      <Table @benches={{this.lowerBenches}} @file={{this.file}} />
       <br />
       <br />
       <br />
