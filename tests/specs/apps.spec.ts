@@ -87,7 +87,7 @@ for (const framework of FRAMEWORKS) {
 const DEV_PORT_BASE = 4650;
 
 for (const [index, framework] of FRAMEWORKS.entries()) {
-  test(`${framework} / dbmon-with-chat (vite dev)`, async ({ page }) => {
+  test(`${framework} / dbmon-with-chat (dev server)`, async ({ page }) => {
     const dev = await startDevServer(
       appDir(framework, 'dbmon-with-chat'),
       DEV_PORT_BASE + index,

@@ -32,7 +32,7 @@ jobs:
         working-directory: tests
       - run: pnpm exec playwright install --with-deps chromium
         working-directory: tests
-      # global-setup installs and builds all 25 apps (and common)
+      # global-setup installs and builds all 30 apps (and common)
       - run: pnpm test
         working-directory: tests
       - uses: actions/upload-artifact@v4

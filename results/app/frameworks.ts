@@ -24,6 +24,15 @@ export interface FrameworkInfo {
 }
 
 export const frameworks: Record<string, FrameworkInfo> = {
+  angular: {
+    // one of the stops of the logo's gradient, distinguishable from
+    // the ember / svelte reds
+    color: "#9717E7",
+    logo: "/angular.svg",
+    name: "Angular",
+    url: "https://angular.dev/",
+    package: "@angular/core",
+  },
   ember: {
     color: "#E04E39",
     logo: "/ember.svg",
