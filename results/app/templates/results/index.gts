@@ -279,47 +279,55 @@ class Table extends Component<{
   };
 
   <template>
-    <table>
-      <thead>
-        <tr>
-          <th></th>
-          {{#each this.frameworkNames as |framework|}}
-            <th class="fw-header">
-              <FrameworkInfo @name={{framework}} />
-              <span class="small">
-                <Version
-                  @version={{this.versionFor framework}}
-                  @override={{this.overrideFor framework}}
-                />
-              </span>
-            </th>
-          {{/each}}
-        </tr>
-      </thead>
-      <tbody>
-        {{#each @benches as |bench|}}
-          <TableRow @file={{@file}} @benchInfo={{bench}} @frameworkNames={{this.frameworkNames}} />
-        {{/each}}
-      </tbody>
-
-      {{#if this.shouldShowTotals}}
-        <tfoot>
-          <tr><th style="text-align: right">Total</th>
+    {{! wide tables scroll in their own container instead of expanding
+        the page's layout viewport on small screens }}
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th></th>
             {{#each this.frameworkNames as |framework|}}
-              <td
-                style="background: {{colorFor
-                  (get this.totals framework)
-                  this.totals.min
-                  this.totals.max
-                }}"
-              >
-                <span class="value">{{this.totalValue framework}}</span>
-              </td>
+              <th class="fw-header">
+                <FrameworkInfo @name={{framework}} />
+                <span class="small">
+                  <Version
+                    @version={{this.versionFor framework}}
+                    @override={{this.overrideFor framework}}
+                  />
+                </span>
+              </th>
             {{/each}}
           </tr>
-        </tfoot>
-      {{/if}}
-    </table>
+        </thead>
+        <tbody>
+          {{#each @benches as |bench|}}
+            <TableRow
+              @file={{@file}}
+              @benchInfo={{bench}}
+              @frameworkNames={{this.frameworkNames}}
+            />
+          {{/each}}
+        </tbody>
+
+        {{#if this.shouldShowTotals}}
+          <tfoot>
+            <tr><th style="text-align: right">Total</th>
+              {{#each this.frameworkNames as |framework|}}
+                <td
+                  style="background: {{colorFor
+                    (get this.totals framework)
+                    this.totals.min
+                    this.totals.max
+                  }}"
+                >
+                  <span class="value">{{this.totalValue framework}}</span>
+                </td>
+              {{/each}}
+            </tr>
+          </tfoot>
+        {{/if}}
+      </table>
+    </div>
   </template>
 }
 
