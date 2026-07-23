@@ -148,50 +148,33 @@ main.error-page {
  * everything else. The vw-based cap (not a percentage) is what breaks
  * that content-sized circularity.
  *
- * The thead pins in both modes, but differently, because a scroll
- * container captures position:sticky:
- *
- * - above the breakpoint the wrapper is overflow: visible, so the
- *   thead pins to the viewport, just below the site header
- * - at or below it (the table can't fit: ~810px natural width today --
- *   bump the breakpoint if columns outgrow it) the wrapper is a
- *   height-bounded scroll pane, and the thead pins to the pane's top
- *   edge instead. A viewport-relative top offset would be wrong here:
- *   it would just shove the thead down over the first rows.
+ * The wrapper only becomes a scroll container on viewports the table
+ * genuinely can't fit in (~810px natural width today -- bump the
+ * breakpoint if columns outgrow it). That threshold matters for the
+ * thead too: a scroll container captures position:sticky, so the thead
+ * can only pin to the viewport while the wrapper is overflow: visible.
+ * Below the breakpoint the headers simply scroll away -- the page
+ * itself must stay the only vertical scroller (nested vertical
+ * scrollbars are miserable to use), and that rules out pinning inside
+ * the wrapper.
  */
 .table-scroll {
   max-width: calc(100vw - 1rem);
 }
 
-table thead th {
-  position: sticky;
-  background: var(--page-bg);
-  /* above the sticky benchmark-name cells rows scroll by with */
-  z-index: 2;
-}
-
-@media (width > 60rem) {
-  table thead th {
-    top: var(--header-height);
-  }
-}
-
-@media (width <= 60rem) {
+@media (width <= 52rem) {
   .table-scroll {
-    overflow: auto;
-    max-height: calc(100vh - var(--header-height) - 1rem);
-    max-height: calc(100dvh - var(--header-height) - 1rem);
+    overflow-x: auto;
   }
+}
 
+@media (width > 52rem) {
   table thead th {
-    top: 0;
-  }
-
-  /* the corner: pinned on both axes, so the frozen label column and
-     the frozen header row never show each other's scrolled content */
-  table thead th:first-child {
-    left: 0;
-    z-index: 3;
+    position: sticky;
+    top: var(--header-height);
+    background: var(--page-bg);
+    /* above the sticky benchmark-name cells rows scroll by with */
+    z-index: 2;
   }
 }
 
