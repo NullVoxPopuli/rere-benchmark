@@ -5,6 +5,7 @@ import { get } from "@ember/helper";
 import { service } from "@ember/service";
 
 import { interpolate } from "culori";
+import { modifier } from "ember-modifier";
 
 import { FrameworkInfo } from "#components/framework-info.gts";
 import { Version } from "#components/version.gts";
@@ -33,6 +34,59 @@ function colorFor(
 
   return `oklch(${color.l} ${color.c} ${color.h}deg)`;
 }
+
+/**
+ * Matches the .table-scroll media query in app.css: below this the table
+ * sits in a horizontal scroll container, which captures position:sticky --
+ * so the thead can't pin to the viewport with CSS alone. This modifier
+ * emulates it there: translate the thead down by however far the page has
+ * scrolled past the table (clamped to the table, like real sticky), so the
+ * headings stay visible without any nested vertical scrolling.
+ */
+const wrapperMode = "(width <= 52rem)";
+
+const pinnedThead = modifier((table: HTMLTableElement) => {
+  const thead = table.querySelector("thead");
+
+  if (!thead) return;
+
+  const media = window.matchMedia(wrapperMode);
+  const root = document.documentElement;
+  let headerHeight = parseFloat(getComputedStyle(root).getPropertyValue("--header-height"));
+  let lastY = 0;
+
+  const update = () => {
+    let y = 0;
+
+    if (media.matches) {
+      const overshoot = headerHeight - table.getBoundingClientRect().top;
+      const limit = table.clientHeight - thead.offsetHeight;
+
+      y = Math.round(Math.max(0, Math.min(overshoot, limit)));
+    }
+
+    if (y === lastY) return;
+
+    lastY = y;
+    thead.style.transform = y === 0 ? "" : `translateY(${y}px)`;
+  };
+
+  const remeasure = () => {
+    headerHeight = parseFloat(getComputedStyle(root).getPropertyValue("--header-height"));
+    update();
+  };
+
+  window.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("resize", remeasure, { passive: true });
+  media.addEventListener("change", update);
+  update();
+
+  return () => {
+    window.removeEventListener("scroll", update);
+    window.removeEventListener("resize", remeasure);
+    media.removeEventListener("change", update);
+  };
+});
 
 type ValueMode = "raw" | "linear" | "times";
 
@@ -282,7 +336,7 @@ class Table extends Component<{
     {{! wide tables scroll in their own container instead of expanding
         the page's layout viewport on small screens }}
     <div class="table-scroll">
-      <table>
+      <table {{pinnedThead}}>
         <thead>
           <tr>
             <th></th>
