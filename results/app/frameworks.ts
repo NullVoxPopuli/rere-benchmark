@@ -76,4 +76,12 @@ export const frameworks: Record<string, FrameworkInfo> = {
     url: "https://svelte.dev/",
     package: "svelte",
   },
+  vanilla: {
+    color: "#F7DF1E",
+    logo: "/javascript.svg",
+    name: "Vanilla JS",
+    url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+    // no framework: the only versioned tool involved is the bundler
+    package: "vite",
+  },
 };
