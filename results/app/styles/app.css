@@ -4,6 +4,9 @@
 
   --dark-bg: #151515;
   --dark-fg: #efefef;
+
+  /* whichever of the two is active, for elements that must be opaque */
+  --page-bg: var(--light-bg);
 }
 
 body {
@@ -18,6 +21,10 @@ header {
 }
 
 @media (prefers-color-scheme: dark) {
+  :root {
+    --page-bg: var(--dark-bg);
+  }
+
   body {
     background: var(--dark-bg);
     color: var(--dark-fg);
@@ -132,6 +139,17 @@ main.error-page {
   }
 }
 
+/*
+ * The page centers content at its natural width, so a wide table would
+ * otherwise expand the layout viewport on small screens and clip
+ * everything else. The vw-based cap (not a percentage) is what breaks
+ * that content-sized circularity.
+ */
+.table-scroll {
+  max-width: calc(100vw - 1rem);
+  overflow-x: auto;
+}
+
 table {
   th,
   td {
@@ -143,10 +161,20 @@ table {
     vertical-align: bottom;
   }
 
+  /* benchmark names stay readable while the value columns scroll under them */
+  .benchmark-name,
+  tfoot th {
+    position: sticky;
+    left: 0;
+    background: var(--page-bg);
+    /* cells later in the row otherwise paint over the sticky cell */
+    z-index: 1;
+  }
+
   .benchmark-name {
+    min-width: 11rem;
     text-align: right;
     display: flex;
-    position: relative;
     justify-content: end;
 
     .units {
@@ -166,7 +194,9 @@ table {
 
 .value-mode {
   display: inline-flex;
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  max-width: calc(100vw - 1rem);
   border: 1px solid lightgray;
   padding: 0.25rem 0.75rem;
 
