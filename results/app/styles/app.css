@@ -7,6 +7,9 @@
 
   /* whichever of the two is active, for elements that must be opaque */
   --page-bg: var(--light-bg);
+
+  /* the site header's height; sticky table headers pin just below it */
+  --header-height: 64px;
 }
 
 body {
@@ -144,10 +147,37 @@ main.error-page {
  * otherwise expand the layout viewport on small screens and clip
  * everything else. The vw-based cap (not a percentage) is what breaks
  * that content-sized circularity.
+ *
+ * The overflow is gated to viewports the table can't fit in: a scroll
+ * container captures position:sticky, so the thead can only pin to the
+ * viewport (below the site header) while this wrapper is overflow:
+ * visible. Bump the breakpoint if columns outgrow it (~810px natural
+ * width today).
  */
 .table-scroll {
   max-width: calc(100vw - 1rem);
-  overflow-x: auto;
+}
+
+@media (width <= 60rem) {
+  .table-scroll {
+    overflow-x: auto;
+  }
+}
+
+/*
+ * Only while the wrapper is NOT a scroll container: inside one, the
+ * sticky top offset binds to the wrapper (which never scrolls
+ * vertically), which would just shove the thead down over the first
+ * rows instead of pinning it to the viewport.
+ */
+@media (width > 60rem) {
+  table thead th {
+    position: sticky;
+    top: var(--header-height);
+    background: var(--page-bg);
+    /* above the sticky benchmark-name cells rows scroll by with */
+    z-index: 2;
+  }
 }
 
 table {
