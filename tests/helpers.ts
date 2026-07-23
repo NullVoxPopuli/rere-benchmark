@@ -13,6 +13,7 @@ export const FRAMEWORKS = [
   'react',
   'solid',
   'svelte',
+  'vanilla',
   'vue',
 ] as const;
 
