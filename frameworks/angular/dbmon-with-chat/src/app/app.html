@@ -1,0 +1,48 @@
+<div class="layout">
+  <table>
+    <thead>
+      <tr>
+        <th>dbname</th>
+        <th>queries</th>
+        <th colspan="5">elapsed times</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of rows(); track row.dbname) {
+        <tr>
+          <td class="dbname">{{ row.dbname }}</td>
+          <td class="query-count">
+            <span [class]="row.lastSample.countClassName">
+              {{ row.lastSample.queries.length }}
+            </span>
+          </td>
+          @for (query of row.lastSample.topFiveQueries; track $index) {
+            <td>
+              {{ query.elapsed }}
+              <div class="popover bottom">
+                <div class="popover-content">{{ query.query }}</div>
+                <div class="arrow"></div>
+              </div>
+            </td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  <div class="chats">
+    <div class="messages">
+      <div class="messages-inner">
+        @for (chat of chats(); track $index) {
+          <div class="chat">
+            <div class="author">{{ chat.author }}</div>
+            <p>{{ chat.message }}</p>
+          </div>
+        }
+      </div>
+    </div>
+    <div class="entry">
+      <textarea placeholder="send a message"></textarea>
+    </div>
+  </div>
+</div>
