@@ -148,35 +148,50 @@ main.error-page {
  * everything else. The vw-based cap (not a percentage) is what breaks
  * that content-sized circularity.
  *
- * The overflow is gated to viewports the table can't fit in: a scroll
- * container captures position:sticky, so the thead can only pin to the
- * viewport (below the site header) while this wrapper is overflow:
- * visible. Bump the breakpoint if columns outgrow it (~810px natural
- * width today).
+ * The thead pins in both modes, but differently, because a scroll
+ * container captures position:sticky:
+ *
+ * - above the breakpoint the wrapper is overflow: visible, so the
+ *   thead pins to the viewport, just below the site header
+ * - at or below it (the table can't fit: ~810px natural width today --
+ *   bump the breakpoint if columns outgrow it) the wrapper is a
+ *   height-bounded scroll pane, and the thead pins to the pane's top
+ *   edge instead. A viewport-relative top offset would be wrong here:
+ *   it would just shove the thead down over the first rows.
  */
 .table-scroll {
   max-width: calc(100vw - 1rem);
 }
 
-@media (width <= 60rem) {
-  .table-scroll {
-    overflow-x: auto;
+table thead th {
+  position: sticky;
+  background: var(--page-bg);
+  /* above the sticky benchmark-name cells rows scroll by with */
+  z-index: 2;
+}
+
+@media (width > 60rem) {
+  table thead th {
+    top: var(--header-height);
   }
 }
 
-/*
- * Only while the wrapper is NOT a scroll container: inside one, the
- * sticky top offset binds to the wrapper (which never scrolls
- * vertically), which would just shove the thead down over the first
- * rows instead of pinning it to the viewport.
- */
-@media (width > 60rem) {
+@media (width <= 60rem) {
+  .table-scroll {
+    overflow: auto;
+    max-height: calc(100vh - var(--header-height) - 1rem);
+    max-height: calc(100dvh - var(--header-height) - 1rem);
+  }
+
   table thead th {
-    position: sticky;
-    top: var(--header-height);
-    background: var(--page-bg);
-    /* above the sticky benchmark-name cells rows scroll by with */
-    z-index: 2;
+    top: 0;
+  }
+
+  /* the corner: pinned on both axes, so the frozen label column and
+     the frozen header row never show each other's scrolled content */
+  table thead th:first-child {
+    left: 0;
+    z-index: 3;
   }
 }
 
