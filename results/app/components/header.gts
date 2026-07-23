@@ -24,9 +24,11 @@ export const Header = <template>
   <style>
     header {
       width: 100%;
-      height: 64px;
+      height: var(--header-height);
       position: sticky;
       top: 0;
+      /* above the table's sticky header row and corner cell */
+      z-index: 4;
       display: flex;
       justify-content: space-between;
       align-items: center;
