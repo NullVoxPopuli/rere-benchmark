@@ -7,6 +7,9 @@
 
   /* whichever of the two is active, for elements that must be opaque */
   --page-bg: var(--light-bg);
+
+  /* the site header's height; sticky table headers pin just below it */
+  --header-height: 64px;
 }
 
 body {
@@ -144,10 +147,46 @@ main.error-page {
  * otherwise expand the layout viewport on small screens and clip
  * everything else. The vw-based cap (not a percentage) is what breaks
  * that content-sized circularity.
+ *
+ * The wrapper only becomes a scroll container on viewports the table
+ * genuinely can't fit in (~810px natural width today -- bump the
+ * breakpoint if columns outgrow it). That threshold matters for the
+ * thead too: a scroll container captures position:sticky, so the thead
+ * pins to the viewport with CSS only while the wrapper is overflow:
+ * visible. Below the breakpoint the pinning is emulated by the
+ * pinnedThead modifier (results/index.gts) instead -- the page must
+ * stay the only vertical scroller (nested vertical scrollbars are
+ * miserable to use), which rules out a scroll-pane approach.
  */
 .table-scroll {
   max-width: calc(100vw - 1rem);
-  overflow-x: auto;
+}
+
+@media (width <= 52rem) {
+  .table-scroll {
+    overflow-x: auto;
+  }
+}
+
+table thead {
+  /* the whole header row paints above the sticky benchmark-name cells
+     that rows scroll by with (a per-cell z-index can't win once the
+     modifier's transform gives the thead its own stacking context) */
+  position: relative;
+  z-index: 2;
+  /* also covers the border-spacing gaps between the th cells */
+  background: var(--page-bg);
+}
+
+table thead th {
+  background: var(--page-bg);
+}
+
+@media (width > 52rem) {
+  table thead th {
+    position: sticky;
+    top: var(--header-height);
+  }
 }
 
 table {
