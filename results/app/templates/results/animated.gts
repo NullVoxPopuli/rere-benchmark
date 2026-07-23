@@ -3,6 +3,7 @@ import { cached } from "@glimmer/tracking";
 import { assert } from "@ember/debug";
 
 import { FrameworkInfo } from "#components/framework-info.gts";
+import { Version } from "#components/version.gts";
 import { dataOf, round } from "#utils";
 
 import type { Model } from "#routes/results.ts";
@@ -86,6 +87,10 @@ export class Visualize extends Component<{
     return this.args.benchInfo.whatsBetter === "bigger";
   }
 
+  overrideFor = (framework: string) => {
+    return this.args.file.versionOverrides?.[framework];
+  };
+
   <template>
     <section class="languages-container">
       <h2>{{@benchInfo.name}}</h2>
@@ -109,7 +114,7 @@ export class Visualize extends Component<{
                 {{fw.units}}
                 <br />
                 <span class="small">
-                  {{fw.version}}
+                  <Version @version={{fw.version}} @override={{this.overrideFor fw.name}} />
                 </span>
               </td>
               <td>

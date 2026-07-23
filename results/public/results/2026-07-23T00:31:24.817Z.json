@@ -1,6 +1,12 @@
 {
   "date": "2026-07-23T00:31:24.817Z",
   "sha": "e7d3d9023fe35ce4b6b6c3770b2ccc8428db4915",
+  "versionOverrides": {
+    "ember": {
+      "number": 21514,
+      "url": "https://github.com/emberjs/ember.js/pull/21514"
+    }
+  },
   "args": {
     "SKIP_BUILD": false,
     "CPU_THROTTLE": 4,

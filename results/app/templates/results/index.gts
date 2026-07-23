@@ -7,6 +7,7 @@ import { service } from "@ember/service";
 import { interpolate } from "culori";
 
 import { FrameworkInfo } from "#components/framework-info.gts";
+import { Version } from "#components/version.gts";
 import { round, timeFromMarks } from "#utils";
 
 import type Owner from "@ember/owner";
@@ -273,6 +274,10 @@ class Table extends Component<{
     return [...versionSet][0];
   };
 
+  overrideFor = (framework: string) => {
+    return this.args.file.versionOverrides?.[framework];
+  };
+
   <template>
     <table>
       <thead>
@@ -282,7 +287,10 @@ class Table extends Component<{
             <th class="fw-header">
               <FrameworkInfo @name={{framework}} />
               <span class="small">
-                {{this.versionFor framework}}
+                <Version
+                  @version={{this.versionFor framework}}
+                  @override={{this.overrideFor framework}}
+                />
               </span>
             </th>
           {{/each}}
