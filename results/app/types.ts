@@ -25,6 +25,21 @@ export interface ResultData {
   };
 }
 
+/**
+ * An optional override that replaces a framework's version label in the
+ * results app with a link — e.g. to the PR the build was produced from.
+ */
+export interface VersionOverride {
+  /**
+   * The PR number, rendered as `#<number>` in place of the version.
+   */
+  number: string | number;
+  /**
+   * Where the label links to (e.g. the PR on GitHub).
+   */
+  url: string;
+}
+
 export interface BenchmarkInfo {
   name: string;
   app: string;
@@ -70,6 +85,12 @@ export interface ResultSet {
     frameworks: string[];
   };
   benchmarkInfo: BenchmarkInfo[];
+  /**
+   * Optional per-framework overrides that replace the version label in the
+   * results app with a link (e.g. to the PR a build came from). Keyed by
+   * framework name, e.g. `{ ember: { number: 21513, url: "https://..." } }`.
+   */
+  versionOverrides?: Record<string, VersionOverride>;
   environment: {
     machine: {
       os: {
