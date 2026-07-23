@@ -1,4 +1,6 @@
 :root {
+  --header-height: 64px;
+
   --light-bg: #fff;
   --light-fg: #000;
 
@@ -63,6 +65,16 @@ body {
   display: grid;
   gap: 0.5rem;
   justify-content: center;
+
+  /* wide tables widen the page itself (horizontal page scroll) rather than
+     scrolling in a nested container; sizing the body to its content keeps
+     the centered grid from overflowing past the unreachable left edge */
+  --body-margin: 8px;
+  margin: var(--body-margin);
+  width: max-content;
+  /* 100% would add the margins on top of the viewport width and leave a
+     permanent 8px horizontal scroll */
+  min-width: calc(100% - 2 * var(--body-margin));
 }
 
 .home-link {
@@ -139,21 +151,26 @@ main.error-page {
   }
 }
 
-/*
- * The page centers content at its natural width, so a wide table would
- * otherwise expand the layout viewport on small screens and clip
- * everything else. The vw-based cap (not a percentage) is what breaks
- * that content-sized circularity.
- */
-.table-scroll {
-  max-width: calc(100vw - 1rem);
-  overflow-x: auto;
-}
-
 table {
   th,
   td {
     padding: 0.25rem 0.5rem;
+  }
+
+  /* the page is the scroll container, so the header row can pin below the
+     sticky site header while the rows scroll under it */
+  thead th {
+    position: sticky;
+    top: var(--header-height);
+    background: var(--page-bg);
+    z-index: 2;
+  }
+
+  /* corner cell pins on both axes so framework headers slide under it,
+     matching the sticky benchmark-name column below */
+  thead th:first-child {
+    left: 0;
+    z-index: 3;
   }
 
   .fw-header {
