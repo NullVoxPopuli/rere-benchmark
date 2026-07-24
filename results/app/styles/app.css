@@ -209,6 +209,88 @@ table {
   }
 }
 
+.compare-title {
+  font-size: 1.25rem;
+  text-align: center;
+}
+
+.compare-controls {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  align-items: center;
+  max-width: calc(100vw - 1rem);
+  border: 1px solid lightgray;
+  padding: 0.25rem 0.75rem;
+  margin-bottom: 1rem;
+
+  legend {
+    font-size: 0.8rem;
+  }
+
+  label {
+    display: inline-flex;
+    gap: 0.25rem;
+    align-items: center;
+  }
+
+  select {
+    max-width: 40vw;
+  }
+}
+
+.compare-warning {
+  max-width: 40rem;
+  border: 1px solid darkorange;
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
+}
+
+.compare-table {
+  .run-header {
+    text-align: center;
+
+    .run-tag {
+      font-size: 0.7rem;
+      border: 1px solid currentColor;
+      border-radius: 0.25rem;
+      padding: 0 0.25rem;
+      opacity: 0.7;
+    }
+
+    .small {
+      display: block;
+    }
+  }
+
+  .num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .change {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+
+    /* .value handles text contrast against these, same as the results tables */
+    &.better {
+      background: #77ff77;
+    }
+
+    &.worse {
+      background: #ff7777;
+    }
+
+    /* same contrast treatment the .value spans get, at label size */
+    .units {
+      font-size: 0.6rem;
+      color: white;
+      filter: contrast(0.4);
+      mix-blend-mode: difference;
+    }
+  }
+}
+
 .value-mode {
   display: inline-flex;
   flex-wrap: wrap;

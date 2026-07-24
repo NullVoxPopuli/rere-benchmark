@@ -2,7 +2,7 @@ import { assert } from "@ember/debug";
 
 import { frameworks } from "./frameworks.ts";
 
-import type { Mark, ResultData } from "#types";
+import type { BenchmarkInfo, Mark, ResultData } from "#types";
 
 export function getFrameworkVersion(results: ResultData, framework: string) {
   return Object.values(results[framework] ?? {})[0]?.version;
@@ -110,6 +110,17 @@ export function timeFromMarks(times: Array<Mark[]>, measure: string | undefined)
 
 export function isBiggerBetter(results: { whatsBetter: string }): boolean {
   return results.whatsBetter === "bigger";
+}
+
+export function higherIsBetterBenches(benchmarkInfo: BenchmarkInfo[]) {
+  return benchmarkInfo.filter((bench) => bench.whatsBetter === "bigger");
+}
+
+export function lowerIsBetterBenches(benchmarkInfo: BenchmarkInfo[]) {
+  return benchmarkInfo
+    .filter((bench) => bench.whatsBetter !== "bigger")
+    .toSorted()
+    .toSorted((a, b) => (a.name.includes("async") ? 1 : 0) - (b.name.includes("async") ? 1 : 0));
 }
 
 export function dataOf(results: ResultData, benchName: string) {

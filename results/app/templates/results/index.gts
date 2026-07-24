@@ -8,7 +8,7 @@ import { interpolate } from "culori";
 
 import { FrameworkInfo } from "#components/framework-info.gts";
 import { Version } from "#components/version.gts";
-import { round, timeFromMarks } from "#utils";
+import { higherIsBetterBenches, lowerIsBetterBenches, round, timeFromMarks } from "#utils";
 
 import type Owner from "@ember/owner";
 import type RouterService from "@ember/routing/router-service";
@@ -350,15 +350,12 @@ export default class ResultsTables extends Component<{
 
   @cached
   get higherBenches() {
-    return this.benchmarkInfo.filter((bench) => bench.whatsBetter === "bigger");
+    return higherIsBetterBenches(this.benchmarkInfo);
   }
 
   @cached
   get lowerBenches() {
-    return this.benchmarkInfo
-      .filter((bench) => bench.whatsBetter !== "bigger")
-      .toSorted()
-      .toSorted((a, b) => (a.name.includes("async") ? 1 : 0) - (b.name.includes("async") ? 1 : 0));
+    return lowerIsBetterBenches(this.benchmarkInfo);
   }
 
   <template>
