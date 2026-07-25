@@ -17,7 +17,6 @@ import path from 'node:path';
 
 import * as clack from '@clack/prompts';
 import { $ } from 'execa';
-import { globby } from 'globby';
 
 const [, , framework, tarball] = process.argv;
 
@@ -37,11 +36,10 @@ if (!existsSync(tarPath)) {
   process.exit(1);
 }
 
-const appDirs = (
-  await globby(`frameworks/${framework}/*/package.json`, { gitignore: true })
-)
-  .map((manifest) => path.dirname(manifest))
-  .sort();
+const manifests = await Array.fromAsync(
+  fs.glob(`frameworks/${framework}/*/package.json`),
+);
+const appDirs = manifests.map((manifest) => path.dirname(manifest)).sort();
 
 if (appDirs.length === 0) {
   const available = await fs.readdir('frameworks');
