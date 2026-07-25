@@ -6,9 +6,10 @@
  *
  *   pnpm use-tar-for ember ./path-to/tar.tgz
  *
- * The tarball is copied in to each app, because pnpm resolves `file:`
- * dependencies relative to the package that declares them --
- * a path that works from the monorepo root does not work from the app.
+ * The tarball is copied to the root of the repo (once), and each app
+ * references it from there -- pnpm resolves `file:` dependencies relative
+ * to the package that declares them, so each app gets its own relative path
+ * to the one tarball.
  */
 import { existsSync } from 'node:fs';
 import fs from 'node:fs/promises';
@@ -52,16 +53,26 @@ if (appDirs.length === 0) {
 }
 
 const tarName = path.basename(tarPath);
+const rootCopy = path.resolve(tarName);
+
+if (rootCopy !== tarPath) {
+  await fs.copyFile(tarPath, rootCopy);
+}
 
 for (const dir of appDirs) {
-  clack.log.info(`Installing ${tarName} in ${dir}`);
+  /**
+   * Relative to the app, because that's what pnpm writes in to the app's
+   * package.json -- and what it resolves from when installing.
+   */
+  const specifier = path.relative(path.resolve(dir), rootCopy);
 
-  await fs.copyFile(tarPath, path.join(dir, tarName));
+  clack.log.info(`Installing ${specifier} in ${dir}`);
+
   await $({
     preferLocal: true,
     cwd: dir,
     stdio: 'inherit',
-  })`pnpm add ./${tarName}`;
+  })`pnpm add ${specifier}`;
 }
 
 clack.log.success(
