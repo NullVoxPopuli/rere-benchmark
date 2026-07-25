@@ -159,3 +159,21 @@ TODO: Write this
     2. `pnpm install`
     3. `pnpm start`
 
+## Benchmarking an unreleased version of a framework
+
+A PR, a nightly, a local build -- anything you can `npm pack` into a tarball:
+
+```bash
+pnpm use-tar-for ember ./path-to/ember-source.tgz
+```
+
+The tarball is copied to the root of the repo, and every app in `frameworks/ember/`
+is pointed at it. Then run the benchmark as usual, and compare the run against a
+run of `main` in the results app.
+
+For ember specifically, CI can do all of that for you: run the
+[**Try Ember PR**](../../actions/workflows/try-ember-pr.yml) workflow with a link to a
+PR on `emberjs/ember.js` (or just its number). It builds that PR, installs the build
+in every ember app, and opens a draft PR here with the result -- check it out, and
+`pnpm bench`.
+
