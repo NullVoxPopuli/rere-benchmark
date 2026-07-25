@@ -30,9 +30,17 @@ export function tryVerify(label, check, attempts = 0) {
   }
 
   if (attempts < NUM_FRAMES_TO_WAIT) {
-    requestIdleCallback(() => {
-      tryVerify(label, check, attempts + 1);
-    });
+    // The timeout keeps the retry loop honest in two ways: a fully idle
+    // page can starve requestIdleCallback entirely (the arm-but-never-fire
+    // failure #34 fixed in base-test), and unbounded idle-grant latency
+    // taxes frameworks that defer rendering past the dirtying task by
+    // hundreds of ms of pure measurement noise on `:done`.
+    requestIdleCallback(
+      () => {
+        tryVerify(label, check, attempts + 1);
+      },
+      { timeout: 50 },
+    );
     return;
   }
 
