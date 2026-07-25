@@ -86,11 +86,6 @@ jobs:
 
       - name: Checkout the benchmark
         uses: actions/checkout@v6
-        with:
-          # PRs opened (and branches pushed) with the default GITHUB_TOKEN do not
-          # trigger CI on themselves. Add a TRY_EMBER_PR_TOKEN secret (a PAT with
-          # `repo` scope) to have the benchmark workflows run on the PRs this opens.
-          token: ${{ secrets.TRY_EMBER_PR_TOKEN || github.token }}
 
       - name: Checkout ember-source
         uses: actions/checkout@v6
@@ -133,7 +128,7 @@ jobs:
       - name: Open the PR
         id: open
         env:
-          GH_TOKEN: ${{ secrets.TRY_EMBER_PR_TOKEN || github.token }}
+          GH_TOKEN: ${{ github.token }}
           EMBER_REPO: ${{ steps.pr.outputs.repo }}
           NUMBER: ${{ steps.pr.outputs.number }}
           REF: ${{ steps.pr.outputs.ref }}
