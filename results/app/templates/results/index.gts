@@ -1,14 +1,21 @@
 import Component from "@glimmer/component";
 import { cached } from "@glimmer/tracking";
-import { warn } from "@ember/debug";
 import { get } from "@ember/helper";
 import { service } from "@ember/service";
 
 import { interpolate } from "culori";
 
+import { BenchmarkName } from "#components/benchmark-name.gts";
 import { FrameworkInfo } from "#components/framework-info.gts";
 import { Version } from "#components/version.gts";
-import { higherIsBetterBenches, lowerIsBetterBenches, round, timeFromMarks } from "#utils";
+import {
+  higherIsBetterBenches,
+  lowerIsBetterBenches,
+  overrideOf,
+  round,
+  timeFor,
+  versionOf,
+} from "#utils";
 
 import type Owner from "@ember/owner";
 import type RouterService from "@ember/routing/router-service";
@@ -82,11 +89,9 @@ function speedsFor(file: ResultSet, benchInfo: BenchmarkInfo, frameworkNames: st
   let max = -Infinity;
 
   for (const framework of frameworkNames) {
-    const test = file.results[framework]?.[benchInfo.name];
+    const time = timeFor(file, framework, benchInfo);
 
-    if (!test) continue;
-
-    const time = timeFromMarks(test.times, benchInfo.measure);
+    if (time === undefined) continue;
 
     speeds[framework] = time;
 
@@ -158,14 +163,7 @@ class TableRow extends Component<{
 
   <template>
     <tr>
-      <td class="benchmark-name">
-        {{@benchInfo.name}}
-        <span class="units">
-          (
-          {{@benchInfo.units}}
-          )
-        </span>
-      </td>
+      <BenchmarkName @bench={{@benchInfo}} />
 
       {{#each @frameworkNames as |framework|}}
         <td style="background: {{get this.colors framework}};"><span class="value">{{this.value
@@ -201,11 +199,9 @@ class Table extends Component<{
         for (const framework of args.file.selections.frameworks) {
           this.totals[framework] ??= 0;
 
-          const test = args.file.results[framework]?.[bench.name];
+          const time = timeFor(args.file, framework, bench);
 
-          if (!test) continue;
-
-          const time = timeFromMarks(test.times, bench.measure);
+          if (time === undefined) continue;
 
           this.totals[framework] += time;
         }
@@ -253,31 +249,6 @@ class Table extends Component<{
     }
   };
 
-  versionFor = (framework: string) => {
-    /**
-     * Because each bench mark is a different app, it is possible the versions diverge
-     */
-    const versions = Object.values(this.args.file.results[framework] ?? {}).map(
-      (result) => result.version,
-    );
-
-    const versionSet = new Set(versions);
-
-    warn(
-      `There is more than one version for ${framework}. You need to do some upgrading to get the benchmark apps for ${framework} in sync. Found ${[...versionSet].join(", ")}`,
-      versionSet.size > 1,
-      {
-        id: "benchmark-app-maintenance-needed-version-divergence",
-      },
-    );
-
-    return [...versionSet][0];
-  };
-
-  overrideFor = (framework: string) => {
-    return this.args.file.versionOverrides?.[framework];
-  };
-
   <template>
     {{! wide tables widen the page itself so the sticky header row and
         benchmark-name column can pin against the viewport }}
@@ -290,8 +261,8 @@ class Table extends Component<{
               <FrameworkInfo @name={{framework}} />
               <span class="small">
                 <Version
-                  @version={{this.versionFor framework}}
-                  @override={{this.overrideFor framework}}
+                  @version={{versionOf @file framework}}
+                  @override={{overrideOf @file framework}}
                 />
               </span>
             </th>

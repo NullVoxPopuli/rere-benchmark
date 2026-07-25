@@ -1,6 +1,8 @@
 import Route from "@ember/routing/route";
 import { service } from "@ember/service";
 
+import { warnOnVersionDivergence } from "#utils";
+
 import type RouterService from "@ember/routing/router-service";
 import type Transition from "@ember/routing/transition";
 import type { ResultSet } from "#types";
@@ -47,6 +49,9 @@ export default class Results extends Route<Model> {
       const response = await fetch(`/results/${q}.json`);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const json = await response.json();
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      warnOnVersionDivergence(json);
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       return { data: json };

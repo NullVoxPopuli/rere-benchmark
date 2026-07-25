@@ -1,11 +1,73 @@
-import { assert } from "@ember/debug";
+import { assert, warn } from "@ember/debug";
 
 import { frameworks } from "./frameworks.ts";
 
-import type { BenchmarkInfo, Mark, ResultData } from "#types";
+import type { BenchmarkInfo, Mark, ResultData, ResultSet } from "#types";
 
-export function getFrameworkVersion(results: ResultData, framework: string) {
-  return Object.values(results[framework] ?? {})[0]?.version;
+function versionsOf(file: ResultSet, framework: string) {
+  return new Set(Object.values(file.results[framework] ?? {}).map((result) => result.version));
+}
+
+/**
+ * The version of a framework in a run.
+ */
+export function versionOf(file: ResultSet, framework: string) {
+  return [...versionsOf(file, framework)][0];
+}
+
+/**
+ * Every benchmark is its own app, so a framework's version can drift
+ * between them -- a maintenance problem worth shouting about.
+ *
+ * Checked once per loaded run rather than per rendered version, because
+ * a framework whose version is displayed as a PR link never has its
+ * version read at all: template arguments are lazy, so the frameworks
+ * most likely to have drifted are exactly the ones that would slip
+ * through a check that hangs off the display.
+ */
+export function warnOnVersionDivergence(file: ResultSet) {
+  for (const framework of getFrameworks(file.results)) {
+    const versions = versionsOf(file, framework);
+
+    warn(
+      `There is more than one version for ${framework}. You need to do some upgrading to get the benchmark apps for ${framework} in sync. Found ${[...versions].join(", ")}`,
+      versions.size <= 1,
+      {
+        id: "benchmark-app-maintenance-needed-version-divergence",
+      },
+    );
+  }
+}
+
+/**
+ * A label to show in place of the version, when a run was built from
+ * something that doesn't have one -- a PR, say.
+ */
+export function overrideOf(file: ResultSet, framework: string) {
+  return file.versionOverrides?.[framework];
+}
+
+/**
+ * How one framework did at one benchmark, or undefined when that run
+ * doesn't have the pair.
+ */
+export function timeFor(file: ResultSet, framework: string, bench: BenchmarkInfo) {
+  const test = file.results[framework]?.[bench.name];
+
+  if (!test) return;
+
+  return timeFromMarks(test.times, bench.measure);
+}
+
+/**
+ * How much the CPU was slowed down for a run. Timings are only comparable
+ * at the same setting, so this is worth stating outright. A run from
+ * before the setting was recorded is not the same as an unthrottled one.
+ */
+export function throttleLabel(cpuThrottle: number | undefined) {
+  if (cpuThrottle === undefined) return "CPU throttle unrecorded";
+
+  return cpuThrottle > 1 ? `${cpuThrottle}x CPU slowdown` : "no CPU slowdown";
 }
 
 export function getFrameworks(results: ResultData): string[] {

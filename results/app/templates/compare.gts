@@ -6,16 +6,19 @@ import { service } from "@ember/service";
 import { pageTitle } from "ember-page-title";
 import { results } from "virtual:result-sets";
 
+import { BenchmarkName } from "#components/benchmark-name.gts";
 import { FrameworkInfo } from "#components/framework-info.gts";
 import { Version } from "#components/version.gts";
-import { frameworks } from "#frameworks";
+import { nameOf } from "#frameworks";
 import {
   getFrameworks,
-  getFrameworkVersion,
   higherIsBetterBenches,
   lowerIsBetterBenches,
+  overrideOf,
   round,
-  timeFromMarks,
+  throttleLabel,
+  timeFor,
+  versionOf,
 } from "#utils";
 
 import type RouterService from "@ember/routing/router-service";
@@ -36,42 +39,16 @@ function qp(runName: string) {
   return { q: runName };
 }
 
-function nameOf(framework: string) {
-  return frameworks[framework]?.name ?? framework;
-}
-
-function versionOf(file: ResultSet, framework: string) {
-  return getFrameworkVersion(file.results, framework);
-}
-
-function overrideOf(file: ResultSet, framework: string) {
-  return file.versionOverrides?.[framework];
-}
-
 /**
- * How much the CPU was slowed down for a run. Timings are only
- * comparable at the same setting, so both runs say theirs outright
- * rather than leaving it to be inferred. A run from before the setting
- * was recorded is not the same as a run that wasn't throttled.
+ * Both runs state their throttle outright rather than leaving it to be
+ * inferred from the warning that only shows when they disagree.
  */
 function throttleOf(file: ResultSet) {
-  const throttle = file.args?.CPU_THROTTLE;
-
-  if (throttle === undefined) return "CPU throttle unrecorded";
-
-  return throttle > 1 ? `${throttle}x CPU slowdown` : "no CPU slowdown";
+  return throttleLabel(file.args?.CPU_THROTTLE);
 }
 
 function throttlesDiffer(a: ResultSet, b: ResultSet) {
   return (a.args?.CPU_THROTTLE ?? null) !== (b.args?.CPU_THROTTLE ?? null);
-}
-
-function timeFor(file: ResultSet, framework: string, bench: BenchmarkInfo) {
-  const test = file.results[framework]?.[bench.name];
-
-  if (!test) return;
-
-  return timeFromMarks(test.times, bench.measure);
 }
 
 interface Comparison {
@@ -191,14 +168,7 @@ class CompareTable extends Component<{
       <tbody>
         {{#each this.rows as |row|}}
           <tr>
-            <td class="benchmark-name">
-              {{row.bench.name}}
-              <span class="units">
-                (
-                {{row.bench.units}}
-                )
-              </span>
-            </td>
+            <BenchmarkName @bench={{row.bench}} />
             <td class="num">{{display row.a}}</td>
             <td class="num">{{display row.b}}</td>
             <td class="change {{row.comparison.direction}}">

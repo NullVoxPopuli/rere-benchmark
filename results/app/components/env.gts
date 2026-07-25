@@ -1,4 +1,4 @@
-import { formatDuration, msOfFrameAt } from "#utils";
+import { formatDuration, msOfFrameAt, throttleLabel } from "#utils";
 
 import type { TOC } from "@ember/component/template-only";
 import type { ResultSet } from "#types";
@@ -54,7 +54,7 @@ export const Info = <template>
       </li>
       {{#if (isThrottled @cpuThrottle)}}
         <li>
-          {{@cpuThrottle}}x CPU slowdown
+          {{throttleLabel @cpuThrottle}}
         </li>
       {{/if}}
       {{#if @timing}}

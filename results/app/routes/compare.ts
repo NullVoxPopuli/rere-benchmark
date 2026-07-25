@@ -3,6 +3,8 @@ import { service } from "@ember/service";
 
 import { results } from "virtual:result-sets";
 
+import { warnOnVersionDivergence } from "#utils";
+
 import type RouterService from "@ember/routing/router-service";
 import type Transition from "@ember/routing/transition";
 import type { ResultSet } from "#types";
@@ -104,7 +106,12 @@ function runsFor(a: string | undefined, b: string | undefined) {
 
 async function fetchResultSet(name: string): Promise<ResultSet> {
   const response = await fetch(`/results/${name}.json`);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const json = await response.json();
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  warnOnVersionDivergence(json);
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  return response.json();
+  return json;
 }
