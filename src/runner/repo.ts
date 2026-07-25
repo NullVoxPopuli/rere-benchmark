@@ -1,16 +1,19 @@
 import assert from 'node:assert';
+import fs from 'node:fs/promises';
 import path from 'node:path';
-
-import { globby } from 'globby';
 
 import { BENCH_NAME, FRAMEWORK } from './arg.ts';
 
 export async function getTests() {
-  let results = await globby('**/package.json', { gitignore: true });
+  /**
+   * Every app lives at frameworks/<framework>/<bench>,
+   * so there is nothing deeper to search (and no node_modules to skip).
+   */
+  const manifests = await Array.fromAsync(
+    fs.glob('frameworks/*/*/package.json'),
+  );
 
-  results = results
-    .filter((result) => result.startsWith('framework'))
-    .map((result) => path.dirname(result));
+  let results = manifests.map((manifest) => path.dirname(manifest)).sort();
 
   if (FRAMEWORK) {
     results = results.filter((result) => result.includes(`/${FRAMEWORK}/`));
