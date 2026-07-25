@@ -95,6 +95,13 @@ body {
     margin-top: 0;
     margin-bottom: 0.5rem;
   }
+
+  /* the label column is as wide as its longest benchmark name, so tables
+     on the same page are different widths; lining up their right edges
+     puts the same value column in the same place in each of them */
+  > table {
+    justify-self: end;
+  }
 }
 
 .visualizations {
@@ -148,6 +155,23 @@ main.error-page {
   span {
     font-size: 0.8rem;
     white-space: nowrap;
+  }
+}
+
+/* Every value column is this wide in every table of data. Combined with
+   the right-edge alignment above, that's what lets a column in one table
+   sit directly over the same column in the next one -- otherwise each
+   table sizes its columns to its own widest value and they drift. The
+   animated view's table is left out on purpose: one of its columns is a
+   visualization that wants all the room it can get. */
+.results-table,
+.compare-table {
+  --value-column: 6.5rem;
+
+  thead th:not(:first-child),
+  tbody td:not(.benchmark-name),
+  tfoot td {
+    width: var(--value-column);
   }
 }
 
@@ -272,8 +296,16 @@ table {
 }
 
 .compare-table {
+  /* wider than the results tables: these columns are headed by a
+     timestamp rather than a framework name */
+  --value-column: 10rem;
+
   .run-header {
     text-align: center;
+
+    a {
+      white-space: nowrap;
+    }
 
     .run-tag {
       font-size: 0.7rem;
@@ -285,6 +317,18 @@ table {
 
     .small {
       display: block;
+      font-weight: normal;
+    }
+
+    .throttle {
+      opacity: 0.7;
+
+      /* timings from different throttle settings aren't comparable, so
+         the two labels have to be noticed, not just present */
+      &.mismatch {
+        opacity: 1;
+        color: darkorange;
+      }
     }
   }
 

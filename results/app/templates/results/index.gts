@@ -284,7 +284,7 @@ class Table extends Component<{
   <template>
     {{! wide tables widen the page itself so the sticky header row and
         benchmark-name column can pin against the viewport }}
-    <table>
+    <table class="results-table">
       <thead>
         <tr>
           <th></th>

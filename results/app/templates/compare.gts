@@ -43,6 +43,24 @@ function overrideOf(file: ResultSet, framework: string) {
   return file.versionOverrides?.[framework];
 }
 
+/**
+ * How much the CPU was slowed down for a run. Timings are only
+ * comparable at the same setting, so both runs say theirs outright
+ * rather than leaving it to be inferred. A run from before the setting
+ * was recorded is not the same as a run that wasn't throttled.
+ */
+function throttleOf(file: ResultSet) {
+  const throttle = file.args?.CPU_THROTTLE;
+
+  if (throttle === undefined) return "CPU throttle unrecorded";
+
+  return throttle > 1 ? `${throttle}x CPU slowdown` : "no CPU slowdown";
+}
+
+function throttlesDiffer(a: ResultSet, b: ResultSet) {
+  return (a.args?.CPU_THROTTLE ?? null) !== (b.args?.CPU_THROTTLE ?? null);
+}
+
 function timeFor(file: ResultSet, framework: string, bench: BenchmarkInfo) {
   const test = file.results[framework]?.[bench.name];
 
@@ -104,6 +122,10 @@ class CompareTable extends Component<{
     });
   }
 
+  get throttlesDiffer() {
+    return throttlesDiffer(this.args.a.data, this.args.b.data);
+  }
+
   @cached
   get totals() {
     // benches missing from either run would skew a summed comparison
@@ -141,6 +163,9 @@ class CompareTable extends Component<{
                 @override={{overrideOf @a.data @framework}}
               />
             </span>
+            <span class="small throttle {{if this.throttlesDiffer 'mismatch'}}">
+              {{throttleOf @a.data}}
+            </span>
           </th>
           <th class="run-header">
             <span class="run-tag">B</span>
@@ -150,6 +175,9 @@ class CompareTable extends Component<{
                 @version={{versionOf @b.data @framework}}
                 @override={{overrideOf @b.data @framework}}
               />
+            </span>
+            <span class="small throttle {{if this.throttlesDiffer 'mismatch'}}">
+              {{throttleOf @b.data}}
             </span>
           </th>
           <th>B vs A</th>
@@ -260,11 +288,10 @@ export default class Compare extends Component<{ model: Model }> {
       problems.push("these runs were recorded in different environments (machine / browser)");
     }
 
-    const throttleA = this.a.data.args?.CPU_THROTTLE ?? 1;
-    const throttleB = this.b.data.args?.CPU_THROTTLE ?? 1;
-
-    if (throttleA !== throttleB) {
-      problems.push(`CPU throttle differs (${throttleA}x vs ${throttleB}x)`);
+    if (throttlesDiffer(this.a.data, this.b.data)) {
+      problems.push(
+        `the CPU was throttled differently (${throttleOf(this.a.data)} vs ${throttleOf(this.b.data)})`,
+      );
     }
 
     return problems.join("; ");
@@ -342,29 +369,25 @@ export default class Compare extends Component<{ model: Model }> {
       <FrameworkInfo @name={{this.framework}} />
 
       {{#if this.higherBenches.length}}
-        <div>
-          <h2>higher is better</h2>
+        <h2>higher is better</h2>
 
-          <CompareTable
-            @benches={{this.higherBenches}}
-            @a={{this.a}}
-            @b={{this.b}}
-            @framework={{this.framework}}
-          />
-        </div>
+        <CompareTable
+          @benches={{this.higherBenches}}
+          @a={{this.a}}
+          @b={{this.b}}
+          @framework={{this.framework}}
+        />
       {{/if}}
 
       {{#if this.lowerBenches.length}}
-        <div>
-          <h2>lower is better</h2>
+        <h2>lower is better</h2>
 
-          <CompareTable
-            @benches={{this.lowerBenches}}
-            @a={{this.a}}
-            @b={{this.b}}
-            @framework={{this.framework}}
-          />
-        </div>
+        <CompareTable
+          @benches={{this.lowerBenches}}
+          @a={{this.a}}
+          @b={{this.b}}
+          @framework={{this.framework}}
+        />
       {{/if}}
     </div>
   </template>
