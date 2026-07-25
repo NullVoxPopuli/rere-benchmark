@@ -1,5 +1,3 @@
-import { assert } from "@ember/debug";
-
 export interface FrameworkInfo {
   /**
    * How the framework likes to be written as
@@ -87,7 +85,9 @@ export const frameworks: Record<string, FrameworkInfo> = {
 export function infoFor(name: string): FrameworkInfo {
   const info = frameworks[name];
 
-  assert(`Expected ${name} to be one of ${Object.keys(frameworks).join(", ")}`, info);
+  if (!info) {
+    throw new Error(`Expected ${name} to be one of ${Object.keys(frameworks).join(", ")}`);
+  }
 
   return info;
 }
