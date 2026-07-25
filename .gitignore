@@ -1,6 +1,9 @@
 # deps
 node_modules/
 
+# tarballs copied in to apps by `pnpm use-tar-for`
+*.tgz
+
 # common output directories
 .log/
 dist/

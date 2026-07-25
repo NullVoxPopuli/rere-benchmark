@@ -16,6 +16,7 @@
     "start": "cd ./results; pnpm start",
     "cli": "node --experimental-strip-types ./src/runner/cli.ts",
     "copy": "node --experimental-strip-types ./src/runner/copy.ts",
+    "use-tar-for": "node --experimental-strip-types ./src/runner/use-tar-for.ts",
     "bench": "node --experimental-strip-types ./src/runner/index.ts"
   },
   "packageManager": "pnpm@10.21.0",
