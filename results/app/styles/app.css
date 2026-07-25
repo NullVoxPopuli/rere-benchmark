@@ -176,6 +176,10 @@ table {
   .fw-header {
     text-align: center;
     vertical-align: bottom;
+
+    .compare-link {
+      margin: 0.25rem auto 0;
+    }
   }
 
   /* benchmark names stay readable while the value columns scroll under them */
@@ -206,6 +210,27 @@ table {
     color: white;
     filter: contrast(0.4);
     mix-blend-mode: difference;
+  }
+}
+
+/* quiet until wanted -- the numbers are what the table is for -- but big
+   enough to be a tap target */
+.compare-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.5rem;
+  color: currentColor;
+  border: 1px solid;
+  border-radius: 0.25rem;
+  border-color: color-mix(in oklch, currentColor 30%, transparent);
+  opacity: 0.6;
+
+  &:hover,
+  &:focus-visible {
+    opacity: 1;
+    border-color: currentColor;
   }
 }
 

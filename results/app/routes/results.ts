@@ -10,6 +10,10 @@ interface Params {
 }
 
 export interface Model {
+  /**
+   * The name of the run -- i.e. the ?q= param / results file it came from.
+   */
+  name: string;
   data: ResultSet;
 }
 
@@ -49,7 +53,7 @@ export default class Results extends Route<Model> {
       const json = await response.json();
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      return { data: json };
+      return { name: q, data: json };
     } catch (e) {
       console.error(e);
       // SAFETY: don't care -- the fact that people can throw non-errors is a mistake

@@ -6,6 +6,7 @@ import { service } from "@ember/service";
 
 import { interpolate } from "culori";
 
+import { CompareLink } from "#components/compare-link.gts";
 import { FrameworkInfo } from "#components/framework-info.gts";
 import { Version } from "#components/version.gts";
 import { higherIsBetterBenches, lowerIsBetterBenches, round, timeFromMarks } from "#utils";
@@ -179,6 +180,7 @@ class TableRow extends Component<{
 class Table extends Component<{
   benches: BenchmarkInfo[];
   file: ResultSet;
+  runName: string;
 }> {
   @service declare router: RouterService;
 
@@ -190,6 +192,7 @@ class Table extends Component<{
     args: {
       benches: BenchmarkInfo[];
       file: ResultSet;
+      runName: string;
     },
   ) {
     super(owner, args);
@@ -294,6 +297,7 @@ class Table extends Component<{
                   @override={{this.overrideFor framework}}
                 />
               </span>
+              <CompareLink @framework={{framework}} @run={{@runName}} />
             </th>
           {{/each}}
         </tr>
@@ -395,7 +399,7 @@ export default class ResultsTables extends Component<{
     {{#if this.higherBenches.length}}
       <h2>higher is better</h2>
 
-      <Table @benches={{this.higherBenches}} @file={{this.file}} />
+      <Table @benches={{this.higherBenches}} @file={{this.file}} @runName={{@model.name}} />
       <br />
       <br />
       <br />
@@ -404,7 +408,7 @@ export default class ResultsTables extends Component<{
     {{#if this.lowerBenches.length}}
       <h2>lower is better</h2>
 
-      <Table @benches={{this.lowerBenches}} @file={{this.file}} />
+      <Table @benches={{this.lowerBenches}} @file={{this.file}} @runName={{@model.name}} />
       <br />
       <br />
       <br />

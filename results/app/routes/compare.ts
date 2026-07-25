@@ -42,12 +42,7 @@ export default class Compare extends Route<Model> {
 
     transition.abort();
     this.router.transitionTo("compare", {
-      queryParams: {
-        ...qps,
-        // default to comparing the two most recent runs
-        a: qps["a"] ?? results[1] ?? results[0],
-        b: qps["b"] ?? results[0],
-      },
+      queryParams: { ...qps, ...runsFor(qps["a"], qps["b"]) },
     });
   }
 
@@ -73,6 +68,38 @@ export default class Compare extends Route<Model> {
       this.router.transitionTo("error", { queryParams: { error: e.message } });
     }
   }
+}
+
+/**
+ * The run next to `name`, preferring `direction` -- `results` is
+ * newest-first, so older runs are later in the list. Falls back to the
+ * other side for the first and last run, and to `name` itself when it's
+ * the only run there is.
+ */
+function neighborOf(name: string, direction: "older" | "newer") {
+  const index = results.indexOf(name);
+
+  if (index === -1) return results[0];
+
+  const [preferred, fallback] =
+    direction === "older" ? [index + 1, index - 1] : [index - 1, index + 1];
+
+  return results[preferred] ?? results[fallback] ?? name;
+}
+
+/**
+ * Fills in whichever of the two runs wasn't asked for, so linking to
+ * /compare from a single run only has to name that run. A run linked as
+ * the candidate (B) is compared against what came before it; one linked
+ * as the baseline (A) is compared against what came after.
+ */
+function runsFor(a: string | undefined, b: string | undefined) {
+  if (a && b) return { a, b };
+  if (b) return { a: neighborOf(b, "older"), b };
+  if (a) return { a, b: neighborOf(a, "newer") };
+
+  // no runs named at all -- the two most recent
+  return { a: results[1] ?? results[0], b: results[0] };
 }
 
 async function fetchResultSet(name: string): Promise<ResultSet> {
