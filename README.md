@@ -153,6 +153,9 @@ TODO: Write this
 
     There are interactive prompts to choose which frameworks / benchmarks to run.
 
+    To skip the picking, `pnpm bench --framework=all --bench=all` runs everything.
+    (Every flag is listed in the table the runner prints on start up.)
+
 4. Wait for it to finish    
 5. View results:
     1. `cd results`
@@ -170,6 +173,17 @@ pnpm use-tar-for ember ./path-to/ember-source.tgz
 The tarball is copied to the root of the repo, and every app in `frameworks/ember/`
 is pointed at it. Then run the benchmark as usual, and compare the run against a
 run of `main` in the results app.
+
+The version number that gets recorded for such a run is whatever the branch happened
+to be cut from, which says nothing about what was measured -- so tell the runner where
+the build came from, and the results app links to the PR instead:
+
+```bash
+pnpm bench --framework=all --bench=all --ember=https://github.com/emberjs/ember.js/pull/21514
+```
+
+`--<framework>=<pr>` works for every framework in `results/app/frameworks.ts`
+(`--vue=`, `--svelte=`, ...), and takes a link or `owner/repo#number`.
 
 For ember specifically, CI can do all of that for you: run the
 [**Try Ember PR**](../../actions/workflows/try-ember-pr.yml) workflow with a link to a
