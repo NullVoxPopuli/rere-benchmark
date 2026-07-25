@@ -1,6 +1,16 @@
 import { styleText } from 'node:util';
 
+import { frameworks } from '../../results/app/frameworks.ts';
+
+import type { VersionOverride } from '../../results/app/types.ts';
+
 const [, , ...args] = process.argv;
+
+/**
+ * `--framework=all` / `--bench=all` selects everything,
+ * instead of asking.
+ */
+export const ALL = 'all';
 
 export const HEADLESS = bool('--headless');
 export const COUNT = int('--count', 10);
@@ -8,6 +18,7 @@ export const CPU_THROTTLE = int('--cpu-throttle', 1);
 export const FRAMEWORK = str('--framework');
 export const BENCH_NAME = str('--bench');
 export const SKIP_BUILD = bool('--skip-build');
+export const VERSION_OVERRIDES = versionOverrides();
 
 function col1(name: string) {
   return styleText('yellow', name.padEnd(16));
@@ -41,8 +52,15 @@ console.log(
     ),
     row(col1('--headless'), col2(HEADLESS), col3('limited to 60 fps')),
     row(col1('--count'), col2(COUNT), col3('sample count')),
-    row(col1('--framework'), col2(FRAMEWORK), ''),
-    row(col1('--bench'), col2(BENCH_NAME), ''),
+    row(col1('--framework'), col2(FRAMEWORK), col3(`or '${ALL}'`)),
+    row(col1('--bench'), col2(BENCH_NAME), col3(`or '${ALL}'`)),
+    ...Object.entries(VERSION_OVERRIDES).map(([framework, override]) =>
+      row(
+        col1(`--${framework}`),
+        col2(`#${override.number}`),
+        col3(override.url),
+      ),
+    ),
   ]
     .map((line) => '\t' + line)
     .join('\n'),
@@ -56,6 +74,66 @@ function str(name: string) {
   const arg = args.find((a) => a.startsWith(name));
 
   return arg?.split('=')[1];
+}
+
+/**
+ * Unlike {@link str}, `--ember` must not answer for `--ember-canary`.
+ */
+function exact(name: string) {
+  const arg = args.find((a) => a.split('=')[0] === name);
+
+  return arg?.split('=').slice(1).join('=');
+}
+
+/**
+ * `--ember=<link to a PR>` (and the same for every other framework) records
+ * which PR a framework's build came from -- as `pnpm use-tar-for` installs a
+ * tarball, the installed version number is whatever the PR happened to be
+ * branched from, and says nothing about what was measured.
+ *
+ * The results app links to the PR in place of that version.
+ */
+function versionOverrides() {
+  const overrides: Record<string, VersionOverride> = {};
+
+  for (const framework of Object.keys(frameworks)) {
+    const value = exact(`--${framework}`);
+
+    if (!value) continue;
+
+    const override = toPullRequest(value);
+
+    if (!override) {
+      console.error(
+        `--${framework}=${value} is not a pull request. ` +
+          `Expected a link (https://github.com/emberjs/ember.js/pull/21514) ` +
+          `or emberjs/ember.js#21514`,
+      );
+      process.exit(1);
+    }
+
+    overrides[framework] = override;
+  }
+
+  return overrides;
+}
+
+function toPullRequest(value: string): VersionOverride | undefined {
+  const parsed = value
+    .trim()
+    .replace(/^(https?:\/\/)?(www\.)?github\.com\//, '')
+    .match(/^(?<owner>[\w.-]+)\/(?<repo>[\w.-]+)(?:\/pull\/|#)(?<number>\d+)/);
+
+  if (!parsed?.groups) return;
+
+  const { owner, repo, number } = parsed.groups;
+
+  return {
+    number: Number(number),
+    // rebuilt, so that a link copied from a /files or #discussion view still
+    // points at the PR itself
+    url: `https://github.com/${owner}/${repo}/pull/${number}`,
+  };
 }
 
 function int(name: string, defaultValue: number) {

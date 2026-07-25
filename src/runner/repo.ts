@@ -2,7 +2,7 @@ import assert from 'node:assert';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
-import { BENCH_NAME, FRAMEWORK } from './arg.ts';
+import { ALL, BENCH_NAME, FRAMEWORK } from './arg.ts';
 
 export async function getTests() {
   /**
@@ -15,11 +15,11 @@ export async function getTests() {
 
   let results = manifests.map((manifest) => path.dirname(manifest)).sort();
 
-  if (FRAMEWORK) {
+  if (FRAMEWORK && FRAMEWORK !== ALL) {
     results = results.filter((result) => result.includes(`/${FRAMEWORK}/`));
   }
 
-  if (BENCH_NAME) {
+  if (BENCH_NAME && BENCH_NAME !== ALL) {
     results = results.filter((result) => result.includes(`${BENCH_NAME}`));
   }
 

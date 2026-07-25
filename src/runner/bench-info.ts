@@ -7,7 +7,7 @@ import * as clack from '@clack/prompts';
 import * as args from './arg.ts';
 import { yyyymmdd } from './environment.ts';
 import { frameworks } from './repo.ts';
-import { info, saveBenchmarkInfo } from './results.ts';
+import { info, saveBenchmarkInfo, saveVersionOverrides } from './results.ts';
 
 export interface BenchmarkInfo {
   /**
@@ -191,6 +191,10 @@ const benchmarks: BenchmarkInfo[] = [
 ];
 
 async function getFrameworks() {
+  if (args.FRAMEWORK === args.ALL) {
+    return [...frameworks.values()];
+  }
+
   let selectedFrameworks: string[] | undefined = args.FRAMEWORK
     ? [args.FRAMEWORK]
     : undefined;
@@ -215,6 +219,10 @@ async function getFrameworks() {
 }
 
 async function getBenches() {
+  if (args.BENCH_NAME === args.ALL) {
+    return benchmarks;
+  }
+
   let preselected: BenchmarkInfo | undefined;
 
   if (args.BENCH_NAME) {
@@ -274,6 +282,15 @@ async function getFilePath() {
 
 export async function getBenchInfo() {
   const selectedFrameworks = await getFrameworks();
+
+  for (const framework of Object.keys(args.VERSION_OVERRIDES)) {
+    if (selectedFrameworks.includes(framework)) continue;
+
+    clack.log.warn(
+      `--${framework} was given a PR, but ${framework} is not being benchmarked`,
+    );
+  }
+
   const selectedBenches = await getBenches();
   const filePath = await getFilePath();
 
@@ -303,6 +320,8 @@ export async function getBenchInfo() {
     },
     filePath,
   );
+
+  await saveVersionOverrides(args.VERSION_OVERRIDES, filePath);
 
   return {
     apps,
