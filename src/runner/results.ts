@@ -12,6 +12,7 @@ import {
 } from '../../results/app/frameworks.ts';
 import { getInfo } from './environment.ts';
 
+import type { VersionOverride } from '../../results/app/types.ts';
 import type { BenchmarkInfo } from './bench-info.ts';
 
 const require = createRequire(import.meta.url);
@@ -95,6 +96,23 @@ export async function saveBenchmarkInfo(
 
     return rest;
   });
+
+  await write(file, filePath);
+}
+
+/**
+ * Which PR each framework's build came from, when it came from one.
+ * Merged in, so appending to an existing file keeps the runs already in it.
+ */
+export async function saveVersionOverrides(
+  overrides: Record<string, VersionOverride>,
+  filePath: string,
+) {
+  if (Object.keys(overrides).length === 0) return;
+
+  const file = await read(filePath);
+
+  file.versionOverrides = { ...file.versionOverrides, ...overrides };
 
   await write(file, filePath);
 }
