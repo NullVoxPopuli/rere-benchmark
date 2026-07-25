@@ -13,5 +13,6 @@ Router.map(function () {
     this.route("animated");
   });
   this.route("history");
+  this.route("compare");
   this.route("error");
 });

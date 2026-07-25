@@ -1,16 +1,6 @@
-import { assert } from "@ember/debug";
-
-import { type FrameworkInfo as Info, frameworks } from "#frameworks";
+import { infoFor } from "#frameworks";
 
 import type { TOC } from "@ember/component/template-only";
-
-function infoFor(name: string): Info {
-  const info = frameworks[name];
-
-  assert(`Expected ${name} to be one of ${Object.keys(frameworks).join(", ")}`, info);
-
-  return info;
-}
 
 export const FrameworkInfo = <template>
   {{#let (infoFor @name) as |info|}}

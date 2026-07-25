@@ -11,6 +11,10 @@ export const Header = <template>
         History
       </LinkTo>
       |
+      <LinkTo @route="compare">
+        Compare
+      </LinkTo>
+      |
       <a
         href="https://github.com/NullVoxPopuli/rere-benchmark"
         target="_blank"

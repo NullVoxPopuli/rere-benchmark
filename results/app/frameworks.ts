@@ -1,3 +1,5 @@
+import { assert } from "@ember/debug";
+
 export interface FrameworkInfo {
   /**
    * How the framework likes to be written as
@@ -77,3 +79,24 @@ export const frameworks: Record<string, FrameworkInfo> = {
     package: "svelte",
   },
 };
+
+/**
+ * Everything known about a framework a run mentions. A run naming one we
+ * have no entry for is a gap in this file, not bad data.
+ */
+export function infoFor(name: string): FrameworkInfo {
+  const info = frameworks[name];
+
+  assert(`Expected ${name} to be one of ${Object.keys(frameworks).join(", ")}`, info);
+
+  return info;
+}
+
+/**
+ * How a framework likes to be written, for prose and form controls.
+ * Falls back to the key so an unknown framework is still nameable in
+ * builds where the assert above is compiled out.
+ */
+export function nameOf(framework: string) {
+  return frameworks[framework]?.name ?? framework;
+}
