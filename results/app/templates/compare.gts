@@ -8,6 +8,7 @@ import { results } from "virtual:result-sets";
 
 import { FrameworkInfo } from "#components/framework-info.gts";
 import { Version } from "#components/version.gts";
+import { frameworks } from "#frameworks";
 import {
   getFrameworks,
   getFrameworkVersion,
@@ -33,6 +34,10 @@ function shortName(runName: string) {
 
 function qp(runName: string) {
   return { q: runName };
+}
+
+function nameOf(framework: string) {
+  return frameworks[framework]?.name ?? framework;
 }
 
 function versionOf(file: ResultSet, framework: string) {
@@ -242,7 +247,8 @@ export default class Compare extends Component<{ model: Model }> {
       getFrameworks(this.a.data.results).concat(getFrameworks(this.b.data.results)),
     );
 
-    return Array.from(names);
+    // the runs list them in whatever order they were benchmarked in
+    return Array.from(names).sort((a, b) => nameOf(a).localeCompare(nameOf(b)));
   }
 
   get framework(): string {
@@ -334,7 +340,7 @@ export default class Compare extends Component<{ model: Model }> {
         framework
         <select name="framework" {{on "change" this.setFramework}}>
           {{#each this.frameworkNames as |name|}}
-            <option value={{name}} selected={{this.isFramework name}}>{{name}}</option>
+            <option value={{name}} selected={{this.isFramework name}}>{{nameOf name}}</option>
           {{/each}}
         </select>
       </label>
@@ -342,7 +348,7 @@ export default class Compare extends Component<{ model: Model }> {
         run A
         <select name="run-a" {{on "change" (fn this.setRun "a")}}>
           {{#each results as |name|}}
-            <option value={{name}} selected={{this.isRun "a" name}}>{{name}}</option>
+            <option value={{name}} selected={{this.isRun "a" name}}>{{shortName name}}</option>
           {{/each}}
         </select>
       </label>
@@ -350,7 +356,7 @@ export default class Compare extends Component<{ model: Model }> {
         run B
         <select name="run-b" {{on "change" (fn this.setRun "b")}}>
           {{#each results as |name|}}
-            <option value={{name}} selected={{this.isRun "b" name}}>{{name}}</option>
+            <option value={{name}} selected={{this.isRun "b" name}}>{{shortName name}}</option>
           {{/each}}
         </select>
       </label>
