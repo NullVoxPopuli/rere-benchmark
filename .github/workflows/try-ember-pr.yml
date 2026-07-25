@@ -1,0 +1,197 @@
+name: "Try Ember PR"
+
+# Builds ember-source from a PR on emberjs/ember.js and opens a PR here with
+# that build installed in every ember app -- i.e. `pnpm use-tar-for ember <tgz>`,
+# but done for you, in CI.
+on:
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: "PR on emberjs/ember.js: a URL (https://github.com/emberjs/ember.js/pull/21512) or just the number (21512)"
+        required: true
+        type: string
+      commit:
+        description: "Which commit to build: the PR merged into its base branch, or the PR's own head"
+        required: false
+        type: choice
+        options:
+          - merge
+          - head
+        default: merge
+
+concurrency:
+  group: try-ember-pr-${{ inputs.pr }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  try-ember-pr:
+    name: "Build the PR, install it, open a PR"
+    runs-on: ubuntu-latest
+    # installing 5 ember apps from scratch is the slow part
+    timeout-minutes: 60
+
+    steps:
+      - name: Resolve the ember PR
+        id: pr
+        env:
+          INPUT_PR: ${{ inputs.pr }}
+          INPUT_COMMIT: ${{ inputs.commit }}
+        run: |
+          node --input-type=module <<'RESOLVE'
+          import { execFileSync } from 'node:child_process';
+          import { appendFileSync } from 'node:fs';
+
+          const input = (process.env.INPUT_PR ?? '').trim();
+          /**
+           * Accepts a full URL, `owner/repo#123`, or a bare number.
+           * A bare number means emberjs/ember.js -- that's the whole point of this workflow.
+           */
+          const parsed = input
+            .replace(/^(https?:\/\/)?(www\.)?github\.com\//, '')
+            .replace(/^#/, '')
+            .match(/^(?:(?<owner>[\w.-]+)\/(?<repo>[\w.-]+)(?:\/pull\/|#))?(?<number>\d+)/);
+
+          if (!parsed) {
+            console.error(`Could not find a PR number in "${input}"`);
+            process.exit(1);
+          }
+
+          const { owner = 'emberjs', repo = 'ember.js', number } = parsed.groups;
+          const remote = `https://github.com/${owner}/${repo}.git`;
+
+          let ref = `refs/pull/${number}/merge`;
+
+          if (process.env.INPUT_COMMIT === 'head') {
+            ref = `refs/pull/${number}/head`;
+          } else if (!execFileSync('git', ['ls-remote', remote, ref], { encoding: 'utf8' }).trim()) {
+            /**
+             * GitHub only publishes the merge ref while the PR merges cleanly,
+             * so a conflicted (or closed) PR still has a head to benchmark.
+             */
+            console.log(`No ${ref} (the PR does not merge cleanly?) -- using the PR's head instead`);
+            ref = `refs/pull/${number}/head`;
+          }
+
+          console.log(`Building ${owner}/${repo}#${number} at ${ref}`);
+
+          appendFileSync(
+            process.env.GITHUB_OUTPUT,
+            [`repo=${owner}/${repo}`, `number=${number}`, `ref=${ref}`, ''].join('\n'),
+          );
+          RESOLVE
+
+      - name: Checkout the benchmark
+        uses: actions/checkout@v6
+
+      - name: Checkout ember-source
+        uses: actions/checkout@v6
+        with:
+          repository: ${{ steps.pr.outputs.repo }}
+          ref: ${{ steps.pr.outputs.ref }}
+          # never committed -- only the tarball built from it is
+          path: ember-source-pr
+
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Build a tarball from the PR
+        working-directory: ember-source-pr
+        env:
+          NUMBER: ${{ steps.pr.outputs.number }}
+        run: |
+          set -euo pipefail
+          sha=$(git rev-parse --short HEAD)
+          tarball="ember-source-pr-${NUMBER}-${sha}.tgz"
+
+          # ember-source pins its own pnpm via `packageManager`, which pnpm honors
+          pnpm install --frozen-lockfile
+          pnpm build
+          pnpm pack --out "${GITHUB_WORKSPACE}/${tarball}"
+
+          {
+            echo "TARBALL=${tarball}"
+            echo "EMBER_SHA=${sha}"
+          } >> "$GITHUB_ENV"
+
+      - name: Install it in every ember app
+        run: |
+          set -euo pipefail
+          pnpm install
+          pnpm use-tar-for ember "${GITHUB_WORKSPACE}/${TARBALL}"
+
+      - name: Open the PR
+        id: open
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EMBER_REPO: ${{ steps.pr.outputs.repo }}
+          NUMBER: ${{ steps.pr.outputs.number }}
+          REF: ${{ steps.pr.outputs.ref }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+
+          branch="try-ember-pr/${NUMBER}"
+          # quoted, never interpolated: the ember PR title is somebody else's input
+          ember_title=$(gh pr view "$NUMBER" --repo "$EMBER_REPO" --json title --jq .title)
+          ember_url="${GITHUB_SERVER_URL}/${EMBER_REPO}/pull/${NUMBER}"
+
+          printf '%s\n' \
+            "Benchmarking [${EMBER_REPO}#${NUMBER}](${ember_url}) -- ${ember_title}" \
+            "" \
+            "Every app in \`frameworks/ember/\` now resolves \`ember-source\` from a tarball built" \
+            "from that PR (\`${REF}\`, commit \`${EMBER_SHA}\`) instead of from npm." \
+            "" \
+            "\`\`\`bash" \
+            "gh pr checkout ${branch}" \
+            "pnpm install" \
+            "pnpm bench" \
+            "\`\`\`" \
+            "" \
+            "Then compare against a run of \`main\` in the results app." \
+            "" \
+            "The \`.tgz\` is committed past \`.gitignore\` so that a checkout of this branch" \
+            "installs the same ember every time. **Do not merge this** -- re-run" \
+            "[Try Ember PR](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/workflows/try-ember-pr.yml)" \
+            "to rebuild the branch after the ember PR changes." \
+            "" \
+            "Built by [this run](${RUN_URL})." \
+            > /tmp/try-ember-pr-body.md
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          # the tarball is gitignored, on purpose, for local use of use-tar-for
+          git add -f "$TARBALL"
+          git add frameworks/ember
+
+          if git diff --cached --quiet; then
+            echo "::error::Nothing to commit -- did use-tar-for change anything?"
+            exit 1
+          fi
+
+          git commit -m "Try ${EMBER_REPO}#${NUMBER} (${EMBER_SHA})"
+          git push --force origin "HEAD:refs/heads/${branch}"
+
+          title="Try ${EMBER_REPO}#${NUMBER}: ${ember_title}"
+          existing=$(gh pr list --head "$branch" --state open --json number --jq '.[0].number // empty')
+
+          if [ -n "$existing" ]; then
+            gh pr edit "$existing" --title "$title" --body-file /tmp/try-ember-pr-body.md
+            url=$(gh pr view "$existing" --json url --jq .url)
+          else
+            url=$(gh pr create \
+              --base "${GITHUB_REF_NAME}" \
+              --head "$branch" \
+              --title "$title" \
+              --body-file /tmp/try-ember-pr-body.md \
+              --draft)
+          fi
+
+          echo "url=${url}" >> "$GITHUB_OUTPUT"
+          printf '%s\n' "[${title}](${url})" >> "$GITHUB_STEP_SUMMARY"
