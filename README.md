@@ -7,7 +7,6 @@
 ## TODOs
 
 - Vanilla JS implementation
-- Use `Worker` for benches, for better simulating of async / socket handling
 - More Benches:
   - db mon + chat + typing-responsiveness
 
@@ -25,22 +24,24 @@
       - install
       - build
       - framework version
-      
-- document the methodology
 
 -----------------------------------------
 
 
 This is the Reactivity and Rendering Benchmark for frontend application and component frameworks.
 
-- [Motivation](#motivation) 
+- [Motivation](#motivation)
 - [Methodology](#methodology)
+  - [The Benchmarks](#the-benchmarks)
+  - [Measuring "done"](#measuring-done)
+  - [Reliability](#reliability)
 - [Adding a new framework](#adding-a-new-framework)
+- [Running the Benchmark](#running-the-benchmark)
 
 
 ## Motivation
 
-I've felt that existing benchmarks don't exactly capture the things that _I_ care most about -- the ability to be fast once the app is booted. Afterall, the thing with single-page-apps is that you generally accept that there may be a higher up front cost, and then things are smooth sailing from there. 
+I've felt that existing benchmarks don't exactly capture the things that _I_ care most about -- the ability to be fast once the app is booted. After all, the thing with single-page-apps is that you generally accept that there may be a higher up front cost, and then things are smooth sailing from there. 
 
 The [JS Framework Benchmark](https://github.com/krausest/js-framework-benchmark) is the most notorious Frontend JS benchmark out there, but it focuses on boot time, memory, and generally some metrics similar to what [Page Speed Insights](https://pagespeed.web.dev/) focuses on. These are _good benchmarks_ for SEO, conversion, etc. 
 
@@ -48,7 +49,7 @@ There is also [JS Reactivity Benchmark](https://github.com/milomg/js-reactivity-
 
 _To be clear_, I think for what these benchmarks do, they do a good job. 
 
-They just are not complete, and I'm mostly focused an apps: those with interactivity, rendering, representing live information, etc, 
+They just are not complete, and I'm mostly focused on apps: those with interactivity, rendering, representing live information, etc, 
 
 How are we to measure all these post-boot behaviors?
 
@@ -88,18 +89,26 @@ It's kinda similar to having this in your app:
 websocket.on('message', updateData);
 ```
 
-Where you don't control the frequency of the updates, and they could happen at any speed. In this bench, we test if the message event is so fast, it's synchronous. And then measure the time it takes for the framework to render those schanges. 
+Where you don't control the frequency of the updates, and they could happen at any speed. In this bench, we test if the message event is so fast, it's synchronous. And then measure the time it takes for the framework to render those changes.
 
 #### 10k items, one update (variable) 
 
-This test is coverying a few things: iteration, ability to efficiently update one thing in the list without re-rendering the list, as well as the ability to handle a reactive collection, as is common in tables where you edit data.
+This test is covering a few things: iteration, ability to efficiently update one thing in the list without re-rendering the list, as well as the ability to handle a reactive collection, as is common in tables where you edit data.
 
 It's kinda similar to having this in your app:
 ```js 
 websocket.on('message', updateRow);
 ```
 
-Where you don't control the frequency of the updates, and they could happen at any speed. In this bench, we test if the message event is so fast, it's synchronous. And then measure the time it takes for the framework to render those schanges. 
+Where you don't control the frequency of the updates, and they could happen at any speed. In this bench, we test if the message event is so fast, it's synchronous. And then measure the time it takes for the framework to render those changes.
+
+#### Incrementing render effect
+
+Each render schedules the next update: the app renders a number, an effect
+observes that render, and sets the number again. 100,000 times.
+
+The DOM is checked every iteration, so a framework that falls behind fails
+instead of getting a score.
 
 #### One value, many consumers (fan out)
 
@@ -123,24 +132,99 @@ Inspired by [dbmon repaint challenge](https://mathieuancelin.github.io/js-repain
 > [!NOTE]  
 > Many dbmon benchmark implementations use row-virtualization. This bench does not do that, but does render a fixed number of rows -- we are stressing rendering as well as reactivity -- but in a real app, you may want virtual row rendering.
 
-### Measuring "done" 
+The score is the average frame rate over each 5s window, sampled 5 times from
+one page load.
 
-TOOD: Write this
+FPS can't go above the monitor's refresh rate, so frameworks at the ceiling
+are tied, even if some of them have headroom left. This is why we throttle
+the CPU when running the benches -- slowed down enough, nobody's at the
+ceiling, and the differences show.
+
+#### The `(async)` variants
+
+Some benches appear twice, once plain and once `(async)`. The async ones give
+up control between updates instead of running the whole loop synchronously.
+
+By default the yield is a microtask (`await 0`). Frameworks that flush on a
+microtask get to render between updates. Frameworks that schedule on a task,
+a frame, or an idle callback don't, because microtasks drain first. That's a
+real difference between frameworks, but it's not how sockets deliver data --
+keep that in mind when reading these rows.
+
+`?yield=macro` runs the same loops over real tasks (the same MessageChannel
+trick the fan out bench uses), which is how a `websocket.on('message')`
+handler actually gets called. It's not the default because a task per update
+makes the 100k benches take tens of seconds per sample.
+
+### Measuring "done"
+
+Every bench that completes marks `:start` and `:done`. The time between them
+is the sample.
+
+- `:start` is set after the app has booted and settled, right before the first
+  update. Boot time is someone else's benchmark.
+- `:done` is set as soon as the DOM shows the finished state. A
+  MutationObserver re-checks whenever the DOM changes, so we notice the moment
+  the framework renders, no matter what it schedules rendering on. No waiting
+  on a frame or an idle callback. (`:done` also records how it settled, as
+  `{ checks, via }`.)
+
+"Finished" means the whole DOM, not a spot check. The list benches check every
+item against what the run should have left behind. Fan out knows exactly what
+its final text is (the last value, once per consumer) and compares the whole
+container against that. Partially-flushed doesn't count.
+
+If the DOM never gets there, the page throws after 30s and the runner fails
+the whole run. There's no such thing as a partial sample in the results.
 
 ### Reliability
 
-TODO: Write this
+**What the numbers are.** Each cell is a percentile of that series' samples.
+p50 (the median) by default, p75 and p90 selectable. Percentiles always run
+toward the worse end, whichever direction that is, so pXX reads "XX% of samples
+were at least this good".
+
+Median and not mean, because samples aren't spread evenly around a true value.
+One GC pause adds a one-sided lump that the mean keeps and the median ignores.
+We've seen the two differ by 47% -- enough to reorder a row.
+
+**How many samples.** `--count` (default 10) page loads per bench per
+framework. dbmon takes its 5 samples from one page load, so its spread is
+narrower than it looks.
+
+**Harness overhead.** The `:done` observer only attaches when the DOM isn't
+already correct at the end of the update loop -- for benches that render
+synchronously it never attaches at all. When it does attach, watching costs
+about half a microsecond per DOM write. On the heaviest bench that's 1-4% of
+the sample, under the run-to-run noise.
+
+**Identical work.** All randomness is seeded (`?seed=`, default 1): which items
+get updated, what dbmon mutates, worker delays, chat text. Same seed, same
+final DOM, byte for byte, across every framework. Scheduling isn't controlled
+though -- workers interleave with the main thread however the OS wants.
+
+**Ordering.** Each framework's whole suite runs before the next framework
+starts, so on a long run, heat and boost drift land on whoever goes last.
+Run on a machine that isn't doing anything else.
+
+**What is not comparable.** Different `--cpu-throttle`, different machines,
+different refresh rates. All of it is recorded in the results file.
+
+**Environment.** Run headed (the default) on your fastest monitor, keep the
+window visible, and close everything else. Chrome throttles rAF for windows it
+thinks you can't see -- the runner disables what it can, but it can't help a
+window you've covered up.
 
 
 ## Adding a new framework
 
 1. Add relevant information to ./results/app/frameworks.ts
 2. Add the framework's logo to `./results/public/`
-2. `mkdir frameworks/$frameworkName`
-3. For each benchmark, create a separate project in `frameworks/$frameworkName` that implements that benchmark
-4. Open a PR <3 
+3. `mkdir frameworks/$frameworkName`
+4. For each benchmark, create a separate project in `frameworks/$frameworkName` that implements that benchmark
+5. Open a PR <3
 
-## Renning the Benchmark
+## Running the Benchmark
 
 1. Clone the repo
 2. `cd` into the cloned repo
@@ -156,11 +240,41 @@ TODO: Write this
     To skip the picking, `pnpm bench --framework=all --bench=all` runs everything.
     (Every flag is listed in the table the runner prints on start up.)
 
-4. Wait for it to finish    
+4. Wait for it to finish
 5. View results:
     1. `cd results`
     2. `pnpm install`
     3. `pnpm start`
+
+### Flags
+
+| flag | default | |
+| --- | --- | --- |
+| `--framework` | prompts | a framework name, or `all` |
+| `--bench` | prompts | a benchmark's display name, or `all` |
+| `--count` | `10` | samples per bench per framework |
+| `--cpu-throttle` | `1` | emulated CPU slowdown; runs at different settings are not comparable |
+| `--headless` | off | headless caps at 60fps, so the frame-rate bench means less |
+| `--timeout` | `60000` | ms a single sample may take before the run fails |
+| `--skip-build` | off | re-use an existing build |
+
+### Query params
+
+The apps read their own config from the URL, so you can open any bench and
+poke at it by hand -- `pnpm --filter <app> dev`, then add these.
+
+| param | default | |
+| --- | --- | --- |
+| `seed` | `1` | seeds every random choice; the same seed is the same workload |
+| `items` | `10000` | list length, for the list benches |
+| `updates` | `10000` | how many updates the run performs |
+| `random` | `false` | update random indices rather than sequential ones |
+| `percentRandomAwait` | `0` | how often the loop yields between updates (0-100) |
+| `yield` | `micro` | `micro` for a microtask, `macro` for a real task |
+| `consumers` | `1000` | fan-out only: how many places render the value |
+| `burstSize` | `100` | fan-out only: updates per socket message |
+| `rows` | `20` | dbmon only: row pairs in the table |
+| `mutations` | `15` | dbmon only: percent of rows that change per tick |
 
 ## Benchmarking an unreleased version of a framework
 
