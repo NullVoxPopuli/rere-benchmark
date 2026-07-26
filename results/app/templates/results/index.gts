@@ -410,7 +410,7 @@ export default class ResultsTables extends Component<{
       {{/each}}
       {{! percentiles run toward the worse end either way, so the same
           number means the same thing on both tables }}
-      <span class="units">of each run's samples; higher p = further into the bad tail</span>
+      <span class="units">of each run's samples</span>
     </fieldset>
 
     {{#if this.higherBenches.length}}
