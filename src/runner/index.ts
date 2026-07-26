@@ -140,19 +140,28 @@ clack.log.info('Starting Benchmark Runs');
 
 const benchmarkStart = Date.now();
 
-for (const framework of info.frameworks) {
-  clack.log.info(`Benchmarking ${framework}`);
+/**
+ * One server per framework for the app under test, all up at once.
+ *
+ * That is what lets the sample loop go framework-by-framework *inside* each
+ * round rather than running a framework's whole suite before starting the
+ * next one. A full suite is many minutes of sustained load, and a CPU that
+ * has been at it for ten minutes is not the CPU the first framework was
+ * measured on -- thermal headroom and boost residency both drift one way.
+ * Grouping by framework turned that drift into a per-framework offset;
+ * interleaving spreads it evenly over all of them.
+ */
+async function serversFor(app: string) {
+  const servers = [];
 
-  /**
-   * Iterating on the apps allows us to boot one server for a whose suite of tests
-   */
-  for (const app of info.apps) {
+  for (const framework of info.frameworks) {
     const dir = join('frameworks', framework, app);
 
-    clack.log.info(`Starting server for ${app} in ${dir}/dist`);
+    clack.log.info(`Starting server for ${framework}/${app} in ${dir}/dist`);
 
+    // port 0: the OS picks a free one, so N frameworks can be up together
     // TODO: make the output directory configurable
-    const server = await serve(`${dir}/dist`);
+    const server = await serve(`${dir}/dist`, 0);
     const address = server.address();
 
     assert(
@@ -160,38 +169,51 @@ for (const framework of info.frameworks) {
       `Server for ${framework}, (in ${app}) does not have an address!`,
     );
 
-    const serverUrl =
+    const url =
       typeof address === 'string'
         ? address
         : `http://${address.address === '::' ? 'localhost' : address.address}:${address.port}`;
 
-    clack.log.info(`Server up at ${serverUrl}`);
+    clack.log.info(`  ${framework} up at ${url}`);
 
-    if (!info.benches) {
-      clack.log.error(`No benches selected`);
-      process.exit(1);
-    }
+    servers.push({ framework, server, url });
+  }
 
-    for (const bench of info.benches) {
-      if (bench.app !== app) continue;
+  return servers;
+}
 
-      for (const variant of info.variants) {
-        const url = serverUrl + '/?' + bench.query + variant.query;
-        const name = variant.name
-          ? `${bench.name} ${variant.name}`
-          : bench.name;
+if (!info.benches) {
+  clack.log.error(`No benches selected`);
+  process.exit(1);
+}
 
-        clack.log.info(`\tVariant: ${url}`);
+for (const app of info.apps) {
+  const servers = await serversFor(app);
 
+  for (const bench of info.benches) {
+    if (bench.app !== app) continue;
+
+    for (const variant of info.variants) {
+      const name = variant.name ? `${bench.name} ${variant.name}` : bench.name;
+      const count = bench.ignoreCount ? 1 : COUNT;
+
+      clack.log.info(`${name}`);
+
+      for (const { framework } of servers) {
         // per variant, under the same name addResult writes to
         await prepareForResults(framework, bench, name, info.filePath);
+      }
 
-        const count = bench.ignoreCount ? 1 : COUNT;
+      for (let i = 0; i < count; i++) {
+        clack.log.info(`\tSample ${i + 1} of ${count}`);
 
-        for (let i = 0; i < count; i++) {
-          clack.log.info(`\t\tRemaining: ${count - i}`);
+        for (const { framework, url } of servers) {
+          clack.log.info(`\t\t${framework}`);
 
-          const performanceMarks = await getMarks(browser, url);
+          const performanceMarks = await getMarks(
+            browser,
+            url + '/?' + bench.query + variant.query,
+          );
 
           await addResult(
             framework,
@@ -203,18 +225,21 @@ for (const framework of info.frameworks) {
         }
       }
     }
-
-    const promise = new Promise((resolve) => {
-      server.on('close', resolve);
-    });
-
-    // We add this via the killable package
-    // @ts-expect-error
-    server.kill();
-
-    clack.log.info(`Waiting for server to exit`);
-    await promise;
   }
+
+  clack.log.info(`Waiting for servers to exit`);
+
+  await Promise.all(
+    servers.map(({ server }) => {
+      const closed = new Promise((resolve) => server.on('close', resolve));
+
+      // We add this via the killable package
+      // @ts-expect-error
+      server.kill();
+
+      return closed;
+    }),
+  );
 }
 
 const now = Date.now();
