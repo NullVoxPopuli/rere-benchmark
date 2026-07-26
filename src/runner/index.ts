@@ -35,6 +35,13 @@ interface MarkEntry {
   detail?: unknown;
 }
 
+/**
+ * How long a single sample is allowed to take before we stop waiting.
+ * The page gives up on its own at 30s and throws, so reaching this means
+ * something worse than a slow render.
+ */
+const BUDGET_MS = 60_000;
+
 async function getMarks(browser: Browser, url: string) {
   const page = await browser.newPage();
 
@@ -53,45 +60,69 @@ async function getMarks(browser: Browser, url: string) {
   // TODO: is there a way to wait for the page to calmn down?
   await page.waitForNetworkIdle();
 
-  let marks: Array<MarkEntry> = [];
+  const progress = clack.progress({ style: 'light', max: BUDGET_MS });
+  // Node-side only: this ticks the bar without touching the page.
+  const ticking = setInterval(() => progress.advance(100), 100);
 
-  let remainingWaitTime = 60_000; // 1 minute
-
-  const progress = clack.progress({ style: 'light', max: remainingWaitTime });
-
-  while (remainingWaitTime > 0) {
-    const allMarks = await page.evaluate(() => {
-      return performance.getEntriesByType('mark').map((entry) => {
+  /**
+   * One round trip.
+   *
+   * This used to `page.evaluate` every 100ms until `:done` showed up, which
+   * put a protocol-driven task on the main thread of the page being
+   * measured -- and serialized every mark on it -- a few hundred times over
+   * a dbmon run, while that run was measuring how well the page keeps up.
+   *
+   * A PerformanceObserver resolves the moment the mark lands instead, so
+   * the page is touched once at the start and once at the end.
+   */
+  const allMarks = await page.evaluate((budget) => {
+    const read = () =>
+      performance.getEntriesByType('mark').map((entry) => {
         return {
           name: entry.name,
           at: entry.startTime,
           detail: entry.detail,
         };
       });
-    });
 
-    if (allMarks.find((m) => m.name === ':done')) {
-      progress.stop(`Finished`);
-      marks = allMarks.map((entry) => {
-        if (!entry.detail) {
-          delete entry.detail;
-        }
+    return new Promise<ReturnType<typeof read>>((resolve) => {
+      const isDone = () => performance.getEntriesByName(':done').length > 0;
 
-        return entry as MarkEntry;
+      if (isDone()) return resolve(read());
+
+      const observer = new PerformanceObserver(() => {
+        if (!isDone()) return;
+
+        observer.disconnect();
+        resolve(read());
       });
 
-      break;
+      // buffered so a `:done` that landed between `load` and this call is
+      // not missed
+      observer.observe({ type: 'mark', buffered: true });
+
+      setTimeout(() => resolve(read()), budget);
+    });
+  }, BUDGET_MS);
+
+  clearInterval(ticking);
+
+  const finished = allMarks.some((mark) => mark.name === ':done');
+
+  progress.stop(finished ? `Finished` : `Gave up after ${BUDGET_MS}ms`);
+
+  const marks = allMarks.map((entry) => {
+    if (!entry.detail) {
+      delete entry.detail;
     }
 
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    remainingWaitTime -= 100;
-    progress.advance(100);
-  }
+    return entry as MarkEntry;
+  });
 
-  page.close();
+  await page.close();
 
-  if (marks.length === 0) {
-    clack.log.warn(`No marks recorded`);
+  if (!finished) {
+    clack.log.warn(`No :done mark -- this sample did not finish`);
   }
 
   return marks;
