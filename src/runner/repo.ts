@@ -2,7 +2,7 @@ import assert from 'node:assert';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
-import { ALL, BENCH_NAME, FRAMEWORK } from './arg.ts';
+import { ALL, FRAMEWORK } from './arg.ts';
 
 export async function getTests() {
   /**
@@ -19,10 +19,13 @@ export async function getTests() {
     results = results.filter((result) => result.includes(`/${FRAMEWORK}/`));
   }
 
-  if (BENCH_NAME && BENCH_NAME !== ALL) {
-    results = results.filter((result) => result.includes(`${BENCH_NAME}`));
-  }
-
+  /**
+   * Deliberately not filtered by `--bench`. These paths are app *folders*
+   * (`one-item-many-updates`), and `--bench` takes a benchmark's display
+   * name (`1 item, 1k updates`) -- the two never match, so filtering on it
+   * emptied the list. The framework list should not depend on which
+   * benchmark is selected either way.
+   */
   return results;
 }
 
