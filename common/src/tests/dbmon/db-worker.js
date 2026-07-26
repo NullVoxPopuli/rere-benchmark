@@ -1,6 +1,6 @@
 let isRunning = false;
 
-import { globalState } from '../utils.js';
+import { globalState, seededRandom } from '../utils.js';
 
 addEventListener('message', function handleMessage(event) {
   let data = JSON.parse(event.data);
@@ -23,6 +23,9 @@ import { generateData } from './env.js';
 function start() {
   isRunning = true;
 
+  // seeded here rather than at module scope: the page's query string, and so
+  // the seed, only arrives with the start message
+  const random = seededRandom();
   let data = generateData();
 
   // initial data
@@ -33,7 +36,7 @@ function start() {
   });
 
   async function loop() {
-    let delay = Math.random() * 15;
+    let delay = random() * 15;
     await new Promise((resolve) => setTimeout(resolve, delay));
 
     let changed = data.updateData();

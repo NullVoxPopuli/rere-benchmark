@@ -20,14 +20,20 @@
 //   https://github.com/ryansolid/solid-dbmon/blob/master/dist/ENV.js
 //   https://github.com/html-next/vertical-collection/blob/master/tests/dummy/app/lib/get-data.js
 
-import { qpNum, qpPercent } from '../utils.js';
+import { qpNum, qpPercent, seededRandom } from '../utils.js';
 
 var first = true;
 var counter = 0;
 var data;
 var _base;
-let mutations = qpPercent('mutations', 0.15);
-let rows = qpNum('rows', 20);
+
+// Read in generateData, not here. A worker only learns the page's query
+// string when it is told to start, and that message arrives long after this
+// module is evaluated -- so at import time `mutations` and `rows` were
+// always their defaults, whatever the URL said.
+let random = seededRandom();
+let mutations = 0.15;
+let rows = 20;
 
 function formatElapsed(value) {
   var str = parseFloat(value).toFixed(2);
@@ -67,16 +73,16 @@ function updateQuery(object) {
   if (!object) {
     object = {};
   }
-  var elapsed = Math.random() * 15;
+  var elapsed = random() * 15;
   object.elapsed = elapsed;
   object.formatElapsed = formatElapsed(elapsed);
   object.elapsedClassName = getElapsedClassName(elapsed);
   object.query = 'SELECT blah FROM something';
-  object.waiting = Math.random() < 0.5;
-  if (Math.random() < 0.2) {
+  object.waiting = random() < 0.5;
+  if (random() < 0.2) {
     object.query = '<IDLE> in transaction';
   }
-  if (Math.random() < 0.1) {
+  if (random() < 0.1) {
     object.query = 'vacuum';
   }
   return object;
@@ -98,7 +104,7 @@ function cleanQuery(value) {
 }
 
 function generateRow(object, counter) {
-  var nbQueries = Math.floor(Math.random() * 10 + 1);
+  var nbQueries = Math.floor(random() * 10 + 1);
   if (!object) {
     object = {};
   }
@@ -136,6 +142,10 @@ function generateRow(object, counter) {
 }
 
 export function generateData() {
+  random = seededRandom();
+  mutations = qpPercent('mutations', 0.15);
+  rows = qpNum('rows', 20);
+
   if (!data) {
     data = [];
     for (var i = 1; i <= rows; i++) {
@@ -152,7 +162,7 @@ export function generateData() {
     let changed = [];
     for (var i in data) {
       let row = data[i];
-      if (!row.lastSample || Math.random() < mutations) {
+      if (!row.lastSample || random() < mutations) {
         counter = counter + 1;
 
         generateRow(row, counter);

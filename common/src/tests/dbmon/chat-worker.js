@@ -1,6 +1,6 @@
 let isRunning = false;
 
-import { globalState } from '../utils.js';
+import { DEFAULT_SEED, globalState, qpNum, seededRandom } from '../utils.js';
 
 addEventListener('message', function handleMessage(event) {
   let data = JSON.parse(event.data);
@@ -23,6 +23,13 @@ import { faker } from '@faker-js/faker';
 function start() {
   isRunning = true;
 
+  // faker has its own generator, and unseeded it hands every framework
+  // different names and different message lengths -- which is different text
+  // to lay out, on the bench that measures frame rate
+  faker.seed(qpNum('seed', DEFAULT_SEED));
+
+  const random = seededRandom();
+
   // initial data
   postMessage({
     type: 'json',
@@ -31,7 +38,7 @@ function start() {
   });
 
   async function loop() {
-    let delay = Math.random() * 100;
+    let delay = random() * 100;
     await new Promise((resolve) => setTimeout(resolve, delay));
 
     // TODO: only post what changed
