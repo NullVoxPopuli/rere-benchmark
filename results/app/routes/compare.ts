@@ -32,6 +32,8 @@ export default class Compare extends Route<Model> {
     b: { refreshModel: true },
     // which framework to compare; both runs are already loaded, so no model impact
     framework: {},
+    // which percentile of each run's samples to show (50 | 75 | 90)
+    p: {},
   };
 
   beforeModel(transition: Transition) {

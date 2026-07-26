@@ -22,6 +22,9 @@ export default class Results extends Route<Model> {
     q: { refreshModel: true },
     // display mode for the tables page (raw | linear | log); no model impact
     mode: {},
+    // which percentile of each run's samples to show (50 | 75 | 90);
+    // every sample is already loaded, so no model impact
+    p: {},
   };
 
   beforeModel(transition: Transition) {

@@ -201,6 +201,16 @@ table {
     z-index: 3;
   }
 
+  /* names the statistic every cell in the table is, over the column of
+     benchmark names it labels */
+  .stat-label {
+    text-align: right;
+    font-weight: normal;
+    font-size: 0.8rem;
+    opacity: 0.6;
+    white-space: nowrap;
+  }
+
   .fw-header {
     text-align: center;
     vertical-align: bottom;

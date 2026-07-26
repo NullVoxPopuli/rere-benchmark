@@ -2,6 +2,7 @@ import { assert, warn } from "@ember/debug";
 
 import { frameworks } from "./frameworks.ts";
 
+import type RouterService from "@ember/routing/router-service";
 import type { BenchmarkInfo, Mark, ResultData, ResultSet } from "#types";
 
 function versionsOf(file: ResultSet, framework: string) {
@@ -51,12 +52,17 @@ export function overrideOf(file: ResultSet, framework: string) {
  * How one framework did at one benchmark, or undefined when that run
  * doesn't have the pair.
  */
-export function timeFor(file: ResultSet, framework: string, bench: BenchmarkInfo) {
+export function timeFor(
+  file: ResultSet,
+  framework: string,
+  bench: BenchmarkInfo,
+  percentile: Percentile,
+) {
   const test = file.results[framework]?.[bench.name];
 
   if (!test) return;
 
-  return timeFromMarks(test.times, bench.measure);
+  return timeFromMarks(test.times, bench.measure, percentile, bench.whatsBetter === "bigger");
 }
 
 /**
@@ -183,18 +189,61 @@ export function samplesOf(times: Array<Mark[]>, measure: string | undefined) {
   return measure ? detailsOf(times, measure) : durationsOf(times);
 }
 
-function mean(values: number[]) {
+export const PERCENTILES = [50, 75, 90] as const;
+
+export type Percentile = (typeof PERCENTILES)[number];
+
+export const DEFAULT_PERCENTILE: Percentile = 50;
+
+/**
+ * p50 is the median.
+ *
+ * Percentiles run toward the *worse* end of the distribution whichever
+ * direction is better, so pXX always reads "XX% of samples came in at
+ * least this good": for a duration that is the slow tail, for a frame rate
+ * it is the low tail.
+ *
+ * Interpolates between order statistics (the same method as Excel's
+ * PERCENTILE.INC and numpy's default), so p50 of an even-sized sample is
+ * the midpoint of the middle two -- the median as anyone would compute it
+ * by hand.
+ */
+export function percentileOf(values: number[], percentile: Percentile, biggerIsBetter: boolean) {
   if (values.length === 0) return NaN;
 
-  let total = 0;
+  const sorted = values.toSorted((a, b) => a - b);
+  const towardWorst = biggerIsBetter ? 100 - percentile : percentile;
+  const rank = ((sorted.length - 1) * towardWorst) / 100;
+  const below = Math.floor(rank);
+  const above = Math.ceil(rank);
+  const value = sorted[below] as number;
 
-  values.forEach((value) => (total += value));
+  if (below === above) return value;
 
-  return total / values.length;
+  return value + (rank - below) * ((sorted[above] as number) - value);
 }
 
-export function timeFromMarks(times: Array<Mark[]>, measure: string | undefined) {
-  return round(mean(samplesOf(times, measure)));
+export function timeFromMarks(
+  times: Array<Mark[]>,
+  measure: string | undefined,
+  percentile: Percentile,
+  biggerIsBetter: boolean,
+) {
+  return round(percentileOf(samplesOf(times, measure), percentile, biggerIsBetter));
+}
+
+/**
+ * The `?p=` query param, wherever a component needs it.
+ * router.currentRoute is tracked, so reads stay live across transitions.
+ */
+export function percentileFrom(router: RouterService): Percentile {
+  const found = PERCENTILES.find((p) => String(p) === router.currentRoute?.queryParams["p"]);
+
+  return found ?? DEFAULT_PERCENTILE;
+}
+
+export function labelFor(percentile: Percentile) {
+  return percentile === 50 ? "p50 (median)" : `p${percentile}`;
 }
 
 export function isBiggerBetter(results: { whatsBetter: string }): boolean {
@@ -212,7 +261,7 @@ export function lowerIsBetterBenches(benchmarkInfo: BenchmarkInfo[]) {
     .toSorted((a, b) => (a.name.includes("async") ? 1 : 0) - (b.name.includes("async") ? 1 : 0));
 }
 
-export function dataOf(results: ResultData, benchName: string) {
+export function dataOf(results: ResultData, benchName: string, percentile: Percentile) {
   const list = [];
 
   for (const [framework, benches] of Object.entries(results)) {
@@ -234,7 +283,12 @@ export function dataOf(results: ResultData, benchName: string) {
       continue;
     }
 
-    const time = timeFromMarks(benchData.times, benchData.measure);
+    const time = timeFromMarks(
+      benchData.times,
+      benchData.measure,
+      percentile,
+      benchData.whatsBetter === "bigger",
+    );
 
     list.push({
       name: framework,

@@ -10,17 +10,20 @@ import { FrameworkInfo } from "#components/framework-info.gts";
 import { Version } from "#components/version.gts";
 import {
   higherIsBetterBenches,
+  labelFor,
   lowerIsBetterBenches,
   overrideOf,
+  percentileFrom,
+  PERCENTILES,
   round,
   timeFor,
   versionOf,
 } from "#utils";
 
-import type Owner from "@ember/owner";
 import type RouterService from "@ember/routing/router-service";
 import type { Model } from "#routes/results.ts";
 import type { BenchmarkInfo, ResultSet } from "#types";
+import type { Percentile } from "#utils";
 
 const start = "#ff7777";
 const end = "#77ff77";
@@ -83,13 +86,18 @@ function formatTimes(ratio: number) {
   return `${Math.round(ratio * 100) / 100}x`;
 }
 
-function speedsFor(file: ResultSet, benchInfo: BenchmarkInfo, frameworkNames: string[]) {
+function speedsFor(
+  file: ResultSet,
+  benchInfo: BenchmarkInfo,
+  frameworkNames: string[],
+  percentile: Percentile,
+) {
   const speeds: Record<string, number | undefined> = {};
   let min = Infinity;
   let max = -Infinity;
 
   for (const framework of frameworkNames) {
-    const time = timeFor(file, framework, benchInfo);
+    const time = timeFor(file, framework, benchInfo, percentile);
 
     if (time === undefined) continue;
 
@@ -109,49 +117,47 @@ class TableRow extends Component<{
 }> {
   @service declare router: RouterService;
 
-  declare speeds: Record<string, number | undefined>;
-  declare colors: Record<string, string | undefined>;
-  max = -Infinity;
-  min = Infinity;
+  /**
+   * Derived, not constructor-assigned: the percentile is read off the URL,
+   * so every one of these has to fall out again when it changes.
+   */
+  @cached
+  get row() {
+    const { speeds, min, max } = speedsFor(
+      this.args.file,
+      this.args.benchInfo,
+      this.args.frameworkNames,
+      percentileFrom(this.router),
+    );
 
-  constructor(
-    owner: Owner,
-    args: {
-      file: ResultSet;
-      benchInfo: BenchmarkInfo;
-      frameworkNames: string[];
-    },
-  ) {
-    super(owner, args);
+    const colors: Record<string, string | undefined> = {};
 
-    const { speeds, min, max } = speedsFor(args.file, args.benchInfo, args.frameworkNames);
-
-    this.speeds = speeds;
-    this.min = min;
-    this.max = max;
-    this.colors = {};
-
-    for (const framework of args.frameworkNames) {
-      const time = this.speeds[framework];
-
-      this.colors[framework] = colorFor(
-        time,
-        this.min,
-        this.max,
-        args.benchInfo.whatsBetter === "bigger",
+    for (const framework of this.args.frameworkNames) {
+      colors[framework] = colorFor(
+        speeds[framework],
+        min,
+        max,
+        this.args.benchInfo.whatsBetter === "bigger",
       );
     }
+
+    return { speeds, min, max, colors };
+  }
+
+  get colors() {
+    return this.row.colors;
   }
 
   value = (framework: string) => {
-    const speed = this.speeds[framework];
+    const { speeds, min, max } = this.row;
+    const speed = speeds[framework];
     const bestIsMax = this.args.benchInfo.whatsBetter === "bigger";
 
     switch (modeFrom(this.router)) {
       case "linear":
-        return scoreFor(speed, this.min, this.max);
+        return scoreFor(speed, min, max);
       case "times": {
-        const ratio = timesBestFor(speed, this.min, this.max, bestIsMax);
+        const ratio = timesBestFor(speed, min, max, bestIsMax);
 
         return ratio === undefined ? undefined : formatTimes(ratio);
       }
@@ -180,46 +186,54 @@ class Table extends Component<{
 }> {
   @service declare router: RouterService;
 
-  shouldShowTotals = false;
-  totals: Record<string, number> = {};
+  get shouldShowTotals() {
+    return this.args.benches.length > 1;
+  }
 
-  constructor(
-    owner: Owner,
-    args: {
-      benches: BenchmarkInfo[];
-      file: ResultSet;
-    },
-  ) {
-    super(owner, args);
+  get percentile() {
+    return percentileFrom(this.router);
+  }
 
-    this.shouldShowTotals = this.args.benches.length > 1;
+  get statLabel() {
+    return labelFor(this.percentile);
+  }
 
-    if (this.shouldShowTotals) {
-      for (const bench of args.benches) {
-        for (const framework of args.file.selections.frameworks) {
-          this.totals[framework] ??= 0;
+  /**
+   * Derived, not constructor-assigned: the percentile is read off the URL,
+   * so the totals have to fall out again when it changes.
+   */
+  @cached
+  get totals() {
+    const totals: Record<string, number> = {};
 
-          const time = timeFor(args.file, framework, bench);
+    if (!this.shouldShowTotals) return totals;
 
-          if (time === undefined) continue;
+    for (const bench of this.args.benches) {
+      for (const framework of this.args.file.selections.frameworks) {
+        totals[framework] ??= 0;
 
-          this.totals[framework] += time;
-        }
+        const time = timeFor(this.args.file, framework, bench, this.percentile);
+
+        if (time === undefined) continue;
+
+        totals[framework] += time;
       }
-
-      let max = -Infinity;
-      let min = Infinity;
-
-      for (const [key, value] of Object.entries(this.totals)) {
-        this.totals[key] = round(value);
-
-        if (value > max) max = value;
-        if (value < min) min = value;
-      }
-
-      this.totals.max = max;
-      this.totals.min = min;
     }
+
+    let max = -Infinity;
+    let min = Infinity;
+
+    for (const [key, value] of Object.entries(totals)) {
+      totals[key] = round(value);
+
+      if (value > max) max = value;
+      if (value < min) min = value;
+    }
+
+    totals.max = max;
+    totals.min = min;
+
+    return totals;
   }
 
   get frameworkNames() {
@@ -255,7 +269,11 @@ class Table extends Component<{
     <table class="results-table">
       <thead>
         <tr>
-          <th></th>
+          {{! which number every cell below is, stated where a reader
+              looking at a cell is already looking }}
+          <th class="stat-label" title="every cell is the {{this.statLabel}} of that run's samples">
+            {{this.statLabel}}
+          </th>
           {{#each this.frameworkNames as |framework|}}
             <th class="fw-header">
               <FrameworkInfo @name={{framework}} />
@@ -311,6 +329,20 @@ export default class ResultsTables extends Component<{
 
   isMode = (mode: ValueMode) => this.mode === mode;
 
+  percentiles = PERCENTILES;
+
+  get percentile(): Percentile {
+    return percentileFrom(this.router);
+  }
+
+  setPercentile = (percentile: Percentile) => {
+    this.router.transitionTo({ queryParams: { p: percentile } });
+  };
+
+  isPercentile = (percentile: Percentile) => this.percentile === percentile;
+
+  labelFor = labelFor;
+
   get file() {
     return this.args.model.data;
   }
@@ -361,6 +393,24 @@ export default class ResultsTables extends Component<{
         times best
         <span class="units">(1x is best)</span>
       </label>
+    </fieldset>
+
+    <fieldset class="value-mode">
+      <legend>statistic</legend>
+      {{#each this.percentiles as |percentile|}}
+        <label>
+          <input
+            type="radio"
+            name="percentile"
+            checked={{this.isPercentile percentile}}
+            {{on "change" (fn this.setPercentile percentile)}}
+          />
+          {{this.labelFor percentile}}
+        </label>
+      {{/each}}
+      {{! percentiles run toward the worse end either way, so the same
+          number means the same thing on both tables }}
+      <span class="units">of each run's samples; higher p = further into the bad tail</span>
     </fieldset>
 
     {{#if this.higherBenches.length}}

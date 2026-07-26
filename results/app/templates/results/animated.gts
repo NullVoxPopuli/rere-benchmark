@@ -1,17 +1,25 @@
 import Component from "@glimmer/component";
 import { cached } from "@glimmer/tracking";
 import { assert } from "@ember/debug";
+import { service } from "@ember/service";
 
 import { FrameworkInfo } from "#components/framework-info.gts";
 import { Version } from "#components/version.gts";
-import { dataOf, round } from "#utils";
+import { dataOf, percentileFrom, round } from "#utils";
 
+import type RouterService from "@ember/routing/router-service";
 import type { Model } from "#routes/results.ts";
 import type { BenchmarkInfo, Results, ResultSet } from "#types";
 
 export default class Animated extends Component<{
   model: Model;
 }> {
+  @service declare router: RouterService;
+
+  get percentile() {
+    return percentileFrom(this.router);
+  }
+
   get benchmarkInfo() {
     return this.args.model.data.benchmarkInfo
       .toSorted()
@@ -23,7 +31,7 @@ export default class Animated extends Component<{
       <Visualize
         @benchInfo={{benchInfo}}
         @file={{@model.data}}
-        @results={{dataOf @model.data.results benchInfo.name}}
+        @results={{dataOf @model.data.results benchInfo.name this.percentile}}
       />
     {{/each}}
   </template>
