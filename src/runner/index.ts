@@ -39,8 +39,14 @@ async function getMarks(browser: Browser, url: string) {
   const page = await browser.newPage();
 
   if (CPU_THROTTLE !== 1) {
-    page.emulateCPUThrottling(CPU_THROTTLE);
+    // awaited: this is a CDP round trip, and an un-awaited one is a
+    // floating rejection that could also land after navigation starts
+    await page.emulateCPUThrottling(CPU_THROTTLE);
   }
+
+  // a tab that is not the active one gets its rAF throttled, which is the
+  // whole measurement on the dbmon bench
+  await page.bringToFront();
 
   await page.goto(url, { waitUntil: 'load' });
 
@@ -95,7 +101,26 @@ const browser = await puppeteer.launch({
   executablePath: chromeLocation,
   headless: HEADLESS,
   defaultViewport: { width: 1280, height: 720 },
-  args: ['--window-size=1280,800'],
+  args: [
+    '--window-size=1280,800',
+    /**
+     * Chrome throttles timers, backgrounds renderers, and drops
+     * requestAnimationFrame to a crawl for windows it thinks nobody is
+     * looking at. Headed runs are the default here, so anything the user
+     * puts in front of the benchmark window -- or any occlusion at all --
+     * would otherwise land in the results as a slow framework.
+     */
+    '--disable-background-timer-throttling',
+    '--disable-backgrounding-occluded-windows',
+    '--disable-renderer-backgrounding',
+    /**
+     * A profile-wide first-run/default-browser prompt, and any extension,
+     * is work the benchmark did not ask for.
+     */
+    '--disable-extensions',
+    '--no-default-browser-check',
+    '--no-first-run',
+  ],
 });
 
 const runStart = Date.now();
