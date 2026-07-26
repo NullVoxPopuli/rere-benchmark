@@ -1,4 +1,4 @@
-import { afterNextRender, ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { helpers } from 'common';
 
 const test = helpers.fanOut();
@@ -9,7 +9,7 @@ const test = helpers.fanOut();
   template: `
     <output>
       @for (c of consumers; track c) {
-        <span>{{ formatted() }}</span>
+        <span>{{ format(value()) }}</span>
       }
     </output>
   `,
@@ -17,7 +17,7 @@ const test = helpers.fanOut();
 export class App {
   protected readonly consumers = test.consumerRange;
   protected readonly value = signal(test.getData());
-  protected readonly formatted = computed(() => test.formatItem(this.value()));
+  protected readonly format = (v: number) => test.formatItem(v);
 
   constructor() {
     afterNextRender(() => {
