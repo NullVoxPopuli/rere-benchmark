@@ -119,55 +119,82 @@ export function msOfFrameAt(hz: number) {
   return Math.round(result * 100) / 100;
 }
 
-function averageOf(arrayOfMarks: Array<Mark[]>) {
-  const durations = [];
+/**
+ * Every bench brackets its work with these two marks.
+ *
+ * Matched exactly. They used to be matched with `endsWith`, which quietly
+ * answers to any other mark a framework or a future harness change might
+ * emit -- and the first match wins, so a stray `:start`-suffixed mark
+ * silently redefines where the measurement began.
+ */
+const START = ":start";
+const DONE = ":done";
 
-  for (const pair of arrayOfMarks) {
-    const start = pair.find((x) => x.name.endsWith("start"));
-    const done = pair.find((x) => x.name.endsWith("done"));
+/**
+ * The duration of each run, from a run's marks.
+ */
+function durationsOf(runs: Array<Mark[]>) {
+  const durations: number[] = [];
 
-    if (!done || !start) {
+  for (const marks of runs) {
+    const start = marks.find((mark) => mark.name === START);
+    const done = marks.find((mark) => mark.name === DONE);
+
+    if (!start || !done) {
       console.warn(`Dataset could have missing data`);
-      console.debug(arrayOfMarks);
+      console.debug(runs);
       continue;
     }
 
-    const duration = done.at - start.at;
-
-    durations.push(duration);
+    durations.push(done.at - start.at);
   }
 
-  let total = 0;
-
-  durations.forEach((d) => (total += d));
-
-  return round(total / durations.length);
+  return durations;
 }
 
-function averageOfNamedMark(sampleBuckets: Array<Mark[]>, name: string) {
-  const fps = [];
+/**
+ * Benches that sample rather than complete (dbmon) record each sample as
+ * the detail of a named mark, and every sample counts -- one run can carry
+ * several of them.
+ */
+function detailsOf(runs: Array<Mark[]>, name: string) {
+  const details: number[] = [];
 
-  for (const list of sampleBuckets) {
-    for (const mark of list) {
+  for (const marks of runs) {
+    for (const mark of marks) {
       if (mark.name === name) {
-        fps.push(mark.detail);
+        details.push(mark.detail);
       }
     }
   }
 
+  return details;
+}
+
+/**
+ * Every measured value for one framework at one bench, in run order.
+ *
+ * The single place marks become numbers: the summary table and the
+ * boxplots used to extract them separately -- and differently, one by name
+ * and one by position -- so the same dataset could put a framework in a
+ * different place depending on which of the two you were looking at.
+ */
+export function samplesOf(times: Array<Mark[]>, measure: string | undefined) {
+  return measure ? detailsOf(times, measure) : durationsOf(times);
+}
+
+function mean(values: number[]) {
+  if (values.length === 0) return NaN;
+
   let total = 0;
 
-  fps.forEach((f) => (total += f));
+  values.forEach((value) => (total += value));
 
-  return round(total / fps.length);
+  return total / values.length;
 }
 
 export function timeFromMarks(times: Array<Mark[]>, measure: string | undefined) {
-  if (measure) {
-    return averageOfNamedMark(times, measure);
-  }
-
-  return averageOf(times);
+  return round(mean(samplesOf(times, measure)));
 }
 
 export function isBiggerBetter(results: { whatsBetter: string }): boolean {
