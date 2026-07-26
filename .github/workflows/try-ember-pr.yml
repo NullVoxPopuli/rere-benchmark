@@ -150,7 +150,7 @@ jobs:
             "\`\`\`bash" \
             "gh pr checkout ${branch}" \
             "pnpm install" \
-            "pnpm bench" \
+            "pnpm bench --framework=all --bench=all --cpu-throttle=4 --ember=${ember_url}" \
             "\`\`\`" \
             "" \
             "Then compare against a run of \`main\` in the results app." \
