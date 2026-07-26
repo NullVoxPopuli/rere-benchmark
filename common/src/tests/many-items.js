@@ -1,5 +1,12 @@
 import { BaseTest, RUN } from './base-test.js';
-import { qpBool, qpNum, qpPercent, tryVerify } from './utils.js';
+import {
+  qpBool,
+  qpNum,
+  qpPercent,
+  tryVerify,
+  yieldKind,
+  yieldTo,
+} from './utils.js';
 
 /**
  * @typedef {import('./types.ts').BenchTest<Array<number | undefined>>} ArrayTest
@@ -23,6 +30,11 @@ export class ManyItems extends BaseTest {
    * @type {number}
    */
   #percentRandomAwait = 0;
+
+  /**
+   * @type {'micro' | 'macro'}
+   */
+  #yieldKind = yieldKind();
 
   constructor({
     totalUpdates = qpNum('updates', 10_000),
@@ -80,7 +92,7 @@ export class ManyItems extends BaseTest {
           this.#percentRandomAwait < 1 ||
           Math.random() < this.#percentRandomAwait
         ) {
-          await 0;
+          await yieldTo(this.#yieldKind);
         }
       }
 
