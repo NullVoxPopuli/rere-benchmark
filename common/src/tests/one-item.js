@@ -1,4 +1,4 @@
-import { qpNum, qpPercent, tryVerify } from './utils.js';
+import { qpNum, qpPercent, tryVerify, yieldKind, yieldTo } from './utils.js';
 import { RUN, BaseTest } from './base-test.js';
 
 /**
@@ -17,6 +17,11 @@ export class OneItem extends BaseTest {
    * @type {number}
    */
   #percentRandomAwait = 0;
+
+  /**
+   * @type {'micro' | 'macro'}
+   */
+  #yieldKind = yieldKind();
 
   /**
    * @type {number}
@@ -79,7 +84,7 @@ export class OneItem extends BaseTest {
           this.#percentRandomAwait < 1 ||
           Math.random() < this.#percentRandomAwait
         ) {
-          await 0;
+          await yieldTo(this.#yieldKind);
         }
       }
       set(i);

@@ -64,6 +64,38 @@ export function nextMacrotask() {
   });
 }
 
+/**
+ * How the update loops hand control back between updates.
+ *
+ * `micro` is `await 0`: one turn of the microtask queue. Frameworks that
+ * flush on a microtask get to render between updates; anything scheduled
+ * on a task, a frame, or an idle callback does not, because the microtask
+ * queue is drained before the browser looks at any of those. That is a
+ * real and interesting thing to measure, but it is *not* what "async" means
+ * to most readers, and it is not how data actually arrives over a socket.
+ *
+ * `macro` is a real task, the same MessageChannel hop fan-out uses, which
+ * is how a `websocket.on('message')` handler is actually reached.
+ *
+ * `micro` stays the default: it is what every recorded run so far used, and
+ * a real task per update would put the 100k-update variants into the
+ * minutes.
+ *
+ * @returns {'micro' | 'macro'}
+ */
+export function yieldKind() {
+  return qp('yield') === 'macro' ? 'macro' : 'micro';
+}
+
+/**
+ * One turn of whichever queue {@link yieldKind} selects.
+ *
+ * @param {'micro' | 'macro'} kind
+ */
+export function yieldTo(kind) {
+  return kind === 'macro' ? nextMacrotask() : Promise.resolve();
+}
+
 const state = Symbol.for('worker:state');
 
 export function globalState() {
