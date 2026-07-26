@@ -5,7 +5,7 @@ import * as clack from '@clack/prompts';
 import { $ } from 'execa';
 import puppeteer, { type Browser } from 'puppeteer';
 
-import { COUNT, CPU_THROTTLE, HEADLESS, SKIP_BUILD } from './arg.ts';
+import { COUNT, CPU_THROTTLE, HEADLESS, SKIP_BUILD, TIMEOUT } from './arg.ts';
 import { getBenchInfo } from './bench-info.ts';
 import { chromeLocation } from './environment.ts';
 import {
@@ -35,13 +35,6 @@ interface MarkEntry {
   detail?: unknown;
 }
 
-/**
- * How long a single sample is allowed to take before we stop waiting.
- * The page gives up on its own at 30s and throws, so reaching this means
- * something worse than a slow render.
- */
-const BUDGET_MS = 60_000;
-
 async function getMarks(browser: Browser, url: string) {
   const page = await browser.newPage();
 
@@ -60,7 +53,7 @@ async function getMarks(browser: Browser, url: string) {
   // TODO: is there a way to wait for the page to calmn down?
   await page.waitForNetworkIdle();
 
-  const progress = clack.progress({ style: 'light', max: BUDGET_MS });
+  const progress = clack.progress({ style: 'light', max: TIMEOUT });
   // Node-side only: this ticks the bar without touching the page.
   const ticking = setInterval(() => progress.advance(100), 100);
 
@@ -103,13 +96,13 @@ async function getMarks(browser: Browser, url: string) {
 
       setTimeout(() => resolve(read()), budget);
     });
-  }, BUDGET_MS);
+  }, TIMEOUT);
 
   clearInterval(ticking);
 
   const finished = allMarks.some((mark) => mark.name === ':done');
 
-  progress.stop(finished ? `Finished` : `Gave up after ${BUDGET_MS}ms`);
+  progress.stop(finished ? `Finished` : `Gave up after ${TIMEOUT}ms`);
 
   const marks = allMarks.map((entry) => {
     if (!entry.detail) {
@@ -121,8 +114,23 @@ async function getMarks(browser: Browser, url: string) {
 
   await page.close();
 
+  /**
+   * A sample that never reached `:done` is not a slow sample, it is a
+   * broken one -- the page throws on its own after 30s if the DOM never
+   * settles, so getting here means something worse.
+   *
+   * It used to be recorded anyway, as an entry with no `:done` in it. The
+   * results app skips those with a `console.warn` nobody reads, so a run
+   * could quietly summarize 7 samples while claiming 10, and a run where
+   * every sample failed produced NaN. Stopping is louder and cheaper than
+   * discovering it later; whatever completed before this point is already
+   * in the results file.
+   */
   if (!finished) {
-    clack.log.warn(`No :done mark -- this sample did not finish`);
+    throw new Error(
+      `No :done mark after ${TIMEOUT}ms at ${url}\n` +
+        `Recorded marks: ${marks.map((mark) => mark.name).join(', ') || '(none)'}`,
+    );
   }
 
   return marks;
