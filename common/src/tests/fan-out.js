@@ -121,7 +121,6 @@ export class FanOut extends BaseTest {
   async [RUN](set) {
     let name = this.name;
 
-    console.time(name);
     performance.mark(`:start`);
 
     let value = 0;

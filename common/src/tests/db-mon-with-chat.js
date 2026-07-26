@@ -71,7 +71,7 @@ export class DBMonWithChat extends BaseTest {
       this.#averages.push(fps);
 
       if (bucketsOf5s >= SAMPLES) {
-        tryVerify(this.name, this.verify, 1);
+        tryVerify(this.name, this.verify);
       }
     }
   };
