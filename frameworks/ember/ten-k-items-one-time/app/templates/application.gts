@@ -18,11 +18,18 @@ export default class Test extends Component {
     });
   };
 
+  // key="@index": position-keyed, like react's key={index}, vue and
+  // svelte's positional defaults, and angular's track $index. The default
+  // (@identity) keys by value, and this bench's values change on every
+  // update -- so every update tore its row down and built a new one
+  // (10k adds + 10k removes per flush) instead of writing the text in
+  // place. 3.4x on this bench.
+  //
   // No spaces, like all the other frameworks (especially JSX)
   // Adding invisible characters is so annoying in JSX haha
   //
   // Ember should probably have a way to strip the unmeaning spaces anyway
   // I think the algo is easy
   // prettier-ignore
-  <template>{{#each this.items as |item|}}{{test.formatItem item}}{{/each}}{{(this.start)}}</template>
+  <template>{{#each this.items key="@index" as |item|}}{{test.formatItem item}}{{/each}}{{(this.start)}}</template>
 }
