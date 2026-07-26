@@ -13,8 +13,11 @@ import { nameOf } from "#frameworks";
 import {
   getFrameworks,
   higherIsBetterBenches,
+  labelFor,
   lowerIsBetterBenches,
   overrideOf,
+  percentileFrom,
+  PERCENTILES,
   round,
   throttleLabel,
   timeFor,
@@ -24,6 +27,7 @@ import {
 import type RouterService from "@ember/routing/router-service";
 import type { Model, NamedRun } from "#routes/compare.ts";
 import type { BenchmarkInfo, ResultSet } from "#types";
+import type { Percentile } from "#utils";
 
 /**
  * Below this |% change|, runs are considered equivalent -- individual
@@ -89,11 +93,15 @@ class CompareTable extends Component<{
   b: NamedRun;
   framework: string;
 }> {
+  @service declare router: RouterService;
+
   @cached
   get rows() {
+    const percentile = percentileFrom(this.router);
+
     return this.args.benches.map((bench) => {
-      const a = timeFor(this.args.a.data, this.args.framework, bench);
-      const b = timeFor(this.args.b.data, this.args.framework, bench);
+      const a = timeFor(this.args.a.data, this.args.framework, bench, percentile);
+      const b = timeFor(this.args.b.data, this.args.framework, bench, percentile);
 
       return {
         bench,
@@ -299,6 +307,18 @@ export default class Compare extends Component<{ model: Model }> {
 
   isRun = (which: "a" | "b", name: string) => this[which].name === name;
 
+  percentiles = PERCENTILES;
+
+  labelFor = labelFor;
+
+  isPercentile = (percentile: Percentile) => percentileFrom(this.router) === percentile;
+
+  setPercentile = (event: Event) => {
+    const { value } = event.target as HTMLSelectElement;
+
+    this.router.transitionTo({ queryParams: { p: value } });
+  };
+
   <template>
     {{pageTitle "Compare"}}
 
@@ -327,6 +347,16 @@ export default class Compare extends Component<{ model: Model }> {
         <select name="run-b" {{on "change" (fn this.setRun "b")}}>
           {{#each results as |name|}}
             <option value={{name}} selected={{this.isRun "b" name}}>{{shortName name}}</option>
+          {{/each}}
+        </select>
+      </label>
+      <label>
+        statistic
+        <select name="percentile" {{on "change" this.setPercentile}}>
+          {{#each this.percentiles as |percentile|}}
+            <option value={{percentile}} selected={{this.isPercentile percentile}}>{{this.labelFor
+                percentile
+              }}</option>
           {{/each}}
         </select>
       </label>

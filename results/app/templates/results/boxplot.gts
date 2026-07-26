@@ -6,6 +6,7 @@ import { converter, filterBrightness, formatCss } from "culori";
 import { modifier } from "ember-modifier";
 
 import { frameworks } from "#frameworks";
+import { samplesOf } from "#utils";
 
 import type { Model } from "#routes/results.ts";
 import type { BenchmarkInfo, ResultSet } from "#types";
@@ -29,22 +30,8 @@ function boxData(file: ResultSet, benchInfo: BenchmarkInfo) {
     labels.push(framework);
 
     const marks = file.results[framework]?.[benchInfo.name]?.times;
-    let frameworkData: number[] = [];
 
-    if (marks) {
-      if (benchInfo.whatsBetter === "bigger") {
-        frameworkData = marks
-          .flat()
-          .filter((mark) => mark.name === benchInfo.measure)
-          .map((mark) => mark.detail);
-      } else {
-        frameworkData = marks
-          .map(([start, end]) => (start && end ? end.at - start.at : undefined))
-          .filter((duration) => duration !== undefined);
-      }
-    }
-
-    data.push(frameworkData);
+    data.push(marks ? samplesOf(marks, benchInfo.measure) : []);
 
     const baseColor = frameworks[framework]?.color ?? "#888";
     const hsl = HSL(baseColor);
