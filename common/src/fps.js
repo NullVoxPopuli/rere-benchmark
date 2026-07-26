@@ -6,30 +6,26 @@
  * - averages over 1s and 5s, rather than since last frame
  * - precision displayed to 1 decimal place instead of 6
  * - padding to 5 characters to prevent jitter
+ * - samples are read from the frame timestamps directly, not parsed back
+ *   out of the overlay's rendered text (which is repainted at most every
+ *   50ms and rounded to 1 decimal place)
  */
 
 const ms_1s = 1000;
 const ms_5s = 5000;
 
+/**
+ * Frame timestamps of the last 5 seconds, maintained by {@link setupFPS}.
+ *
+ * @type {number[]}
+ */
+let frameTimes = [];
+
+/**
+ * The average frame rate over the last 5 seconds.
+ */
 export function get5sAverage() {
-  let fps = document.getElementById('fps');
-
-  if (!fps) {
-    throw new Error(`FPS was not rendered. First call setupFPS()`);
-  }
-
-  let content = fps.textContent;
-  let lines = content.split('\n');
-  let relevantLine = lines.find((line) => line.includes('5s avg '));
-
-  if (!relevantLine) {
-    throw new Error(`Could not find 5s avg in the FPS element`);
-  }
-
-  let valueStr = relevantLine.replace('5s avg', '').trim();
-  let value = parseFloat(valueStr);
-
-  return value;
+  return rollingAvg(frameTimes, ms_5s, 0);
 }
 
 /**
@@ -75,8 +71,8 @@ export function setupFPS() {
   el.style.height = 'auto';
   document.body.appendChild(el);
 
-  /** @type {number[]} */
-  const frameTimes = [];
+  frameTimes = [];
+
   /** @type {number | undefined} */
   let prevTime;
   /** @type {number | undefined} */
