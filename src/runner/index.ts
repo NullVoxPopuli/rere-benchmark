@@ -175,12 +175,16 @@ for (const framework of info.frameworks) {
     for (const bench of info.benches) {
       if (bench.app !== app) continue;
 
-      await prepareForResults(framework, bench, info.filePath);
-
       for (const variant of info.variants) {
         const url = serverUrl + '/?' + bench.query + variant.query;
+        const name = variant.name
+          ? `${bench.name} ${variant.name}`
+          : bench.name;
 
         clack.log.info(`\tVariant: ${url}`);
+
+        // per variant, under the same name addResult writes to
+        await prepareForResults(framework, bench, name, info.filePath);
 
         const count = bench.ignoreCount ? 1 : COUNT;
 
@@ -188,10 +192,6 @@ for (const framework of info.frameworks) {
           clack.log.info(`\t\tRemaining: ${count - i}`);
 
           const performanceMarks = await getMarks(browser, url);
-
-          const name = variant.name
-            ? `${bench.name} ${variant.name}`
-            : bench.name;
 
           await addResult(
             framework,

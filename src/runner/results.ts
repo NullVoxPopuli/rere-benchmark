@@ -161,14 +161,27 @@ async function getVersion(framework: string, bench: BenchmarkInfo) {
   return version;
 }
 
+/**
+ * Clears out whatever a previous run left under this framework/bench pair,
+ * so appending to an existing file replaces that series rather than
+ * growing it.
+ *
+ * `resultName` rather than `bench.name`: a named variant is recorded as
+ * `"<bench> <variant>"`, which is the key `addResult` writes to. Keying the
+ * reset off the bare bench name meant a variant's samples were never
+ * cleared, and the bare name was cleared without ever being written to.
+ * Dormant while the only variant is the unnamed one, and wrong the moment
+ * the manual-batching variant comes back.
+ */
 export async function prepareForResults(
   framework: string,
   bench: BenchmarkInfo,
+  resultName: string,
   filePath: string,
 ) {
   const existing = await getResults(filePath);
 
-  const benchName = bench.name;
+  const benchName = resultName;
   const version = await getVersion(framework, bench);
 
   existing[framework] ||= {};
