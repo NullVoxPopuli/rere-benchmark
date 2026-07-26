@@ -18,6 +18,7 @@ export const CPU_THROTTLE = int('--cpu-throttle', 1);
 export const FRAMEWORK = str('--framework');
 export const BENCH_NAME = str('--bench');
 export const SKIP_BUILD = bool('--skip-build');
+export const TIMEOUT = int('--timeout', 60_000);
 export const VERSION_OVERRIDES = versionOverrides();
 
 function col1(name: string) {
@@ -52,6 +53,7 @@ console.log(
     ),
     row(col1('--headless'), col2(HEADLESS), col3('limited to 60 fps')),
     row(col1('--count'), col2(COUNT), col3('sample count')),
+    row(col1('--timeout'), col2(TIMEOUT), col3('ms a single sample may take')),
     row(col1('--framework'), col2(FRAMEWORK), col3(`or '${ALL}'`)),
     row(col1('--bench'), col2(BENCH_NAME), col3(`or '${ALL}'`)),
     ...Object.entries(VERSION_OVERRIDES).map(([framework, override]) =>

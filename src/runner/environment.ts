@@ -14,6 +14,7 @@ import {
   FRAMEWORK,
   HEADLESS,
   SKIP_BUILD,
+  TIMEOUT,
 } from './arg.ts';
 
 const whichGoogleChrome = await $`which google-chrome`;
@@ -112,6 +113,7 @@ export async function getInfo() {
       COUNT,
       FRAMEWORK,
       BENCH_NAME,
+      TIMEOUT,
     },
     environment: {
       machine: {
