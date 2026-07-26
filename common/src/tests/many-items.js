@@ -3,6 +3,7 @@ import {
   qpBool,
   qpNum,
   qpPercent,
+  seededRandom,
   tryVerify,
   yieldKind,
   yieldTo,
@@ -46,6 +47,8 @@ export class ManyItems extends BaseTest {
    * @type {'micro' | 'macro'}
    */
   #yieldKind = yieldKind();
+
+  #rng = seededRandom();
 
   constructor({
     totalUpdates = qpNum('updates', 10_000),
@@ -122,7 +125,7 @@ export class ManyItems extends BaseTest {
   };
 
   #randomNextValue = () => {
-    return Math.floor(Math.random() * this.#num);
+    return Math.floor(this.#rng() * this.#num);
   };
 
   /**
@@ -140,7 +143,7 @@ export class ManyItems extends BaseTest {
       if (this.#percentRandomAwait > 0) {
         if (
           this.#percentRandomAwait < 1 ||
-          Math.random() < this.#percentRandomAwait
+          this.#rng() < this.#percentRandomAwait
         ) {
           await yieldTo(this.#yieldKind);
         }

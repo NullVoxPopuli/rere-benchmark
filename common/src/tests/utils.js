@@ -96,6 +96,49 @@ export function yieldTo(kind) {
   return kind === 'macro' ? nextMacrotask() : Promise.resolve();
 }
 
+/**
+ * Changing this changes every workload, so runs recorded either side of it
+ * are not comparable. Override per run with `?seed=`.
+ */
+export const DEFAULT_SEED = 1;
+
+/**
+ * A seeded stand-in for `Math.random`.
+ *
+ * The benches lean on randomness in a lot of places -- which items a random
+ * variant updates, which rows dbmon mutates and what it puts in them, how
+ * long each worker sleeps, what text faker generates. All of it came from
+ * `Math.random`, so every framework was measured against a *different*
+ * workload, and so was every run of the same framework. Seeding it means
+ * every framework does identical work, and a suspicious result can be
+ * reproduced instead of re-rolled.
+ *
+ * The algorithm is mulberry32, by Tommy Ettinger, copied verbatim from
+ * bryc's collection of seedable PRNGs (public domain):
+ * https://github.com/bryc/code/blob/master/jshash/PRNGs.md#mulberry32
+ * That page also covers how it works and how it compares to alternatives.
+ * Tiny, fast, and good enough for picking indices and delays.
+ *
+ * Each caller gets its own stream so that adding a call site in one place
+ * does not shift the sequence everywhere else.
+ *
+ * @param {number} [seed]
+ * @returns {() => number}
+ */
+export function seededRandom(seed = qpNum('seed', DEFAULT_SEED)) {
+  let a = seed >>> 0;
+
+  return function random() {
+    a = (a + 0x6d2b79f5) | 0;
+
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
 const state = Symbol.for('worker:state');
 
 export function globalState() {
@@ -108,7 +151,11 @@ export function globalState() {
  * @param {string} name
  */
 export function qp(name) {
-  let search = globalThis.location?.search ?? globalState()?.search;
+  // A worker has a `location`, but it is the worker script's own URL and its
+  // search is the empty string -- which `??` does not fall through, so the
+  // search the page forwarded on startup was never consulted and no query
+  // param has ever reached a worker. `||` falls through to it.
+  let search = globalThis.location?.search || globalState()?.search || '';
 
   let query = new URLSearchParams(search);
 
