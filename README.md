@@ -7,17 +7,11 @@
 ## TODOs
 
 - Vanilla JS implementation
-- More Benches:
-  - db mon + chat + typing-responsiveness
 
 - create lints 
   - we don't want to prescribe pnpm vs npm vs yarn, so folks should provide an
     - install.sh and a build.sh?
     - config file? yaml? everyone loves yaml
-
-- create tests
-  - we need to ensure folks don't cheat
-  - how to do this? Should we just trust code review?
 
 - create ci check to comment back on the PR if the src/runner can't access the build:prod output
     - require that all apps in a framework folder have the same
