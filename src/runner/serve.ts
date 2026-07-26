@@ -43,13 +43,30 @@ export function serve(directory: string, port = 3000): Promise<http.Server> {
 
       const contentType = mimeTypes[extname] || 'application/octet-stream';
 
-      res.writeHead(200, { 'Content-Type': contentType });
+      res.writeHead(200, {
+        'Content-Type': contentType,
+        /**
+         * Every framework's app is served from this same origin, on this
+         * same port, at this same `/index.html`. Without a cache directive
+         * the browser is free to apply heuristic caching, and a hit across
+         * that boundary means benchmarking one framework's build under
+         * another framework's name.
+         *
+         * Nothing here should be cached anyway: each sample is a fresh page
+         * load and the point is to measure the app, not the transport.
+         */
+        'Cache-Control': 'no-store',
+      });
 
       return res.end(content);
     });
   });
 
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
+    // Without this the promise never settles when the port is taken, and
+    // the runner hangs with no output rather than saying what is wrong.
+    server.on('error', reject);
+
     server.listen(port, () => {
       killable(server);
       resolve(server);
