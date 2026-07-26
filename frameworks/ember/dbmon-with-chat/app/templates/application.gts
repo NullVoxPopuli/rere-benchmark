@@ -56,11 +56,13 @@ export default class Test extends Component {
                 </span>
               </td>
               {{#each row.lastSample.topFiveQueries key="@index" as |query|}}
-                <td>{{query.elapsed}}</td>
-                <div class="popover bottom">
-                  <div class="popover-content">{{query.query}}</div>
-                  <div class="arrow"></div>
-                </div>
+                <td>
+                  {{query.elapsed}}
+                  <div class="popover bottom">
+                    <div class="popover-content">{{query.query}}</div>
+                    <div class="arrow"></div>
+                  </div>
+                </td>
               {{/each}}
             </tr>
           {{/each}}
