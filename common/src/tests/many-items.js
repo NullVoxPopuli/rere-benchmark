@@ -136,7 +136,6 @@ export class ManyItems extends BaseTest {
   async [RUN](set) {
     let name = this.name;
 
-    console.time(name);
     performance.mark(`:start`);
 
     for (let i = 0; i < this.#totalUpdates; i++) {

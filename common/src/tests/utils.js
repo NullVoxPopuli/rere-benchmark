@@ -1,52 +1,122 @@
 /**
- * If using requestAnimationFrame:
- *
- * 960 frames:
- * - 16s @ 60fps
- * - 4s @ 240fps
- *
- * 480 frames:
- * - 8s @ 60fps
- * - 2s @ 240fps
- *
- * 120 frames:
- * - 2s @ 60fps
- * - 0.5s @ 240fps
+ * How long to wait for the DOM to catch up before calling the run broken.
+ * The runner gives up at 60s; failing first means the failure says what
+ * actually went wrong instead of arriving as an empty result.
  */
-const NUM_FRAMES_TO_WAIT = 960;
+const SETTLE_TIMEOUT_MS = 30_000;
 
 /**
- * TODO?: also have a second-based timeout?
+ * Stamp `:done` as soon as the DOM reflects the finished state.
+ *
+ * Two things used to sit between "the DOM is correct" and the mark:
+ *
+ * 1. `console.timeEnd(label)` ran *before* `performance.mark(':done')`.
+ *    With a debugger attached every console call is serialized and shipped
+ *    over the protocol, so an unknown number of milliseconds of devtools
+ *    I/O landed inside the measurement. The mark goes first now, and the
+ *    log is built from the marks afterwards.
+ *
+ * 2. When the framework had not rendered yet, `check` was retried from a
+ *    `requestIdleCallback`, so `:done` carried however long the idle
+ *    scheduler took to hand back a slot. That is not framework work.
+ *
+ * A MutationObserver callback is a microtask that runs at the end of
+ * whichever task touched the DOM, so we re-check the moment a framework
+ * renders -- whatever it schedules rendering on, and without waiting for a
+ * frame. Measured on `1 item, 1k updates` at 4x throttle, 6 runs, same
+ * machine, before and after:
+ *
+ *              median      range              median     range
+ *     ember      7.65   6.1 - 13.2   ->         5.45   4.4 - 7.8
+ *     vue        10.8   9.7 - 12.5   ->         6.65   5.7 - 8.5
+ *     react      17.0   12.8 - 30.7  ->        12.85   9.8 - 15.5
+ *
+ * One of those six vue runs never produced `:done` at all beforehand --
+ * the idle callback that never fires, which the `{ timeout: 50 }` in #46
+ * was papering over.
+ *
+ * The rAF loop alongside the observer is a backstop for anything that
+ * could satisfy `check` without mutating (nothing does today), so a miss
+ * shows up as a slightly late `:done` rather than a hang.
  *
  * @param {string} label
  * @param {() => boolean} check
  */
-export function tryVerify(label, check, attempts = 0) {
-  if (check()) {
-    console.timeEnd(label);
-    performance.mark(`:done`);
-    console.log(`Rendered in ${attempts} frames`);
-    return;
-  }
+export function tryVerify(label, check) {
+  let checks = 0;
+  let done = false;
 
-  if (attempts < NUM_FRAMES_TO_WAIT) {
-    // The timeout keeps the retry loop honest in two ways: a fully idle
-    // page can starve requestIdleCallback entirely (the arm-but-never-fire
-    // failure #34 fixed in base-test), and unbounded idle-grant latency
-    // taxes frameworks that defer rendering past the dirtying task by
-    // hundreds of ms of pure measurement noise on `:done`.
-    requestIdleCallback(
-      () => {
-        tryVerify(label, check, attempts + 1);
-      },
-      { timeout: 50 },
+  /**
+   * @param {'immediate' | 'mutation' | 'frame'} via
+   */
+  const finish = (via) => {
+    if (done) return;
+    done = true;
+
+    observer.disconnect();
+    clearTimeout(timeout);
+
+    performance.mark(`:done`, { detail: { checks, via } });
+
+    const [start] = performance.getEntriesByName(`:start`);
+    const [end] = performance.getEntriesByName(`:done`);
+
+    if (start && end) {
+      console.log(
+        `${label}: ${(end.startTime - start.startTime).toFixed(2)}ms ` +
+          `(settled via ${via} after ${checks} check${checks === 1 ? '' : 's'})`,
+      );
+    }
+  };
+
+  /**
+   * @param {'immediate' | 'mutation' | 'frame'} via
+   */
+  const attempt = (via) => {
+    if (done) return;
+
+    checks++;
+
+    if (check()) finish(via);
+  };
+
+  const observer = new MutationObserver(() => attempt('mutation'));
+
+  const timeout = setTimeout(() => {
+    if (done) return;
+
+    observer.disconnect();
+
+    throw new Error(
+      `${label}: the DOM never reached the verified state, ` +
+        `after ${checks} checks over ${SETTLE_TIMEOUT_MS}ms`,
     );
-    return;
-  }
+  }, SETTLE_TIMEOUT_MS);
 
-  throw new Error(
-    `Could not determine verified state within ${attempts} frames`,
-  );
+  const nextFrame = () => {
+    if (done) return;
+
+    attempt('frame');
+    requestAnimationFrame(nextFrame);
+  };
+
+  // Already correct: the framework rendered synchronously with the writes,
+  // so there is nothing to wait for and nothing to add to the measurement.
+  attempt('immediate');
+
+  if (done) return;
+
+  // childList and characterData are how a rendered value reaches the
+  // screen -- a replaced text node or a rewritten one. Attributes are left
+  // out on purpose: no bench verifies one, and observing them would record
+  // (and allocate) for every class change dbmon makes.
+  observer.observe(document, {
+    subtree: true,
+    childList: true,
+    characterData: true,
+  });
+
+  requestAnimationFrame(nextFrame);
 }
 
 const macrotaskChannel = new MessageChannel();
