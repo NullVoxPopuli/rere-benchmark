@@ -254,7 +254,18 @@ async function getBenches() {
 
 const yesterdayFull = new Date(Date.now() - 24 * 60 * 60 * 1000);
 
+/** Both selection flags set → skip remaining interactive confirms. */
+function isNonInteractive() {
+  return Boolean(args.FRAMEWORK && args.BENCH_NAME);
+}
+
 async function getFilePath() {
+  const newFile = yyyymmdd + '.json';
+
+  if (isNonInteractive()) {
+    return `./results/public/results/${newFile}`;
+  }
+
   let existing = await readdir(`./results/public/results/`);
 
   const today = yyyymmdd.split('T')[0]!;
@@ -265,7 +276,7 @@ async function getFilePath() {
   const result = await clack.select({
     message: 'Where to save?',
     options: [
-      { value: yyyymmdd + '.json', label: 'New file', hint: yyyymmdd },
+      { value: newFile, label: 'New file', hint: yyyymmdd },
       ...existing.map((x) => {
         return { value: x, label: x };
       }),
@@ -299,13 +310,15 @@ export async function getBenchInfo() {
     Results will be written to ${filePath}
   `);
 
-  const letsgo = await clack.confirm({
-    message: 'Does this information look correct?',
-  });
+  if (!isNonInteractive()) {
+    const letsgo = await clack.confirm({
+      message: 'Does this information look correct?',
+    });
 
-  if (!letsgo || clack.isCancel(letsgo)) {
-    clack.log.info('Exiting');
-    process.exit(1);
+    if (!letsgo || clack.isCancel(letsgo)) {
+      clack.log.info('Exiting');
+      process.exit(1);
+    }
   }
 
   assert(selectedBenches, `Must select at least one benchmark`);
