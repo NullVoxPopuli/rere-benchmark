@@ -10,7 +10,6 @@ export const FRAMEWORKS = [
   'angular',
   'ember',
   'react',
-  'react-compiler',
   'solid',
   'svelte',
   'vue',

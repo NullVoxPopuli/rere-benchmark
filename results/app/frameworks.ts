@@ -55,14 +55,6 @@ export const frameworks: Record<string, FrameworkInfo> = {
     url: "https://react.dev/",
     package: "react",
   },
-  ["react-compiler"]: {
-    color: "#149ECA",
-    logo: "/react.svg",
-    name: "React Compiler",
-    url: "https://react.dev/learn/react-compiler",
-    package: "react",
-  },
-
   solid: {
     color: "#2c4f7c",
     logo: "/solid.svg",
