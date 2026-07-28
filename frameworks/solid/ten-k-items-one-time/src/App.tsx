@@ -1,4 +1,4 @@
-import { createEffect, createStore, For } from 'solid-js'
+import { createEffect, createStore, Repeat } from 'solid-js'
 import { helpers } from 'common';
 
 const test = helpers.tenKitems1UpdateEach();
@@ -18,7 +18,11 @@ function App() {
     });
   });
 
-  return <For each={store.items}>{i => test.formatItem(i)}</For>
+  return (
+    <Repeat count={store.items.length}>
+      {index => <>{test.formatItem(store.items[index])}</>}
+    </Repeat>
+  )
 }
 
 export default App
