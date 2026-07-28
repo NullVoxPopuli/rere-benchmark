@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup vapor lang="ts">
   import { ref, onMounted, onUpdated } from 'vue'
   import { helpers } from 'common';
 
