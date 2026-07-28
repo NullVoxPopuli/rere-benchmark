@@ -1,4 +1,4 @@
-import { createSignal, createEffect } from 'solid-js'
+import { createSignal, createEffect, onSettled } from 'solid-js'
 import { helpers } from 'common';
 
 const test = helpers.incrementingRenderEffect();
@@ -18,9 +18,7 @@ function App() {
     },
   );
 
-  // no more onMount in solid 2: an effect with an empty compute runs
-  // once after the first render
-  createEffect(() => {}, () => {
+  onSettled(() => {
     test.doit({
       element: el,
       get: () => output(),

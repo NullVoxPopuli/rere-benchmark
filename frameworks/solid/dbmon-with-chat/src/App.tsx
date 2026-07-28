@@ -1,6 +1,6 @@
 import 'common/dbmon.css';
 import './layout.css';
-import { createEffect, createSignal, For } from 'solid-js';
+import { createSignal, For, onSettled } from 'solid-js';
 import { helpers, type DBRow, type ChatMessage, type DBUpdate, type ChatUpdate } from 'common';
 
 const test = helpers.dbMonWithChat();
@@ -9,9 +9,7 @@ function App() {
   const [db, setDb] = createSignal<Map<string, DBRow>>(new Map());
   const [chats, setChats] = createSignal<ChatMessage[]>([]);
 
-  // no more onMount in solid 2: an effect with an empty compute runs
-  // once after the first render
-  createEffect(() => {}, () => {
+  onSettled(() => {
     test.doit({
       handleDbUpdate: (eventData: DBUpdate) => {
         setDb(prev => {
