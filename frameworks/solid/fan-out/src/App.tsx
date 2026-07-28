@@ -11,7 +11,9 @@ function App() {
   });
 
   return <output>
-    <For each={test.consumerRange}>{() => <span>{test.formatItem(value())}</span>}</For>
+    <For each={test.consumerRange}>
+      {() => <span textContent={test.formatItem(value())} />}
+    </For>
   </output>
 }
 

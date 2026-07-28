@@ -10,7 +10,7 @@ function App() {
     test.doit((i) => setCount(i));
   });
 
-  return <output>{test.formatItem(count())}</output>
+  return <output textContent={test.formatItem(count())} />
 }
 
 export default App

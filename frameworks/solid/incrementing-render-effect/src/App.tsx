@@ -27,7 +27,7 @@ function App() {
     });
   });
 
-  return <output ref={el}>{output()}</output>;
+  return <output ref={el} textContent={output()} />;
 }
 
 export default App
