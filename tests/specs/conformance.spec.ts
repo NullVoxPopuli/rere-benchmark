@@ -65,14 +65,8 @@ interface Trace {
 interface ConformanceSpec {
   app: string;
   query: string;
-  /**
-   * The exact sequence of page-text states the run must pass through,
-   * or null for the self-advancing bench (validated as a strict +1
-   * counting sequence instead, because each framework's initial render
-   * differs: some start at -1, some at 0, so the first in-window state
-   * is 0 or 1).
-   */
-  expectedStates: string[] | null;
+  /** The exact sequence of page-text states the run must pass through */
+  expectedStates: string[];
   /**
    * Text-node churn allowed per rendered state. 2 covers frameworks
    * that swap the text node instead of writing `nodeValue` in place;
@@ -85,23 +79,6 @@ interface ConformanceSpec {
 function range(start: number, end: number): number[] {
   return Array.from({ length: end - start }, (_, i) => start + i);
 }
-
-/**
- * Deviations discovered by running this suite -- documented scheduling
- * asymmetries, not cheats, kept here so they are visible and so any new
- * one has to be added (and reviewed) explicitly.
- *
- * react / fan-out: the first burst-end is written synchronously from
- * the requestIdleCallback that boots the bench, and react's first
- * render consistently lands after the second burst was already applied,
- * so state [1] never reaches the DOM. Every render after that is in
- * lockstep (each carries exactly one state's worth of mutation
- * records). one-item does not hit this because its loop yields *before*
- * the first write, so every write happens inside a task.
- */
-const MAY_SKIP_FIRST_STATE: Array<[framework: string, app: string]> = [
-  ['react', 'fan-out'],
-];
 
 const SPECS: ConformanceSpec[] = [
   {
@@ -137,9 +114,9 @@ const SPECS: ConformanceSpec[] = [
   {
     app: 'incrementing-render-effect',
     query: `?updates=${UPDATES}`,
-    // self-advancing: the bench itself throws if the DOM ever lags the
-    // value, so here we only pin the counting shape and the churn
-    expectedStates: null,
+    // self-advancing (the bench itself throws if the DOM ever lags the
+    // value): every app starts at -1, so set(0)..set(30) all render
+    expectedStates: range(0, UPDATES + 1).map(String),
     maxNodesPerState: 2,
   },
 ];
@@ -225,22 +202,6 @@ function installTraceObserver() {
   });
 }
 
-function expectCountingSequence(states: string[], last: number) {
-  const numbers = states.map(Number);
-
-  expect(
-    numbers.every((n) => Number.isInteger(n)),
-    `every state is an integer: ${states.join(', ')}`,
-  ).toBe(true);
-
-  // strict +1 steps: rendering every intermediate value, none twice
-  const broken = numbers.filter((n, i) => i > 0 && n !== numbers[i - 1]! + 1);
-
-  expect(broken, 'every step increments by exactly 1').toEqual([]);
-  expect(numbers[0], 'starts at the first update').toBeLessThanOrEqual(1);
-  expect(numbers.at(-1), 'ends at the final value').toBe(last);
-}
-
 async function runConformance(
   page: Page,
   framework: string,
@@ -273,21 +234,9 @@ async function runConformance(
 
     expect(errors, 'no uncaught errors on the page').toEqual([]);
 
-    if (spec.expectedStates) {
-      const maySkipFirst = MAY_SKIP_FIRST_STATE.some(
-        ([fw, app]) => fw === framework && app === spec.app,
-      );
-      const expected =
-        maySkipFirst && trace.states.length === spec.expectedStates.length - 1
-          ? spec.expectedStates.slice(1)
-          : spec.expectedStates;
-
-      expect(trace.states, 'rendered exactly the expected states').toEqual(
-        expected,
-      );
-    } else {
-      expectCountingSequence(trace.states, UPDATES);
-    }
+    expect(trace.states, 'rendered exactly the expected states').toEqual(
+      spec.expectedStates,
+    );
 
     expect(
       trace.churn.elementsAdded,

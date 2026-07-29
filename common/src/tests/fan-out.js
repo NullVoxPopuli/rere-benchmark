@@ -130,6 +130,15 @@ export class FanOut extends BaseTest {
   async [RUN](set) {
     let name = this.name;
 
+    // The first message must arrive like every other message: as its own
+    // task. Without this hop the first burst is written synchronously
+    // from the requestIdleCallback that boots the bench, where react's
+    // first render lands only after the *second* burst was applied -- so
+    // the first value never reached the DOM (found by
+    // tests/specs/conformance.spec.ts). Before `:start`, so the hop is
+    // not part of the measurement.
+    await nextMacrotask();
+
     performance.mark(`:start`);
 
     let value = 0;
