@@ -2,6 +2,7 @@ import { formatDuration, msOfFrameAt, throttleLabel } from "#utils";
 
 import type { TOC } from "@ember/component/template-only";
 import type { ResultSet } from "#types";
+import type { DisplayPr } from "#utils";
 
 function first8(str: string) {
   return str.slice(0, 8);
@@ -71,6 +72,22 @@ export const Info = <template>
         </li>
       {{/if}}
     </ul>
+
+    {{#if @prs.length}}
+      <details class="pr-notes">
+        <summary>PRs since the previous result set ({{@prs.length}})</summary>
+        <ul>
+          {{#each @prs as |pr|}}
+            <li>
+              <a target="_blank" rel="noopener noreferrer" href={{pr.url}}>
+                {{pr.label}}
+              </a>
+              {{#if pr.title}}{{pr.title}}{{/if}}
+            </li>
+          {{/each}}
+        </ul>
+      </details>
+    {{/if}}
   </div>
 </template> satisfies TOC<{
   date: string;
@@ -78,4 +95,5 @@ export const Info = <template>
   env: ResultSet["environment"];
   cpuThrottle: number | undefined;
   timing: ResultSet["timing"];
+  prs: DisplayPr[];
 }>;

@@ -19,6 +19,7 @@ export const FRAMEWORK = str('--framework');
 export const BENCH_NAME = str('--bench');
 export const SKIP_BUILD = bool('--skip-build');
 export const TIMEOUT = int('--timeout', 60_000);
+export const INCLUDE_PRS = bool('--include-prs');
 export const VERSION_OVERRIDES = versionOverrides();
 
 function col1(name: string) {
@@ -56,6 +57,11 @@ console.log(
     row(col1('--timeout'), col2(TIMEOUT), col3('ms a single sample may take')),
     row(col1('--framework'), col2(FRAMEWORK), col3(`or '${ALL}'`)),
     row(col1('--bench'), col2(BENCH_NAME), col3(`or '${ALL}'`)),
+    row(
+      col1('--include-prs'),
+      col2(INCLUDE_PRS),
+      col3('record PRs merged since the previous result set'),
+    ),
     ...Object.entries(VERSION_OVERRIDES).map(([framework, override]) =>
       row(
         col1(`--${framework}`),

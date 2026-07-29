@@ -251,6 +251,7 @@ window you've covered up.
 | `--headless` | off | headless caps at 60fps, so the frame-rate bench means less |
 | `--timeout` | `60000` | ms a single sample may take before the run fails |
 | `--skip-build` | off | re-use an existing build |
+| `--include-prs` | off | record the PRs that landed since the previous result set in the run's notes (from git history; shown in the results app) |
 
 ### Query params
 

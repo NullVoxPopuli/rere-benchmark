@@ -56,6 +56,32 @@ export function variantOf(file: ResultSet, framework: string) {
   return file.notes?.[framework]?.variant;
 }
 
+export interface DisplayPr {
+  url: string;
+  title?: string;
+  /**
+   * `#<number>` when the URL has one, the URL itself otherwise.
+   */
+  label: string;
+}
+
+/**
+ * The PRs a run recorded (the ones that landed between the previous
+ * result set and the run), normalized for display: the runner records
+ * `{ url, title }`, hand-added entries are plain URL strings.
+ */
+export function prsOf(file: ResultSet): DisplayPr[] {
+  const prs = file.notes?.prs ?? [];
+
+  return prs.map((pr) => {
+    const url = typeof pr === "string" ? pr : pr.url;
+    const title = typeof pr === "string" ? undefined : pr.title;
+    const number = url.match(/\/pull\/(\d+)/)?.[1];
+
+    return { url, title, label: number ? `#${number}` : url };
+  });
+}
+
 /**
  * How one framework did at one benchmark, or undefined when that run
  * doesn't have the pair.

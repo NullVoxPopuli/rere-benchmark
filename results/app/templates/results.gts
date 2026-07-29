@@ -1,6 +1,7 @@
 import { LinkTo } from "@ember/routing";
 
 import { Info } from "#components/env.gts";
+import { prsOf } from "#utils";
 
 import type { TOC } from "@ember/component/template-only";
 import type { Model } from "#routes/results.ts";
@@ -20,6 +21,7 @@ export default <template>
     @env={{@model.data.environment}}
     @cpuThrottle={{@model.data.args.CPU_THROTTLE}}
     @timing={{@model.data.timing}}
+    @prs={{prsOf @model.data}}
   />
 
   <div class="all-results">
