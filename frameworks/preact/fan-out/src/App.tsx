@@ -16,12 +16,12 @@ function App() {
   // reading `.value` during render subscribes the *component*, so a
   // synchronous burst of writes coalesces into one re-render (the point of
   // this bench) -- binding the signal per <span> would instead write every
-  // span on every write: 10k updates x 1k consumers = 10M DOM writes
-  const label = test.formatItem(value.value);
-
+  // span on every write: 10k updates x 1k consumers = 10M DOM writes.
+  // Each consumer formats the value itself, like every other framework's
+  // implementation.
   return <output>
     {test.consumerRange.map((c: number) => {
-      return <span key={c}>{label}</span>;
+      return <span key={c}>{test.formatItem(value.value)}</span>;
     })}
   </output>
 }
