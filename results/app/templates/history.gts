@@ -3,9 +3,28 @@ import { LinkTo } from "@ember/routing";
 import { pageTitle } from "ember-page-title";
 import { experiments, runs } from "virtual:result-sets";
 
+import { formatRunName, isoOf, relativeToNow } from "#utils";
+
+import type { TOC } from "@ember/component/template-only";
+
 function qp(resultName: string) {
   return { q: resultName };
 }
+
+const ResultList = <template>
+  <nav>
+    <ul class="run-list">
+      {{#each @names as |resultName|}}
+        <li>
+          <LinkTo @route="results" @query={{qp resultName}} title={{resultName}}>
+            <time datetime={{isoOf resultName}}>{{formatRunName resultName}}</time>
+          </LinkTo>
+          <span class="small">{{relativeToNow resultName}}</span>
+        </li>
+      {{/each}}
+    </ul>
+  </nav>
+</template> satisfies TOC<{ names: string[] }>;
 
 <template>
   {{pageTitle "History"}}
@@ -15,33 +34,13 @@ function qp(resultName: string) {
 
     <section>
       <h2>Runs</h2>
-      <nav>
-        <ul>
-          {{#each runs as |resultName|}}
-            <li>
-              <LinkTo @route="results" @query={{qp resultName}}>
-                {{resultName}}
-              </LinkTo>
-            </li>
-          {{/each}}
-        </ul>
-      </nav>
+      <ResultList @names={{runs}} />
     </section>
 
     {{#if experiments.length}}
       <section>
         <h2>Experiments</h2>
-        <nav>
-          <ul>
-            {{#each experiments as |resultName|}}
-              <li>
-                <LinkTo @route="results" @query={{qp resultName}}>
-                  {{resultName}}
-                </LinkTo>
-              </li>
-            {{/each}}
-          </ul>
-        </nav>
+        <ResultList @names={{experiments}} />
       </section>
     {{/if}}
   </main>

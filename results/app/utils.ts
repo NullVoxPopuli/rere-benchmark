@@ -151,6 +151,91 @@ export function formatDuration(ms: number): string {
   return `${minutes}m ${seconds}s`;
 }
 
+/**
+ * Result-set names end in a `Date#toISOString` timestamp
+ * (`2026-07-29T16:32:44.768Z`), optionally preceded by an experiment prefix
+ * (`ember-2026-07-29T...`). Raw ISO strings are hard to scan, so anywhere a
+ * run name is *displayed* it gets formatted for the viewer's locale; the raw
+ * name stays in URLs and `datetime` / `title` attributes.
+ */
+const ISO_TIMESTAMP_LENGTH = "2026-07-29T16:32:44.768Z".length;
+
+const TIMESTAMP_FORMAT = new Intl.DateTimeFormat(undefined, {
+  dateStyle: "medium",
+  timeStyle: "short",
+});
+
+export function formatTimestamp(datetime: string) {
+  return TIMESTAMP_FORMAT.format(new Date(datetime));
+}
+
+/**
+ * The ISO timestamp within a run name, for `<time datetime>`.
+ * `undefined` for names that don't follow the timestamp convention.
+ *
+ * `Date#toISOString` output is fixed-length, so the timestamp is the name's
+ * tail; it's genuine when the platform parses it and round-trips back to the
+ * exact same string.
+ */
+export function isoOf(runName: string) {
+  const candidate = runName.slice(-ISO_TIMESTAMP_LENGTH);
+  const date = new Date(candidate);
+
+  if (Number.isNaN(date.getTime()) || date.toISOString() !== candidate) {
+    return undefined;
+  }
+
+  return candidate;
+}
+
+export function formatRunName(runName: string) {
+  const iso = isoOf(runName);
+
+  if (!iso) return runName;
+
+  const formatted = formatTimestamp(iso);
+  const joined = runName.slice(0, runName.length - iso.length);
+  const prefix = joined.endsWith("-") ? joined.slice(0, -1) : joined;
+
+  return prefix ? `${prefix} · ${formatted}` : formatted;
+}
+
+const RELATIVE_FORMAT = new Intl.RelativeTimeFormat(undefined, { numeric: "auto" });
+
+// most-significant-first; weeks are omitted because `until` only populates
+// them when they're the largest unit requested
+const DURATION_UNITS = ["year", "month", "day", "hour", "minute", "second"] as const;
+
+/**
+ * "3 days ago" for the timestamp in a run name; empty for names that don't
+ * follow the timestamp convention, so templates can render it unconditionally.
+ *
+ * Temporal does the calendar-aware breakdown and `Intl.RelativeTimeFormat`
+ * the wording; all that's left to us is picking the duration's most
+ * significant non-zero unit. Temporal is ES2026 but not yet in Safari, so
+ * the hint is simply absent there.
+ */
+export function relativeToNow(runName: string) {
+  const iso = isoOf(runName);
+
+  if (!iso) return "";
+  if (!("Temporal" in globalThis)) return "";
+
+  const timeZone = Temporal.Now.timeZoneId();
+  const then = Temporal.Instant.from(iso).toZonedDateTimeISO(timeZone);
+  const duration = then.until(Temporal.Now.zonedDateTimeISO(), { largestUnit: "year" });
+
+  for (const unit of DURATION_UNITS) {
+    const elapsed = duration[`${unit}s`];
+
+    if (elapsed !== 0) {
+      return RELATIVE_FORMAT.format(-elapsed, unit);
+    }
+  }
+
+  return RELATIVE_FORMAT.format(0, "second");
+}
+
 const msInOneHz = 1_000;
 
 export function msOfFrameAt(hz: number) {

@@ -12,8 +12,10 @@ import { Variant } from "#components/variant.gts";
 import { Version } from "#components/version.gts";
 import { nameOf } from "#frameworks";
 import {
+  formatRunName,
   getFrameworks,
   higherIsBetterBenches,
+  isoOf,
   labelFor,
   lowerIsBetterBenches,
   overrideOf,
@@ -38,10 +40,6 @@ import type { Percentile } from "#utils";
  */
 const SAME_THRESHOLD = 1;
 
-function shortName(runName: string) {
-  return runName.slice(0, 16).replace("T", " ");
-}
-
 function qp(runName: string) {
   return { q: runName };
 }
@@ -54,13 +52,17 @@ function qp(runName: string) {
 const RunOptions = <template>
   <optgroup label="Runs">
     {{#each runs as |name|}}
-      <option value={{name}} selected={{@isRun @which name}}>{{shortName name}}</option>
+      <option value={{name}} selected={{@isRun @which name}} title={{name}}>{{formatRunName
+          name
+        }}</option>
     {{/each}}
   </optgroup>
   {{#if experiments.length}}
     <optgroup label="Experiments">
       {{#each experiments as |name|}}
-        <option value={{name}} selected={{@isRun @which name}}>{{shortName name}}</option>
+        <option value={{name}} selected={{@isRun @which name}} title={{name}}>{{formatRunName
+            name
+          }}</option>
       {{/each}}
     </optgroup>
   {{/if}}
@@ -177,7 +179,9 @@ class CompareTable extends Component<{
         <tr>
           <th></th>
           <th class="run-header">
-            <LinkTo @route="results" @query={{qp @a.name}}>{{shortName @a.name}}</LinkTo>
+            <LinkTo @route="results" @query={{qp @a.name}} title={{@a.name}}>
+              <time datetime={{isoOf @a.name}}>{{formatRunName @a.name}}</time>
+            </LinkTo>
             <span class="small">
               <Version
                 @version={{versionOf @a.data @framework}}
@@ -189,7 +193,9 @@ class CompareTable extends Component<{
             </span>
           </th>
           <th class="run-header">
-            <LinkTo @route="results" @query={{qp @b.name}}>{{shortName @b.name}}</LinkTo>
+            <LinkTo @route="results" @query={{qp @b.name}} title={{@b.name}}>
+              <time datetime={{isoOf @b.name}}>{{formatRunName @b.name}}</time>
+            </LinkTo>
             <span class="small">
               <Version
                 @version={{versionOf @b.data @framework}}
