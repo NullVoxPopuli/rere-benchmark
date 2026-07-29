@@ -11,6 +11,11 @@
     "TIMEOUT": 60000
   },
   "notes": {
+    "prs": [
+      "https://github.com/NullVoxPopuli/rere-benchmark/pull/72",
+      "https://github.com/NullVoxPopuli/rere-benchmark/pull/71",
+      "https://github.com/NullVoxPopuli/rere-benchmark/pull/69"
+    ],
     "vue": {
       "variant": "Vapor"
     }
