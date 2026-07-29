@@ -1,5 +1,6 @@
 import { defineConfig, searchForWorkspaceRoot } from 'vite'
-import react from '@vitejs/plugin-react'
+import react, { reactCompilerPreset } from '@vitejs/plugin-react'
+import babel from '@rolldown/plugin-babel'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -10,5 +11,10 @@ export default defineConfig({
       allow: [searchForWorkspaceRoot(process.cwd()), '../../../common'],
     },
   },
-  plugins: [react()],
+  plugins: [
+    react(),
+    babel({
+      presets: [reactCompilerPreset()],
+    }),
+  ],
 })

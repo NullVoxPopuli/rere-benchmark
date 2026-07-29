@@ -1,24 +1,27 @@
-import { createEffect, createStore, For } from 'solid-js'
+import { createSignal, onSettled, Repeat } from 'solid-js'
 import { helpers } from 'common';
 
 const test = helpers.tenKitems1UpdateEach();
 
 function App() {
-  const [store, setStore] = createStore({ items: test.getData() });
+  const items = test.getData().map(item => createSignal(item));
 
-  // no more onMount in solid 2: an effect with an empty compute runs
-  // once after the first render.
   // (v1 wrapped test.run in `batch`; solid 2 batches automatically,
   // so plain doit matches the other frameworks again)
-  createEffect(() => {}, () => {
+  onSettled(() => {
     test.doit((i) => {
-      setStore((state) => {
-        state.items[i] = i;
-      });
+      items[i]?.[1](i);
     });
   });
 
-  return <For each={store.items}>{i => test.formatItem(i)}</For>
+  return (
+    <Repeat count={items.length}>
+      {index => {
+        const item = items[index]![0];
+        return <>{test.formatItem(item())}</>;
+      }}
+    </Repeat>
+  )
 }
 
 export default App

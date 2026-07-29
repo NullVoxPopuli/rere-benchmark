@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup vapor lang="ts">
 import 'common/dbmon.css';
 import { reactive, ref } from 'vue';
 import { helpers, type DBRow, type ChatMessage, type DBUpdate, type ChatUpdate } from 'common';
