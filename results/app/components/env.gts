@@ -1,4 +1,4 @@
-import { formatDuration, msOfFrameAt, throttleLabel } from "#utils";
+import { formatDuration, formatTimestamp, msOfFrameAt, throttleLabel } from "#utils";
 
 import type { TOC } from "@ember/component/template-only";
 import type { ResultSet } from "#types";
@@ -8,10 +8,6 @@ function first8(str: string) {
   return str.slice(0, 8);
 }
 
-function dateOf(datetime: string) {
-  return new Intl.DateTimeFormat("en-CA").format(new Date(datetime));
-}
-
 function isThrottled(cpuThrottle: number | undefined) {
   return typeof cpuThrottle === "number" && cpuThrottle > 1;
 }
@@ -19,7 +15,7 @@ function isThrottled(cpuThrottle: number | undefined) {
 export const Info = <template>
   <div class="env-info">
     Tested on
-    <time datetime={{@date}}>{{dateOf @date}}</time>
+    <time datetime={{@date}}>{{formatTimestamp @date}}</time>
 
     {{#if @sha}}
       <span>

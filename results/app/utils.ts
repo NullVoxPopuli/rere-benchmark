@@ -151,6 +151,74 @@ export function formatDuration(ms: number): string {
   return `${minutes}m ${seconds}s`;
 }
 
+/**
+ * Result-set names are ISO timestamps (`2026-07-29T16:32:44.768Z`), with an
+ * optional experiment prefix (`ember-2026-07-29T...`). Raw ISO strings are
+ * hard to scan, so anywhere a run name is *displayed* it gets formatted for
+ * the viewer's locale; the raw name stays in URLs and `datetime` / `title`
+ * attributes.
+ */
+const RUN_NAME = /^(?:(.+)-)?(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z)$/;
+
+const TIMESTAMP_FORMAT = new Intl.DateTimeFormat(undefined, {
+  dateStyle: "medium",
+  timeStyle: "short",
+});
+
+export function formatTimestamp(datetime: string) {
+  return TIMESTAMP_FORMAT.format(new Date(datetime));
+}
+
+/**
+ * The ISO timestamp within a run name, for `<time datetime>`.
+ * `undefined` for names that don't follow the timestamp convention.
+ */
+export function isoOf(runName: string) {
+  return RUN_NAME.exec(runName)?.[2];
+}
+
+export function formatRunName(runName: string) {
+  const match = RUN_NAME.exec(runName);
+
+  if (!match) return runName;
+
+  const [, prefix, iso] = match;
+  const formatted = formatTimestamp(iso as string);
+
+  return prefix ? `${prefix} · ${formatted}` : formatted;
+}
+
+const RELATIVE_FORMAT = new Intl.RelativeTimeFormat(undefined, { numeric: "auto" });
+
+const RELATIVE_STEPS: Array<[Intl.RelativeTimeFormatUnit, number]> = [
+  ["year", 365 * 24 * 3_600_000],
+  ["month", 30 * 24 * 3_600_000],
+  ["week", 7 * 24 * 3_600_000],
+  ["day", 24 * 3_600_000],
+  ["hour", 3_600_000],
+  ["minute", 60_000],
+];
+
+/**
+ * "3 days ago" for the timestamp in a run name; empty for names that don't
+ * follow the timestamp convention, so templates can render it unconditionally.
+ */
+export function relativeToNow(runName: string) {
+  const iso = isoOf(runName);
+
+  if (!iso) return "";
+
+  const delta = new Date(iso).getTime() - Date.now();
+
+  for (const [unit, ms] of RELATIVE_STEPS) {
+    if (Math.abs(delta) >= ms || unit === "minute") {
+      return RELATIVE_FORMAT.format(Math.round(delta / ms), unit);
+    }
+  }
+
+  return "";
+}
+
 const msInOneHz = 1_000;
 
 export function msOfFrameAt(hz: number) {

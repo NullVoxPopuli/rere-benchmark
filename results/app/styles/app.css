@@ -404,3 +404,15 @@ table {
 .compare-controls select {
   max-width: 40vw;
 }
+
+/* history: run links line up with their "how long ago" hint */
+.run-list {
+  li {
+    margin-block: 0.25rem;
+  }
+
+  .small {
+    margin-left: 0.5rem;
+    opacity: 0.75;
+  }
+}
