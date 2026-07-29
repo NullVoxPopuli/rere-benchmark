@@ -65,7 +65,7 @@ export const frameworks: Record<string, FrameworkInfo> = {
   vue: {
     color: "#42b883",
     logo: "/vue.svg",
-    name: "Vue.js Vapor",
+    name: "Vue.js",
     url: "https://vuejs.org/",
     package: "vue",
   },
