@@ -10,6 +10,11 @@
     "BENCH_NAME": "all",
     "TIMEOUT": 60000
   },
+  "notes": {
+    "vue": {
+      "variant": "Vapor"
+    }
+  },
   "environment": {
     "machine": {
       "os": {
