@@ -1,6 +1,6 @@
 import 'common/dbmon.css';
 import './layout.css';
-import { createEffect, createSignal, For } from 'solid-js';
+import { createSignal, For, onSettled } from 'solid-js';
 import { helpers, type DBRow, type ChatMessage, type DBUpdate, type ChatUpdate } from 'common';
 
 const test = helpers.dbMonWithChat();
@@ -9,9 +9,7 @@ function App() {
   const [db, setDb] = createSignal<Map<string, DBRow>>(new Map());
   const [chats, setChats] = createSignal<ChatMessage[]>([]);
 
-  // no more onMount in solid 2: an effect with an empty compute runs
-  // once after the first render
-  createEffect(() => {}, () => {
+  onSettled(() => {
     test.doit({
       handleDbUpdate: (eventData: DBUpdate) => {
         setDb(prev => {
@@ -42,21 +40,21 @@ function App() {
           </tr>
         </thead>
         <tbody>
-          <For each={[...db().values()]}>
+          <For each={[...db().values()]} keyed={row => row.dbname}>
             {(row) => (
               <tr>
-                <td class="dbname">{row.dbname}</td>
+                <td class="dbname">{row().dbname}</td>
                 <td class="query-count">
-                  <span class={row.lastSample.countClassName}>
-                    {row.lastSample.queries.length}
+                  <span class={row().lastSample.countClassName}>
+                    {row().lastSample.queries.length}
                   </span>
                 </td>
-                <For each={row.lastSample.topFiveQueries}>
+                <For each={row().lastSample.topFiveQueries} keyed={false}>
                   {(query) => (
                     <td>
-                      {query.elapsed}
+                      {query().elapsed}
                       <div class="popover bottom">
-                        <div class="popover-content">{query.query}</div>
+                        <div class="popover-content">{query().query}</div>
                         <div class="arrow"></div>
                       </div>
                     </td>
