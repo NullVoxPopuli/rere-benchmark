@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useLayoutEffect, useRef } from 'react'
 import { helpers } from 'common';
 
 const test = helpers.incrementingRenderEffect();
@@ -10,7 +10,7 @@ function App() {
   const elRef = useRef<HTMLOutputElement>(null);
   outputRef.current = output;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (advancerRef.current) {
       advancerRef.current();
       return;

@@ -1,6 +1,6 @@
 import 'common/dbmon.css';
 import './layout.css';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useLayoutEffect, useRef } from 'react';
 import { helpers, type DBRow, type ChatMessage, type DBUpdate, type ChatUpdate } from 'common';
 
 const test = helpers.dbMonWithChat();
@@ -10,7 +10,7 @@ function App() {
   const [chats, setChats] = useState<ChatMessage[]>([]);
   const started = useRef(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (started.current) return;
     started.current = true;
 

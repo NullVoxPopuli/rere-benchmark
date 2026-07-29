@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useLayoutEffect } from 'react'
 import { helpers } from 'common';
 
 let test = helpers.tenKitems1UpdateEach();
@@ -6,7 +6,7 @@ let test = helpers.tenKitems1UpdateEach();
 function App() {
   const [items, setItems] = useState(test.getData());
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     test.doit((i) => {
       // https://react.dev/learn/updating-arrays-in-state#updating-arrays-without-mutation
       setItems((previous) => {
