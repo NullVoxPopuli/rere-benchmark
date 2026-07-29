@@ -35,6 +35,14 @@ jobs:
       # global-setup installs and builds all 30 apps (and common)
       - run: pnpm test
         working-directory: tests
+      # anti-cheating: with one update per task, every framework must
+      # render the exact same sequence of DOM states, without touching
+      # the DOM more than the others (see specs/conformance.spec.ts)
+      - run: pnpm test specs/conformance.spec.ts
+        working-directory: tests
+        env:
+          CONFORMANCE: "1"
+          SKIP_BUILD: "1"
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
