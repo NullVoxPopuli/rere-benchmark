@@ -152,13 +152,13 @@ export function formatDuration(ms: number): string {
 }
 
 /**
- * Result-set names are ISO timestamps (`2026-07-29T16:32:44.768Z`), with an
- * optional experiment prefix (`ember-2026-07-29T...`). Raw ISO strings are
- * hard to scan, so anywhere a run name is *displayed* it gets formatted for
- * the viewer's locale; the raw name stays in URLs and `datetime` / `title`
- * attributes.
+ * Result-set names end in a `Date#toISOString` timestamp
+ * (`2026-07-29T16:32:44.768Z`), optionally preceded by an experiment prefix
+ * (`ember-2026-07-29T...`). Raw ISO strings are hard to scan, so anywhere a
+ * run name is *displayed* it gets formatted for the viewer's locale; the raw
+ * name stays in URLs and `datetime` / `title` attributes.
  */
-const RUN_NAME = /^(?:(.+)-)?(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z)$/;
+const ISO_TIMESTAMP_LENGTH = "2026-07-29T16:32:44.768Z".length;
 
 const TIMESTAMP_FORMAT = new Intl.DateTimeFormat(undefined, {
   dateStyle: "medium",
@@ -172,18 +172,30 @@ export function formatTimestamp(datetime: string) {
 /**
  * The ISO timestamp within a run name, for `<time datetime>`.
  * `undefined` for names that don't follow the timestamp convention.
+ *
+ * `Date#toISOString` output is fixed-length, so the timestamp is the name's
+ * tail; it's genuine when the platform parses it and round-trips back to the
+ * exact same string.
  */
 export function isoOf(runName: string) {
-  return RUN_NAME.exec(runName)?.[2];
+  const candidate = runName.slice(-ISO_TIMESTAMP_LENGTH);
+  const date = new Date(candidate);
+
+  if (Number.isNaN(date.getTime()) || date.toISOString() !== candidate) {
+    return undefined;
+  }
+
+  return candidate;
 }
 
 export function formatRunName(runName: string) {
-  const match = RUN_NAME.exec(runName);
+  const iso = isoOf(runName);
 
-  if (!match) return runName;
+  if (!iso) return runName;
 
-  const [, prefix, iso] = match;
-  const formatted = formatTimestamp(iso as string);
+  const formatted = formatTimestamp(iso);
+  const joined = runName.slice(0, runName.length - iso.length);
+  const prefix = joined.endsWith("-") ? joined.slice(0, -1) : joined;
 
   return prefix ? `${prefix} · ${formatted}` : formatted;
 }
