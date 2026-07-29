@@ -1,7 +1,7 @@
 import Route from "@ember/routing/route";
 import { service } from "@ember/service";
 
-import { runs } from "virtual:result-sets";
+import { experiments, runs } from "virtual:result-sets";
 
 import { warnOnVersionDivergence } from "#utils";
 
@@ -107,7 +107,9 @@ function runsFor(a: string | undefined, b: string | undefined) {
 }
 
 async function fetchResultSet(name: string): Promise<ResultSet> {
-  const response = await fetch(`/results/${name}.json`);
+  // experiments live in a separate directory from the official runs
+  const dir = experiments.includes(name) ? "experiments" : "results";
+  const response = await fetch(`/${dir}/${name}.json`);
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const json = await response.json();
 
