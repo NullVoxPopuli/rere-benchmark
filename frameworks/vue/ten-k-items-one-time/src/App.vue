@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup vapor lang="ts">
 import { reactive, onMounted } from 'vue'
 import { helpers } from 'common';
 

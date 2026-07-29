@@ -17,7 +17,8 @@
     "cli": "node --experimental-strip-types ./src/runner/cli.ts",
     "copy": "node --experimental-strip-types ./src/runner/copy.ts",
     "use-tar-for": "node --experimental-strip-types ./src/runner/use-tar-for.ts",
-    "bench": "node --experimental-strip-types ./src/runner/index.ts"
+    "bench": "node --experimental-strip-types ./src/runner/index.ts",
+    "bench:all": "pnpm bench --framework=all --bench=all --cpu-throttle=4"
   },
   "packageManager": "pnpm@10.21.0",
   "engines": {
