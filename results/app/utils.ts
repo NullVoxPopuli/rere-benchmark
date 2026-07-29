@@ -202,33 +202,38 @@ export function formatRunName(runName: string) {
 
 const RELATIVE_FORMAT = new Intl.RelativeTimeFormat(undefined, { numeric: "auto" });
 
-const RELATIVE_STEPS: Array<[Intl.RelativeTimeFormatUnit, number]> = [
-  ["year", 365 * 24 * 3_600_000],
-  ["month", 30 * 24 * 3_600_000],
-  ["week", 7 * 24 * 3_600_000],
-  ["day", 24 * 3_600_000],
-  ["hour", 3_600_000],
-  ["minute", 60_000],
-];
+// most-significant-first; weeks are omitted because `until` only populates
+// them when they're the largest unit requested
+const DURATION_UNITS = ["year", "month", "day", "hour", "minute", "second"] as const;
 
 /**
  * "3 days ago" for the timestamp in a run name; empty for names that don't
  * follow the timestamp convention, so templates can render it unconditionally.
+ *
+ * Temporal does the calendar-aware breakdown and `Intl.RelativeTimeFormat`
+ * the wording; all that's left to us is picking the duration's most
+ * significant non-zero unit. Temporal is ES2026 but not yet in Safari, so
+ * the hint is simply absent there.
  */
 export function relativeToNow(runName: string) {
   const iso = isoOf(runName);
 
   if (!iso) return "";
+  if (!("Temporal" in globalThis)) return "";
 
-  const delta = new Date(iso).getTime() - Date.now();
+  const timeZone = Temporal.Now.timeZoneId();
+  const then = Temporal.Instant.from(iso).toZonedDateTimeISO(timeZone);
+  const duration = then.until(Temporal.Now.zonedDateTimeISO(), { largestUnit: "year" });
 
-  for (const [unit, ms] of RELATIVE_STEPS) {
-    if (Math.abs(delta) >= ms || unit === "minute") {
-      return RELATIVE_FORMAT.format(Math.round(delta / ms), unit);
+  for (const unit of DURATION_UNITS) {
+    const elapsed = duration[`${unit}s`];
+
+    if (elapsed !== 0) {
+      return RELATIVE_FORMAT.format(-elapsed, unit);
     }
   }
 
-  return "";
+  return RELATIVE_FORMAT.format(0, "second");
 }
 
 const msInOneHz = 1_000;
