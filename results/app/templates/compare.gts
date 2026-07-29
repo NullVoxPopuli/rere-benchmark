@@ -170,8 +170,13 @@ class CompareTable extends Component<{
       <thead>
         <tr>
           <th></th>
+          <th class="run-header"><span class="run-tag">A</span></th>
+          <th class="run-header"><span class="run-tag">B</span></th>
+          <th></th>
+        </tr>
+        <tr>
+          <th></th>
           <th class="run-header">
-            <span class="run-tag">A</span>
             <LinkTo @route="results" @query={{qp @a.name}}>{{shortName @a.name}}</LinkTo>
             <span class="small">
               <Version
@@ -184,7 +189,6 @@ class CompareTable extends Component<{
             </span>
           </th>
           <th class="run-header">
-            <span class="run-tag">B</span>
             <LinkTo @route="results" @query={{qp @b.name}}>{{shortName @b.name}}</LinkTo>
             <span class="small">
               <Version
