@@ -7,7 +7,10 @@ import { modifier } from "ember-modifier";
 const test = helpers.incrementingRenderEffect();
 
 export default class Test extends Component {
-  @tracked out = 0;
+  // -1 so the initial set(0) is not swallowed by equality, same as the
+  // other frameworks. tracked() as a value has Object.is equality,
+  // unlike the @tracked decorator, which dirties on every write.
+  out = tracked(-1);
 
   #advancer: (() => void) | undefined;
   setup = modifier((element) => {
@@ -19,13 +22,13 @@ export default class Test extends Component {
 
     test.doit({
       element,
-      get: () => this.out,
-      set: (value: number) => (this.out = value),
+      get: () => this.out.value,
+      set: (value: number) => (this.out.value = value),
       setupAdvancer: (advancer: () => void) => (this.#advancer = advancer),
     });
   });
 
   <template>
-    <output {{this.setup}}>{{this.out}}</output>
+    <output {{this.setup}}>{{this.out.value}}</output>
   </template>
 }
