@@ -4,10 +4,11 @@ import { LinkTo } from "@ember/routing";
 import { service } from "@ember/service";
 
 import { pageTitle } from "ember-page-title";
-import { results } from "virtual:result-sets";
+import { runs } from "virtual:result-sets";
 
 import { BenchmarkName } from "#components/benchmark-name.gts";
 import { FrameworkInfo } from "#components/framework-info.gts";
+import { Variant } from "#components/variant.gts";
 import { Version } from "#components/version.gts";
 import { nameOf } from "#frameworks";
 import {
@@ -21,6 +22,7 @@ import {
   round,
   throttleLabel,
   timeFor,
+  variantOf,
   versionOf,
 } from "#utils";
 
@@ -303,6 +305,16 @@ export default class Compare extends Component<{ model: Model }> {
     return lowerIsBetterBenches(this.benchmarkInfo);
   }
 
+  /**
+   * The variant either run recorded for the compared framework, preferring
+   * the candidate (B). Both runs are usually the same build, so this reads
+   * "what flavor of the framework am I looking at" rather than a per-run
+   * difference.
+   */
+  get variant() {
+    return variantOf(this.b.data, this.framework) ?? variantOf(this.a.data, this.framework);
+  }
+
   isFramework = (name: string) => this.framework === name;
 
   isRun = (which: "a" | "b", name: string) => this[which].name === name;
@@ -337,7 +349,7 @@ export default class Compare extends Component<{ model: Model }> {
       <label>
         run A
         <select name="run-a" {{on "change" (fn this.setRun "a")}}>
-          {{#each results as |name|}}
+          {{#each runs as |name|}}
             <option value={{name}} selected={{this.isRun "a" name}}>{{shortName name}}</option>
           {{/each}}
         </select>
@@ -345,7 +357,7 @@ export default class Compare extends Component<{ model: Model }> {
       <label>
         run B
         <select name="run-b" {{on "change" (fn this.setRun "b")}}>
-          {{#each results as |name|}}
+          {{#each runs as |name|}}
             <option value={{name}} selected={{this.isRun "b" name}}>{{shortName name}}</option>
           {{/each}}
         </select>
@@ -373,6 +385,7 @@ export default class Compare extends Component<{ model: Model }> {
 
     <div class="all-results">
       <FrameworkInfo @name={{this.framework}} />
+      <Variant @variant={{this.variant}} />
 
       {{#if this.higherBenches.length}}
         <h2>higher is better</h2>

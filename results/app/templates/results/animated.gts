@@ -4,8 +4,9 @@ import { assert } from "@ember/debug";
 import { service } from "@ember/service";
 
 import { FrameworkInfo } from "#components/framework-info.gts";
+import { Variant } from "#components/variant.gts";
 import { Version } from "#components/version.gts";
-import { dataOf, percentileFrom, round } from "#utils";
+import { dataOf, percentileFrom, round, variantOf } from "#utils";
 
 import type RouterService from "@ember/routing/router-service";
 import type { Model } from "#routes/results.ts";
@@ -117,6 +118,7 @@ export class Visualize extends Component<{
             <tr>
               <td>
                 <FrameworkInfo @name={{fw.name}} />
+                <Variant @variant={{variantOf @file fw.name}} />
               </td>
               <td class="time">{{round fw.speed}}
                 {{fw.units}}

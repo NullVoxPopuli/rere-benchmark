@@ -7,7 +7,12 @@ import * as clack from '@clack/prompts';
 import * as args from './arg.ts';
 import { yyyymmdd } from './environment.ts';
 import { frameworks } from './repo.ts';
-import { info, saveBenchmarkInfo, saveVersionOverrides } from './results.ts';
+import {
+  info,
+  saveBenchmarkInfo,
+  saveNotes,
+  saveVersionOverrides,
+} from './results.ts';
 
 export interface BenchmarkInfo {
   /**
@@ -322,6 +327,7 @@ export async function getBenchInfo() {
   );
 
   await saveVersionOverrides(args.VERSION_OVERRIDES, filePath);
+  await saveNotes(selectedFrameworks, filePath);
 
   return {
     apps,

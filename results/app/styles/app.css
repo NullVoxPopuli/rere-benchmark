@@ -65,6 +65,16 @@ h1 {
   font-size: 0.8rem;
 }
 
+/* a framework's build flavor (e.g. "Vapor"), sitting between the name and
+   the version -- a block so it lands on its own line under the name */
+.variant {
+  display: block;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  opacity: 0.75;
+}
+
 body {
   display: grid;
   gap: 0.5rem;
@@ -103,7 +113,7 @@ body {
   /* the label column is as wide as its longest benchmark name, so tables
      on the same page are different widths; lining up their right edges
      puts the same value column in the same place in each of them */
-  > table {
+  >table {
     justify-self: end;
   }
 }
@@ -114,6 +124,7 @@ body {
 }
 
 main {
+  min-width: 500px;
   display: grid;
   justify-items: center;
 }
@@ -180,6 +191,7 @@ main.error-page {
 }
 
 table {
+
   th,
   td {
     padding: 0.25rem 0.5rem;

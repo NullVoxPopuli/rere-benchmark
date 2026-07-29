@@ -40,6 +40,18 @@ export interface VersionOverride {
   url: string;
 }
 
+/**
+ * Small labels a run records about a framework, collected by the runner
+ * from `frameworks/<framework>/notes.json`.
+ */
+export interface FrameworkNotes {
+  /**
+   * The flavor of the framework the run used -- e.g. "Vapor" for a Vue
+   * Vapor build. Shown under the framework's name, above its version.
+   */
+  variant?: string;
+}
+
 export interface BenchmarkInfo {
   name: string;
   app: string;
@@ -91,6 +103,12 @@ export interface ResultSet {
    * framework name, e.g. `{ ember: { number: 21513, url: "https://..." } }`.
    */
   versionOverrides?: Record<string, VersionOverride>;
+  /**
+   * Optional per-framework notes, keyed by framework name. Collected by the
+   * runner from `frameworks/<framework>/notes.json`, e.g.
+   * `{ vue: { variant: "Vapor" } }`.
+   */
+  notes?: Record<string, FrameworkNotes>;
   environment: {
     machine: {
       os: {

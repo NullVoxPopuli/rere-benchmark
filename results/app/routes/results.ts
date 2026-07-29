@@ -1,6 +1,8 @@
 import Route from "@ember/routing/route";
 import { service } from "@ember/service";
 
+import { experiments } from "virtual:result-sets";
+
 import { warnOnVersionDivergence } from "#utils";
 
 import type RouterService from "@ember/routing/router-service";
@@ -49,7 +51,9 @@ export default class Results extends Route<Model> {
     const { q } = params as unknown as Params;
 
     try {
-      const response = await fetch(`/results/${q}.json`);
+      // experiments live in a separate directory from the official runs
+      const dir = experiments.includes(q) ? "experiments" : "results";
+      const response = await fetch(`/${dir}/${q}.json`);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const json = await response.json();
 

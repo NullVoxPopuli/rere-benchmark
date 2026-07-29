@@ -1,7 +1,7 @@
 import Route from "@ember/routing/route";
 import { service } from "@ember/service";
 
-import { results } from "virtual:result-sets";
+import { runs } from "virtual:result-sets";
 
 import type RouterService from "@ember/routing/router-service";
 
@@ -11,7 +11,7 @@ export default class Index extends Route {
   beforeModel() {
     this.router.transitionTo("results", {
       queryParams: {
-        q: results[0],
+        q: runs[0],
       },
     });
   }
