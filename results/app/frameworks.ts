@@ -48,6 +48,13 @@ export const frameworks: Record<string, FrameworkInfo> = {
     url: "https://emberjs.com/",
     package: "ember-source",
   },
+  preact: {
+    color: "#673ab8",
+    logo: "/preact.svg",
+    name: "Preact",
+    url: "https://preactjs.com/",
+    package: "preact",
+  },
   react: {
     color: "#61DBFB",
     logo: "/react.svg",

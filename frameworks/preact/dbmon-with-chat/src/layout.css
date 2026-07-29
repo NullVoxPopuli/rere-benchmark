@@ -1,0 +1,39 @@
+* {
+  box-sizing: border-box;
+}
+.layout {
+  display: grid;
+  grid-template-columns: 75% 25%;
+  gap: 0.5rem;
+  align-items: start;
+
+  table {
+    font-family: monospace;
+  }
+}
+.chats {
+  display: flex;
+  flex-direction: column;
+  max-height: 600px;
+
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .entry {
+    flex-shrink: 0;
+
+    textarea {
+      width: 100%;
+      padding: 1rem;
+    }
+  }
+}
+.chat {
+  .author {
+    font-weight: bold;
+  }
+}
