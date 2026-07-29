@@ -12,7 +12,10 @@ import {
 } from '../../results/app/frameworks.ts';
 import { getInfo } from './environment.ts';
 
-import type { VersionOverride } from '../../results/app/types.ts';
+import type {
+  PullRequestNote,
+  VersionOverride,
+} from '../../results/app/types.ts';
 import type { BenchmarkInfo } from './bench-info.ts';
 
 const require = createRequire(import.meta.url);
@@ -146,6 +149,27 @@ export async function saveNotes(frameworks: string[], filePath: string) {
   const file = await read(filePath);
 
   file.notes = { ...file.notes, ...notes };
+
+  await write(file, filePath);
+}
+
+/**
+ * The PRs that landed between the previous result set and this run
+ * (`--include-prs`, from git history). Merged in and deduplicated by URL,
+ * so hand-added entries (plain URL strings) and earlier appends survive.
+ */
+export async function savePrNotes(prs: PullRequestNote[], filePath: string) {
+  if (prs.length === 0) return;
+
+  const file = await read(filePath);
+
+  const existing: Array<string | PullRequestNote> = file.notes?.prs ?? [];
+  const known = new Set(
+    existing.map((pr) => (typeof pr === 'string' ? pr : pr.url)),
+  );
+  const fresh = prs.filter((pr) => !known.has(pr.url));
+
+  file.notes = { ...file.notes, prs: existing.concat(fresh) };
 
   await write(file, filePath);
 }

@@ -41,6 +41,20 @@ export interface VersionOverride {
 }
 
 /**
+ * A PR recorded in a result set's notes. The runner writes these
+ * (`--include-prs`) from git history between the previous result set and
+ * the run; hand-added entries may also be plain URL strings.
+ */
+export interface PullRequestNote {
+  url: string;
+  /**
+   * The PR title, from the merge (or squash) commit. Absent on
+   * hand-added entries.
+   */
+  title?: string;
+}
+
+/**
  * Small labels a run records about a framework, collected by the runner
  * from `frameworks/<framework>/notes.json`.
  */
@@ -107,8 +121,13 @@ export interface ResultSet {
    * Optional per-framework notes, keyed by framework name. Collected by the
    * runner from `frameworks/<framework>/notes.json`, e.g.
    * `{ vue: { variant: "Vapor" } }`.
+   *
+   * `prs` sits alongside the framework keys: the PRs that landed between
+   * the previous result set and this run (see {@link PullRequestNote}).
    */
-  notes?: Record<string, FrameworkNotes>;
+  notes?: {
+    prs?: Array<string | PullRequestNote>;
+  } & Record<string, FrameworkNotes>;
   environment: {
     machine: {
       os: {

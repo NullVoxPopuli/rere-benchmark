@@ -6,13 +6,17 @@ import * as clack from '@clack/prompts';
 
 import * as args from './arg.ts';
 import { yyyymmdd } from './environment.ts';
+import { prsSinceLastResultSet } from './prs.ts';
 import { frameworks } from './repo.ts';
 import {
   info,
   saveBenchmarkInfo,
   saveNotes,
+  savePrNotes,
   saveVersionOverrides,
 } from './results.ts';
+
+import type { PullRequestNote } from '../../results/app/types.ts';
 
 export interface BenchmarkInfo {
   /**
@@ -299,6 +303,29 @@ export async function getBenchInfo() {
   const selectedBenches = await getBenches();
   const filePath = await getFilePath();
 
+  // resolved before the confirm below, so what will be recorded is part
+  // of the "does this look correct?" review
+  let prNotes: PullRequestNote[] = [];
+
+  if (args.INCLUDE_PRS) {
+    const found = await prsSinceLastResultSet(filePath);
+
+    if (found && found.prs.length > 0) {
+      prNotes = found.prs;
+
+      clack.log.info(
+        `PRs since the previous result set (${found.since}):\n` +
+          found.prs
+            .map((pr) => `  ${pr.url}${pr.title ? ` — ${pr.title}` : ''}`)
+            .join('\n'),
+      );
+    } else {
+      clack.log.warn(
+        `--include-prs: no PRs found since the previous result set`,
+      );
+    }
+  }
+
   console.info(inspect(info, { showHidden: false, depth: null, colors: true }));
   console.log(`
     Results will be written to ${filePath}
@@ -328,6 +355,7 @@ export async function getBenchInfo() {
 
   await saveVersionOverrides(args.VERSION_OVERRIDES, filePath);
   await saveNotes(selectedFrameworks, filePath);
+  await savePrNotes(prNotes, filePath);
 
   return {
     apps,
