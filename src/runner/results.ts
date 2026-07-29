@@ -124,6 +124,32 @@ async function readJSON(filePath: string) {
   return json;
 }
 
+/**
+ * Per-framework notes, collected from `frameworks/<framework>/notes.json`
+ * when present, keyed by framework name. Lets a run carry small labels the
+ * results app shows -- e.g. Vue's `{ "variant": "Vapor" }`. Merged in, so
+ * appending to an existing file keeps notes already written to it.
+ */
+export async function saveNotes(frameworks: string[], filePath: string) {
+  const notes: Record<string, unknown> = {};
+
+  for (const framework of frameworks) {
+    const notePath = join('frameworks', framework, 'notes.json');
+
+    if (!existsSync(notePath)) continue;
+
+    notes[framework] = await readJSON(notePath);
+  }
+
+  if (Object.keys(notes).length === 0) return;
+
+  const file = await read(filePath);
+
+  file.notes = { ...file.notes, ...notes };
+
+  await write(file, filePath);
+}
+
 async function getVersion(framework: string, bench: BenchmarkInfo) {
   const dir = join('frameworks', framework, bench.app);
   const manifestPath = join(dir, 'package.json');

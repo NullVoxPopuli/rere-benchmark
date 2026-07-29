@@ -1,7 +1,7 @@
 import Route from "@ember/routing/route";
 import { service } from "@ember/service";
 
-import { results } from "virtual:result-sets";
+import { experiments, runs } from "virtual:result-sets";
 
 import { warnOnVersionDivergence } from "#utils";
 
@@ -75,20 +75,20 @@ export default class Compare extends Route<Model> {
 }
 
 /**
- * The run next to `name`, preferring `direction` -- `results` is
+ * The run next to `name`, preferring `direction` -- `runs` is
  * newest-first, so older runs are later in the list. Falls back to the
  * other side for the first and last run, and to `name` itself when it's
  * the only run there is.
  */
 function neighborOf(name: string, direction: "older" | "newer") {
-  const index = results.indexOf(name);
+  const index = runs.indexOf(name);
 
-  if (index === -1) return results[0];
+  if (index === -1) return runs[0];
 
   const [preferred, fallback] =
     direction === "older" ? [index + 1, index - 1] : [index - 1, index + 1];
 
-  return results[preferred] ?? results[fallback] ?? name;
+  return runs[preferred] ?? runs[fallback] ?? name;
 }
 
 /**
@@ -103,11 +103,13 @@ function runsFor(a: string | undefined, b: string | undefined) {
   if (a) return { a, b: neighborOf(a, "newer") };
 
   // no runs named at all -- the two most recent
-  return { a: results[1] ?? results[0], b: results[0] };
+  return { a: runs[1] ?? runs[0], b: runs[0] };
 }
 
 async function fetchResultSet(name: string): Promise<ResultSet> {
-  const response = await fetch(`/results/${name}.json`);
+  // experiments live in a separate directory from the official runs
+  const dir = experiments.includes(name) ? "experiments" : "results";
+  const response = await fetch(`/${dir}/${name}.json`);
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const json = await response.json();
 

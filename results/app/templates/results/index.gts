@@ -7,6 +7,7 @@ import { interpolate } from "culori";
 
 import { BenchmarkName } from "#components/benchmark-name.gts";
 import { FrameworkInfo } from "#components/framework-info.gts";
+import { Variant } from "#components/variant.gts";
 import { Version } from "#components/version.gts";
 import {
   higherIsBetterBenches,
@@ -17,6 +18,7 @@ import {
   PERCENTILES,
   round,
   timeFor,
+  variantOf,
   versionOf,
 } from "#utils";
 
@@ -277,6 +279,7 @@ class Table extends Component<{
           {{#each this.frameworkNames as |framework|}}
             <th class="fw-header">
               <FrameworkInfo @name={{framework}} />
+              <Variant @variant={{variantOf @file framework}} />
               <span class="small">
                 <Version
                   @version={{versionOf @file framework}}

@@ -49,6 +49,14 @@ export function overrideOf(file: ResultSet, framework: string) {
 }
 
 /**
+ * The variant a run recorded for a framework, if any -- e.g. "Vapor" for a
+ * Vue Vapor build. Shown under the framework's name, above its version.
+ */
+export function variantOf(file: ResultSet, framework: string) {
+  return file.notes?.[framework]?.variant;
+}
+
+/**
  * How one framework did at one benchmark, or undefined when that run
  * doesn't have the pair.
  */

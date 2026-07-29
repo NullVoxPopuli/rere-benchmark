@@ -4,10 +4,11 @@ import { LinkTo } from "@ember/routing";
 import { service } from "@ember/service";
 
 import { pageTitle } from "ember-page-title";
-import { results } from "virtual:result-sets";
+import { experiments, runs } from "virtual:result-sets";
 
 import { BenchmarkName } from "#components/benchmark-name.gts";
 import { FrameworkInfo } from "#components/framework-info.gts";
+import { Variant } from "#components/variant.gts";
 import { Version } from "#components/version.gts";
 import { nameOf } from "#frameworks";
 import {
@@ -21,9 +22,11 @@ import {
   round,
   throttleLabel,
   timeFor,
+  variantOf,
   versionOf,
 } from "#utils";
 
+import type { TOC } from "@ember/component/template-only";
 import type RouterService from "@ember/routing/router-service";
 import type { Model, NamedRun } from "#routes/compare.ts";
 import type { BenchmarkInfo, ResultSet } from "#types";
@@ -42,6 +45,29 @@ function shortName(runName: string) {
 function qp(runName: string) {
   return { q: runName };
 }
+
+/**
+ * The options for one of the A/B run selectors: the official runs, plus
+ * the experiments in their own group when there are any. Either side can
+ * point at either category, so a run can be compared against an experiment.
+ */
+const RunOptions = <template>
+  <optgroup label="Runs">
+    {{#each runs as |name|}}
+      <option value={{name}} selected={{@isRun @which name}}>{{shortName name}}</option>
+    {{/each}}
+  </optgroup>
+  {{#if experiments.length}}
+    <optgroup label="Experiments">
+      {{#each experiments as |name|}}
+        <option value={{name}} selected={{@isRun @which name}}>{{shortName name}}</option>
+      {{/each}}
+    </optgroup>
+  {{/if}}
+</template> satisfies TOC<{
+  which: "a" | "b";
+  isRun: (which: "a" | "b", name: string) => boolean;
+}>;
 
 /**
  * Both runs state their throttle outright rather than leaving it to be
@@ -303,6 +329,16 @@ export default class Compare extends Component<{ model: Model }> {
     return lowerIsBetterBenches(this.benchmarkInfo);
   }
 
+  /**
+   * The variant either run recorded for the compared framework, preferring
+   * the candidate (B). Both runs are usually the same build, so this reads
+   * "what flavor of the framework am I looking at" rather than a per-run
+   * difference.
+   */
+  get variant() {
+    return variantOf(this.b.data, this.framework) ?? variantOf(this.a.data, this.framework);
+  }
+
   isFramework = (name: string) => this.framework === name;
 
   isRun = (which: "a" | "b", name: string) => this[which].name === name;
@@ -337,17 +373,13 @@ export default class Compare extends Component<{ model: Model }> {
       <label>
         run A
         <select name="run-a" {{on "change" (fn this.setRun "a")}}>
-          {{#each results as |name|}}
-            <option value={{name}} selected={{this.isRun "a" name}}>{{shortName name}}</option>
-          {{/each}}
+          <RunOptions @which="a" @isRun={{this.isRun}} />
         </select>
       </label>
       <label>
         run B
         <select name="run-b" {{on "change" (fn this.setRun "b")}}>
-          {{#each results as |name|}}
-            <option value={{name}} selected={{this.isRun "b" name}}>{{shortName name}}</option>
-          {{/each}}
+          <RunOptions @which="b" @isRun={{this.isRun}} />
         </select>
       </label>
       <label>
@@ -373,6 +405,7 @@ export default class Compare extends Component<{ model: Model }> {
 
     <div class="all-results">
       <FrameworkInfo @name={{this.framework}} />
+      <Variant @variant={{this.variant}} />
 
       {{#if this.higherBenches.length}}
         <h2>higher is better</h2>
