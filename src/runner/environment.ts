@@ -1,5 +1,5 @@
 import assert from 'node:assert';
-import { realpathSync } from 'node:fs';
+import { existsSync, realpathSync } from 'node:fs';
 
 // SAFETY: the types for byte-size are not correct
 // @ts-expect-error
@@ -17,11 +17,22 @@ import {
   TIMEOUT,
 } from './arg.ts';
 
-const whichGoogleChrome = await $`which google-chrome`;
+async function findChrome() {
+  const macChrome =
+    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 
-// Resolve symlinks so Chrome can find its framework files
-// (e.g. a symlink at ~/Applications/google-chrome -> /Applications/Google Chrome.app/...)
-export const chromeLocation = realpathSync(whichGoogleChrome.stdout.trim());
+  if (existsSync(macChrome)) {
+    return macChrome;
+  }
+
+  const whichGoogleChrome = await $`which google-chrome`;
+
+  // Resolve symlinks so Chrome can find its framework files
+  // (e.g. a symlink at ~/Applications/google-chrome -> /Applications/Google Chrome.app/...)
+  return realpathSync(whichGoogleChrome.stdout.trim());
+}
+
+export const chromeLocation = await findChrome();
 export const yyyymmdd = new Date().toJSON();
 
 assert(yyyymmdd, `Failed to find date`);
