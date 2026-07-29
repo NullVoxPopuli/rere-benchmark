@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useLayoutEffect } from 'react'
 import { helpers } from 'common';
 
 let test = helpers.fanOut();
@@ -6,7 +6,7 @@ let test = helpers.fanOut();
 function App() {
   const [value, setValue] = useState(test.getData());
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     test.doit((v: number) => {
       setValue(v)
     });
