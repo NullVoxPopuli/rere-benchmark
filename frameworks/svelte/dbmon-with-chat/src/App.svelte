@@ -1,9 +1,10 @@
 <script lang="ts">
   import 'common/dbmon.css';
   import { helpers, type DBRow, type ChatMessage, type DBUpdate, type ChatUpdate } from 'common';
+  import { SvelteMap } from 'svelte/reactivity';
 
   const test = helpers.dbMonWithChat();
-  let db: Map<string, DBRow> = $state(new Map());
+  const db = new SvelteMap<string, DBRow>();
   let chats: ChatMessage[] = $state([]);
 
   $effect(() => {
@@ -12,7 +13,6 @@
         for (const d of eventData.data) {
           db.set(d.dbname, d);
         }
-        db = new Map(db);
       },
       handleChat: (eventData: ChatUpdate) => {
         for (const d of eventData.data) {
