@@ -1,26 +1,72 @@
 import 'common/dbmon.css';
 import './layout.css';
 import { useLayoutEffect } from 'preact/hooks';
-import { useSignal } from '@preact/signals';
+import { signal } from '@preact/signals';
+import { For } from '@preact/signals/utils';
 import { helpers, type DBRow, type ChatMessage, type DBUpdate, type ChatUpdate } from 'common';
+import type { Signal } from '@preact/signals';
 
 const test = helpers.dbMonWithChat();
 
-function App() {
-  // reading `.value` during render subscribes the component; each worker
-  // message swaps in a new Map/array, re-rendering like the other
-  // frameworks' dbmon implementations
-  const db = useSignal<Map<string, DBRow>>(new Map());
-  const chats = useSignal<ChatMessage[]>([]);
+// One signal per row keyed by dbname; only the affected row re-renders on update.
+const rowMap = new Map<string, Signal<DBRow>>();
+const dbRows = signal<Signal<DBRow>[]>([]);
+const chats = signal<ChatMessage[]>([]);
 
+function Row({ row }: { row: Signal<DBRow> }) {
+  const r = row.value;
+  return (
+    <tr>
+      <td className="dbname">{r.dbname}</td>
+      <td className="query-count">
+        <span className={r.lastSample.countClassName}>
+          {r.lastSample.queries.length}
+        </span>
+      </td>
+      {r.lastSample.topFiveQueries.map((query, i) => (
+        <td key={i}>
+          {query.elapsed}
+          <div className="popover bottom">
+            <div className="popover-content">{query.query}</div>
+            <div className="arrow"></div>
+          </div>
+        </td>
+      ))}
+    </tr>
+  );
+}
+
+function ChatList() {
+  return (
+    <>
+      {chats.value.map((chat, i) => (
+        <div className="chat" key={i}>
+          <div className="author">{chat.author}</div>
+          <p>{chat.message}</p>
+        </div>
+      ))}
+    </>
+  );
+}
+
+function App() {
   useLayoutEffect(() => {
     test.doit({
       handleDbUpdate: (eventData: DBUpdate) => {
-        const next = new Map(db.value);
+        const newRows: Signal<DBRow>[] = [];
         for (const d of eventData.data) {
-          next.set(d.dbname, d);
+          const existing = rowMap.get(d.dbname);
+          if (existing) {
+            existing.value = d;
+          } else {
+            const row = signal(d);
+            rowMap.set(d.dbname, row);
+            newRows.push(row);
+          }
         }
-        db.value = next;
+        if (newRows.length > 0) {
+          dbRows.value = [...dbRows.value, ...newRows];
+        }
       },
       handleChat: (eventData: ChatUpdate) => {
         const next = chats.value.concat(eventData.data);
@@ -40,37 +86,16 @@ function App() {
           </tr>
         </thead>
         <tbody>
-          {[...db.value.values()].map(row => (
-            <tr key={row.dbname}>
-              <td className="dbname">{row.dbname}</td>
-              <td className="query-count">
-                <span className={row.lastSample.countClassName}>
-                  {row.lastSample.queries.length}
-                </span>
-              </td>
-              {row.lastSample.topFiveQueries.map((query, i) => (
-                <td key={i}>
-                  {query.elapsed}
-                  <div className="popover bottom">
-                    <div className="popover-content">{query.query}</div>
-                    <div className="arrow"></div>
-                  </div>
-                </td>
-              ))}
-            </tr>
-          ))}
+          <For each={dbRows}>
+            {(row) => <Row row={row} />}
+          </For>
         </tbody>
       </table>
 
       <div className="chats">
         <div className="messages">
           <div className="messages-inner">
-            {chats.value.map((chat, i) => (
-              <div className="chat" key={i}>
-                <div className="author">{chat.author}</div>
-                <p>{chat.message}</p>
-              </div>
-            ))}
+            <ChatList />
           </div>
         </div>
         <div className="entry">
