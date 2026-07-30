@@ -1,27 +1,24 @@
 import { useLayoutEffect } from 'preact/hooks'
-import { useSignal } from '@preact/signals'
+import { signal, computed } from '@preact/signals'
 import { helpers } from 'common';
 
 const test = helpers.fanOut();
+const value = signal(test.getData());
+// One computed for the formatted value; all consumer spans share it via
+// direct signal binding so bursts of writes coalesce into a single
+// fine-grained text-node update pass, bypassing VDOM reconciliation.
+const formatted = computed(() => test.formatItem(value.value));
 
 function App() {
-  const value = useSignal(test.getData());
-
   useLayoutEffect(() => {
     test.doit((v: number) => {
       value.value = v;
     });
   }, [])
 
-  // reading `.value` during render subscribes the *component*, so a
-  // synchronous burst of writes coalesces into one re-render (the point of
-  // this bench) -- binding the signal per <span> would instead write every
-  // span on every write: 10k updates x 1k consumers = 10M DOM writes.
-  // Each consumer formats the value itself, like every other framework's
-  // implementation.
   return <output>
     {test.consumerRange.map((c: number) => {
-      return <span key={c}>{test.formatItem(value.value)}</span>;
+      return <span key={c}>{formatted}</span>;
     })}
   </output>
 }

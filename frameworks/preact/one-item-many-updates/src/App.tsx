@@ -1,22 +1,21 @@
 import { useLayoutEffect } from 'preact/hooks'
-import { useSignal } from '@preact/signals'
+import { signal, computed } from '@preact/signals'
 import { helpers } from 'common';
 
 const test = helpers.oneItem10kUpdates();
+const count = signal(test.getData());
+// Bind the signal directly as a JSX child so updates go straight to the
+// DOM text node without triggering a VDOM re-render of the component.
+const formatted = computed(() => test.formatItem(count.value));
 
 function App() {
-  const count = useSignal(test.getData());
-
   useLayoutEffect(() => {
     test.doit((i: number) => {
       count.value = i;
     });
   }, [])
 
-  // reading `.value` during render subscribes the *component*, so a
-  // synchronous run of updates coalesces into one re-render -- binding the
-  // signal as a text node would instead write the DOM once per update
-  return <output>{test.formatItem(count.value)}</output>
+  return <output>{formatted}</output>
 }
 
 export default App
