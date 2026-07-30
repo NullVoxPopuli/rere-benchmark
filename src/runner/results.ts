@@ -79,6 +79,41 @@ export async function saveTiming(timing: Timing, filePath: string) {
   await write(file, filePath);
 }
 
+/**
+ * `existing` in the order it already has, then whatever `fresh` adds.
+ */
+function union<T>(existing: T[] | undefined, fresh: T[]) {
+  return Array.from(new Set(existing ?? []).union(new Set(fresh)));
+}
+
+type SavedBenchmarkInfo = Omit<BenchmarkInfo, 'ignoreCount'>;
+
+/**
+ * By name, with this run's descriptor winning for a bench it re-ran.
+ */
+function mergeBenchmarkInfo(
+  existing: SavedBenchmarkInfo[] | undefined,
+  fresh: SavedBenchmarkInfo[],
+) {
+  const byName = new Map(
+    (existing ?? []).map((bench) => [bench.name, bench] as const),
+  );
+
+  for (const bench of fresh) {
+    byName.set(bench.name, bench);
+  }
+
+  return Array.from(byName.values());
+}
+
+/**
+ * What a run selected, and the descriptor for each bench it ran.
+ *
+ * Merged in, so appending a partial run (`--framework preact`, say) to an
+ * existing file keeps the runs already in it. The results app renders
+ * exactly what `selections` lists rather than what `results` holds, so
+ * replacing it hid every framework but the one just appended.
+ */
 export async function saveBenchmarkInfo(
   info: {
     benches: BenchmarkInfo[];
@@ -88,17 +123,22 @@ export async function saveBenchmarkInfo(
 ) {
   const file = await read(filePath);
 
-  file.selections = {
-    benches: info.benches.map((bench) => bench.name),
-    frameworks: info.frameworks,
-  };
-
-  file.benchmarkInfo = info.benches.map((bench) => {
+  const benches: SavedBenchmarkInfo[] = info.benches.map((bench) => {
     // ignoreCount is only used for the runner
     const { ignoreCount: _, ...rest } = bench;
 
     return rest;
   });
+
+  file.selections = {
+    benches: union(
+      file.selections?.benches,
+      benches.map((bench) => bench.name),
+    ),
+    frameworks: union(file.selections?.frameworks, info.frameworks),
+  };
+
+  file.benchmarkInfo = mergeBenchmarkInfo(file.benchmarkInfo, benches);
 
   await write(file, filePath);
 }
