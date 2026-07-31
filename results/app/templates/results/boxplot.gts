@@ -1,13 +1,18 @@
 import Component from "@glimmer/component";
+import { service } from "@ember/service";
 
 // https://github.com/sgratzl/chartjs-chart-boxplot
 import { BoxPlotChart } from "@sgratzl/chartjs-chart-boxplot";
 import { converter, filterBrightness, formatCss } from "culori";
 import { modifier } from "ember-modifier";
 
+import { borrowOf, BorrowPicker } from "#components/borrow-picker.gts";
+import { Settings } from "#components/settings.gts";
 import { frameworks } from "#frameworks";
-import { samplesOf } from "#utils";
+import { formatRunName, samplesOf } from "#utils";
 
+import type RouterService from "@ember/routing/router-service";
+import type { Borrow } from "#components/borrow-picker.gts";
 import type { Model } from "#routes/results.ts";
 import type { BenchmarkInfo, ResultSet } from "#types";
 
@@ -15,10 +20,10 @@ const HSL = converter("hsl");
 const BRIGHTEN = filterBrightness(1.5, "lrgb");
 const DARKEN = filterBrightness(0.5, "lrgb");
 
-function boxData(file: ResultSet, benchInfo: BenchmarkInfo) {
+function boxData(file: ResultSet, benchInfo: BenchmarkInfo, borrow: Borrow | undefined) {
   // Why is chartjs like this?
   // managing this many arrays in sync across indicies is annoying
-  const labels: string[] = [];
+  const labels: Array<string | string[]> = [];
   const data: number[][] = [];
   const backgroundColor: string[] = [];
   const borderColor: string[] = [];
@@ -26,10 +31,10 @@ function boxData(file: ResultSet, benchInfo: BenchmarkInfo) {
   const medianColor: string[] = [];
   const lowerBackgroundColor: string[] = [];
 
-  for (const framework of file.selections.frameworks) {
-    labels.push(framework);
+  const add = (label: string | string[], source: ResultSet, framework: string) => {
+    labels.push(label);
 
-    const marks = file.results[framework]?.[benchInfo.name]?.times;
+    const marks = source.results[framework]?.[benchInfo.name]?.times;
 
     data.push(marks ? samplesOf(marks, benchInfo.measure) : []);
 
@@ -51,6 +56,14 @@ function boxData(file: ResultSet, benchInfo: BenchmarkInfo) {
     // meanBackgroundColor
 
     lowerBackgroundColor.push(brighter);
+  };
+
+  for (const framework of file.selections.frameworks) {
+    add(framework, file, framework);
+  }
+
+  if (borrow) {
+    add([borrow.framework, `from ${formatRunName(borrow.name)}`], borrow.data, borrow.framework);
   }
 
   const datasets = [
@@ -73,9 +86,9 @@ function boxData(file: ResultSet, benchInfo: BenchmarkInfo) {
 
 const renderChart = modifier(function boxplot(
   element: HTMLCanvasElement,
-  [file, benchInfo]: [ResultSet, BenchmarkInfo],
+  [file, benchInfo, borrow]: [ResultSet, BenchmarkInfo, Borrow | undefined],
 ) {
-  const { datasets, labels } = boxData(file, benchInfo);
+  const { datasets, labels } = boxData(file, benchInfo, borrow);
   // https://www.sgratzl.com/chartjs-chart-boxplot/examples/styling.html
   const chart = new BoxPlotChart(element, {
     data: {
@@ -139,6 +152,8 @@ const renderChart = modifier(function boxplot(
 export default class Boxplat extends Component<{
   model: Model;
 }> {
+  @service declare router: RouterService;
+
   get benchmarkInfo() {
     return this.args.model.data.benchmarkInfo
       .toSorted()
@@ -149,11 +164,23 @@ export default class Boxplat extends Component<{
     return this.args.model.data.selections.frameworks;
   }
 
+  get borrow() {
+    return borrowOf(this.router, this.args.model.borrowed);
+  }
+
+  get rows() {
+    return this.frameworks.length + (this.borrow ? 1 : 0);
+  }
+
   get height() {
-    return 70 * this.frameworks.length;
+    return 70 * this.rows;
   }
 
   <template>
+    <Settings>
+      <BorrowPicker @borrowed={{@model.borrowed}} />
+    </Settings>
+
     {{#each this.benchmarkInfo as |benchInfo|}}
       <section>
         <header class="boxplot-header">
@@ -173,7 +200,7 @@ export default class Boxplat extends Component<{
         {{! chart.js responsive sizing tracks the parent element,
             so the fixed height goes on a wrapper, not the canvas }}
         <div style="position: relative; height:{{this.height}}px;">
-          <canvas {{renderChart @model.data benchInfo}}></canvas>
+          <canvas {{renderChart @model.data benchInfo this.borrow}}></canvas>
         </div>
       </section>
     {{/each}}

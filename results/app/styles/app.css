@@ -256,6 +256,31 @@ table {
     filter: contrast(0.4);
     mix-blend-mode: difference;
   }
+
+  th.borrowed,
+  td.borrowed {
+    border-inline-start: 1px dashed color-mix(in oklch, currentColor 35%, transparent);
+  }
+
+  .borrow-tag {
+    font-size: 0.7rem;
+    border: 1px solid currentColor;
+    border-radius: 0.25rem;
+    padding: 0 0.25rem;
+    opacity: 0.7;
+  }
+
+  .borrow-source {
+    display: block;
+    font-weight: normal;
+    opacity: 0.75;
+  }
+
+  .throttle-mismatch {
+    display: block;
+    font-weight: normal;
+    color: darkorange;
+  }
 }
 
 .compare-title {
@@ -335,10 +360,54 @@ table {
   }
 }
 
+.settings {
+  justify-self: center;
+  text-align: center;
+
+  summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    cursor: pointer;
+    padding: 0.25rem 1rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.7;
+    border: 1px solid color-mix(in oklch, currentColor 25%, transparent);
+    border-radius: 0.5rem;
+
+    &::before {
+      content: "";
+      border-block: 0.3em solid transparent;
+      border-inline-start: 0.42em solid color-mix(in oklch, currentColor 70%, transparent);
+      transition: rotate 0.15s;
+    }
+
+    &:hover,
+    &:focus-visible {
+      opacity: 1;
+      border-color: color-mix(in oklch, currentColor 60%, transparent);
+    }
+  }
+
+  &[open] summary::before {
+    rotate: 90deg;
+  }
+
+  .fields {
+    display: grid;
+    justify-items: center;
+    padding-top: 1rem;
+    text-align: initial;
+  }
+}
+
 /* The control bars above the tables: which value to show on a results
    table, which framework and runs to line up on the compare page. */
 .value-mode,
-.compare-controls {
+.compare-controls,
+.borrow-controls {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -401,7 +470,8 @@ table {
   }
 }
 
-.compare-controls select {
+.compare-controls select,
+.borrow-controls select {
   max-width: 40vw;
 }
 

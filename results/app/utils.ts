@@ -1,6 +1,6 @@
 import { assert, warn } from "@ember/debug";
 
-import { metadata } from "virtual:result-sets";
+import { experiments, metadata } from "virtual:result-sets";
 
 import { frameworks } from "./frameworks.ts";
 
@@ -40,6 +40,20 @@ export function warnOnVersionDivergence(file: ResultSet) {
       },
     );
   }
+}
+
+export async function fetchResultSet(name: string): Promise<ResultSet> {
+  // experiments live in a separate directory from the official runs
+  const dir = experiments.includes(name) ? "experiments" : "results";
+  const response = await fetch(`/${dir}/${name}.json`);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const json = await response.json();
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  warnOnVersionDivergence(json);
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return json;
 }
 
 /**
