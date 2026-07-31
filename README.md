@@ -272,6 +272,10 @@ the framework's runs and leaves the rest alone. It re-uses the
 in the file (mixing settings within a file would make its numbers
 incomparable), and then hands off to `pnpm bench` with those flags.
 
+Hardware is held to the same standard: appending to a file recorded on a
+different machine (cpu, ram, or monitor refresh rate) is an error, and an
+OS or browser difference is warned about.
+
 ### Query params
 
 The apps read their own config from the URL, so you can open any bench and

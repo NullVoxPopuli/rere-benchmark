@@ -54,6 +54,66 @@ async function saveResults(results: any, filePath: string) {
   await write(file, filePath);
 }
 
+/**
+ * Numbers in one file must be comparable, and hardware is part of the
+ * measurement: appending runs from a different machine (or a different
+ * monitor -- the frame-rate bench is capped by its refresh rate) would mix
+ * results that cannot be compared.
+ */
+export async function assertSameEnvironment(filePath: string) {
+  if (!existsSync(filePath)) return;
+
+  const file = await read(filePath);
+  const recorded = file.environment;
+
+  if (!recorded) {
+    return;
+  }
+
+  const current = info.environment;
+  const mismatches: string[] = [];
+
+  if (recorded.machine?.cpu !== current.machine.cpu) {
+    mismatches.push(`cpu: ${recorded.machine?.cpu} vs ${current.machine.cpu}`);
+  }
+
+  if (recorded.machine?.ram !== current.machine.ram) {
+    mismatches.push(`ram: ${recorded.machine?.ram} vs ${current.machine.ram}`);
+  }
+
+  if (recorded.monitor?.hz !== current.monitor.hz) {
+    mismatches.push(
+      `monitor: ${recorded.monitor?.hz}hz vs ${current.monitor.hz}hz`,
+    );
+  }
+
+  assert(
+    mismatches.length === 0,
+    `${filePath} was recorded on different hardware (recorded vs now):\n` +
+      mismatches.map((mismatch) => `  ${mismatch}`).join('\n'),
+  );
+
+  /**
+   * Not hardware, so not fatal -- but an OS or browser update between runs
+   * is still worth knowing about when reading the numbers later.
+   */
+  if (
+    JSON.stringify(recorded.machine?.os) !== JSON.stringify(current.machine.os)
+  ) {
+    console.warn(
+      `${filePath} was recorded on ${recorded.machine?.os?.name} ${recorded.machine?.os?.version}, ` +
+        `this is ${current.machine.os.name} ${current.machine.os.version}`,
+    );
+  }
+
+  if (JSON.stringify(recorded.browser) !== JSON.stringify(current.browser)) {
+    console.warn(
+      `${filePath} was recorded with ${recorded.browser?.name} ${recorded.browser?.version}, ` +
+        `this is ${current.browser.name} ${current.browser.version}`,
+    );
+  }
+}
+
 export interface Timing {
   /**
    * Wall-clock time (ms) spent installing + building all apps.

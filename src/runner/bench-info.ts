@@ -10,6 +10,7 @@ import { yyyymmdd } from './environment.ts';
 import { prsSinceLastResultSet } from './prs.ts';
 import { frameworks } from './repo.ts';
 import {
+  assertSameEnvironment,
   info,
   saveBenchmarkInfo,
   saveNotes,
@@ -353,6 +354,8 @@ export async function getBenchInfo() {
 
   const selectedBenches = await getBenches();
   const filePath = await getFilePath();
+
+  await assertSameEnvironment(filePath);
 
   // resolved before the confirm below, so what will be recorded is part
   // of the "does this look correct?" review
