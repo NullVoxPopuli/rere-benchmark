@@ -1,12 +1,12 @@
 import assert from 'node:assert';
 import { existsSync } from 'node:fs';
 import { readdir, readFile } from 'node:fs/promises';
+import { basename, join } from 'node:path';
 import { inspect } from 'node:util';
 
 import * as clack from '@clack/prompts';
 
 import * as args from './arg.ts';
-import { yyyymmdd } from './environment.ts';
 import { prsSinceLastResultSet } from './prs.ts';
 import { frameworks } from './repo.ts';
 import {
@@ -304,7 +304,62 @@ async function getBenches() {
   return result;
 }
 
-const yesterdayFull = new Date(Date.now() - 24 * 60 * 60 * 1000);
+const RESULTS_DIR = './results/public/results';
+
+/**
+ * Result files are numbered sequentially (`1.json`, `2.json`, ...), so a
+ * new run's file is one past the highest number already used. Anything
+ * that isn't a plain number doesn't participate.
+ */
+function nextResultFileName(existing: string[]) {
+  let highest = 0;
+
+  for (const file of existing) {
+    if (!file.endsWith('.json')) continue;
+
+    const number = Number(basename(file, '.json'));
+
+    if (Number.isInteger(number) && number > highest) {
+      highest = number;
+    }
+  }
+
+  return `${highest + 1}.json`;
+}
+
+const startOfYesterday = new Date();
+
+startOfYesterday.setHours(0, 0, 0, 0);
+startOfYesterday.setDate(startOfYesterday.getDate() - 1);
+
+const RUN_DATE_FORMAT = new Intl.DateTimeFormat(undefined, {
+  dateStyle: 'medium',
+  timeStyle: 'short',
+});
+
+/**
+ * Appending only makes sense into a fresh result set, so only files whose
+ * run started today or yesterday are offered. The run date lives inside
+ * each file (names are just numbers), so the files have to be opened.
+ */
+async function recentResultFiles(existing: string[]) {
+  const recent: Array<{ file: string; date: Date }> = [];
+
+  for (const file of existing) {
+    if (!file.endsWith('.json')) continue;
+
+    const buffer = await readFile(join(RESULTS_DIR, file));
+    const json = JSON.parse(buffer.toString());
+    const date = new Date(json.date);
+
+    if (Number.isNaN(date.getTime())) continue;
+    if (date < startOfYesterday) continue;
+
+    recent.push({ file, date });
+  }
+
+  return recent;
+}
 
 async function getFilePath() {
   if (args.FILE) {
@@ -316,21 +371,17 @@ async function getFilePath() {
     return args.FILE;
   }
 
-  let existing = await readdir(`./results/public/results/`);
-
-  const today = yyyymmdd.split('T')[0]!;
-  const yesterday = yesterdayFull.toJSON().split('T')[0]!;
-
-  existing = existing.filter((x) => x.includes(today) || x.includes(yesterday));
+  const existing = await readdir(RESULTS_DIR);
+  const fresh = nextResultFileName(existing);
+  const recent = await recentResultFiles(existing);
 
   const result = await clack.select({
     message: 'Where to save?',
-    options: [
-      { value: yyyymmdd + '.json', label: 'New file', hint: yyyymmdd },
-      ...existing.map((x) => {
-        return { value: x, label: x };
+    options: [{ value: fresh, label: 'New file', hint: fresh }].concat(
+      recent.map(({ file, date }) => {
+        return { value: file, label: file, hint: RUN_DATE_FORMAT.format(date) };
       }),
-    ],
+    ),
   });
 
   if (clack.isCancel(result)) {
@@ -338,7 +389,7 @@ async function getFilePath() {
     process.exit(1);
   }
 
-  return `./results/public/results/${result}`;
+  return `${RESULTS_DIR}/${result}`;
 }
 
 export async function getBenchInfo() {

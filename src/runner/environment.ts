@@ -133,6 +133,7 @@ export async function getInfo() {
           version: osInfo.version,
         },
         cpu: cpuName,
+        cpus: cpu.cores,
         ram: bs(memory.total).toString(),
       },
       monitor: {

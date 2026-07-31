@@ -1,5 +1,5 @@
-import { readdir } from 'node:fs/promises';
-import { basename } from 'node:path';
+import { readdir, readFile } from 'node:fs/promises';
+import { basename, join } from 'node:path';
 
 import { $ } from 'execa';
 
@@ -14,20 +14,30 @@ const REPO_URL = 'https://github.com/NullVoxPopuli/rere-benchmark';
 
 /**
  * When the most recent result set (other than the one being written) was
- * recorded. Result files are named with the run's ISO timestamp, so the
- * directory listing is the history -- no need to open the files.
+ * recorded. Result files are numbered, and each one records its run date
+ * in its `date` field -- so every file has to be opened.
  */
 async function previousResultSetDate(currentFilePath: string) {
   const files = await readdir(RESULTS_DIR);
   const current = basename(currentFilePath);
 
-  const dates = files
-    .filter((file) => file.endsWith('.json') && file !== current)
-    .map((file) => file.replace(/\.json$/, ''))
-    .filter((iso) => !Number.isNaN(Date.parse(iso)))
-    .sort();
+  let newest: string | undefined;
 
-  return dates.at(-1);
+  for (const file of files) {
+    if (!file.endsWith('.json') || file === current) continue;
+
+    const buffer = await readFile(join(RESULTS_DIR, file));
+    const json = JSON.parse(buffer.toString());
+    const date: unknown = json.date;
+
+    if (typeof date !== 'string' || Number.isNaN(Date.parse(date))) continue;
+
+    if (!newest || new Date(date) > new Date(newest)) {
+      newest = date;
+    }
+  }
+
+  return newest;
 }
 
 /**

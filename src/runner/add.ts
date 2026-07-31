@@ -11,7 +11,7 @@
  * process rather than the ones this wizard assembles.
  */
 import assert from 'node:assert';
-import { readdir, readFile, stat } from 'node:fs/promises';
+import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import * as clack from '@clack/prompts';
@@ -25,7 +25,22 @@ const RESULT_DIRS = [
 interface Candidate {
   path: string;
   kind: (typeof RESULT_DIRS)[number]['kind'];
-  modifiedAt: number;
+  /**
+   * When the set's run started, from the file's `date` field -- the
+   * numbered file names carry no date. Invalid on files without one.
+   */
+  recordedAt: Date;
+}
+
+const RUN_DATE_FORMAT = new Intl.DateTimeFormat(undefined, {
+  dateStyle: 'medium',
+  timeStyle: 'short',
+});
+
+function hintFor(candidate: Candidate) {
+  if (Number.isNaN(candidate.recordedAt.getTime())) return candidate.kind;
+
+  return `${candidate.kind} · ${RUN_DATE_FORMAT.format(candidate.recordedAt)}`;
 }
 
 async function listResultFiles() {
@@ -44,13 +59,16 @@ async function listResultFiles() {
       if (!entry.endsWith('.json')) continue;
 
       const path = join(dir, entry);
-      const { mtimeMs } = await stat(path);
+      const json = JSON.parse((await readFile(path)).toString());
 
-      candidates.push({ path, kind, modifiedAt: mtimeMs });
+      candidates.push({ path, kind, recordedAt: new Date(json.date) });
     }
   }
 
-  return candidates.sort((a, b) => b.modifiedAt - a.modifiedAt);
+  // newest run first; files without a date (NaN) sink to the end
+  return candidates.sort(
+    (a, b) => (b.recordedAt.getTime() || 0) - (a.recordedAt.getTime() || 0),
+  );
 }
 
 function exitOnCancel<T>(value: T | symbol): T {
@@ -75,7 +93,11 @@ const target = exitOnCancel(
   await clack.select({
     message: 'Which result set?',
     options: candidates.map((candidate) => {
-      return { value: candidate, label: candidate.path, hint: candidate.kind };
+      return {
+        value: candidate,
+        label: candidate.path,
+        hint: hintFor(candidate),
+      };
     }),
   }),
 );

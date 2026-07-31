@@ -135,6 +135,11 @@ export interface ResultSet {
         version: string;
       };
       cpu: string;
+      /**
+       * Logical CPU count. Absent on result sets recorded before it was
+       * collected.
+       */
+      cpus?: number;
       ram: string;
     };
     browser: {
