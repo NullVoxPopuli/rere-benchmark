@@ -245,13 +245,36 @@ window you've covered up.
 | flag | default | |
 | --- | --- | --- |
 | `--framework` | prompts | a framework name, or `all` |
-| `--bench` | prompts | a benchmark's display name, or `all` |
+| `--bench` | prompts | a benchmark's display name, or `all`; repeat the flag to select several |
 | `--count` | `10` | samples per bench per framework |
 | `--cpu-throttle` | `1` | emulated CPU slowdown; runs at different settings are not comparable |
 | `--headless` | off | headless caps at 60fps, so the frame-rate bench means less |
 | `--timeout` | `60000` | ms a single sample may take before the run fails |
 | `--skip-build` | off | re-use an existing build |
 | `--include-prs` | off | record the PRs that landed since the previous result set in the run's notes (from git history; shown in the results app) |
+| `--file` | prompts | append to this existing result file; the bench selection comes from the file, so only `--framework` is left to pick |
+
+### Adding one framework to an existing result set
+
+```bash
+pnpm bench:add
+```
+
+An interactive wrapper around `pnpm bench` for when a result set (or
+`use-tar-for` experiment) already exists and one framework needs to be
+added to it -- or re-run and replaced (runs are stored by framework name,
+so a re-run overwrites the previous ones).
+
+It walks through picking the file, the framework, and which of the file's
+benches to run -- all of them by default; a subset replaces just those of
+the framework's runs and leaves the rest alone. It re-uses the
+`--cpu-throttle` / `--count` / `--timeout` / `--headless` settings recorded
+in the file (mixing settings within a file would make its numbers
+incomparable), and then hands off to `pnpm bench` with those flags.
+
+Hardware is held to the same standard: appending to a file recorded on a
+different machine (cpu, ram, or monitor refresh rate) is an error, and an
+OS or browser difference is warned about.
 
 ### Query params
 

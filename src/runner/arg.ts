@@ -17,9 +17,11 @@ export const COUNT = int('--count', 10);
 export const CPU_THROTTLE = int('--cpu-throttle', 1);
 export const FRAMEWORK = str('--framework');
 export const BENCH_NAME = str('--bench');
+export const BENCH_NAMES = strAll('--bench');
 export const SKIP_BUILD = bool('--skip-build');
 export const TIMEOUT = int('--timeout', 60_000);
 export const INCLUDE_PRS = bool('--include-prs');
+export const FILE = str('--file');
 export const VERSION_OVERRIDES = versionOverrides();
 
 function col1(name: string) {
@@ -27,7 +29,8 @@ function col1(name: string) {
 }
 
 function col2(value: unknown) {
-  return String(value ?? '').padEnd(10);
+  // the trailing space keeps a separator when the value overflows the pad
+  return (String(value ?? '') + ' ').padEnd(10);
 }
 
 function col3(description: string) {
@@ -56,11 +59,20 @@ console.log(
     row(col1('--count'), col2(COUNT), col3('sample count')),
     row(col1('--timeout'), col2(TIMEOUT), col3('ms a single sample may take')),
     row(col1('--framework'), col2(FRAMEWORK), col3(`or '${ALL}'`)),
-    row(col1('--bench'), col2(BENCH_NAME), col3(`or '${ALL}'`)),
+    row(
+      col1('--bench'),
+      col2(BENCH_NAME),
+      col3(`or '${ALL}'; repeatable to select several`),
+    ),
     row(
       col1('--include-prs'),
       col2(INCLUDE_PRS),
       col3('record PRs merged since the previous result set'),
+    ),
+    row(
+      col1('--file'),
+      col2(FILE),
+      col3('append to this result file, re-using its bench selection'),
     ),
     ...Object.entries(VERSION_OVERRIDES).map(([framework, override]) =>
       row(
@@ -82,6 +94,16 @@ function str(name: string) {
   const arg = args.find((a) => a.startsWith(name));
 
   return arg?.split('=')[1];
+}
+
+/**
+ * A flag that may be repeated -- `--bench=X --bench=Y` selects both.
+ */
+function strAll(name: string) {
+  return args
+    .filter((a) => a.split('=')[0] === name)
+    .map((a) => a.split('=').slice(1).join('='))
+    .filter(Boolean);
 }
 
 /**

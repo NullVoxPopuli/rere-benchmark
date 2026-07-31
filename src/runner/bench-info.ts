@@ -1,5 +1,6 @@
 import assert from 'node:assert';
-import { readdir } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
+import { readdir, readFile } from 'node:fs/promises';
 import { inspect } from 'node:util';
 
 import * as clack from '@clack/prompts';
@@ -9,6 +10,7 @@ import { yyyymmdd } from './environment.ts';
 import { prsSinceLastResultSet } from './prs.ts';
 import { frameworks } from './repo.ts';
 import {
+  assertSameEnvironment,
   info,
   saveBenchmarkInfo,
   saveNotes,
@@ -227,43 +229,93 @@ async function getFrameworks() {
   return selectedFrameworks;
 }
 
+/**
+ * The bench selection recorded in an existing result file, so `--file`
+ * (and `pnpm bench:add` on top of it) re-runs exactly what the file holds.
+ */
+async function benchNamesFrom(filePath: string) {
+  const buffer = await readFile(filePath);
+  const file = JSON.parse(buffer.toString());
+  const names: unknown = file.selections?.benches;
+
+  assert(
+    Array.isArray(names) && names.length > 0,
+    `${filePath} does not record which benches it ran (selections.benches)`,
+  );
+
+  return names as string[];
+}
+
+/**
+ * The named benches, warning about names that do not match any bench --
+ * a rename since the names were recorded, or a typo.
+ */
+function benchesNamed(names: string[], source: string) {
+  const known = benchmarks.filter((bench) => names.includes(bench.name));
+  const unknown = names.filter(
+    (name) => !known.some((bench) => bench.name === name),
+  );
+
+  if (unknown.length > 0) {
+    clack.log.warn(
+      `Bench names from ${source} that do not exist (skipped):\n` +
+        unknown.map((name) => `  ${name}`).join('\n'),
+    );
+  }
+
+  assert(known.length > 0, `No existing benches were named by ${source}`);
+
+  return known;
+}
+
 async function getBenches() {
   if (args.BENCH_NAME === args.ALL) {
     return benchmarks;
   }
 
-  let preselected: BenchmarkInfo | undefined;
-
-  if (args.BENCH_NAME) {
-    preselected = benchmarks.find((bench) => bench.name === args.BENCH_NAME);
+  if (args.BENCH_NAMES.length > 0) {
+    return benchesNamed(args.BENCH_NAMES, '--bench');
   }
 
-  let selectedBenches: BenchmarkInfo[] | undefined = preselected
-    ? [preselected]
-    : undefined;
+  if (args.FILE) {
+    const names = await benchNamesFrom(args.FILE);
+    const known = benchesNamed(names, args.FILE);
 
-  if (!selectedBenches) {
-    const result = await clack.multiselect({
-      message: 'Which benchmarks?',
-      options: benchmarks.map((b) => {
-        return { value: b, label: b.name };
-      }),
-    });
+    clack.log.info(
+      `Benches recorded in ${args.FILE}:\n` +
+        known.map((bench) => `  ${bench.name}`).join('\n'),
+    );
 
-    if (clack.isCancel(result)) {
-      clack.log.info('Cancelled');
-      process.exit(1);
-    }
-
-    selectedBenches = result;
+    return known;
   }
 
-  return selectedBenches;
+  const result = await clack.multiselect({
+    message: 'Which benchmarks?',
+    options: benchmarks.map((b) => {
+      return { value: b, label: b.name };
+    }),
+  });
+
+  if (clack.isCancel(result)) {
+    clack.log.info('Cancelled');
+    process.exit(1);
+  }
+
+  return result;
 }
 
 const yesterdayFull = new Date(Date.now() - 24 * 60 * 60 * 1000);
 
 async function getFilePath() {
+  if (args.FILE) {
+    assert(
+      existsSync(args.FILE),
+      `--file=${args.FILE} does not exist -- it appends to a result set that has already been created`,
+    );
+
+    return args.FILE;
+  }
+
   let existing = await readdir(`./results/public/results/`);
 
   const today = yyyymmdd.split('T')[0]!;
@@ -302,6 +354,8 @@ export async function getBenchInfo() {
 
   const selectedBenches = await getBenches();
   const filePath = await getFilePath();
+
+  await assertSameEnvironment(filePath);
 
   // resolved before the confirm below, so what will be recorded is part
   // of the "does this look correct?" review
