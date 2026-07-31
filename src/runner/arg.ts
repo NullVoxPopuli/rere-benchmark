@@ -20,6 +20,7 @@ export const BENCH_NAME = str('--bench');
 export const SKIP_BUILD = bool('--skip-build');
 export const TIMEOUT = int('--timeout', 60_000);
 export const INCLUDE_PRS = bool('--include-prs');
+export const FILE = str('--file');
 export const VERSION_OVERRIDES = versionOverrides();
 
 function col1(name: string) {
@@ -27,7 +28,8 @@ function col1(name: string) {
 }
 
 function col2(value: unknown) {
-  return String(value ?? '').padEnd(10);
+  // the trailing space keeps a separator when the value overflows the pad
+  return (String(value ?? '') + ' ').padEnd(10);
 }
 
 function col3(description: string) {
@@ -61,6 +63,11 @@ console.log(
       col1('--include-prs'),
       col2(INCLUDE_PRS),
       col3('record PRs merged since the previous result set'),
+    ),
+    row(
+      col1('--file'),
+      col2(FILE),
+      col3('append to this result file, re-using its bench selection'),
     ),
     ...Object.entries(VERSION_OVERRIDES).map(([framework, override]) =>
       row(

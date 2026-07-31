@@ -252,6 +252,23 @@ window you've covered up.
 | `--timeout` | `60000` | ms a single sample may take before the run fails |
 | `--skip-build` | off | re-use an existing build |
 | `--include-prs` | off | record the PRs that landed since the previous result set in the run's notes (from git history; shown in the results app) |
+| `--file` | prompts | append to this existing result file; the bench selection comes from the file, so only `--framework` is left to pick |
+
+### Adding one framework to an existing result set
+
+```bash
+pnpm bench:add
+```
+
+An interactive wrapper around `pnpm bench` for when a result set (or
+`use-tar-for` experiment) already exists and one framework needs to be
+added to it -- or re-run and replaced (runs are stored by framework name,
+so a re-run overwrites the previous ones).
+
+It walks through picking the file and the framework, re-uses the
+`--cpu-throttle` / `--count` / `--timeout` / `--headless` settings recorded
+in the file (mixing settings within a file would make its numbers
+incomparable), and then hands off to `pnpm bench` with those flags.
 
 ### Query params
 

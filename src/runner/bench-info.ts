@@ -1,5 +1,6 @@
 import assert from 'node:assert';
-import { readdir } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
+import { readdir, readFile } from 'node:fs/promises';
 import { inspect } from 'node:util';
 
 import * as clack from '@clack/prompts';
@@ -227,6 +228,23 @@ async function getFrameworks() {
   return selectedFrameworks;
 }
 
+/**
+ * The bench selection recorded in an existing result file, so `--file`
+ * (and `pnpm bench:add` on top of it) re-runs exactly what the file holds.
+ */
+async function benchNamesFrom(filePath: string) {
+  const buffer = await readFile(filePath);
+  const file = JSON.parse(buffer.toString());
+  const names: unknown = file.selections?.benches;
+
+  assert(
+    Array.isArray(names) && names.length > 0,
+    `${filePath} does not record which benches it ran (selections.benches)`,
+  );
+
+  return names as string[];
+}
+
 async function getBenches() {
   if (args.BENCH_NAME === args.ALL) {
     return benchmarks;
@@ -241,6 +259,33 @@ async function getBenches() {
   let selectedBenches: BenchmarkInfo[] | undefined = preselected
     ? [preselected]
     : undefined;
+
+  if (!selectedBenches && args.FILE) {
+    const names = await benchNamesFrom(args.FILE);
+    const known = benchmarks.filter((bench) => names.includes(bench.name));
+    const unknown = names.filter(
+      (name) => !known.some((bench) => bench.name === name),
+    );
+
+    if (unknown.length > 0) {
+      clack.log.warn(
+        `Benches recorded in ${args.FILE} that no longer exist (skipped):\n` +
+          unknown.map((name) => `  ${name}`).join('\n'),
+      );
+    }
+
+    assert(
+      known.length > 0,
+      `None of the benches recorded in ${args.FILE} exist anymore`,
+    );
+
+    clack.log.info(
+      `Benches recorded in ${args.FILE}:\n` +
+        known.map((bench) => `  ${bench.name}`).join('\n'),
+    );
+
+    selectedBenches = known;
+  }
 
   if (!selectedBenches) {
     const result = await clack.multiselect({
@@ -264,6 +309,15 @@ async function getBenches() {
 const yesterdayFull = new Date(Date.now() - 24 * 60 * 60 * 1000);
 
 async function getFilePath() {
+  if (args.FILE) {
+    assert(
+      existsSync(args.FILE),
+      `--file=${args.FILE} does not exist -- it appends to a result set that has already been created`,
+    );
+
+    return args.FILE;
+  }
+
   let existing = await readdir(`./results/public/results/`);
 
   const today = yyyymmdd.split('T')[0]!;
