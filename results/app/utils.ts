@@ -194,10 +194,11 @@ export function isoOf(runName: string) {
 }
 
 /**
- * `Chrome 138 - 60 Hz - 4x throttle - Jul 29, 2026` -- the run's
- * environment headline, the CPU throttle it applied, and its date,
- * formatted for the viewer's locale. Fields a set didn't record drop out;
- * a name with no metadata at all displays as itself.
+ * `#6 Chrome 138 - 60 Hz - 4x throttle - Jul 29, 2026` -- the file number
+ * first, then the run's environment headline, the CPU throttle it
+ * applied, and its date, formatted for the viewer's locale. Fields a set
+ * didn't record drop out; a name with no metadata at all displays as
+ * itself.
  */
 export function formatRunName(runName: string) {
   const meta = metadata[runName];
@@ -217,20 +218,16 @@ export function formatRunName(runName: string) {
 
   if (parts.length === 0) return runName;
 
-  const label = parts.join(" - ");
-
-  return meta.prefix ? `${meta.prefix} · ${label}` : label;
+  return `#${runName} ${parts.join(" - ")}`;
 }
 
 /**
- * The tooltip behind a displayed run name: the raw name, plus the
- * machine's CPU model when the set recorded one -- too long for the name
- * itself, still worth keeping within reach.
+ * The tooltip behind a displayed run name: the machine's CPU model --
+ * too long for the name itself, still worth keeping within reach. The
+ * name already leads with the file number, so nothing else belongs here.
  */
 export function titleOf(runName: string) {
-  const cpu = metadata[runName]?.cpu;
-
-  return cpu ? `${runName} — ${cpu}` : runName;
+  return metadata[runName]?.cpu;
 }
 
 const RELATIVE_FORMAT = new Intl.RelativeTimeFormat(undefined, { numeric: "auto" });

@@ -9,31 +9,16 @@ const RESULT_SETS = "virtual:result-sets";
 const RESOLVED_RESULT_SETS = "\0" + RESULT_SETS;
 
 /**
- * An experiment's name is a prefix and a number (`ember-1`); official runs
- * are just numbers (`6`). The prefix, when there is one, is worth showing.
- */
-function prefixOf(name) {
-  const at = name.lastIndexOf("-");
-
-  if (at <= 0) return undefined;
-  if (!Number.isInteger(Number(name.slice(at + 1)))) return undefined;
-
-  return name.slice(0, at);
-}
-
-/**
  * What the app needs to *display* a result set without fetching it: the
  * run date, the environment headline (browser, refresh rate, CPU model),
  * and the CPU throttle the run applied. Every field is optional -- older
  * result sets predate some of them, and a missing field just drops out of
  * the displayed name.
  */
-function metaOf(name, json) {
+function metaOf(json) {
   const meta = {};
-  const prefix = prefixOf(name);
   const environment = json.environment ?? {};
 
-  if (prefix) meta.prefix = prefix;
   if (typeof json.date === "string") meta.date = json.date;
   if (typeof environment.machine?.cpu === "string") meta.cpu = environment.machine.cpu;
   if (typeof environment.monitor?.hz === "number") meta.hz = environment.monitor.hz;
@@ -66,7 +51,7 @@ function setsIn(dir) {
     const name = basename(file, ".json");
     const json = JSON.parse(fsSync.readFileSync(join(dir, file), "utf8"));
 
-    sets.push({ name, meta: metaOf(name, json) });
+    sets.push({ name, meta: metaOf(json) });
   }
 
   return sets.sort(

@@ -16,11 +16,6 @@ declare module "virtual:result-sets" {
    */
   export interface ResultSetMeta {
     /**
-     * The experiment prefix from the file name (`ember-1` -> `ember`).
-     * Official runs have none.
-     */
-    prefix?: string;
-    /**
      * When the run started, ISO 8601.
      */
     date?: string;
