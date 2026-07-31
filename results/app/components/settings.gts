@@ -6,26 +6,32 @@ import { DEFAULT_PERCENTILE } from "#utils";
 import type Owner from "@ember/owner";
 import type RouterService from "@ember/routing/router-service";
 
-function hasNonDefaults(router: RouterService) {
+const DEFAULTS: Record<string, string> = {
+  mode: "raw",
+  p: String(DEFAULT_PERCENTILE),
+};
+
+function hasNonDefaults(router: RouterService, params: string[]) {
   const qps = router.currentRoute?.queryParams ?? {};
 
-  if (qps["from"]) return true;
-  if (qps["mode"] !== undefined && qps["mode"] !== "raw") return true;
-  if (qps["p"] !== undefined && qps["p"] !== String(DEFAULT_PERCENTILE)) return true;
+  return params.some((param) => {
+    const value = qps[param];
 
-  return false;
+    return value !== undefined && value !== "" && value !== DEFAULTS[param];
+  });
 }
 
 export class Settings extends Component<{
+  Args: { params: string[] };
   Blocks: { default: [] };
 }> {
   @service declare router: RouterService;
 
   open: boolean;
 
-  constructor(owner: Owner, args: object) {
+  constructor(owner: Owner, args: { params: string[] }) {
     super(owner, args);
-    this.open = hasNonDefaults(this.router);
+    this.open = hasNonDefaults(this.router, args.params);
   }
 
   <template>

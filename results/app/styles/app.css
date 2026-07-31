@@ -362,12 +362,10 @@ table {
 
 .settings {
   justify-self: center;
-  text-align: center;
 
   summary {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5em;
+    width: fit-content;
+    margin-inline: auto;
     cursor: pointer;
     padding: 0.25rem 1rem;
     font-size: 0.7rem;
@@ -377,13 +375,6 @@ table {
     border: 1px solid color-mix(in oklch, currentColor 25%, transparent);
     border-radius: 0.5rem;
 
-    &::before {
-      content: "";
-      border-block: 0.3em solid transparent;
-      border-inline-start: 0.42em solid color-mix(in oklch, currentColor 70%, transparent);
-      transition: rotate 0.15s;
-    }
-
     &:hover,
     &:focus-visible {
       opacity: 1;
@@ -391,15 +382,10 @@ table {
     }
   }
 
-  &[open] summary::before {
-    rotate: 90deg;
-  }
-
   .fields {
     display: grid;
     justify-items: center;
     padding-top: 1rem;
-    text-align: initial;
   }
 }
 
