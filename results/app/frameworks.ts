@@ -51,7 +51,7 @@ export const frameworks: Record<string, FrameworkInfo> = {
   ["lit-signals"]: {
     color: "#324FFF",
     logo: "/lit.svg",
-    name: "Lit",
+    name: "Lit (Signals)",
     url: "https://lit.dev/",
     package: "lit",
   },
