@@ -48,6 +48,13 @@ export const frameworks: Record<string, FrameworkInfo> = {
     url: "https://emberjs.com/",
     package: "ember-source",
   },
+  ["lit-signals"]: {
+    color: "#324FFF",
+    logo: "/lit.svg",
+    name: "Lit",
+    url: "https://lit.dev/",
+    package: "lit",
+  },
   preact: {
     color: "#673ab8",
     logo: "/preact.svg",

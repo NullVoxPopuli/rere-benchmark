@@ -9,6 +9,7 @@ export const REPO_ROOT = fileURLToPath(new URL('..', import.meta.url));
 export const FRAMEWORKS = [
   'angular',
   'ember',
+  'lit-signals',
   'preact',
   'react',
   'solid',
