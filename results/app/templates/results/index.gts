@@ -10,6 +10,7 @@ import { borrowOf, BorrowPicker } from "#components/borrow-picker.gts";
 import { FrameworkInfo } from "#components/framework-info.gts";
 import { FrameworkToggles, visibleFrameworksOf } from "#components/framework-toggles.gts";
 import { Settings } from "#components/settings.gts";
+import { SortControl } from "#components/sort-control.gts";
 import { Variant } from "#components/variant.gts";
 import { Version } from "#components/version.gts";
 import {
@@ -22,9 +23,11 @@ import {
   percentileFrom,
   PERCENTILES,
   round,
+  sortedByTotal,
   throttleLabel,
   timeFor,
   titleOf,
+  totalSortFrom,
   variantOf,
   versionOf,
 } from "#utils";
@@ -456,7 +459,7 @@ export default class ResultsTables extends Component<{
     return visibleFrameworksOf(this.router, this.file);
   }
 
-  settingParams = ["mode", "p", "hide", "from"];
+  settingParams = ["mode", "p", "hide", "from", "sort"];
 
   get benchmarkInfo() {
     return this.args.model.data.benchmarkInfo;
@@ -470,6 +473,24 @@ export default class ResultsTables extends Component<{
   @cached
   get lowerBenches() {
     return lowerIsBetterBenches(this.benchmarkInfo);
+  }
+
+  sorted(benches: BenchmarkInfo[]) {
+    const sort = totalSortFrom(this.router);
+
+    if (!sort) return this.visibleFrameworks;
+
+    return sortedByTotal(this.visibleFrameworks, this.file, benches, this.percentile, sort);
+  }
+
+  @cached
+  get higherFrameworks() {
+    return this.sorted(this.higherBenches);
+  }
+
+  @cached
+  get lowerFrameworks() {
+    return this.sorted(this.lowerBenches);
   }
 
   <template>
@@ -525,6 +546,8 @@ export default class ResultsTables extends Component<{
         <span class="units">of each run's samples</span>
       </fieldset>
 
+      <SortControl />
+
       <FrameworkToggles @file={{this.file}} />
 
       <BorrowPicker @borrowed={{@model.borrowed}} />
@@ -536,7 +559,7 @@ export default class ResultsTables extends Component<{
       <Table
         @benches={{this.higherBenches}}
         @file={{this.file}}
-        @frameworkNames={{this.visibleFrameworks}}
+        @frameworkNames={{this.higherFrameworks}}
         @borrow={{this.borrow}}
       />
       <br />
@@ -550,7 +573,7 @@ export default class ResultsTables extends Component<{
       <Table
         @benches={{this.lowerBenches}}
         @file={{this.file}}
-        @frameworkNames={{this.visibleFrameworks}}
+        @frameworkNames={{this.lowerFrameworks}}
         @borrow={{this.borrow}}
       />
       <br />

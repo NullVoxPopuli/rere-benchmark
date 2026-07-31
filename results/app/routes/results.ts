@@ -32,6 +32,8 @@ export default class Results extends Route<Model> {
     // so no model impact
     col: {},
     hide: {},
+    // order frameworks by their per-area totals (best | worst); no model impact
+    sort: {},
     // display mode for the tables page (raw | linear | log); no model impact
     mode: {},
     // which percentile of each run's samples to show (50 | 75 | 90);

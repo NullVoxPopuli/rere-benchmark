@@ -1,4 +1,5 @@
 import Component from "@glimmer/component";
+import { cached } from "@glimmer/tracking";
 import { service } from "@ember/service";
 
 // https://github.com/sgratzl/chartjs-chart-boxplot
@@ -9,8 +10,17 @@ import { modifier } from "ember-modifier";
 import { borrowOf, BorrowPicker } from "#components/borrow-picker.gts";
 import { FrameworkToggles, visibleFrameworksOf } from "#components/framework-toggles.gts";
 import { Settings } from "#components/settings.gts";
+import { SortControl } from "#components/sort-control.gts";
 import { frameworks } from "#frameworks";
-import { formatRunName, samplesOf } from "#utils";
+import {
+  formatRunName,
+  higherIsBetterBenches,
+  lowerIsBetterBenches,
+  percentileFrom,
+  samplesOf,
+  sortedByTotal,
+  totalSortFrom,
+} from "#utils";
 
 import type RouterService from "@ember/routing/router-service";
 import type { Borrow } from "#components/borrow-picker.gts";
@@ -175,7 +185,34 @@ export default class Boxplat extends Component<{
     return visibleFrameworksOf(this.router, this.args.model.data);
   }
 
-  settingParams = ["hide", "from"];
+  sorted(benches: BenchmarkInfo[]) {
+    const sort = totalSortFrom(this.router);
+
+    if (!sort) return this.frameworks;
+
+    return sortedByTotal(
+      this.frameworks,
+      this.args.model.data,
+      benches,
+      percentileFrom(this.router),
+      sort,
+    );
+  }
+
+  @cached
+  get higherFrameworks() {
+    return this.sorted(higherIsBetterBenches(this.args.model.data.benchmarkInfo));
+  }
+
+  @cached
+  get lowerFrameworks() {
+    return this.sorted(lowerIsBetterBenches(this.args.model.data.benchmarkInfo));
+  }
+
+  frameworksFor = (benchInfo: BenchmarkInfo) =>
+    isBiggerBetter(benchInfo) ? this.higherFrameworks : this.lowerFrameworks;
+
+  settingParams = ["hide", "from", "sort"];
 
   get borrow() {
     return borrowOf(this.router, this.args.model.borrowed);
@@ -191,6 +228,8 @@ export default class Boxplat extends Component<{
 
   <template>
     <Settings @params={{this.settingParams}}>
+      <SortControl />
+
       <FrameworkToggles @file={{@model.data}} />
 
       <BorrowPicker @borrowed={{@model.borrowed}} />
@@ -215,7 +254,9 @@ export default class Boxplat extends Component<{
         {{! chart.js responsive sizing tracks the parent element,
             so the fixed height goes on a wrapper, not the canvas }}
         <div style="position: relative; height:{{this.height}}px;">
-          <canvas {{renderChart @model.data benchInfo this.frameworks this.borrow}}></canvas>
+          <canvas
+            {{renderChart @model.data benchInfo (this.frameworksFor benchInfo) this.borrow}}
+          ></canvas>
         </div>
       </section>
     {{/each}}

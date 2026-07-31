@@ -415,6 +415,59 @@ export function percentileFrom(router: RouterService): Percentile {
   return found ?? DEFAULT_PERCENTILE;
 }
 
+export type TotalSort = "best" | "worst";
+
+/**
+ * The `?sort=` query param, wherever a component needs it.
+ * Absent (or anything unrecognized) means the recorded order.
+ */
+export function totalSortFrom(router: RouterService): TotalSort | undefined {
+  const sort = router.currentRoute?.queryParams["sort"];
+
+  return sort === "best" || sort === "worst" ? sort : undefined;
+}
+
+/**
+ * Frameworks ordered by their summed result over one area's benches.
+ *
+ * "best" and "worst" are stated in the area's own direction -- best-first
+ * is the highest total when bigger is better and the lowest when smaller
+ * is -- so the same setting reads coherently across both areas. Frameworks
+ * the set has no data for go last either way.
+ */
+export function sortedByTotal(
+  frameworkNames: string[],
+  file: ResultSet,
+  benches: BenchmarkInfo[],
+  percentile: Percentile,
+  sort: TotalSort,
+) {
+  const totals: Record<string, number> = {};
+
+  for (const framework of frameworkNames) {
+    for (const bench of benches) {
+      const time = timeFor(file, framework, bench, percentile);
+
+      if (time === undefined) continue;
+
+      totals[framework] = (totals[framework] ?? 0) + time;
+    }
+  }
+
+  const descending = (sort === "best") === (benches[0]?.whatsBetter === "bigger");
+
+  return frameworkNames.toSorted((a, b) => {
+    const totalA = totals[a];
+    const totalB = totals[b];
+
+    if (totalA === undefined && totalB === undefined) return 0;
+    if (totalA === undefined) return 1;
+    if (totalB === undefined) return -1;
+
+    return descending ? totalB - totalA : totalA - totalB;
+  });
+}
+
 export function labelFor(percentile: Percentile) {
   return percentile === 50 ? "p50 (median)" : `p${percentile}`;
 }
