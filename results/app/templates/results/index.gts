@@ -8,6 +8,7 @@ import { interpolate } from "culori";
 import { BenchmarkName } from "#components/benchmark-name.gts";
 import { borrowOf, BorrowPicker } from "#components/borrow-picker.gts";
 import { FrameworkInfo } from "#components/framework-info.gts";
+import { FrameworkToggles, visibleFrameworksOf } from "#components/framework-toggles.gts";
 import { Settings } from "#components/settings.gts";
 import { Variant } from "#components/variant.gts";
 import { Version } from "#components/version.gts";
@@ -215,6 +216,7 @@ class TableRow extends Component<{
 class Table extends Component<{
   benches: BenchmarkInfo[];
   file: ResultSet;
+  frameworkNames: string[];
   borrow: Borrow | undefined;
 }> {
   @service declare router: RouterService;
@@ -242,7 +244,7 @@ class Table extends Component<{
     if (!this.shouldShowTotals) return totals;
 
     for (const bench of this.args.benches) {
-      for (const framework of this.args.file.selections.frameworks) {
+      for (const framework of this.args.frameworkNames) {
         totals[framework] ??= 0;
 
         const time = timeFor(this.args.file, framework, bench, this.percentile);
@@ -284,7 +286,7 @@ class Table extends Component<{
   }
 
   get frameworkNames() {
-    return this.args.file.selections.frameworks;
+    return this.args.frameworkNames;
   }
 
   get borrowedThrottle() {
@@ -450,6 +452,12 @@ export default class ResultsTables extends Component<{
     return borrowOf(this.router, this.args.model.borrowed);
   }
 
+  get visibleFrameworks() {
+    return visibleFrameworksOf(this.router, this.file);
+  }
+
+  settingParams = ["mode", "p", "hide", "from"];
+
   get benchmarkInfo() {
     return this.args.model.data.benchmarkInfo;
   }
@@ -465,7 +473,7 @@ export default class ResultsTables extends Component<{
   }
 
   <template>
-    <Settings>
+    <Settings @params={{this.settingParams}}>
       <fieldset class="value-mode">
         <legend>values</legend>
         <label>
@@ -517,13 +525,20 @@ export default class ResultsTables extends Component<{
         <span class="units">of each run's samples</span>
       </fieldset>
 
+      <FrameworkToggles @file={{this.file}} />
+
       <BorrowPicker @borrowed={{@model.borrowed}} />
     </Settings>
 
     {{#if this.higherBenches.length}}
       <h2>higher is better</h2>
 
-      <Table @benches={{this.higherBenches}} @file={{this.file}} @borrow={{this.borrow}} />
+      <Table
+        @benches={{this.higherBenches}}
+        @file={{this.file}}
+        @frameworkNames={{this.visibleFrameworks}}
+        @borrow={{this.borrow}}
+      />
       <br />
       <br />
       <br />
@@ -532,7 +547,12 @@ export default class ResultsTables extends Component<{
     {{#if this.lowerBenches.length}}
       <h2>lower is better</h2>
 
-      <Table @benches={{this.lowerBenches}} @file={{this.file}} @borrow={{this.borrow}} />
+      <Table
+        @benches={{this.lowerBenches}}
+        @file={{this.file}}
+        @frameworkNames={{this.visibleFrameworks}}
+        @borrow={{this.borrow}}
+      />
       <br />
       <br />
       <br />
