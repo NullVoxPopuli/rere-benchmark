@@ -1,0 +1,23 @@
+{
+  "name": "fan-out",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "oxlint",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@lit-labs/signals": "^0.3.0",
+    "common": "link:../../../common",
+    "lit": "^3.3.3"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.2",
+    "oxlint": "^1.76.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.2.0"
+  }
+}
