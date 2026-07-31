@@ -1,7 +1,7 @@
 import 'common/dbmon.css';
 import './layout.css';
 import { useLayoutEffect } from 'preact/hooks';
-import { signal } from '@preact/signals';
+import { signal, computed, useComputed } from '@preact/signals';
 import { For } from '@preact/signals/utils';
 import { helpers, type DBRow, type ChatMessage, type DBUpdate, type ChatUpdate } from 'common';
 import type { Signal } from '@preact/signals';
@@ -14,38 +14,42 @@ const dbRows = signal<Signal<DBRow>[]>([]);
 const chats = signal<ChatMessage[]>([]);
 
 function Row({ row }: { row: Signal<DBRow> }) {
-  const r = row.value;
+  const dbname = useComputed(() => row.value.dbname);
+  const countClassName = useComputed(() => row.value.lastSample.countClassName);
+  const queryCount = useComputed(() => row.value.lastSample.queries.length);
+  const topFiveQueries = useComputed(() => row.value.lastSample.topFiveQueries);
+
   return (
     <tr>
-      <td className="dbname">{r.dbname}</td>
+      <td className="dbname">{dbname}</td>
       <td className="query-count">
-        <span className={r.lastSample.countClassName}>
-          {r.lastSample.queries.length}
-        </span>
+        <span className={countClassName}>{queryCount}</span>
       </td>
-      {r.lastSample.topFiveQueries.map((query, i) => (
-        <td key={i}>
-          {query.elapsed}
-          <div className="popover bottom">
-            <div className="popover-content">{query.query}</div>
-            <div className="arrow"></div>
-          </div>
-        </td>
-      ))}
+      <For each={topFiveQueries}>
+        {(query) => (
+          <td>
+            {computed(() => query.value.elapsed)}
+            <div className="popover bottom">
+              <div className="popover-content">{computed(() => query.value.query)}</div>
+              <div className="arrow"></div>
+            </div>
+          </td>
+        )}
+      </For>
     </tr>
   );
 }
 
 function ChatList() {
   return (
-    <>
-      {chats.value.map((chat, i) => (
-        <div className="chat" key={i}>
-          <div className="author">{chat.author}</div>
-          <p>{chat.message}</p>
+    <For each={chats}>
+      {(chat) => (
+        <div className="chat">
+          <div className="author">{computed(() => chat.value.author)}</div>
+          <p>{computed(() => chat.value.message)}</p>
         </div>
-      ))}
-    </>
+      )}
+    </For>
   );
 }
 
