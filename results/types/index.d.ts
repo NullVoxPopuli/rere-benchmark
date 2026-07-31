@@ -33,6 +33,11 @@ declare module "virtual:result-sets" {
      * The monitor's refresh rate.
      */
     hz?: number;
+    /**
+     * The CPU slowdown multiplier the run applied (`args.CPU_THROTTLE`);
+     * 1 means the run was not throttled.
+     */
+    throttle?: number;
   }
   export const metadata: Record<string, ResultSetMeta | undefined>;
 }
