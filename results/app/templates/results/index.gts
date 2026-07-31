@@ -8,6 +8,7 @@ import { interpolate } from "culori";
 import { BenchmarkName } from "#components/benchmark-name.gts";
 import { borrowOf, BorrowPicker } from "#components/borrow-picker.gts";
 import { FrameworkInfo } from "#components/framework-info.gts";
+import { Settings } from "#components/settings.gts";
 import { Variant } from "#components/variant.gts";
 import { Version } from "#components/version.gts";
 import {
@@ -464,58 +465,60 @@ export default class ResultsTables extends Component<{
   }
 
   <template>
-    <fieldset class="value-mode">
-      <legend>values</legend>
-      <label>
-        <input
-          type="radio"
-          name="value-mode"
-          checked={{this.isMode "raw"}}
-          {{on "change" (fn this.setMode "raw")}}
-        />
-        raw
-      </label>
-      <label>
-        <input
-          type="radio"
-          name="value-mode"
-          checked={{this.isMode "linear"}}
-          {{on "change" (fn this.setMode "linear")}}
-        />
-        score
-        <span class="units">(normalized 0 to 1)</span>
-      </label>
-      <label>
-        <input
-          type="radio"
-          name="value-mode"
-          checked={{this.isMode "times"}}
-          {{on "change" (fn this.setMode "times")}}
-        />
-        times best
-        <span class="units">(1x is best)</span>
-      </label>
-    </fieldset>
-
-    <fieldset class="value-mode">
-      <legend>statistic</legend>
-      {{#each this.percentiles as |percentile|}}
+    <Settings>
+      <fieldset class="value-mode">
+        <legend>values</legend>
         <label>
           <input
             type="radio"
-            name="percentile"
-            checked={{this.isPercentile percentile}}
-            {{on "change" (fn this.setPercentile percentile)}}
+            name="value-mode"
+            checked={{this.isMode "raw"}}
+            {{on "change" (fn this.setMode "raw")}}
           />
-          {{this.labelFor percentile}}
+          raw
         </label>
-      {{/each}}
-      {{! percentiles run toward the worse end either way, so the same
-          number means the same thing on both tables }}
-      <span class="units">of each run's samples</span>
-    </fieldset>
+        <label>
+          <input
+            type="radio"
+            name="value-mode"
+            checked={{this.isMode "linear"}}
+            {{on "change" (fn this.setMode "linear")}}
+          />
+          score
+          <span class="units">(normalized 0 to 1)</span>
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="value-mode"
+            checked={{this.isMode "times"}}
+            {{on "change" (fn this.setMode "times")}}
+          />
+          times best
+          <span class="units">(1x is best)</span>
+        </label>
+      </fieldset>
 
-    <BorrowPicker @borrowed={{@model.borrowed}} />
+      <fieldset class="value-mode">
+        <legend>statistic</legend>
+        {{#each this.percentiles as |percentile|}}
+          <label>
+            <input
+              type="radio"
+              name="percentile"
+              checked={{this.isPercentile percentile}}
+              {{on "change" (fn this.setPercentile percentile)}}
+            />
+            {{this.labelFor percentile}}
+          </label>
+        {{/each}}
+        {{! percentiles run toward the worse end either way, so the same
+          number means the same thing on both tables }}
+        <span class="units">of each run's samples</span>
+      </fieldset>
+
+      <BorrowPicker @borrowed={{@model.borrowed}} />
+    </Settings>
 
     {{#if this.higherBenches.length}}
       <h2>higher is better</h2>

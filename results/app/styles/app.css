@@ -360,6 +360,36 @@ table {
   }
 }
 
+.settings {
+  justify-self: center;
+  text-align: center;
+
+  summary {
+    display: inline-block;
+    cursor: pointer;
+    padding: 0.25rem 1rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.7;
+    border: 1px solid color-mix(in oklch, currentColor 25%, transparent);
+    border-radius: 0.5rem;
+
+    &:hover,
+    &:focus-visible {
+      opacity: 1;
+      border-color: color-mix(in oklch, currentColor 60%, transparent);
+    }
+  }
+
+  .fields {
+    display: grid;
+    justify-items: center;
+    padding-top: 1rem;
+    text-align: initial;
+  }
+}
+
 /* The control bars above the tables: which value to show on a results
    table, which framework and runs to line up on the compare page. */
 .value-mode,

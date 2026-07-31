@@ -7,6 +7,7 @@ import { converter, filterBrightness, formatCss } from "culori";
 import { modifier } from "ember-modifier";
 
 import { borrowOf, BorrowPicker } from "#components/borrow-picker.gts";
+import { Settings } from "#components/settings.gts";
 import { frameworks } from "#frameworks";
 import { formatRunName, samplesOf } from "#utils";
 
@@ -176,7 +177,9 @@ export default class Boxplat extends Component<{
   }
 
   <template>
-    <BorrowPicker @borrowed={{@model.borrowed}} />
+    <Settings>
+      <BorrowPicker @borrowed={{@model.borrowed}} />
+    </Settings>
 
     {{#each this.benchmarkInfo as |benchInfo|}}
       <section>
