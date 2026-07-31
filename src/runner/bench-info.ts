@@ -245,65 +245,62 @@ async function benchNamesFrom(filePath: string) {
   return names as string[];
 }
 
+/**
+ * The named benches, warning about names that do not match any bench --
+ * a rename since the names were recorded, or a typo.
+ */
+function benchesNamed(names: string[], source: string) {
+  const known = benchmarks.filter((bench) => names.includes(bench.name));
+  const unknown = names.filter(
+    (name) => !known.some((bench) => bench.name === name),
+  );
+
+  if (unknown.length > 0) {
+    clack.log.warn(
+      `Bench names from ${source} that do not exist (skipped):\n` +
+        unknown.map((name) => `  ${name}`).join('\n'),
+    );
+  }
+
+  assert(known.length > 0, `No existing benches were named by ${source}`);
+
+  return known;
+}
+
 async function getBenches() {
   if (args.BENCH_NAME === args.ALL) {
     return benchmarks;
   }
 
-  let preselected: BenchmarkInfo | undefined;
-
-  if (args.BENCH_NAME) {
-    preselected = benchmarks.find((bench) => bench.name === args.BENCH_NAME);
+  if (args.BENCH_NAMES.length > 0) {
+    return benchesNamed(args.BENCH_NAMES, '--bench');
   }
 
-  let selectedBenches: BenchmarkInfo[] | undefined = preselected
-    ? [preselected]
-    : undefined;
-
-  if (!selectedBenches && args.FILE) {
+  if (args.FILE) {
     const names = await benchNamesFrom(args.FILE);
-    const known = benchmarks.filter((bench) => names.includes(bench.name));
-    const unknown = names.filter(
-      (name) => !known.some((bench) => bench.name === name),
-    );
-
-    if (unknown.length > 0) {
-      clack.log.warn(
-        `Benches recorded in ${args.FILE} that no longer exist (skipped):\n` +
-          unknown.map((name) => `  ${name}`).join('\n'),
-      );
-    }
-
-    assert(
-      known.length > 0,
-      `None of the benches recorded in ${args.FILE} exist anymore`,
-    );
+    const known = benchesNamed(names, args.FILE);
 
     clack.log.info(
       `Benches recorded in ${args.FILE}:\n` +
         known.map((bench) => `  ${bench.name}`).join('\n'),
     );
 
-    selectedBenches = known;
+    return known;
   }
 
-  if (!selectedBenches) {
-    const result = await clack.multiselect({
-      message: 'Which benchmarks?',
-      options: benchmarks.map((b) => {
-        return { value: b, label: b.name };
-      }),
-    });
+  const result = await clack.multiselect({
+    message: 'Which benchmarks?',
+    options: benchmarks.map((b) => {
+      return { value: b, label: b.name };
+    }),
+  });
 
-    if (clack.isCancel(result)) {
-      clack.log.info('Cancelled');
-      process.exit(1);
-    }
-
-    selectedBenches = result;
+  if (clack.isCancel(result)) {
+    clack.log.info('Cancelled');
+    process.exit(1);
   }
 
-  return selectedBenches;
+  return result;
 }
 
 const yesterdayFull = new Date(Date.now() - 24 * 60 * 60 * 1000);

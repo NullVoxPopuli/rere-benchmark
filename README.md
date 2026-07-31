@@ -245,7 +245,7 @@ window you've covered up.
 | flag | default | |
 | --- | --- | --- |
 | `--framework` | prompts | a framework name, or `all` |
-| `--bench` | prompts | a benchmark's display name, or `all` |
+| `--bench` | prompts | a benchmark's display name, or `all`; repeat the flag to select several |
 | `--count` | `10` | samples per bench per framework |
 | `--cpu-throttle` | `1` | emulated CPU slowdown; runs at different settings are not comparable |
 | `--headless` | off | headless caps at 60fps, so the frame-rate bench means less |
@@ -265,7 +265,9 @@ An interactive wrapper around `pnpm bench` for when a result set (or
 added to it -- or re-run and replaced (runs are stored by framework name,
 so a re-run overwrites the previous ones).
 
-It walks through picking the file and the framework, re-uses the
+It walks through picking the file, the framework, and which of the file's
+benches to run -- all of them by default; a subset replaces just those of
+the framework's runs and leaves the rest alone. It re-uses the
 `--cpu-throttle` / `--count` / `--timeout` / `--headless` settings recorded
 in the file (mixing settings within a file would make its numbers
 incomparable), and then hands off to `pnpm bench` with those flags.

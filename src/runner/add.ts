@@ -11,7 +11,7 @@
  * process rather than the ones this wizard assembles.
  */
 import assert from 'node:assert';
-import { readdir, readFile, stat, writeFile } from 'node:fs/promises';
+import { readdir, readFile, stat } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import * as clack from '@clack/prompts';
@@ -133,34 +133,28 @@ if (recordedArgs.HEADLESS) {
   flags.push('--headless');
 }
 
-/**
- * A `use-tar-for` experiment labels the framework with the PR its build
- * came from. Replacing those runs with a normally-installed build while
- * the label sticks around would misattribute the new numbers.
- */
-const override = file.versionOverrides?.[framework];
+const recordedBenches: string[] = file.selections?.benches ?? [];
 
-if (override) {
-  const stillFromPr = exitOnCancel(
-    await clack.confirm({
-      message:
-        `This file labels ${framework} as built from ${override.url}. ` +
-        `Is this run also from that PR (the use-tar-for tarball is still installed)?`,
-      initialValue: false,
+if (recordedBenches.length > 1) {
+  const benches = exitOnCancel(
+    await clack.multiselect({
+      message: `Which benches? (a subset replaces just those of ${framework}'s runs)`,
+      options: recordedBenches.map((name) => {
+        return { value: name, label: name };
+      }),
+      initialValues: recordedBenches,
     }),
   );
 
-  if (stillFromPr) {
-    flags.push(`--${framework}=${override.url}`);
-  } else {
-    delete file.versionOverrides[framework];
-
-    if (Object.keys(file.versionOverrides).length === 0) {
-      delete file.versionOverrides;
+  /**
+   * All of them selected means no flag: the runner then takes its
+   * selection from the file, exactly as if the subset question was
+   * never asked.
+   */
+  if (benches.length < recordedBenches.length) {
+    for (const name of benches) {
+      flags.push(`--bench=${name}`);
     }
-
-    await writeFile(target.path, JSON.stringify(file, null, 2));
-    clack.log.info(`Removed the ${override.url} label from ${target.path}`);
   }
 }
 
@@ -175,7 +169,11 @@ if (!build) {
   flags.push('--skip-build');
 }
 
-clack.log.info(`Running: pnpm bench ${flags.join(' ')}`);
+const printable = flags
+  .map((flag) => (flag.includes(' ') ? `"${flag}"` : flag))
+  .join(' ');
+
+clack.log.info(`Running: pnpm bench ${printable}`);
 clack.outro('Handing off to the benchmark runner');
 
 const result = await $({
