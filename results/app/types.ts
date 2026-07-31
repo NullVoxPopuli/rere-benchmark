@@ -129,11 +129,6 @@ export interface ResultSet {
     prs?: Array<string | PullRequestNote>;
   } & Record<string, FrameworkNotes>;
   environment: {
-    /**
-     * Logical CPU count (`machine.cpu` is the model's name). Absent on
-     * result sets recorded before it was collected.
-     */
-    cpu?: number;
     machine: {
       os: {
         name: string;

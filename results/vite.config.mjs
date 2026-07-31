@@ -23,7 +23,7 @@ function prefixOf(name) {
 
 /**
  * What the app needs to *display* a result set without fetching it: the
- * run date, the environment headline (CPU count, browser, refresh rate),
+ * run date, the environment headline (browser, refresh rate, CPU model),
  * and the CPU throttle the run applied. Every field is optional -- older
  * result sets predate some of them, and a missing field just drops out of
  * the displayed name.
@@ -35,8 +35,7 @@ function metaOf(name, json) {
 
   if (prefix) meta.prefix = prefix;
   if (typeof json.date === "string") meta.date = json.date;
-  // environment.cpu is the logical CPU *count*; machine.cpu is the model
-  if (typeof environment.cpu === "number") meta.cpus = environment.cpu;
+  if (typeof environment.machine?.cpu === "string") meta.cpu = environment.machine.cpu;
   if (typeof environment.monitor?.hz === "number") meta.hz = environment.monitor.hz;
   if (typeof json.args?.CPU_THROTTLE === "number") meta.throttle = json.args.CPU_THROTTLE;
 

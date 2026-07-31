@@ -25,9 +25,10 @@ declare module "virtual:result-sets" {
      */
     date?: string;
     /**
-     * Logical CPU count of the machine.
+     * The machine's CPU model -- too long for the displayed name, shown
+     * in the name's tooltip instead.
      */
-    cpus?: number;
+    cpu?: string;
     browser?: { name: string; version: string };
     /**
      * The monitor's refresh rate.

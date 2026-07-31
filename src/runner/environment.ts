@@ -127,10 +127,6 @@ export async function getInfo() {
       TIMEOUT,
     },
     environment: {
-      /**
-       * Logical CPU count -- machine.cpu is the model's name.
-       */
-      cpu: cpu.cores,
       machine: {
         os: {
           name: osInfo.name,

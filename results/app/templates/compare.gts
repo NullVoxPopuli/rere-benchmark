@@ -24,6 +24,7 @@ import {
   round,
   throttleLabel,
   timeFor,
+  titleOf,
   variantOf,
   versionOf,
 } from "#utils";
@@ -52,7 +53,7 @@ function qp(runName: string) {
 const RunOptions = <template>
   <optgroup label="Runs">
     {{#each runs as |name|}}
-      <option value={{name}} selected={{@isRun @which name}} title={{name}}>{{formatRunName
+      <option value={{name}} selected={{@isRun @which name}} title={{titleOf name}}>{{formatRunName
           name
         }}</option>
     {{/each}}
@@ -60,9 +61,11 @@ const RunOptions = <template>
   {{#if experiments.length}}
     <optgroup label="Experiments">
       {{#each experiments as |name|}}
-        <option value={{name}} selected={{@isRun @which name}} title={{name}}>{{formatRunName
-            name
-          }}</option>
+        <option
+          value={{name}}
+          selected={{@isRun @which name}}
+          title={{titleOf name}}
+        >{{formatRunName name}}</option>
       {{/each}}
     </optgroup>
   {{/if}}
@@ -179,7 +182,7 @@ class CompareTable extends Component<{
         <tr>
           <th></th>
           <th class="run-header">
-            <LinkTo @route="results" @query={{qp @a.name}} title={{@a.name}}>
+            <LinkTo @route="results" @query={{qp @a.name}} title={{titleOf @a.name}}>
               <time datetime={{isoOf @a.name}}>{{formatRunName @a.name}}</time>
             </LinkTo>
             <span class="small">
@@ -193,7 +196,7 @@ class CompareTable extends Component<{
             </span>
           </th>
           <th class="run-header">
-            <LinkTo @route="results" @query={{qp @b.name}} title={{@b.name}}>
+            <LinkTo @route="results" @query={{qp @b.name}} title={{titleOf @b.name}}>
               <time datetime={{isoOf @b.name}}>{{formatRunName @b.name}}</time>
             </LinkTo>
             <span class="small">

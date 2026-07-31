@@ -194,7 +194,7 @@ export function isoOf(runName: string) {
 }
 
 /**
- * `20 CPU - Chrome 138 - 60 Hz - 4x throttle - Jul 29, 2026` -- the run's
+ * `Chrome 138 - 60 Hz - 4x throttle - Jul 29, 2026` -- the run's
  * environment headline, the CPU throttle it applied, and its date,
  * formatted for the viewer's locale. Fields a set didn't record drop out;
  * a name with no metadata at all displays as itself.
@@ -206,7 +206,6 @@ export function formatRunName(runName: string) {
 
   const parts: string[] = [];
 
-  if (meta.cpus !== undefined) parts.push(`${meta.cpus} CPU`);
   if (meta.browser) parts.push(browserLabel(meta.browser));
   if (meta.hz !== undefined) parts.push(`${meta.hz} Hz`);
 
@@ -221,6 +220,17 @@ export function formatRunName(runName: string) {
   const label = parts.join(" - ");
 
   return meta.prefix ? `${meta.prefix} · ${label}` : label;
+}
+
+/**
+ * The tooltip behind a displayed run name: the raw name, plus the
+ * machine's CPU model when the set recorded one -- too long for the name
+ * itself, still worth keeping within reach.
+ */
+export function titleOf(runName: string) {
+  const cpu = metadata[runName]?.cpu;
+
+  return cpu ? `${runName} — ${cpu}` : runName;
 }
 
 const RELATIVE_FORMAT = new Intl.RelativeTimeFormat(undefined, { numeric: "auto" });
