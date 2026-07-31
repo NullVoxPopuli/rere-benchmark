@@ -45,8 +45,10 @@ function createRow(dbname) {
 
   const countCell = document.createElement('td');
   const count = document.createElement('span');
+  const countText = document.createTextNode('');
 
   countCell.className = 'query-count';
+  count.append(countText);
   countCell.append(count);
   tr.append(name, countCell);
 
@@ -57,26 +59,33 @@ function createRow(dbname) {
     const elapsed = document.createTextNode('');
     const popover = document.createElement('div');
     const content = document.createElement('div');
+    const contentText = document.createTextNode('');
     const arrow = document.createElement('div');
 
     popover.className = 'popover bottom';
     content.className = 'popover-content';
     arrow.className = 'arrow';
 
+    content.append(contentText);
     popover.append(content, arrow);
     td.append(elapsed, popover);
     tr.append(td);
-    queries.push({ elapsed, content });
+    queries.push({ elapsed, content: contentText });
   }
 
   tbody.append(tr);
 
-  return { count, queries };
+  return { count, countText, queries };
 }
 
+/**
+ * @param {Text} node
+ * @param {string} text
+ */
 function setText(node, text) {
-  if (node.textContent !== text) {
-    node.textContent = text;
+  // written in place, only when changed: the text node is never replaced
+  if (node.data !== text) {
+    node.data = text;
   }
 }
 
@@ -90,7 +99,7 @@ test.doit({
         rows.set(db.dbname, row);
       }
 
-      setText(row.count, String(db.lastSample.queries.length));
+      setText(row.countText, String(db.lastSample.queries.length));
 
       if (row.count.className !== db.lastSample.countClassName) {
         row.count.className = db.lastSample.countClassName;

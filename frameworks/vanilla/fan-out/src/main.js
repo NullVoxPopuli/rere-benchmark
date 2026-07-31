@@ -4,13 +4,14 @@ const test = helpers.fanOut();
 
 const output = document.createElement('output');
 const initial = test.formatItem(test.getData());
-const spans = test.consumerRange.map(() => {
+const texts = test.consumerRange.map(() => {
   const span = document.createElement('span');
+  const text = document.createTextNode(initial);
 
-  span.textContent = initial;
+  span.append(text);
   output.append(span);
 
-  return span;
+  return text;
 });
 
 document.querySelector('#app').replaceChildren(output);
@@ -29,10 +30,16 @@ test.doit((value) => {
   queueMicrotask(() => {
     scheduled = false;
 
-    const text = test.formatItem(latest);
+    for (let i = 0; i < texts.length; i++) {
+      // each consumer formats the shared value itself, like every
+      // other implementation
+      const next = test.formatItem(latest);
+      const text = texts[i];
 
-    for (const span of spans) {
-      span.textContent = text;
+      // written in place: the text nodes are never replaced
+      if (text.data !== next) {
+        text.data = next;
+      }
     }
   });
 });

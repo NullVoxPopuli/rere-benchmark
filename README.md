@@ -6,8 +6,6 @@
 
 ## TODOs
 
-- Vanilla JS implementation
-
 - create lints 
   - we don't want to prescribe pnpm vs npm vs yarn, so folks should provide an
     - install.sh and a build.sh?
