@@ -1,7 +1,7 @@
 import 'common/dbmon.css';
 import './layout.css';
 import { useLayoutEffect } from 'preact/hooks';
-import { signal, computed, batch, useComputed } from '@preact/signals';
+import { signal, batch, useComputed } from '@preact/signals';
 import { For } from '@preact/signals/utils';
 import { helpers, type DBRow, type ChatMessage, type DBUpdate, type ChatUpdate } from 'common';
 import type { Signal } from '@preact/signals';
@@ -28,9 +28,9 @@ function Row({ row }: { row: Signal<DBRow> }) {
       <For each={topFiveQueries}>
         {(query) => (
           <td>
-            {computed(() => query.value.elapsed)}
+            {query.elapsed}
             <div className="popover bottom">
-              <div className="popover-content">{computed(() => query.value.query)}</div>
+              <div className="popover-content">{query.query}</div>
               <div className="arrow"></div>
             </div>
           </td>
@@ -45,8 +45,8 @@ function ChatList() {
     <For each={chats}>
       {(chat) => (
         <div className="chat">
-          <div className="author">{computed(() => chat.value.author)}</div>
-          <p>{computed(() => chat.value.message)}</p>
+          <div className="author">{chat.author}</div>
+          <p>{chat.message}</p>
         </div>
       )}
     </For>
