@@ -1,9 +1,7 @@
 import Route from "@ember/routing/route";
 import { service } from "@ember/service";
 
-import { experiments } from "virtual:result-sets";
-
-import { warnOnVersionDivergence } from "#utils";
+import { fetchResultSet } from "#utils";
 
 import type RouterService from "@ember/routing/router-service";
 import type Transition from "@ember/routing/transition";
@@ -11,10 +9,17 @@ import type { ResultSet } from "#types";
 
 interface Params {
   q: string;
+  from?: string;
+}
+
+export interface Borrowed {
+  name: string;
+  data: ResultSet;
 }
 
 export interface Model {
   data: ResultSet;
+  borrowed?: Borrowed;
 }
 
 export default class Results extends Route<Model> {
@@ -22,6 +27,10 @@ export default class Results extends Route<Model> {
 
   queryParams = {
     q: { refreshModel: true },
+    from: { refreshModel: true },
+    // which of the borrowed set's frameworks; the set is already loaded,
+    // so no model impact
+    col: {},
     // display mode for the tables page (raw | linear | log); no model impact
     mode: {},
     // which percentile of each run's samples to show (50 | 75 | 90);
@@ -48,20 +57,18 @@ export default class Results extends Route<Model> {
   // @ts-ignore
   async model(params: Record<string, string>): Promise<Model> {
     // SAFETY: verified in beforeModel
-    const { q } = params as unknown as Params;
+    const { q, from } = params as unknown as Params;
 
     try {
-      // experiments live in a separate directory from the official runs
-      const dir = experiments.includes(q) ? "experiments" : "results";
-      const response = await fetch(`/${dir}/${q}.json`);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const json = await response.json();
+      const [data, borrowedData] = await Promise.all([
+        fetchResultSet(q),
+        from ? fetchResultSet(from) : undefined,
+      ]);
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      warnOnVersionDivergence(json);
-
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      return { data: json };
+      return {
+        data,
+        borrowed: from && borrowedData ? { name: from, data: borrowedData } : undefined,
+      };
     } catch (e) {
       console.error(e);
       // SAFETY: don't care -- the fact that people can throw non-errors is a mistake

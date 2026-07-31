@@ -1,9 +1,9 @@
 import Route from "@ember/routing/route";
 import { service } from "@ember/service";
 
-import { experiments, runs } from "virtual:result-sets";
+import { runs } from "virtual:result-sets";
 
-import { warnOnVersionDivergence } from "#utils";
+import { fetchResultSet } from "#utils";
 
 import type RouterService from "@ember/routing/router-service";
 import type Transition from "@ember/routing/transition";
@@ -104,18 +104,4 @@ function runsFor(a: string | undefined, b: string | undefined) {
 
   // no runs named at all -- the two most recent
   return { a: runs[1] ?? runs[0], b: runs[0] };
-}
-
-async function fetchResultSet(name: string): Promise<ResultSet> {
-  // experiments live in a separate directory from the official runs
-  const dir = experiments.includes(name) ? "experiments" : "results";
-  const response = await fetch(`/${dir}/${name}.json`);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const json = await response.json();
-
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  warnOnVersionDivergence(json);
-
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  return json;
 }

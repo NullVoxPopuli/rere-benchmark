@@ -6,23 +6,29 @@ import { service } from "@ember/service";
 import { interpolate } from "culori";
 
 import { BenchmarkName } from "#components/benchmark-name.gts";
+import { borrowOf, BorrowPicker } from "#components/borrow-picker.gts";
 import { FrameworkInfo } from "#components/framework-info.gts";
 import { Variant } from "#components/variant.gts";
 import { Version } from "#components/version.gts";
 import {
+  formatRunName,
   higherIsBetterBenches,
+  isoOf,
   labelFor,
   lowerIsBetterBenches,
   overrideOf,
   percentileFrom,
   PERCENTILES,
   round,
+  throttleLabel,
   timeFor,
+  titleOf,
   variantOf,
   versionOf,
 } from "#utils";
 
 import type RouterService from "@ember/routing/router-service";
+import type { Borrow } from "#components/borrow-picker.gts";
 import type { Model } from "#routes/results.ts";
 import type { BenchmarkInfo, ResultSet } from "#types";
 import type { Percentile } from "#utils";
@@ -116,6 +122,7 @@ class TableRow extends Component<{
   file: ResultSet;
   benchInfo: BenchmarkInfo;
   frameworkNames: string[];
+  borrow: Borrow | undefined;
 }> {
   @service declare router: RouterService;
 
@@ -132,27 +139,37 @@ class TableRow extends Component<{
       percentileFrom(this.router),
     );
 
+    const { borrow } = this.args;
+    const borrowedSpeed = borrow
+      ? timeFor(borrow.data, borrow.framework, this.args.benchInfo, percentileFrom(this.router))
+      : undefined;
+
+    let lo = min;
+    let hi = max;
+
+    if (borrowedSpeed !== undefined) {
+      if (borrowedSpeed < lo) lo = borrowedSpeed;
+      if (borrowedSpeed > hi) hi = borrowedSpeed;
+    }
+
+    const reverse = this.args.benchInfo.whatsBetter === "bigger";
     const colors: Record<string, string | undefined> = {};
 
     for (const framework of this.args.frameworkNames) {
-      colors[framework] = colorFor(
-        speeds[framework],
-        min,
-        max,
-        this.args.benchInfo.whatsBetter === "bigger",
-      );
+      colors[framework] = colorFor(speeds[framework], lo, hi, reverse);
     }
 
-    return { speeds, min, max, colors };
+    const borrowedColor = colorFor(borrowedSpeed, lo, hi, reverse);
+
+    return { speeds, min: lo, max: hi, colors, borrowedSpeed, borrowedColor };
   }
 
   get colors() {
     return this.row.colors;
   }
 
-  value = (framework: string) => {
-    const { speeds, min, max } = this.row;
-    const speed = speeds[framework];
+  displayOf = (speed: number | undefined) => {
+    const { min, max } = this.row;
     const bestIsMax = this.args.benchInfo.whatsBetter === "bigger";
 
     switch (modeFrom(this.router)) {
@@ -169,6 +186,12 @@ class TableRow extends Component<{
     }
   };
 
+  value = (framework: string) => this.displayOf(this.row.speeds[framework]);
+
+  get borrowedValue() {
+    return this.displayOf(this.row.borrowedSpeed);
+  }
+
   <template>
     <tr>
       <BenchmarkName @bench={{@benchInfo}} />
@@ -178,6 +201,12 @@ class TableRow extends Component<{
               framework
             }}</span></td>
       {{/each}}
+
+      {{#if @borrow}}
+        <td class="borrowed" style="background: {{this.row.borrowedColor}};"><span
+            class="value"
+          >{{this.borrowedValue}}</span></td>
+      {{/if}}
     </tr>
   </template>
 }
@@ -185,6 +214,7 @@ class TableRow extends Component<{
 class Table extends Component<{
   benches: BenchmarkInfo[];
   file: ResultSet;
+  borrow: Borrow | undefined;
 }> {
   @service declare router: RouterService;
 
@@ -222,6 +252,20 @@ class Table extends Component<{
       }
     }
 
+    const { borrow } = this.args;
+
+    if (borrow) {
+      totals.borrowed = 0;
+
+      for (const bench of this.args.benches) {
+        const time = timeFor(borrow.data, borrow.framework, bench, this.percentile);
+
+        if (time === undefined) continue;
+
+        totals.borrowed += time;
+      }
+    }
+
     let max = -Infinity;
     let min = Infinity;
 
@@ -240,6 +284,18 @@ class Table extends Component<{
 
   get frameworkNames() {
     return this.args.file.selections.frameworks;
+  }
+
+  get borrowedThrottle() {
+    const { borrow, file } = this.args;
+
+    if (!borrow) return;
+
+    const theirs = borrow.data.args?.CPU_THROTTLE;
+
+    if ((theirs ?? null) === (file.args?.CPU_THROTTLE ?? null)) return;
+
+    return throttleLabel(theirs);
   }
 
   totalValue = (framework: string) => {
@@ -288,11 +344,37 @@ class Table extends Component<{
               </span>
             </th>
           {{/each}}
+
+          {{#if @borrow}}
+            <th class="fw-header borrowed">
+              <span class="borrow-tag">borrowed</span>
+              <FrameworkInfo @name={{@borrow.framework}} />
+              <Variant @variant={{variantOf @borrow.data @borrow.framework}} />
+              <span class="small">
+                <Version
+                  @version={{versionOf @borrow.data @borrow.framework}}
+                  @override={{overrideOf @borrow.data @borrow.framework}}
+                />
+              </span>
+              <span class="borrow-source small" title={{titleOf @borrow.name}}>
+                from
+                <time datetime={{isoOf @borrow.name}}>{{formatRunName @borrow.name}}</time>
+              </span>
+              {{#if this.borrowedThrottle}}
+                <span class="small throttle-mismatch">{{this.borrowedThrottle}}</span>
+              {{/if}}
+            </th>
+          {{/if}}
         </tr>
       </thead>
       <tbody>
         {{#each @benches as |bench|}}
-          <TableRow @file={{@file}} @benchInfo={{bench}} @frameworkNames={{this.frameworkNames}} />
+          <TableRow
+            @file={{@file}}
+            @benchInfo={{bench}}
+            @frameworkNames={{this.frameworkNames}}
+            @borrow={{@borrow}}
+          />
         {{/each}}
       </tbody>
 
@@ -310,6 +392,19 @@ class Table extends Component<{
                 <span class="value">{{this.totalValue framework}}</span>
               </td>
             {{/each}}
+
+            {{#if @borrow}}
+              <td
+                class="borrowed"
+                style="background: {{colorFor
+                  this.totals.borrowed
+                  this.totals.min
+                  this.totals.max
+                }}"
+              >
+                <span class="value">{{this.totalValue "borrowed"}}</span>
+              </td>
+            {{/if}}
           </tr>
         </tfoot>
       {{/if}}
@@ -348,6 +443,10 @@ export default class ResultsTables extends Component<{
 
   get file() {
     return this.args.model.data;
+  }
+
+  get borrow() {
+    return borrowOf(this.router, this.args.model.borrowed);
   }
 
   get benchmarkInfo() {
@@ -416,10 +515,12 @@ export default class ResultsTables extends Component<{
       <span class="units">of each run's samples</span>
     </fieldset>
 
+    <BorrowPicker @borrowed={{@model.borrowed}} />
+
     {{#if this.higherBenches.length}}
       <h2>higher is better</h2>
 
-      <Table @benches={{this.higherBenches}} @file={{this.file}} />
+      <Table @benches={{this.higherBenches}} @file={{this.file}} @borrow={{this.borrow}} />
       <br />
       <br />
       <br />
@@ -428,7 +529,7 @@ export default class ResultsTables extends Component<{
     {{#if this.lowerBenches.length}}
       <h2>lower is better</h2>
 
-      <Table @benches={{this.lowerBenches}} @file={{this.file}} />
+      <Table @benches={{this.lowerBenches}} @file={{this.file}} @borrow={{this.borrow}} />
       <br />
       <br />
       <br />

@@ -256,6 +256,31 @@ table {
     filter: contrast(0.4);
     mix-blend-mode: difference;
   }
+
+  th.borrowed,
+  td.borrowed {
+    border-inline-start: 1px dashed color-mix(in oklch, currentColor 35%, transparent);
+  }
+
+  .borrow-tag {
+    font-size: 0.7rem;
+    border: 1px solid currentColor;
+    border-radius: 0.25rem;
+    padding: 0 0.25rem;
+    opacity: 0.7;
+  }
+
+  .borrow-source {
+    display: block;
+    font-weight: normal;
+    opacity: 0.75;
+  }
+
+  .throttle-mismatch {
+    display: block;
+    font-weight: normal;
+    color: darkorange;
+  }
 }
 
 .compare-title {
@@ -338,7 +363,8 @@ table {
 /* The control bars above the tables: which value to show on a results
    table, which framework and runs to line up on the compare page. */
 .value-mode,
-.compare-controls {
+.compare-controls,
+.borrow-controls {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -401,7 +427,8 @@ table {
   }
 }
 
-.compare-controls select {
+.compare-controls select,
+.borrow-controls select {
   max-width: 40vw;
 }
 
