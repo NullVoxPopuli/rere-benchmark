@@ -8,21 +8,13 @@ function App() {
   const value = useSignal(test.getData());
 
   useLayoutEffect(() => {
-    test.doit((v: number) => {
+    test.doit((v) => {
       value.value = v;
     });
   }, [])
 
-  // reading `.value` during render subscribes the *component*, so a
-  // synchronous burst of writes coalesces into one re-render (the point of
-  // this bench) -- binding the signal per <span> would instead write every
-  // span on every write: 10k updates x 1k consumers = 10M DOM writes.
-  // Each consumer formats the value itself, like every other framework's
-  // implementation.
   return <output>
-    {test.consumerRange.map((c: number) => {
-      return <span key={c}>{test.formatItem(value.value)}</span>;
-    })}
+    {test.consumerRange.map((c) => <span key={c}>{test.formatItem(value.value)}</span>)}
   </output>
 }
 

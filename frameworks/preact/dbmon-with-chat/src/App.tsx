@@ -1,17 +1,64 @@
 import 'common/dbmon.css';
 import './layout.css';
 import { useLayoutEffect } from 'preact/hooks';
-import { useSignal } from '@preact/signals';
-import { helpers, type DBRow, type ChatMessage, type DBUpdate, type ChatUpdate } from 'common';
+import { useComputed, useSignal } from '@preact/signals';
+import type { ReadonlySignal, Signal } from '@preact/signals';
+import { For } from '@preact/signals/utils';
+import { helpers } from 'common';
+import type { ChatMessage, ChatUpdate, DBRow, DBUpdate } from 'common';
 
 const test = helpers.dbMonWithChat();
 
+function QueryCell({
+  row,
+  index,
+}: {
+  row: ReadonlySignal<DBRow>;
+  index: number;
+}) {
+  const elapsed = useComputed(
+    () => row.value.lastSample.topFiveQueries[index]?.elapsed,
+  );
+  const query = useComputed(
+    () => row.value.lastSample.topFiveQueries[index]?.query,
+  );
+
+  return (
+    <td>
+      {elapsed}
+      <div className="popover bottom">
+        <div className="popover-content">{query}</div>
+        <div className="arrow"></div>
+      </div>
+    </td>
+  );
+}
+
+function Row({ db, name }: { db: Signal<Map<string, DBRow>>; name: string }) {
+  const row = useComputed(() => db.value.get(name)!);
+  const countClassName = useComputed(() => row.value.lastSample.countClassName);
+  const queryCount = useComputed(() => row.value.lastSample.queries.length);
+  const cells = row
+    .peek()
+    .lastSample.topFiveQueries.map((_, index) => (
+      <QueryCell key={index} row={row} index={index} />
+    ));
+
+  return (
+    <tr>
+      <td className="dbname">{name}</td>
+      <td className="query-count">
+        <span className={countClassName}>{queryCount}</span>
+      </td>
+      {cells}
+    </tr>
+  );
+}
+
 function App() {
-  // reading `.value` during render subscribes the component; each worker
-  // message swaps in a new Map/array, re-rendering like the other
-  // frameworks' dbmon implementations
   const db = useSignal<Map<string, DBRow>>(new Map());
   const chats = useSignal<ChatMessage[]>([]);
+  const names = useComputed(() => Array.from(db.value.keys()));
 
   useLayoutEffect(() => {
     test.doit({
@@ -40,37 +87,21 @@ function App() {
           </tr>
         </thead>
         <tbody>
-          {[...db.value.values()].map(row => (
-            <tr key={row.dbname}>
-              <td className="dbname">{row.dbname}</td>
-              <td className="query-count">
-                <span className={row.lastSample.countClassName}>
-                  {row.lastSample.queries.length}
-                </span>
-              </td>
-              {row.lastSample.topFiveQueries.map((query, i) => (
-                <td key={i}>
-                  {query.elapsed}
-                  <div className="popover bottom">
-                    <div className="popover-content">{query.query}</div>
-                    <div className="arrow"></div>
-                  </div>
-                </td>
-              ))}
-            </tr>
-          ))}
+          <For each={names}>{(name) => <Row db={db} name={name} />}</For>
         </tbody>
       </table>
 
       <div className="chats">
         <div className="messages">
           <div className="messages-inner">
-            {chats.value.map((chat, i) => (
-              <div className="chat" key={i}>
-                <div className="author">{chat.author}</div>
-                <p>{chat.message}</p>
-              </div>
-            ))}
+            <For each={chats}>
+              {(chat) => (
+                <div className="chat">
+                  <div className="author">{chat.author}</div>
+                  <p>{chat.message}</p>
+                </div>
+              )}
+            </For>
           </div>
         </div>
         <div className="entry">
