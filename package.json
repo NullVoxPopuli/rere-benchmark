@@ -19,8 +19,8 @@
     "use-tar-for": "node --experimental-strip-types ./src/runner/use-tar-for.ts",
     "bench": "node --experimental-strip-types ./src/runner/index.ts",
     "bench:add": "node --experimental-strip-types ./src/runner/add.ts",
-    "bench:one": "pnpm bench --bench=all --cpu-throttle=4",
-    "bench:all": "pnpm bench --framework=all --bench=all --cpu-throttle=4"
+    "bench:one": "pnpm bench --bench=all --cpu-throttle=8",
+    "bench:all": "pnpm bench --framework=all --bench=all --cpu-throttle=8"
   },
   "packageManager": "pnpm@10.21.0",
   "engines": {

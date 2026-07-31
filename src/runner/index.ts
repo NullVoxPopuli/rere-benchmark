@@ -10,10 +10,13 @@ import { getBenchInfo } from './bench-info.ts';
 import { chromeLocation } from './environment.ts';
 import {
   addResult,
+  info as environmentInfo,
   prepareForResults as prepareForResults,
   saveTiming,
 } from './results.ts';
 import { serve } from './serve.ts';
+
+import type { BenchmarkInfo } from './bench-info.ts';
 
 const info = await getBenchInfo();
 
@@ -33,6 +36,39 @@ interface MarkEntry {
    * (in the case of the dbmon test, this could be the FPS (for example))
    */
   detail?: unknown;
+}
+
+const frameCap = HEADLESS ? 60 : environmentInfo.environment.monitor.hz;
+
+function warnIfCapped(
+  framework: string,
+  bench: BenchmarkInfo,
+  marks: MarkEntry[],
+) {
+  if (bench.measure !== 'fps') return;
+  if (!frameCap) return;
+
+  const samples: number[] = [];
+
+  for (const mark of marks) {
+    if (mark.name === bench.measure && typeof mark.detail === 'number') {
+      samples.push(mark.detail);
+    }
+  }
+
+  if (samples.length === 0) return;
+
+  const sorted = samples.slice().sort((a, b) => a - b);
+  const median = sorted[Math.floor(sorted.length / 2)]!;
+
+  if (median < frameCap * 0.95) return;
+
+  clack.log.warn(
+    `${framework}: "${bench.name}" is pinned at the ${frameCap}hz frame cap ` +
+      `(median ${median.toFixed(1)} FPS). The page kept up with every frame at ` +
+      `--cpu-throttle=${CPU_THROTTLE}, so this sample records the display's ceiling, ` +
+      `not the framework's limit. Increase --cpu-throttle until frameworks fall below the cap.`,
+  );
 }
 
 async function getMarks(browser: Browser, url: string) {
@@ -252,6 +288,8 @@ for (const framework of info.frameworks) {
           clack.log.info(`\t\tRemaining: ${count - i}`);
 
           const performanceMarks = await getMarks(browser, url);
+
+          warnIfCapped(framework, bench, performanceMarks);
 
           const name = variant.name
             ? `${bench.name} ${variant.name}`
