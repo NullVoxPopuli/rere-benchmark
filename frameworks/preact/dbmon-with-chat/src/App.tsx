@@ -1,19 +1,21 @@
 import 'common/dbmon.css';
 import './layout.css';
-import { useLayoutEffect, useMemo } from 'preact/hooks';
-import { batch, signal, useComputed, useSignal } from '@preact/signals';
-import type { Signal } from '@preact/signals';
+import { useLayoutEffect } from 'preact/hooks';
+import { useComputed, useSignal } from '@preact/signals';
+import type { ReadonlySignal, Signal } from '@preact/signals';
 import { For } from '@preact/signals/utils';
 import { helpers } from 'common';
 import type { ChatMessage, ChatUpdate, DBRow, DBUpdate } from 'common';
 
 const test = helpers.dbMonWithChat();
 
-// Cells are positional, like the ember app's key="@index" iteration: the
-// worker structured-clones fresh query objects on every message, so
-// identity-keyed iteration (<For>) would tear down and rebuild all five
-// <td> subtrees per update instead of writing the changed text in place.
-function QueryCell({ row, index }: { row: Signal<DBRow>; index: number }) {
+function QueryCell({
+  row,
+  index,
+}: {
+  row: ReadonlySignal<DBRow>;
+  index: number;
+}) {
   const elapsed = useComputed(
     () => row.value.lastSample.topFiveQueries[index]?.elapsed,
   );
@@ -32,15 +34,10 @@ function QueryCell({ row, index }: { row: Signal<DBRow>; index: number }) {
   );
 }
 
-// One signal per row: a worker message writes only the signals of the rows
-// it carries, and those rows' bindings update in place -- nothing
-// re-renders, matching the granularity of the ember app's keyed rows.
-function Row({ row }: { row: Signal<DBRow> }) {
-  const dbname = useComputed(() => row.value.dbname);
+function Row({ db, name }: { db: Signal<Map<string, DBRow>>; name: string }) {
+  const row = useComputed(() => db.value.get(name)!);
   const countClassName = useComputed(() => row.value.lastSample.countClassName);
   const queryCount = useComputed(() => row.value.lastSample.queries.length);
-  // peek: the sample always carries five queries, so the cell count is
-  // static -- subscribing here would re-render the whole row every update
   const cells = row
     .peek()
     .lastSample.topFiveQueries.map((_, index) => (
@@ -49,7 +46,7 @@ function Row({ row }: { row: Signal<DBRow> }) {
 
   return (
     <tr>
-      <td className="dbname">{dbname}</td>
+      <td className="dbname">{name}</td>
       <td className="query-count">
         <span className={countClassName}>{queryCount}</span>
       </td>
@@ -59,38 +56,21 @@ function Row({ row }: { row: Signal<DBRow> }) {
 }
 
 function App() {
-  const rows = useSignal<Signal<DBRow>[]>([]);
+  const db = useSignal<Map<string, DBRow>>(new Map());
   const chats = useSignal<ChatMessage[]>([]);
-  // index into `rows` by dbname; not reactive state, just a lookup
-  const rowsByName = useMemo(() => new Map<string, Signal<DBRow>>(), []);
+  const names = useComputed(() => Array.from(db.value.keys()));
 
   useLayoutEffect(() => {
     test.doit({
       handleDbUpdate: (eventData: DBUpdate) => {
-        batch(() => {
-          let added: Signal<DBRow>[] | undefined;
-
-          for (const d of eventData.data) {
-            const existing = rowsByName.get(d.dbname);
-
-            if (existing) {
-              existing.value = d;
-            } else {
-              const row = signal(d);
-
-              rowsByName.set(d.dbname, row);
-              (added ??= []).push(row);
-            }
-          }
-
-          if (added) {
-            rows.value = rows.value.concat(added);
-          }
-        });
+        const next = new Map(db.value);
+        for (const d of eventData.data) {
+          next.set(d.dbname, d);
+        }
+        db.value = next;
       },
       handleChat: (eventData: ChatUpdate) => {
         const next = chats.value.concat(eventData.data);
-
         chats.value = next.length > 12 ? next.slice(next.length - 12) : next;
       },
     });
@@ -107,7 +87,7 @@ function App() {
           </tr>
         </thead>
         <tbody>
-          <For each={rows}>{(row) => <Row row={row} />}</For>
+          <For each={names}>{(name) => <Row db={db} name={name} />}</For>
         </tbody>
       </table>
 

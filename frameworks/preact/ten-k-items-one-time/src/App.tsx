@@ -6,9 +6,6 @@ import { helpers } from 'common';
 const test = helpers.tenKitems1UpdateEach();
 
 function App() {
-  // a signal per item inside a signal of the list: <For> subscribes to the
-  // list (so the iteration itself is reactive and tracks data-shape changes),
-  // while an item update writes only that item's own text node
   const items = useSignal(test.getData().map((item) => signal(item)));
 
   useLayoutEffect(() => {
