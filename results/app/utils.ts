@@ -1,5 +1,7 @@
 import { assert, warn } from "@ember/debug";
 
+import { metadata } from "virtual:result-sets";
+
 import { frameworks } from "./frameworks.ts";
 
 import type RouterService from "@ember/routing/router-service";
@@ -151,15 +153,6 @@ export function formatDuration(ms: number): string {
   return `${minutes}m ${seconds}s`;
 }
 
-/**
- * Result-set names end in a `Date#toISOString` timestamp
- * (`2026-07-29T16:32:44.768Z`), optionally preceded by an experiment prefix
- * (`ember-2026-07-29T...`). Raw ISO strings are hard to scan, so anywhere a
- * run name is *displayed* it gets formatted for the viewer's locale; the raw
- * name stays in URLs and `datetime` / `title` attributes.
- */
-const ISO_TIMESTAMP_LENGTH = "2026-07-29T16:32:44.768Z".length;
-
 const TIMESTAMP_FORMAT = new Intl.DateTimeFormat(undefined, {
   dateStyle: "medium",
   timeStyle: "short",
@@ -170,34 +163,71 @@ export function formatTimestamp(datetime: string) {
 }
 
 /**
- * The ISO timestamp within a run name, for `<time datetime>`.
- * `undefined` for names that don't follow the timestamp convention.
- *
- * `Date#toISOString` output is fixed-length, so the timestamp is the name's
- * tail; it's genuine when the platform parses it and round-trips back to the
- * exact same string.
+ * Result-set names are just numbers (`6`), experiments a prefix and a number
+ * (`ember-1`) -- nothing worth displaying. What a run name *displays* as
+ * comes from the build-time `metadata` instead, so no set has to be fetched
+ * before it's shown. The raw name stays in URLs and `title` attributes.
  */
-export function isoOf(runName: string) {
-  const candidate = runName.slice(-ISO_TIMESTAMP_LENGTH);
-  const date = new Date(candidate);
+const RUN_DATE_FORMAT = new Intl.DateTimeFormat(undefined, { dateStyle: "medium" });
 
-  if (Number.isNaN(date.getTime()) || date.toISOString() !== candidate) {
-    return undefined;
-  }
+/**
+ * Browsers state their product name long-form ("Google Chrome"); the short
+ * name reads better in a run's name.
+ */
+const BROWSER_SHORT_NAMES: Record<string, string> = {
+  "Google Chrome": "Chrome",
+};
 
-  return candidate;
+function browserLabel(browser: { name: string; version: string }) {
+  const name = BROWSER_SHORT_NAMES[browser.name] ?? browser.name;
+  const major = Number.parseInt(browser.version, 10);
+
+  return `${name} ${Number.isNaN(major) ? browser.version : major}`;
 }
 
+/**
+ * When the named run started (ISO 8601), for `<time datetime>`.
+ * `undefined` for names the build found no date for.
+ */
+export function isoOf(runName: string) {
+  return metadata[runName]?.date;
+}
+
+/**
+ * `#6 Chrome 138 - 60 Hz - 4x throttle - Jul 29, 2026` -- the file number
+ * first, then the run's environment headline, the CPU throttle it
+ * applied, and its date, formatted for the viewer's locale. Fields a set
+ * didn't record drop out; a name with no metadata at all displays as
+ * itself.
+ */
 export function formatRunName(runName: string) {
-  const iso = isoOf(runName);
+  const meta = metadata[runName];
 
-  if (!iso) return runName;
+  if (!meta) return runName;
 
-  const formatted = formatTimestamp(iso);
-  const joined = runName.slice(0, runName.length - iso.length);
-  const prefix = joined.endsWith("-") ? joined.slice(0, -1) : joined;
+  const parts: string[] = [];
 
-  return prefix ? `${prefix} · ${formatted}` : formatted;
+  if (meta.browser) parts.push(browserLabel(meta.browser));
+  if (meta.hz !== undefined) parts.push(`${displayHz(meta.hz)} Hz`);
+
+  if (meta.throttle !== undefined) {
+    parts.push(meta.throttle > 1 ? `${meta.throttle}x throttle` : "no throttle");
+  }
+
+  if (meta.date) parts.push(RUN_DATE_FORMAT.format(new Date(meta.date)));
+
+  if (parts.length === 0) return runName;
+
+  return `#${runName} ${parts.join(" - ")}`;
+}
+
+/**
+ * The tooltip behind a displayed run name: the machine's CPU model --
+ * too long for the name itself, still worth keeping within reach. The
+ * name already leads with the file number, so nothing else belongs here.
+ */
+export function titleOf(runName: string) {
+  return metadata[runName]?.cpu;
 }
 
 const RELATIVE_FORMAT = new Intl.RelativeTimeFormat(undefined, { numeric: "auto" });
@@ -207,8 +237,8 @@ const RELATIVE_FORMAT = new Intl.RelativeTimeFormat(undefined, { numeric: "auto"
 const DURATION_UNITS = ["year", "month", "day", "hour", "minute", "second"] as const;
 
 /**
- * "3 days ago" for the timestamp in a run name; empty for names that don't
- * follow the timestamp convention, so templates can render it unconditionally.
+ * "3 days ago" for a run's recorded date; empty for names the build found
+ * no date for, so templates can render it unconditionally.
  *
  * Temporal does the calendar-aware breakdown and `Intl.RelativeTimeFormat`
  * the wording; all that's left to us is picking the duration's most
@@ -236,10 +266,20 @@ export function relativeToNow(runName: string) {
   return RELATIVE_FORMAT.format(0, "second");
 }
 
+/**
+ * The recorded refresh rate is 0-indexed -- a 120 Hz monitor records 119.
+ * Every rendered rate (and anything derived from one, like the frame
+ * budget) goes through here; comparisons between recorded values stay on
+ * the recorded convention.
+ */
+export function displayHz(recorded: number) {
+  return recorded + 1;
+}
+
 const msInOneHz = 1_000;
 
-export function msOfFrameAt(hz: number) {
-  const result = msInOneHz / hz;
+export function msOfFrameAt(recordedHz: number) {
+  const result = msInOneHz / displayHz(recordedHz);
 
   return Math.round(result * 100) / 100;
 }
