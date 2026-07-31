@@ -1,7 +1,7 @@
 import 'common/dbmon.css';
 import './layout.css';
 import { useLayoutEffect } from 'preact/hooks';
-import { signal, computed, useComputed } from '@preact/signals';
+import { signal, computed, batch, useComputed } from '@preact/signals';
 import { For } from '@preact/signals/utils';
 import { helpers, type DBRow, type ChatMessage, type DBUpdate, type ChatUpdate } from 'common';
 import type { Signal } from '@preact/signals';
@@ -57,20 +57,18 @@ function App() {
   useLayoutEffect(() => {
     test.doit({
       handleDbUpdate: (eventData: DBUpdate) => {
-        const newRows: Signal<DBRow>[] = [];
-        for (const d of eventData.data) {
-          const existing = rowMap.get(d.dbname);
-          if (existing) {
-            existing.value = d;
-          } else {
-            const row = signal(d);
-            rowMap.set(d.dbname, row);
-            newRows.push(row);
+        batch(() => {
+          for (const d of eventData.data) {
+            const existing = rowMap.get(d.dbname);
+            if (existing) {
+              existing.value = d;
+            } else {
+              const row = signal(d);
+              rowMap.set(d.dbname, row);
+              dbRows.value = [...dbRows.value, row];
+            }
           }
-        }
-        if (newRows.length > 0) {
-          dbRows.value = [...dbRows.value, ...newRows];
-        }
+        });
       },
       handleChat: (eventData: ChatUpdate) => {
         const next = chats.value.concat(eventData.data);
