@@ -1,0 +1,2295 @@
+{
+  "date": "2026-08-04T16:30:00.610Z",
+  "sha": "7f14cb5a9ddce58047ec1ace6e4e4159fb21f23d",
+  "args": {
+    "SKIP_BUILD": false,
+    "CPU_THROTTLE": 8,
+    "HEADLESS": false,
+    "COUNT": 10,
+    "FRAMEWORK": "ember",
+    "BENCH_NAME": "all",
+    "TIMEOUT": 60000
+  },
+  "environment": {
+    "machine": {
+      "os": {
+        "name": "Ubuntu",
+        "version": "26.04"
+      },
+      "cpu": "AMD Ryzen 5 7640U w/ Radeon 760M Graphics",
+      "ram": "96.5 GB"
+    },
+    "monitor": {
+      "hz": 119
+    },
+    "browser": {
+      "name": "Google Chrome",
+      "version": "143.0.7499.169"
+    }
+  },
+  "results": {
+    "ember": {
+      "DB Monitor w/ chat simulation": {
+        "app": "dbmon-with-chat",
+        "query": "",
+        "version": "7.3.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 269.2000000476837
+            },
+            {
+              "name": "fps",
+              "at": 5512.700000047684,
+              "detail": 42.2710153057136
+            },
+            {
+              "name": "fps",
+              "at": 10505,
+              "detail": 48.8
+            },
+            {
+              "name": "fps",
+              "at": 15513.799999952316,
+              "detail": 50
+            },
+            {
+              "name": "fps",
+              "at": 20505,
+              "detail": 47.8
+            },
+            {
+              "name": "fps",
+              "at": 25492.599999904633,
+              "detail": 50.8010160203204
+            },
+            {
+              "name": ":done",
+              "at": 25494.200000047684,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ]
+        ],
+        "measure": "fps",
+        "whatsBetter": "bigger"
+      },
+      "Incrementing Render Effect": {
+        "app": "incrementing-render-effect",
+        "query": "&updates=100000",
+        "version": "7.3.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 248.80000019073486
+            },
+            {
+              "name": ":done",
+              "at": 2776.100000143051,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 232.59999990463257
+            },
+            {
+              "name": ":done",
+              "at": 2800.7999999523163,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 230.40000009536743
+            },
+            {
+              "name": ":done",
+              "at": 2767.5,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 249.20000004768372
+            },
+            {
+              "name": ":done",
+              "at": 2780.7999999523163,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 227.5
+            },
+            {
+              "name": ":done",
+              "at": 2737.5,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 247.09999990463257
+            },
+            {
+              "name": ":done",
+              "at": 2809,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 236
+            },
+            {
+              "name": ":done",
+              "at": 2785.7999999523163,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 220
+            },
+            {
+              "name": ":done",
+              "at": 2738.7999999523163,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 292.7000000476837
+            },
+            {
+              "name": ":done",
+              "at": 3024.5,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 252.40000009536743
+            },
+            {
+              "name": ":done",
+              "at": 2917.800000190735,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 item, 1k updates (async)": {
+        "app": "one-item-many-updates",
+        "query": "&updates=1000&percentRandomAwait=100",
+        "version": "7.3.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 250.5
+            },
+            {
+              "name": ":done",
+              "at": 266.90000009536743,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 237.59999990463257
+            },
+            {
+              "name": ":done",
+              "at": 251.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 271.7000000476837
+            },
+            {
+              "name": ":done",
+              "at": 286.2000000476837,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 236.10000014305115
+            },
+            {
+              "name": ":done",
+              "at": 251.60000014305115,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 231.10000014305115
+            },
+            {
+              "name": ":done",
+              "at": 246.70000004768372,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 238.19999980926514
+            },
+            {
+              "name": ":done",
+              "at": 251.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 225.60000014305115
+            },
+            {
+              "name": ":done",
+              "at": 239,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 237.69999980926514
+            },
+            {
+              "name": ":done",
+              "at": 252.19999980926514,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 214.60000014305115
+            },
+            {
+              "name": ":done",
+              "at": 228.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 227.79999995231628
+            },
+            {
+              "name": ":done",
+              "at": 241.90000009536743,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 item, 1k updates": {
+        "app": "one-item-many-updates",
+        "query": "&updates=1000&percentRandomAwait=0",
+        "version": "7.3.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 268.7000000476837
+            },
+            {
+              "name": ":done",
+              "at": 280,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 236.59999990463257
+            },
+            {
+              "name": ":done",
+              "at": 246.40000009536743,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 270.2999999523163
+            },
+            {
+              "name": ":done",
+              "at": 281.2999999523163,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 227.5
+            },
+            {
+              "name": ":done",
+              "at": 239.30000019073486,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 227.20000004768372
+            },
+            {
+              "name": ":done",
+              "at": 239.60000014305115,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 216.60000014305115
+            },
+            {
+              "name": ":done",
+              "at": 227.80000019073486,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 228
+            },
+            {
+              "name": ":done",
+              "at": 238.70000004768372,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 241.30000019073486
+            },
+            {
+              "name": ":done",
+              "at": 253.90000009536743,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 213.20000004768372
+            },
+            {
+              "name": ":done",
+              "at": 222.79999995231628,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 233.59999990463257
+            },
+            {
+              "name": ":done",
+              "at": 243.40000009536743,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 item, 100k updates (async)": {
+        "app": "one-item-many-updates",
+        "query": "&updates=100000&percentRandomAwait=100",
+        "version": "7.3.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 222.10000014305115
+            },
+            {
+              "name": ":done",
+              "at": 310.80000019073486,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 243.10000014305115
+            },
+            {
+              "name": ":done",
+              "at": 331.7999999523163,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 223.60000014305115
+            },
+            {
+              "name": ":done",
+              "at": 314.40000009536743,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 224.29999995231628
+            },
+            {
+              "name": ":done",
+              "at": 314.7999999523163,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 216.40000009536743
+            },
+            {
+              "name": ":done",
+              "at": 303.7999999523163,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 224.20000004768372
+            },
+            {
+              "name": ":done",
+              "at": 309.09999990463257,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 220.59999990463257
+            },
+            {
+              "name": ":done",
+              "at": 304.7999999523163,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 225.40000009536743
+            },
+            {
+              "name": ":done",
+              "at": 315,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 234.60000014305115
+            },
+            {
+              "name": ":done",
+              "at": 325,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 228.90000009536743
+            },
+            {
+              "name": ":done",
+              "at": 323.10000014305115,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 item, 100k updates": {
+        "app": "one-item-many-updates",
+        "query": "&updates=100000&percentRandomAwait=0",
+        "version": "7.3.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 224.20000004768372
+            },
+            {
+              "name": ":done",
+              "at": 267.40000009536743,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 228.20000004768372
+            },
+            {
+              "name": ":done",
+              "at": 272.90000009536743,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 232.40000009536743
+            },
+            {
+              "name": ":done",
+              "at": 274.60000014305115,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 231.89999985694885
+            },
+            {
+              "name": ":done",
+              "at": 276.09999990463257,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 223
+            },
+            {
+              "name": ":done",
+              "at": 265.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 227.30000019073486
+            },
+            {
+              "name": ":done",
+              "at": 270.90000009536743,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 221.90000009536743
+            },
+            {
+              "name": ":done",
+              "at": 260.90000009536743,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 219.59999990463257
+            },
+            {
+              "name": ":done",
+              "at": 260.7999999523163,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 232.5
+            },
+            {
+              "name": ":done",
+              "at": 275.09999990463257,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 221.70000004768372
+            },
+            {
+              "name": ":done",
+              "at": 261.7000000476837,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1k items, 1 update each (sequentially, async)": {
+        "app": "ten-k-items-one-time",
+        "query": "&items=1000&updates=1000&percentRandomAwait=100",
+        "version": "7.3.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 404.5
+            },
+            {
+              "name": ":done",
+              "at": 465.09999990463257,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 362.2000000476837
+            },
+            {
+              "name": ":done",
+              "at": 422.59999990463257,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 358.5
+            },
+            {
+              "name": ":done",
+              "at": 424.10000014305115,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 371.2999999523163
+            },
+            {
+              "name": ":done",
+              "at": 429.09999990463257,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 382.2999999523163
+            },
+            {
+              "name": ":done",
+              "at": 451.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 381.7000000476837
+            },
+            {
+              "name": ":done",
+              "at": 443.7000000476837,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 368
+            },
+            {
+              "name": ":done",
+              "at": 429.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 393.2999999523163
+            },
+            {
+              "name": ":done",
+              "at": 454.69999980926514,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 365.5
+            },
+            {
+              "name": ":done",
+              "at": 423.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 386.5
+            },
+            {
+              "name": ":done",
+              "at": 445.09999990463257,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1k items, 1 update each (sequentially)": {
+        "app": "ten-k-items-one-time",
+        "query": "&items=1000&updates=1000&percentRandomAwait=0",
+        "version": "7.3.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 370.2000000476837
+            },
+            {
+              "name": ":done",
+              "at": 427.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 375
+            },
+            {
+              "name": ":done",
+              "at": 437.40000009536743,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 380.7999999523163
+            },
+            {
+              "name": ":done",
+              "at": 443.2999999523163,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 372.7000000476837
+            },
+            {
+              "name": ":done",
+              "at": 435.7000000476837,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 396.2999999523163
+            },
+            {
+              "name": ":done",
+              "at": 458.2000000476837,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 351.19999980926514
+            },
+            {
+              "name": ":done",
+              "at": 410.2999999523163,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 357.7999999523163
+            },
+            {
+              "name": ":done",
+              "at": 424.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 370.39999985694885
+            },
+            {
+              "name": ":done",
+              "at": 426.89999985694885,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 359.59999990463257
+            },
+            {
+              "name": ":done",
+              "at": 415.7999999523163,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 374.10000014305115
+            },
+            {
+              "name": ":done",
+              "at": 432.7000000476837,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1k items 1 update on 5% (random, async)": {
+        "app": "ten-k-items-one-time",
+        "query": "&items=1000&updates=50&random=true&percentRandomAwait=100",
+        "version": "7.3.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 347.7999999523163
+            },
+            {
+              "name": ":done",
+              "at": 380.09999990463257,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 379.5
+            },
+            {
+              "name": ":done",
+              "at": 411.7000000476837,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 381
+            },
+            {
+              "name": ":done",
+              "at": 418.39999985694885,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 361.59999990463257
+            },
+            {
+              "name": ":done",
+              "at": 396.40000009536743,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 377
+            },
+            {
+              "name": ":done",
+              "at": 406.7999999523163,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 394
+            },
+            {
+              "name": ":done",
+              "at": 427.89999985694885,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 364.89999985694885
+            },
+            {
+              "name": ":done",
+              "at": 399.7000000476837,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 361.10000014305115
+            },
+            {
+              "name": ":done",
+              "at": 392.7000000476837,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 356
+            },
+            {
+              "name": ":done",
+              "at": 390.7000000476837,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 363.7999999523163
+            },
+            {
+              "name": ":done",
+              "at": 395.89999985694885,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1k items 1 update on 5% (random)": {
+        "app": "ten-k-items-one-time",
+        "query": "&items=1000&updates=50&random=true&percentRandomAwait=0",
+        "version": "7.3.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 364.7000000476837
+            },
+            {
+              "name": ":done",
+              "at": 401.09999990463257,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 367.2999999523163
+            },
+            {
+              "name": ":done",
+              "at": 401.39999985694885,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 368.69999980926514
+            },
+            {
+              "name": ":done",
+              "at": 400.69999980926514,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 373
+            },
+            {
+              "name": ":done",
+              "at": 402.2000000476837,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 357.2999999523163
+            },
+            {
+              "name": ":done",
+              "at": 389.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 382.59999990463257
+            },
+            {
+              "name": ":done",
+              "at": 412.69999980926514,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 380
+            },
+            {
+              "name": ":done",
+              "at": 411.7999999523163,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 365.90000009536743
+            },
+            {
+              "name": ":done",
+              "at": 396.7999999523163,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 369.89999985694885
+            },
+            {
+              "name": ":done",
+              "at": 405.89999985694885,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 366.10000014305115
+            },
+            {
+              "name": ":done",
+              "at": 398.60000014305115,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1k items 1 update on 25% (random, async)": {
+        "app": "ten-k-items-one-time",
+        "query": "&items=1000&updates=250&random=true&percentRandomAwait=100",
+        "version": "7.3.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 385.90000009536743
+            },
+            {
+              "name": ":done",
+              "at": 425.7999999523163,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 374.2999999523163
+            },
+            {
+              "name": ":done",
+              "at": 417,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 355.80000019073486
+            },
+            {
+              "name": ":done",
+              "at": 395.2000000476837,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 402.69999980926514
+            },
+            {
+              "name": ":done",
+              "at": 444.69999980926514,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 361.2000000476837
+            },
+            {
+              "name": ":done",
+              "at": 400.90000009536743,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 386.60000014305115
+            },
+            {
+              "name": ":done",
+              "at": 429.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 380.7000000476837
+            },
+            {
+              "name": ":done",
+              "at": 420.2000000476837,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 358.2000000476837
+            },
+            {
+              "name": ":done",
+              "at": 398.2000000476837,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 357.80000019073486
+            },
+            {
+              "name": ":done",
+              "at": 398.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 370.59999990463257
+            },
+            {
+              "name": ":done",
+              "at": 410.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1k items 1 update on 25% (random)": {
+        "app": "ten-k-items-one-time",
+        "query": "&items=1000&updates=250&random=true&percentRandomAwait=0",
+        "version": "7.3.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 369.5
+            },
+            {
+              "name": ":done",
+              "at": 412.7000000476837,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 356.60000014305115
+            },
+            {
+              "name": ":done",
+              "at": 394.7999999523163,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 363.7000000476837
+            },
+            {
+              "name": ":done",
+              "at": 405.10000014305115,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 366.5
+            },
+            {
+              "name": ":done",
+              "at": 410.7999999523163,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 370.40000009536743
+            },
+            {
+              "name": ":done",
+              "at": 411.09999990463257,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 369.40000009536743
+            },
+            {
+              "name": ":done",
+              "at": 409,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 365.69999980926514
+            },
+            {
+              "name": ":done",
+              "at": 406.19999980926514,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 363.40000009536743
+            },
+            {
+              "name": ":done",
+              "at": 402.2999999523163,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 369
+            },
+            {
+              "name": ":done",
+              "at": 403.7999999523163,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 370.39999985694885
+            },
+            {
+              "name": ":done",
+              "at": 409.09999990463257,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 value, 1k consumers, 10k updates (bursts of 100)": {
+        "app": "fan-out",
+        "query": "&consumers=1000&updates=10000&burstSize=100",
+        "version": "7.3.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 351.89999985694885
+            },
+            {
+              "name": ":done",
+              "at": 2073.0999999046326,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 327.59999990463257
+            },
+            {
+              "name": ":done",
+              "at": 2234.7999999523163,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 340.90000009536743
+            },
+            {
+              "name": ":done",
+              "at": 2229.7000000476837,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 309.7999999523163
+            },
+            {
+              "name": ":done",
+              "at": 2133.399999856949,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 354.10000014305115
+            },
+            {
+              "name": ":done",
+              "at": 2141.7999999523163,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 358.7000000476837
+            },
+            {
+              "name": ":done",
+              "at": 2132.7999999523163,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 345.40000009536743
+            },
+            {
+              "name": ":done",
+              "at": 2168.7999999523163,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 332.90000009536743
+            },
+            {
+              "name": ":done",
+              "at": 2176.5,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 329.60000014305115
+            },
+            {
+              "name": ":done",
+              "at": 2010.7000000476837,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 345.89999985694885
+            },
+            {
+              "name": ":done",
+              "at": 2170.5999999046326,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 value, 1k consumers, 10k updates (bursts of 1000)": {
+        "app": "fan-out",
+        "query": "&consumers=1000&updates=10000&burstSize=1000",
+        "version": "7.3.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 345.5
+            },
+            {
+              "name": ":done",
+              "at": 683.9000000953674,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 344.7000000476837
+            },
+            {
+              "name": ":done",
+              "at": 678.9000000953674,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 334.2999999523163
+            },
+            {
+              "name": ":done",
+              "at": 675,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 339.39999985694885
+            },
+            {
+              "name": ":done",
+              "at": 677.2999999523163,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 362.39999985694885
+            },
+            {
+              "name": ":done",
+              "at": 686.3999998569489,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 342.7000000476837
+            },
+            {
+              "name": ":done",
+              "at": 667.5,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 328.30000019073486
+            },
+            {
+              "name": ":done",
+              "at": 661.4000000953674,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 353.5
+            },
+            {
+              "name": ":done",
+              "at": 663,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 328.59999990463257
+            },
+            {
+              "name": ":done",
+              "at": 683.7000000476837,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 333.7999999523163
+            },
+            {
+              "name": ":done",
+              "at": 663,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 value, 1k consumers, 10k updates (single burst)": {
+        "app": "fan-out",
+        "query": "&consumers=1000&updates=10000&burstSize=10000",
+        "version": "7.3.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 321.89999985694885
+            },
+            {
+              "name": ":done",
+              "at": 394.19999980926514,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 340.10000014305115
+            },
+            {
+              "name": ":done",
+              "at": 413.2000000476837,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 354.09999990463257
+            },
+            {
+              "name": ":done",
+              "at": 427.5,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 366.2000000476837
+            },
+            {
+              "name": ":done",
+              "at": 443.40000009536743,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 332.10000014305115
+            },
+            {
+              "name": ":done",
+              "at": 404.7999999523163,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 333.80000019073486
+            },
+            {
+              "name": ":done",
+              "at": 404.40000009536743,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 330.59999990463257
+            },
+            {
+              "name": ":done",
+              "at": 400.2999999523163,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 353.2000000476837
+            },
+            {
+              "name": ":done",
+              "at": 422.7999999523163,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 326.90000009536743
+            },
+            {
+              "name": ":done",
+              "at": 396.40000009536743,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 377.5
+            },
+            {
+              "name": ":done",
+              "at": 450.10000014305115,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      }
+    }
+  },
+  "selections": {
+    "benches": [
+      "DB Monitor w/ chat simulation",
+      "Incrementing Render Effect",
+      "1 item, 1k updates (async)",
+      "1 item, 1k updates",
+      "1 item, 100k updates (async)",
+      "1 item, 100k updates",
+      "1k items, 1 update each (sequentially, async)",
+      "1k items, 1 update each (sequentially)",
+      "1k items 1 update on 5% (random, async)",
+      "1k items 1 update on 5% (random)",
+      "1k items 1 update on 25% (random, async)",
+      "1k items 1 update on 25% (random)",
+      "1 value, 1k consumers, 10k updates (bursts of 100)",
+      "1 value, 1k consumers, 10k updates (bursts of 1000)",
+      "1 value, 1k consumers, 10k updates (single burst)"
+    ],
+    "frameworks": [
+      "ember"
+    ]
+  },
+  "benchmarkInfo": [
+    {
+      "name": "DB Monitor w/ chat simulation",
+      "app": "dbmon-with-chat",
+      "query": "",
+      "measure": "fps",
+      "whatsBetter": "bigger",
+      "units": "FPS"
+    },
+    {
+      "name": "Incrementing Render Effect",
+      "app": "incrementing-render-effect",
+      "query": "&updates=100000",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1 item, 1k updates (async)",
+      "app": "one-item-many-updates",
+      "query": "&updates=1000&percentRandomAwait=100",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1 item, 1k updates",
+      "app": "one-item-many-updates",
+      "query": "&updates=1000&percentRandomAwait=0",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1 item, 100k updates (async)",
+      "app": "one-item-many-updates",
+      "query": "&updates=100000&percentRandomAwait=100",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1 item, 100k updates",
+      "app": "one-item-many-updates",
+      "query": "&updates=100000&percentRandomAwait=0",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1k items, 1 update each (sequentially, async)",
+      "app": "ten-k-items-one-time",
+      "query": "&items=1000&updates=1000&percentRandomAwait=100",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1k items, 1 update each (sequentially)",
+      "app": "ten-k-items-one-time",
+      "query": "&items=1000&updates=1000&percentRandomAwait=0",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1k items 1 update on 5% (random, async)",
+      "app": "ten-k-items-one-time",
+      "query": "&items=1000&updates=50&random=true&percentRandomAwait=100",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1k items 1 update on 5% (random)",
+      "app": "ten-k-items-one-time",
+      "query": "&items=1000&updates=50&random=true&percentRandomAwait=0",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1k items 1 update on 25% (random, async)",
+      "app": "ten-k-items-one-time",
+      "query": "&items=1000&updates=250&random=true&percentRandomAwait=100",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1k items 1 update on 25% (random)",
+      "app": "ten-k-items-one-time",
+      "query": "&items=1000&updates=250&random=true&percentRandomAwait=0",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1 value, 1k consumers, 10k updates (bursts of 100)",
+      "app": "fan-out",
+      "query": "&consumers=1000&updates=10000&burstSize=100",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1 value, 1k consumers, 10k updates (bursts of 1000)",
+      "app": "fan-out",
+      "query": "&consumers=1000&updates=10000&burstSize=1000",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1 value, 1k consumers, 10k updates (single burst)",
+      "app": "fan-out",
+      "query": "&consumers=1000&updates=10000&burstSize=10000",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    }
+  ],
+  "versionOverrides": {
+    "ember": {
+      "number": 21520,
+      "url": "https://github.com/emberjs/ember.js/pull/21520"
+    }
+  },
+  "timing": {
+    "buildMs": 12392,
+    "benchmarkMs": 173888,
+    "totalMs": 186280
+  }
+}
