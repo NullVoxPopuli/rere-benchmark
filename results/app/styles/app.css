@@ -461,6 +461,13 @@ table {
   max-width: 40vw;
 }
 
+/* pulls each "remove run" button back against the selector it removes,
+   undoing most of the control bar's column gap */
+.compare-controls .remove-run {
+  margin-inline-start: -1rem;
+  line-height: 1;
+}
+
 /* history: run links line up with their "how long ago" hint */
 .run-list {
   li {
