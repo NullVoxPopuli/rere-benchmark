@@ -9,6 +9,7 @@
     "#config": "./app/config/environment.ts",
     "#types": "./app/types.ts",
     "#utils": "./app/utils.ts",
+    "#result-set": "./app/result-set.ts",
     "#frameworks": "./app/frameworks.ts",
     "#routes/*": "./app/routes/*",
     "#components/*": "./app/components/*"

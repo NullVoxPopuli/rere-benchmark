@@ -7,33 +7,31 @@ import { nameOf } from "#frameworks";
 import { formatRunName, titleOf } from "#utils";
 
 import type RouterService from "@ember/routing/router-service";
-import type { Borrowed } from "#routes/results.ts";
-import type { ResultSet } from "#types";
+import type { ResultSet } from "#result-set";
 
 export interface Borrow {
-  name: string;
-  data: ResultSet;
+  set: ResultSet;
   framework: string;
 }
 
 export function borrowOf(
   router: RouterService,
-  borrowed: Borrowed | undefined,
+  borrowed: ResultSet | undefined,
 ): Borrow | undefined {
   if (!borrowed) return;
 
-  const available = borrowed.data.selections.frameworks;
+  const available = borrowed.selectedFrameworks;
   const requested = router.currentRoute?.queryParams["col"];
   const framework =
     typeof requested === "string" && available.includes(requested) ? requested : available[0];
 
   if (!framework) return;
 
-  return { name: borrowed.name, data: borrowed.data, framework };
+  return { set: borrowed, framework };
 }
 
 export class BorrowPicker extends Component<{
-  borrowed: Borrowed | undefined;
+  borrowed: ResultSet | undefined;
 }> {
   @service declare router: RouterService;
 
@@ -112,7 +110,7 @@ export class BorrowPicker extends Component<{
         <label>
           framework
           <select name="borrow-framework" {{on "change" this.setFramework}}>
-            {{#each @borrowed.data.selections.frameworks as |name|}}
+            {{#each @borrowed.selectedFrameworks as |name|}}
               <option value={{name}} selected={{this.isFramework name}}>{{nameOf name}}</option>
             {{/each}}
           </select>

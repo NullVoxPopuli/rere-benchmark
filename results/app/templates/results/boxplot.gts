@@ -12,27 +12,20 @@ import { FrameworkToggles, visibleFrameworksOf } from "#components/framework-tog
 import { Settings } from "#components/settings.gts";
 import { SortControl } from "#components/sort-control.gts";
 import { frameworks } from "#frameworks";
-import {
-  formatRunName,
-  higherIsBetterBenches,
-  lowerIsBetterBenches,
-  percentileFrom,
-  samplesOf,
-  sortedByTotal,
-  totalSortFrom,
-} from "#utils";
+import { isBiggerBetter, percentileFrom, totalSortFrom } from "#utils";
 
 import type RouterService from "@ember/routing/router-service";
 import type { Borrow } from "#components/borrow-picker.gts";
+import type { ResultSet } from "#result-set";
 import type { Model } from "#routes/results.ts";
-import type { BenchmarkInfo, ResultSet } from "#types";
+import type { BenchmarkInfo } from "#types";
 
 const HSL = converter("hsl");
 const BRIGHTEN = filterBrightness(1.5, "lrgb");
 const DARKEN = filterBrightness(0.5, "lrgb");
 
 function boxData(
-  file: ResultSet,
+  set: ResultSet,
   benchInfo: BenchmarkInfo,
   frameworkNames: string[],
   borrow: Borrow | undefined,
@@ -49,10 +42,7 @@ function boxData(
 
   const add = (label: string | string[], source: ResultSet, framework: string) => {
     labels.push(label);
-
-    const marks = source.results[framework]?.[benchInfo.name]?.times;
-
-    data.push(marks ? samplesOf(marks, benchInfo.measure) : []);
+    data.push(source.samplesFor(framework, benchInfo));
 
     const baseColor = frameworks[framework]?.color ?? "#888";
     const hsl = HSL(baseColor);
@@ -69,17 +59,16 @@ function boxData(
 
     meanBorderColor.push(darker);
     medianColor.push(darker);
-    // meanBackgroundColor
 
     lowerBackgroundColor.push(brighter);
   };
 
   for (const framework of frameworkNames) {
-    add(framework, file, framework);
+    add(framework, set, framework);
   }
 
   if (borrow) {
-    add([borrow.framework, `from ${formatRunName(borrow.name)}`], borrow.data, borrow.framework);
+    add([borrow.framework, `from ${borrow.set.displayName}`], borrow.set, borrow.framework);
   }
 
   const datasets = [
@@ -95,21 +84,19 @@ function boxData(
     },
   ];
 
-  console.debug(datasets);
-
   return { datasets, labels };
 }
 
 const renderChart = modifier(function boxplot(
   element: HTMLCanvasElement,
-  [file, benchInfo, frameworkNames, borrow]: [
+  [set, benchInfo, frameworkNames, borrow]: [
     ResultSet,
     BenchmarkInfo,
     string[],
     Borrow | undefined,
   ],
 ) {
-  const { datasets, labels } = boxData(file, benchInfo, frameworkNames, borrow);
+  const { datasets, labels } = boxData(set, benchInfo, frameworkNames, borrow);
   // https://www.sgratzl.com/chartjs-chart-boxplot/examples/styling.html
   const chart = new BoxPlotChart(element, {
     data: {
@@ -175,14 +162,16 @@ export default class Boxplat extends Component<{
 }> {
   @service declare router: RouterService;
 
+  get resultSet() {
+    return this.args.model.data;
+  }
+
   get benchmarkInfo() {
-    return this.args.model.data.benchmarkInfo
-      .toSorted()
-      .toSorted((a, b) => (a.name.includes("async") ? 1 : 0) - (b.name.includes("async") ? 1 : 0));
+    return this.resultSet.orderedBenches;
   }
 
   get frameworks() {
-    return visibleFrameworksOf(this.router, this.args.model.data);
+    return visibleFrameworksOf(this.router, this.resultSet);
   }
 
   sorted(benches: BenchmarkInfo[]) {
@@ -190,9 +179,8 @@ export default class Boxplat extends Component<{
 
     if (!sort) return this.frameworks;
 
-    return sortedByTotal(
+    return this.resultSet.sortedByTotal(
       this.frameworks,
-      this.args.model.data,
       benches,
       percentileFrom(this.router),
       sort,
@@ -201,12 +189,12 @@ export default class Boxplat extends Component<{
 
   @cached
   get higherFrameworks() {
-    return this.sorted(higherIsBetterBenches(this.args.model.data.benchmarkInfo));
+    return this.sorted(this.resultSet.higherBenches);
   }
 
   @cached
   get lowerFrameworks() {
-    return this.sorted(lowerIsBetterBenches(this.args.model.data.benchmarkInfo));
+    return this.sorted(this.resultSet.lowerBenches);
   }
 
   frameworksFor = (benchInfo: BenchmarkInfo) =>
@@ -230,7 +218,7 @@ export default class Boxplat extends Component<{
     <Settings @params={{this.settingParams}}>
       <SortControl />
 
-      <FrameworkToggles @file={{@model.data}} />
+      <FrameworkToggles @set={{this.resultSet}} />
 
       <BorrowPicker @borrowed={{@model.borrowed}} />
     </Settings>
@@ -255,7 +243,7 @@ export default class Boxplat extends Component<{
             so the fixed height goes on a wrapper, not the canvas }}
         <div style="position: relative; height:{{this.height}}px;">
           <canvas
-            {{renderChart @model.data benchInfo (this.frameworksFor benchInfo) this.borrow}}
+            {{renderChart this.resultSet benchInfo (this.frameworksFor benchInfo) this.borrow}}
           ></canvas>
         </div>
       </section>
@@ -286,8 +274,4 @@ export default class Boxplat extends Component<{
       }
     </style>
   </template>
-}
-
-function isBiggerBetter(benchInfo: BenchmarkInfo) {
-  return benchInfo.whatsBetter === "bigger";
 }

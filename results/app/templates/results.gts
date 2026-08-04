@@ -1,7 +1,6 @@
 import { LinkTo } from "@ember/routing";
 
 import { Info } from "#components/env.gts";
-import { prsOf } from "#utils";
 
 import type { TOC } from "@ember/component/template-only";
 import type { Model } from "#routes/results.ts";
@@ -15,14 +14,7 @@ export default <template>
     <LinkTo @route="results.boxplot">Boxplot</LinkTo>
   </nav>
 
-  <Info
-    @date={{@model.data.date}}
-    @sha={{@model.data.sha}}
-    @env={{@model.data.environment}}
-    @cpuThrottle={{@model.data.args.CPU_THROTTLE}}
-    @timing={{@model.data.timing}}
-    @prs={{prsOf @model.data}}
-  />
+  <Info @set={{@model.data}} />
 
   <div class="all-results">
     {{outlet}}

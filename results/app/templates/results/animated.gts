@@ -6,11 +6,12 @@ import { service } from "@ember/service";
 import { FrameworkInfo } from "#components/framework-info.gts";
 import { Variant } from "#components/variant.gts";
 import { Version } from "#components/version.gts";
-import { dataOf, percentileFrom, round, variantOf } from "#utils";
+import { isBiggerBetter, percentileFrom, round } from "#utils";
 
 import type RouterService from "@ember/routing/router-service";
+import type { ResultSet } from "#result-set";
 import type { Model } from "#routes/results.ts";
-import type { BenchmarkInfo, Results, ResultSet } from "#types";
+import type { BenchmarkInfo, Results } from "#types";
 
 export default class Animated extends Component<{
   model: Model;
@@ -22,17 +23,15 @@ export default class Animated extends Component<{
   }
 
   get benchmarkInfo() {
-    return this.args.model.data.benchmarkInfo
-      .toSorted()
-      .toSorted((a, b) => (a.name.includes("async") ? 1 : 0) - (b.name.includes("async") ? 1 : 0));
+    return this.args.model.data.orderedBenches;
   }
 
   <template>
     {{#each this.benchmarkInfo as |benchInfo|}}
       <Visualize
         @benchInfo={{benchInfo}}
-        @file={{@model.data}}
-        @results={{dataOf @model.data.results benchInfo.name this.percentile}}
+        @set={{@model.data}}
+        @results={{@model.data.rankingFor benchInfo.name this.percentile}}
       />
     {{/each}}
   </template>
@@ -53,12 +52,7 @@ function scaleFromBigger(results: Results) {
 
   assert(`Results are empty`, max);
 
-  return (ms: number) => {
-    const result = max / ms;
-
-    // console.log({ ms, max, result });
-    return result;
-  };
+  return (ms: number) => max / ms;
 }
 
 function sortBigger(results: Results) {
@@ -72,11 +66,11 @@ function sortSmaller(results: Results) {
 export class Visualize extends Component<{
   benchInfo: BenchmarkInfo;
   results: Results;
-  file: ResultSet;
+  set: ResultSet;
 }> {
   @cached
   get scaleTime() {
-    if (this.args.benchInfo.whatsBetter === "bigger") {
+    if (this.isBiggerBetter) {
       return scaleFromBigger(this.args.results);
     }
 
@@ -85,7 +79,7 @@ export class Visualize extends Component<{
 
   @cached
   get sorted() {
-    if (this.args.benchInfo.whatsBetter === "bigger") {
+    if (this.isBiggerBetter) {
       return sortBigger(this.args.results);
     }
 
@@ -93,12 +87,8 @@ export class Visualize extends Component<{
   }
 
   get isBiggerBetter() {
-    return this.args.benchInfo.whatsBetter === "bigger";
+    return isBiggerBetter(this.args.benchInfo);
   }
-
-  overrideFor = (framework: string) => {
-    return this.args.file.versionOverrides?.[framework];
-  };
 
   <template>
     <section class="languages-container">
@@ -118,13 +108,13 @@ export class Visualize extends Component<{
             <tr>
               <td>
                 <FrameworkInfo @name={{fw.name}} />
-                <Variant @variant={{variantOf @file fw.name}} />
+                <Variant @variant={{@set.variantOf fw.name}} />
               </td>
               <td class="time">{{round fw.speed}}
                 {{fw.units}}
                 <br />
                 <span class="small">
-                  <Version @version={{fw.version}} @override={{this.overrideFor fw.name}} />
+                  <Version @version={{fw.version}} @override={{@set.overrideOf fw.name}} />
                 </span>
               </td>
               <td>

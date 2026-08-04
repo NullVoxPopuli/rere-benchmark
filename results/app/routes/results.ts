@@ -1,25 +1,19 @@
 import Route from "@ember/routing/route";
 import { service } from "@ember/service";
 
-import { fetchResultSet } from "#utils";
+import { ResultSet } from "#result-set";
 
 import type RouterService from "@ember/routing/router-service";
 import type Transition from "@ember/routing/transition";
-import type { ResultSet } from "#types";
 
 interface Params {
   q: string;
   from?: string;
 }
 
-export interface Borrowed {
-  name: string;
-  data: ResultSet;
-}
-
 export interface Model {
   data: ResultSet;
-  borrowed?: Borrowed;
+  borrowed?: ResultSet;
 }
 
 export default class Results extends Route<Model> {
@@ -63,15 +57,12 @@ export default class Results extends Route<Model> {
     const { q, from } = params as unknown as Params;
 
     try {
-      const [data, borrowedData] = await Promise.all([
-        fetchResultSet(q),
-        from ? fetchResultSet(from) : undefined,
+      const [data, borrowed] = await Promise.all([
+        ResultSet.fetch(q),
+        from ? ResultSet.fetch(from) : undefined,
       ]);
 
-      return {
-        data,
-        borrowed: from && borrowedData ? { name: from, data: borrowedData } : undefined,
-      };
+      return { data, borrowed };
     } catch (e) {
       console.error(e);
       // SAFETY: don't care -- the fact that people can throw non-errors is a mistake

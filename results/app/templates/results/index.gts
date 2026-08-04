@@ -14,28 +14,19 @@ import { SortControl } from "#components/sort-control.gts";
 import { Variant } from "#components/variant.gts";
 import { Version } from "#components/version.gts";
 import {
-  formatRunName,
-  higherIsBetterBenches,
-  isoOf,
+  isBiggerBetter,
   labelFor,
-  lowerIsBetterBenches,
-  overrideOf,
   percentileFrom,
   PERCENTILES,
   round,
-  sortedByTotal,
-  throttleLabel,
-  timeFor,
-  titleOf,
   totalSortFrom,
-  variantOf,
-  versionOf,
 } from "#utils";
 
 import type RouterService from "@ember/routing/router-service";
 import type { Borrow } from "#components/borrow-picker.gts";
+import type { ResultSet } from "#result-set";
 import type { Model } from "#routes/results.ts";
-import type { BenchmarkInfo, ResultSet } from "#types";
+import type { BenchmarkInfo } from "#types";
 import type { Percentile } from "#utils";
 
 const start = "#ff7777";
@@ -99,8 +90,33 @@ function formatTimes(ratio: number) {
   return `${Math.round(ratio * 100) / 100}x`;
 }
 
+/**
+ * One value the way the ?mode= setting asks for it: as recorded, as the
+ * 0-1 score the cell colors use, or as a multiple of the row's best.
+ */
+function displayValue(
+  mode: ValueMode,
+  speed: number | undefined,
+  min: number | undefined,
+  max: number | undefined,
+  bestIsMax: boolean,
+) {
+  switch (mode) {
+    case "linear":
+      return scoreFor(speed, min, max);
+    case "times": {
+      const ratio = timesBestFor(speed, min, max, bestIsMax);
+
+      return ratio === undefined ? undefined : formatTimes(ratio);
+    }
+
+    default:
+      return speed;
+  }
+}
+
 function speedsFor(
-  file: ResultSet,
+  set: ResultSet,
   benchInfo: BenchmarkInfo,
   frameworkNames: string[],
   percentile: Percentile,
@@ -110,7 +126,7 @@ function speedsFor(
   let max = -Infinity;
 
   for (const framework of frameworkNames) {
-    const time = timeFor(file, framework, benchInfo, percentile);
+    const time = set.timeFor(framework, benchInfo, percentile);
 
     if (time === undefined) continue;
 
@@ -124,7 +140,7 @@ function speedsFor(
 }
 
 class TableRow extends Component<{
-  file: ResultSet;
+  set: ResultSet;
   benchInfo: BenchmarkInfo;
   frameworkNames: string[];
   borrow: Borrow | undefined;
@@ -137,16 +153,17 @@ class TableRow extends Component<{
    */
   @cached
   get row() {
+    const percentile = percentileFrom(this.router);
     const { speeds, min, max } = speedsFor(
-      this.args.file,
+      this.args.set,
       this.args.benchInfo,
       this.args.frameworkNames,
-      percentileFrom(this.router),
+      percentile,
     );
 
     const { borrow } = this.args;
     const borrowedSpeed = borrow
-      ? timeFor(borrow.data, borrow.framework, this.args.benchInfo, percentileFrom(this.router))
+      ? borrow.set.timeFor(borrow.framework, this.args.benchInfo, percentile)
       : undefined;
 
     let lo = min;
@@ -157,7 +174,7 @@ class TableRow extends Component<{
       if (borrowedSpeed > hi) hi = borrowedSpeed;
     }
 
-    const reverse = this.args.benchInfo.whatsBetter === "bigger";
+    const reverse = isBiggerBetter(this.args.benchInfo);
     const colors: Record<string, string | undefined> = {};
 
     for (const framework of this.args.frameworkNames) {
@@ -175,20 +192,14 @@ class TableRow extends Component<{
 
   displayOf = (speed: number | undefined) => {
     const { min, max } = this.row;
-    const bestIsMax = this.args.benchInfo.whatsBetter === "bigger";
 
-    switch (modeFrom(this.router)) {
-      case "linear":
-        return scoreFor(speed, min, max);
-      case "times": {
-        const ratio = timesBestFor(speed, min, max, bestIsMax);
-
-        return ratio === undefined ? undefined : formatTimes(ratio);
-      }
-
-      default:
-        return speed;
-    }
+    return displayValue(
+      modeFrom(this.router),
+      speed,
+      min,
+      max,
+      isBiggerBetter(this.args.benchInfo),
+    );
   };
 
   value = (framework: string) => this.displayOf(this.row.speeds[framework]);
@@ -218,7 +229,7 @@ class TableRow extends Component<{
 
 class Table extends Component<{
   benches: BenchmarkInfo[];
-  file: ResultSet;
+  set: ResultSet;
   frameworkNames: string[];
   borrow: Borrow | undefined;
 }> {
@@ -242,50 +253,35 @@ class Table extends Component<{
    */
   @cached
   get totals() {
-    const totals: Record<string, number> = {};
+    const { set, benches, frameworkNames, borrow } = this.args;
 
-    if (!this.shouldShowTotals) return totals;
+    if (!this.shouldShowTotals) return { values: {}, borrowed: undefined, min: 0, max: 0 };
 
-    for (const bench of this.args.benches) {
-      for (const framework of this.args.frameworkNames) {
-        totals[framework] ??= 0;
+    const values = set.totalsFor(frameworkNames, benches, this.percentile);
 
-        const time = timeFor(this.args.file, framework, bench, this.percentile);
-
-        if (time === undefined) continue;
-
-        totals[framework] += time;
-      }
+    for (const framework of frameworkNames) {
+      values[framework] ??= 0;
     }
 
-    const { borrow } = this.args;
-
-    if (borrow) {
-      totals.borrowed = 0;
-
-      for (const bench of this.args.benches) {
-        const time = timeFor(borrow.data, borrow.framework, bench, this.percentile);
-
-        if (time === undefined) continue;
-
-        totals.borrowed += time;
-      }
-    }
+    const borrowed = borrow
+      ? (borrow.set.totalsFor([borrow.framework], benches, this.percentile)[borrow.framework] ?? 0)
+      : undefined;
 
     let max = -Infinity;
     let min = Infinity;
 
-    for (const [key, value] of Object.entries(totals)) {
-      totals[key] = round(value);
+    const all = Object.values(values).concat(borrowed === undefined ? [] : [borrowed]);
 
+    for (const value of all) {
       if (value > max) max = value;
       if (value < min) min = value;
     }
 
-    totals.max = max;
-    totals.min = min;
+    for (const [framework, value] of Object.entries(values)) {
+      values[framework] = round(value);
+    }
 
-    return totals;
+    return { values, borrowed: borrowed === undefined ? undefined : round(borrowed), min, max };
   }
 
   get frameworkNames() {
@@ -293,39 +289,28 @@ class Table extends Component<{
   }
 
   get borrowedThrottle() {
-    const { borrow, file } = this.args;
+    const { borrow, set } = this.args;
 
     if (!borrow) return;
+    if (borrow.set.hasSameThrottleAs(set)) return;
 
-    const theirs = borrow.data.args?.CPU_THROTTLE;
-
-    if ((theirs ?? null) === (file.args?.CPU_THROTTLE ?? null)) return;
-
-    return throttleLabel(theirs);
+    return borrow.set.throttleLabel;
   }
 
-  totalValue = (framework: string) => {
-    const total = this.totals[framework];
+  displayTotal = (total: number | undefined) =>
+    displayValue(
+      modeFrom(this.router),
+      total,
+      this.totals.min,
+      this.totals.max,
+      isBiggerBetter(this.args.benches[0] ?? {}),
+    );
 
-    switch (modeFrom(this.router)) {
-      case "linear":
-        return scoreFor(total, this.totals.min, this.totals.max);
-      case "times": {
-        // times-best of the raw totals, so the best column reads 1x
-        const ratio = timesBestFor(
-          total,
-          this.totals.min,
-          this.totals.max,
-          this.args.benches[0]?.whatsBetter === "bigger",
-        );
+  totalValue = (framework: string) => this.displayTotal(this.totals.values[framework]);
 
-        return ratio === undefined ? undefined : formatTimes(ratio);
-      }
-
-      default:
-        return total;
-    }
-  };
+  get borrowedTotalValue() {
+    return this.displayTotal(this.totals.borrowed);
+  }
 
   <template>
     {{! wide tables widen the page itself so the sticky header row and
@@ -341,11 +326,11 @@ class Table extends Component<{
           {{#each this.frameworkNames as |framework|}}
             <th class="fw-header">
               <FrameworkInfo @name={{framework}} />
-              <Variant @variant={{variantOf @file framework}} />
+              <Variant @variant={{@set.variantOf framework}} />
               <span class="small">
                 <Version
-                  @version={{versionOf @file framework}}
-                  @override={{overrideOf @file framework}}
+                  @version={{@set.versionOf framework}}
+                  @override={{@set.overrideOf framework}}
                 />
               </span>
             </th>
@@ -355,16 +340,16 @@ class Table extends Component<{
             <th class="fw-header borrowed">
               <span class="borrow-tag">borrowed</span>
               <FrameworkInfo @name={{@borrow.framework}} />
-              <Variant @variant={{variantOf @borrow.data @borrow.framework}} />
+              <Variant @variant={{@borrow.set.variantOf @borrow.framework}} />
               <span class="small">
                 <Version
-                  @version={{versionOf @borrow.data @borrow.framework}}
-                  @override={{overrideOf @borrow.data @borrow.framework}}
+                  @version={{@borrow.set.versionOf @borrow.framework}}
+                  @override={{@borrow.set.overrideOf @borrow.framework}}
                 />
               </span>
-              <span class="borrow-source small" title={{titleOf @borrow.name}}>
+              <span class="borrow-source small" title={{@borrow.set.tooltip}}>
                 from
-                <time datetime={{isoOf @borrow.name}}>{{formatRunName @borrow.name}}</time>
+                <time datetime={{@borrow.set.iso}}>{{@borrow.set.displayName}}</time>
               </span>
               {{#if this.borrowedThrottle}}
                 <span class="small throttle-mismatch">{{this.borrowedThrottle}}</span>
@@ -376,7 +361,7 @@ class Table extends Component<{
       <tbody>
         {{#each @benches as |bench|}}
           <TableRow
-            @file={{@file}}
+            @set={{@set}}
             @benchInfo={{bench}}
             @frameworkNames={{this.frameworkNames}}
             @borrow={{@borrow}}
@@ -390,7 +375,7 @@ class Table extends Component<{
             {{#each this.frameworkNames as |framework|}}
               <td
                 style="background: {{colorFor
-                  (get this.totals framework)
+                  (get this.totals.values framework)
                   this.totals.min
                   this.totals.max
                 }}"
@@ -408,7 +393,7 @@ class Table extends Component<{
                   this.totals.max
                 }}"
               >
-                <span class="value">{{this.totalValue "borrowed"}}</span>
+                <span class="value">{{this.borrowedTotalValue}}</span>
               </td>
             {{/if}}
           </tr>
@@ -447,7 +432,7 @@ export default class ResultsTables extends Component<{
 
   labelFor = labelFor;
 
-  get file() {
+  get resultSet() {
     return this.args.model.data;
   }
 
@@ -456,23 +441,19 @@ export default class ResultsTables extends Component<{
   }
 
   get visibleFrameworks() {
-    return visibleFrameworksOf(this.router, this.file);
+    return visibleFrameworksOf(this.router, this.resultSet);
   }
 
   settingParams = ["mode", "p", "hide", "from", "sort"];
 
-  get benchmarkInfo() {
-    return this.args.model.data.benchmarkInfo;
-  }
-
   @cached
   get higherBenches() {
-    return higherIsBetterBenches(this.benchmarkInfo);
+    return this.resultSet.higherBenches;
   }
 
   @cached
   get lowerBenches() {
-    return lowerIsBetterBenches(this.benchmarkInfo);
+    return this.resultSet.lowerBenches;
   }
 
   sorted(benches: BenchmarkInfo[]) {
@@ -480,7 +461,7 @@ export default class ResultsTables extends Component<{
 
     if (!sort) return this.visibleFrameworks;
 
-    return sortedByTotal(this.visibleFrameworks, this.file, benches, this.percentile, sort);
+    return this.resultSet.sortedByTotal(this.visibleFrameworks, benches, this.percentile, sort);
   }
 
   @cached
@@ -548,7 +529,7 @@ export default class ResultsTables extends Component<{
 
       <SortControl />
 
-      <FrameworkToggles @file={{this.file}} />
+      <FrameworkToggles @set={{this.resultSet}} />
 
       <BorrowPicker @borrowed={{@model.borrowed}} />
     </Settings>
@@ -558,7 +539,7 @@ export default class ResultsTables extends Component<{
 
       <Table
         @benches={{this.higherBenches}}
-        @file={{this.file}}
+        @set={{this.resultSet}}
         @frameworkNames={{this.higherFrameworks}}
         @borrow={{this.borrow}}
       />
@@ -572,7 +553,7 @@ export default class ResultsTables extends Component<{
 
       <Table
         @benches={{this.lowerBenches}}
-        @file={{this.file}}
+        @set={{this.resultSet}}
         @frameworkNames={{this.lowerFrameworks}}
         @borrow={{this.borrow}}
       />

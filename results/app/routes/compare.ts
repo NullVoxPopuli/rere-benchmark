@@ -3,25 +3,19 @@ import { service } from "@ember/service";
 
 import { runs } from "virtual:result-sets";
 
-import { fetchResultSet } from "#utils";
+import { ResultSet } from "#result-set";
 
 import type RouterService from "@ember/routing/router-service";
 import type Transition from "@ember/routing/transition";
-import type { ResultSet } from "#types";
 
 interface Params {
   a: string;
   b: string;
 }
 
-export interface NamedRun {
-  name: string;
-  data: ResultSet;
-}
-
 export interface Model {
-  a: NamedRun;
-  bs: NamedRun[];
+  a: ResultSet;
+  bs: ResultSet[];
 }
 
 /**
@@ -73,12 +67,12 @@ export default class Compare extends Route<Model> {
     const names = [a].concat(splitRuns(b));
 
     try {
-      const sets = await Promise.all(names.map((name) => fetchResultSet(name)));
-      const named = names.map((name, i) => ({ name, data: sets[i] as ResultSet }));
+      const sets = await Promise.all(names.map((name) => ResultSet.fetch(name)));
 
       return {
-        a: named[0] as NamedRun,
-        bs: named.slice(1),
+        // SAFETY: `names` always holds at least `a`, verified in beforeModel
+        a: sets[0] as ResultSet,
+        bs: sets.slice(1),
       };
     } catch (e) {
       console.error(e);

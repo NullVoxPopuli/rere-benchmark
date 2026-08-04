@@ -4,7 +4,7 @@ import { service } from "@ember/service";
 import { nameOf } from "#frameworks";
 
 import type RouterService from "@ember/routing/router-service";
-import type { ResultSet } from "#types";
+import type { ResultSet } from "#result-set";
 
 export function hiddenFrameworksFrom(router: RouterService) {
   const raw = router.currentRoute?.queryParams["hide"];
@@ -12,14 +12,14 @@ export function hiddenFrameworksFrom(router: RouterService) {
   return typeof raw === "string" && raw.length > 0 ? raw.split(",") : [];
 }
 
-export function visibleFrameworksOf(router: RouterService, file: ResultSet) {
+export function visibleFrameworksOf(router: RouterService, set: ResultSet) {
   const hidden = hiddenFrameworksFrom(router);
 
-  return file.selections.frameworks.filter((name) => !hidden.includes(name));
+  return set.selectedFrameworks.filter((name) => !hidden.includes(name));
 }
 
 export class FrameworkToggles extends Component<{
-  file: ResultSet;
+  set: ResultSet;
 }> {
   @service declare router: RouterService;
 
@@ -37,7 +37,7 @@ export class FrameworkToggles extends Component<{
   <template>
     <fieldset class="value-mode">
       <legend>frameworks</legend>
-      {{#each @file.selections.frameworks as |name|}}
+      {{#each @set.selectedFrameworks as |name|}}
         <label>
           <input
             type="checkbox"

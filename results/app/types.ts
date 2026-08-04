@@ -75,7 +75,7 @@ export interface BenchmarkInfo {
   units: string;
 }
 
-export interface ResultSet {
+export interface ResultSetData {
   /**
    * YYYY-MM-DD
    */

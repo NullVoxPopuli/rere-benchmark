@@ -1,118 +1,13 @@
-import { assert, warn } from "@ember/debug";
-
-import { experiments, metadata } from "virtual:result-sets";
-
-import { frameworks } from "./frameworks.ts";
+import { metadata } from "virtual:result-sets";
 
 import type RouterService from "@ember/routing/router-service";
-import type { BenchmarkInfo, Mark, ResultData, ResultSet } from "#types";
-
-function versionsOf(file: ResultSet, framework: string) {
-  return new Set(Object.values(file.results[framework] ?? {}).map((result) => result.version));
-}
+import type { BenchmarkInfo } from "#types";
 
 /**
- * The version of a framework in a run.
+ * The query for a `<LinkTo @route="results">` pointing at the named run.
  */
-export function versionOf(file: ResultSet, framework: string) {
-  return [...versionsOf(file, framework)][0];
-}
-
-/**
- * Every benchmark is its own app, so a framework's version can drift
- * between them -- a maintenance problem worth shouting about.
- *
- * Checked once per loaded run rather than per rendered version, because
- * a framework whose version is displayed as a PR link never has its
- * version read at all: template arguments are lazy, so the frameworks
- * most likely to have drifted are exactly the ones that would slip
- * through a check that hangs off the display.
- */
-export function warnOnVersionDivergence(file: ResultSet) {
-  for (const framework of getFrameworks(file.results)) {
-    const versions = versionsOf(file, framework);
-
-    warn(
-      `There is more than one version for ${framework}. You need to do some upgrading to get the benchmark apps for ${framework} in sync. Found ${[...versions].join(", ")}`,
-      versions.size <= 1,
-      {
-        id: "benchmark-app-maintenance-needed-version-divergence",
-      },
-    );
-  }
-}
-
-export async function fetchResultSet(name: string): Promise<ResultSet> {
-  // experiments live in a separate directory from the official runs
-  const dir = experiments.includes(name) ? "experiments" : "results";
-  const response = await fetch(`/${dir}/${name}.json`);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const json = await response.json();
-
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  warnOnVersionDivergence(json);
-
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  return json;
-}
-
-/**
- * A label to show in place of the version, when a run was built from
- * something that doesn't have one -- a PR, say.
- */
-export function overrideOf(file: ResultSet, framework: string) {
-  return file.versionOverrides?.[framework];
-}
-
-/**
- * The variant a run recorded for a framework, if any -- e.g. "Vapor" for a
- * Vue Vapor build. Shown under the framework's name, above its version.
- */
-export function variantOf(file: ResultSet, framework: string) {
-  return file.notes?.[framework]?.variant;
-}
-
-export interface DisplayPr {
-  url: string;
-  title?: string;
-  /**
-   * `#<number>` when the URL has one, the URL itself otherwise.
-   */
-  label: string;
-}
-
-/**
- * The PRs a run recorded (the ones that landed between the previous
- * result set and the run), normalized for display: the runner records
- * `{ url, title }`, hand-added entries are plain URL strings.
- */
-export function prsOf(file: ResultSet): DisplayPr[] {
-  const prs = file.notes?.prs ?? [];
-
-  return prs.map((pr) => {
-    const url = typeof pr === "string" ? pr : pr.url;
-    const title = typeof pr === "string" ? undefined : pr.title;
-    const number = url.match(/\/pull\/(\d+)/)?.[1];
-
-    return { url, title, label: number ? `#${number}` : url };
-  });
-}
-
-/**
- * How one framework did at one benchmark, or undefined when that run
- * doesn't have the pair.
- */
-export function timeFor(
-  file: ResultSet,
-  framework: string,
-  bench: BenchmarkInfo,
-  percentile: Percentile,
-) {
-  const test = file.results[framework]?.[bench.name];
-
-  if (!test) return;
-
-  return timeFromMarks(test.times, bench.measure, percentile, bench.whatsBetter === "bigger");
+export function resultsQuery(runName: string) {
+  return { q: runName };
 }
 
 /**
@@ -124,23 +19,6 @@ export function throttleLabel(cpuThrottle: number | undefined) {
   if (cpuThrottle === undefined) return "CPU throttle unrecorded";
 
   return cpuThrottle > 1 ? `${cpuThrottle}x CPU slowdown` : "no CPU slowdown";
-}
-
-export function getFrameworks(results: ResultData): string[] {
-  return Object.keys(results);
-}
-
-export function getBenchNames(results: ResultData): Set<string> {
-  const names = new Set<string>();
-
-  Object.values(results)
-    .map(Object.keys)
-    .flat()
-    .forEach((name) => {
-      names.add(name);
-    });
-
-  return names;
 }
 
 /**
@@ -307,111 +185,14 @@ export function msOfFrameAt(recordedHz: number) {
   return Math.round(result * 100) / 100;
 }
 
-/**
- * Every bench brackets its work with these two marks.
- *
- * Matched exactly. They used to be matched with `endsWith`, which quietly
- * answers to any other mark a framework or a future harness change might
- * emit -- and the first match wins, so a stray `:start`-suffixed mark
- * silently redefines where the measurement began.
- */
-const START = ":start";
-const DONE = ":done";
-
-/**
- * The duration of each run, from a run's marks.
- */
-function durationsOf(runs: Array<Mark[]>) {
-  const durations: number[] = [];
-
-  for (const marks of runs) {
-    const start = marks.find((mark) => mark.name === START);
-    const done = marks.find((mark) => mark.name === DONE);
-
-    if (!start || !done) {
-      console.warn(`Dataset could have missing data`);
-      console.debug(runs);
-      continue;
-    }
-
-    durations.push(done.at - start.at);
-  }
-
-  return durations;
-}
-
-/**
- * Benches that sample rather than complete (dbmon) record each sample as
- * the detail of a named mark, and every sample counts -- one run can carry
- * several of them.
- */
-function detailsOf(runs: Array<Mark[]>, name: string) {
-  const details: number[] = [];
-
-  for (const marks of runs) {
-    for (const mark of marks) {
-      if (mark.name === name) {
-        details.push(mark.detail);
-      }
-    }
-  }
-
-  return details;
-}
-
-/**
- * Every measured value for one framework at one bench, in run order.
- *
- * The single place marks become numbers: the summary table and the
- * boxplots used to extract them separately -- and differently, one by name
- * and one by position -- so the same dataset could put a framework in a
- * different place depending on which of the two you were looking at.
- */
-export function samplesOf(times: Array<Mark[]>, measure: string | undefined) {
-  return measure ? detailsOf(times, measure) : durationsOf(times);
-}
-
 export const PERCENTILES = [50, 75, 90] as const;
 
 export type Percentile = (typeof PERCENTILES)[number];
 
 export const DEFAULT_PERCENTILE: Percentile = 50;
 
-/**
- * p50 is the median.
- *
- * Percentiles run toward the *worse* end of the distribution whichever
- * direction is better, so pXX always reads "XX% of samples came in at
- * least this good": for a duration that is the slow tail, for a frame rate
- * it is the low tail.
- *
- * Interpolates between order statistics (the same method as Excel's
- * PERCENTILE.INC and numpy's default), so p50 of an even-sized sample is
- * the midpoint of the middle two -- the median as anyone would compute it
- * by hand.
- */
-export function percentileOf(values: number[], percentile: Percentile, biggerIsBetter: boolean) {
-  if (values.length === 0) return NaN;
-
-  const sorted = values.toSorted((a, b) => a - b);
-  const towardWorst = biggerIsBetter ? 100 - percentile : percentile;
-  const rank = ((sorted.length - 1) * towardWorst) / 100;
-  const below = Math.floor(rank);
-  const above = Math.ceil(rank);
-  const value = sorted[below] as number;
-
-  if (below === above) return value;
-
-  return value + (rank - below) * ((sorted[above] as number) - value);
-}
-
-export function timeFromMarks(
-  times: Array<Mark[]>,
-  measure: string | undefined,
-  percentile: Percentile,
-  biggerIsBetter: boolean,
-) {
-  return round(percentileOf(samplesOf(times, measure), percentile, biggerIsBetter));
+export function labelFor(percentile: Percentile) {
+  return percentile === 50 ? "p50 (median)" : `p${percentile}`;
 }
 
 /**
@@ -437,102 +218,27 @@ export function totalSortFrom(router: RouterService): TotalSort | undefined {
 }
 
 /**
- * Frameworks ordered by their summed result over one area's benches.
- *
- * "best" and "worst" are stated in the area's own direction -- best-first
- * is the highest total when bigger is better and the lowest when smaller
- * is -- so the same setting reads coherently across both areas. Frameworks
- * the set has no data for go last either way.
+ * Accepts anything that records a direction: `BenchmarkInfo` states it
+ * outright, per-result data only when bigger is better.
  */
-export function sortedByTotal(
-  frameworkNames: string[],
-  file: ResultSet,
-  benches: BenchmarkInfo[],
-  percentile: Percentile,
-  sort: TotalSort,
-) {
-  const totals: Record<string, number> = {};
-
-  for (const framework of frameworkNames) {
-    for (const bench of benches) {
-      const time = timeFor(file, framework, bench, percentile);
-
-      if (time === undefined) continue;
-
-      totals[framework] = (totals[framework] ?? 0) + time;
-    }
-  }
-
-  const descending = (sort === "best") === (benches[0]?.whatsBetter === "bigger");
-
-  return frameworkNames.toSorted((a, b) => {
-    const totalA = totals[a];
-    const totalB = totals[b];
-
-    if (totalA === undefined && totalB === undefined) return 0;
-    if (totalA === undefined) return 1;
-    if (totalB === undefined) return -1;
-
-    return descending ? totalB - totalA : totalA - totalB;
-  });
+export function isBiggerBetter(bench: { whatsBetter?: string }) {
+  return bench.whatsBetter === "bigger";
 }
 
-export function labelFor(percentile: Percentile) {
-  return percentile === 50 ? "p50 (median)" : `p${percentile}`;
-}
-
-export function isBiggerBetter(results: { whatsBetter: string }): boolean {
-  return results.whatsBetter === "bigger";
+/**
+ * The benches in display order: the completion-style ones first, the
+ * async ones after them.
+ */
+export function asyncBenchesLast(benches: BenchmarkInfo[]) {
+  return benches.toSorted(
+    (a, b) => Number(a.name.includes("async")) - Number(b.name.includes("async")),
+  );
 }
 
 export function higherIsBetterBenches(benchmarkInfo: BenchmarkInfo[]) {
-  return benchmarkInfo.filter((bench) => bench.whatsBetter === "bigger");
+  return benchmarkInfo.filter(isBiggerBetter);
 }
 
 export function lowerIsBetterBenches(benchmarkInfo: BenchmarkInfo[]) {
-  return benchmarkInfo
-    .filter((bench) => bench.whatsBetter !== "bigger")
-    .toSorted()
-    .toSorted((a, b) => (a.name.includes("async") ? 1 : 0) - (b.name.includes("async") ? 1 : 0));
-}
-
-export function dataOf(results: ResultData, benchName: string, percentile: Percentile) {
-  const list = [];
-
-  for (const [framework, benches] of Object.entries(results)) {
-    const benchData = benches[benchName];
-    const frameworkInfo = frameworks[framework];
-
-    assert(
-      `Could not find bench data for bench ${benchName} and framework ${framework}`,
-      benchData,
-    );
-    assert(
-      `Could not find framework information for the framework named ${framework}. Available known frameworks: ${Object.keys(
-        frameworks,
-      ).join(", ")}`,
-      frameworkInfo,
-    );
-
-    if (!benchData || !frameworkInfo) {
-      continue;
-    }
-
-    const time = timeFromMarks(
-      benchData.times,
-      benchData.measure,
-      percentile,
-      benchData.whatsBetter === "bigger",
-    );
-
-    list.push({
-      name: framework,
-      speed: time,
-      color: frameworkInfo.color,
-      version: benchData.version,
-      units: benchData.measure ?? "ms",
-    });
-  }
-
-  return list.sort((a, b) => a.speed - b.speed);
+  return asyncBenchesLast(benchmarkInfo.filter((bench) => !isBiggerBetter(bench)));
 }

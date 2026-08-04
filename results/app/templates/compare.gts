@@ -14,27 +14,22 @@ import { nameOf } from "#frameworks";
 import { joinRuns } from "#routes/compare.ts";
 import {
   formatRunName,
-  getFrameworks,
   higherIsBetterBenches,
-  isoOf,
+  isBiggerBetter,
   labelFor,
   lowerIsBetterBenches,
-  overrideOf,
   percentileFrom,
   PERCENTILES,
+  resultsQuery,
   round,
-  shortRunName,
-  throttleLabel,
-  timeFor,
   titleOf,
-  variantOf,
-  versionOf,
 } from "#utils";
 
 import type { TOC } from "@ember/component/template-only";
 import type RouterService from "@ember/routing/router-service";
-import type { Model, NamedRun } from "#routes/compare.ts";
-import type { BenchmarkInfo, ResultSet } from "#types";
+import type { ResultSet } from "#result-set";
+import type { Model } from "#routes/compare.ts";
+import type { BenchmarkInfo } from "#types";
 import type { Percentile } from "#utils";
 
 /**
@@ -42,10 +37,6 @@ import type { Percentile } from "#utils";
  * runs are noisy, so a fraction of a percent either way is meaningless.
  */
 const SAME_THRESHOLD = 1;
-
-function qp(runName: string) {
-  return { q: runName };
-}
 
 /**
  * The comparison runs are lettered after the baseline: B, C, D, ...
@@ -81,46 +72,31 @@ const RunOptions = <template>
 }>;
 
 /**
- * Both runs state their throttle outright rather than leaving it to be
- * inferred from the warning that only shows when they disagree.
- */
-function throttleOf(file: ResultSet) {
-  return throttleLabel(file.args?.CPU_THROTTLE);
-}
-
-function throttlesDiffer(a: ResultSet, b: ResultSet) {
-  return (a.args?.CPU_THROTTLE ?? null) !== (b.args?.CPU_THROTTLE ?? null);
-}
-
-/**
  * The header shows only the run's number, so the details the full name
  * carries (environment, throttle, date) move into its tooltip, ahead of
  * the CPU model that was already there.
  */
-function headerTitleOf(runName: string) {
-  const cpu = titleOf(runName);
-  const full = formatRunName(runName);
+function headerTitleOf(run: ResultSet) {
+  const cpu = run.tooltip;
+  const full = run.displayName;
 
   return cpu ? `${full} — ${cpu}` : full;
 }
 
 const RunHeader = <template>
   <th class="run-header">
-    <LinkTo @route="results" @query={{qp @run.name}} title={{headerTitleOf @run.name}}>
-      <time datetime={{isoOf @run.name}}>{{shortRunName @run.name}}</time>
+    <LinkTo @route="results" @query={{resultsQuery @run.name}} title={{headerTitleOf @run}}>
+      <time datetime={{@run.iso}}>{{@run.shortName}}</time>
     </LinkTo>
     <span class="small">
-      <Version
-        @version={{versionOf @run.data @framework}}
-        @override={{overrideOf @run.data @framework}}
-      />
+      <Version @version={{@run.versionOf @framework}} @override={{@run.overrideOf @framework}} />
     </span>
     <span class="small throttle {{if @mismatch 'mismatch'}}">
-      {{throttleOf @run.data}}
+      {{@run.throttleLabel}}
     </span>
   </th>
 </template> satisfies TOC<{
-  run: NamedRun;
+  run: ResultSet;
   framework: string;
   mismatch: boolean;
 }>;
@@ -159,8 +135,8 @@ function display(time: number | undefined) {
 
 class CompareTable extends Component<{
   benches: BenchmarkInfo[];
-  a: NamedRun;
-  bs: NamedRun[];
+  a: ResultSet;
+  bs: ResultSet[];
   framework: string;
 }> {
   @service declare router: RouterService;
@@ -173,7 +149,7 @@ class CompareTable extends Component<{
     return this.args.bs.map((run, index) => ({
       run,
       letter: letterFor(index),
-      throttleMismatch: throttlesDiffer(this.args.a.data, run.data),
+      throttleMismatch: !this.args.a.hasSameThrottleAs(run),
     }));
   }
 
@@ -186,11 +162,11 @@ class CompareTable extends Component<{
     const percentile = percentileFrom(this.router);
 
     return this.args.benches.map((bench) => {
-      const a = timeFor(this.args.a.data, this.args.framework, bench, percentile);
+      const a = this.args.a.timeFor(this.args.framework, bench, percentile);
       const others = this.args.bs.map((run) => {
-        const time = timeFor(run.data, this.args.framework, bench, percentile);
+        const time = run.timeFor(this.args.framework, bench, percentile);
 
-        return { time, comparison: compareTimes(a, time, bench.whatsBetter === "bigger") };
+        return { time, comparison: compareTimes(a, time, isBiggerBetter(bench)) };
       });
 
       return { bench, a, others };
@@ -217,7 +193,7 @@ class CompareTable extends Component<{
       });
     }
 
-    const bestIsMax = this.args.benches[0]?.whatsBetter === "bigger";
+    const bestIsMax = isBiggerBetter(this.args.benches[0] ?? {});
 
     return {
       a: round(a),
@@ -311,7 +287,7 @@ export default class Compare extends Component<{ model: Model }> {
     const names = new Set<string>();
 
     for (const run of this.allRuns) {
-      for (const name of getFrameworks(run.data.results)) {
+      for (const name of run.frameworks) {
         names.add(name);
       }
     }
@@ -328,7 +304,7 @@ export default class Compare extends Component<{ model: Model }> {
     }
 
     const inAll = this.frameworkNames.find((name) =>
-      this.allRuns.every((run) => run.data.results[name]),
+      this.allRuns.every((run) => run.frameworks.includes(name)),
     );
 
     return inAll ?? this.frameworkNames[0] ?? "";
@@ -391,7 +367,7 @@ export default class Compare extends Component<{ model: Model }> {
   swap = () => {
     // SAFETY: only reachable via canSwap, so there is exactly one comparee
     this.router.transitionTo({
-      queryParams: { a: (this.bs[0] as NamedRun).name, b: this.a.name },
+      queryParams: { a: (this.bs[0] as ResultSet).name, b: this.a.name },
     });
   };
 
@@ -402,14 +378,14 @@ export default class Compare extends Component<{ model: Model }> {
   get environmentWarning() {
     const problems = [];
 
-    const environment = JSON.stringify(this.a.data.environment);
+    const environment = JSON.stringify(this.a.environment);
 
-    if (this.bs.some((run) => JSON.stringify(run.data.environment) !== environment)) {
+    if (this.bs.some((run) => JSON.stringify(run.environment) !== environment)) {
       problems.push("these runs were recorded in different environments (machine / browser)");
     }
 
-    if (this.bs.some((run) => throttlesDiffer(this.a.data, run.data))) {
-      const throttles = this.allRuns.map((run) => throttleOf(run.data));
+    if (this.bs.some((run) => !this.a.hasSameThrottleAs(run))) {
+      const throttles = this.allRuns.map((run) => run.throttleLabel);
 
       problems.push(`the CPU was throttled differently (${throttles.join(" vs ")})`);
     }
@@ -424,7 +400,7 @@ export default class Compare extends Component<{ model: Model }> {
     const byName = new Map<string, BenchmarkInfo>();
 
     for (const run of this.bs.concat([this.a])) {
-      for (const bench of run.data.benchmarkInfo) {
+      for (const bench of run.benchmarkInfo) {
         if (!byName.has(bench.name)) byName.set(bench.name, bench);
       }
     }
@@ -450,12 +426,12 @@ export default class Compare extends Component<{ model: Model }> {
    */
   get variant() {
     for (const run of this.bs) {
-      const variant = variantOf(run.data, this.framework);
+      const variant = run.variantOf(this.framework);
 
       if (variant) return variant;
     }
 
-    return variantOf(this.a.data, this.framework);
+    return this.a.variantOf(this.framework);
   }
 
   isFramework = (name: string) => this.framework === name;

@@ -1,8 +1,7 @@
-import { displayHz, formatDuration, formatTimestamp, msOfFrameAt, throttleLabel } from "#utils";
+import { displayHz, formatDuration, formatTimestamp, msOfFrameAt } from "#utils";
 
 import type { TOC } from "@ember/component/template-only";
-import type { ResultSet } from "#types";
-import type { DisplayPr } from "#utils";
+import type { ResultSet } from "#result-set";
 
 function first8(str: string) {
   return str.slice(0, 8);
@@ -15,53 +14,53 @@ function isThrottled(cpuThrottle: number | undefined) {
 export const Info = <template>
   <div class="env-info">
     Tested on
-    <time datetime={{@date}}>{{formatTimestamp @date}}</time>
+    <time datetime={{@set.date}}>{{formatTimestamp @set.date}}</time>
 
-    {{#if @sha}}
+    {{#if @set.sha}}
       <span>
         @
         <a
           target="_blank"
-          href="https://github.com/NullVoxPopuli/rere-benchmark/tree/{{@sha}}"
+          href="https://github.com/NullVoxPopuli/rere-benchmark/tree/{{@set.sha}}"
           rel="noopener noreferrer"
         >
-          {{first8 @sha}}
+          {{first8 @set.sha}}
         </a>
       </span>
     {{/if}}
     with:
     <ul>
       <li>
-        {{@env.machine.os.name}}
-        {{@env.machine.os.version}}
+        {{@set.environment.machine.os.name}}
+        {{@set.environment.machine.os.version}}
         w/
-        {{@env.machine.cpu}}
+        {{@set.environment.machine.cpu}}
         /
-        {{@env.machine.ram}}
+        {{@set.environment.machine.ram}}
         RAM
       </li>
       <li>
-        {{@env.browser.name}}
-        {{@env.browser.version}}
+        {{@set.environment.browser.name}}
+        {{@set.environment.browser.version}}
         (non-headless)
       </li>
       <li>
-        {{displayHz @env.monitor.hz}}hz Monitor (1 frame =
-        {{msOfFrameAt @env.monitor.hz}}ms)
+        {{displayHz @set.environment.monitor.hz}}hz Monitor (1 frame =
+        {{msOfFrameAt @set.environment.monitor.hz}}ms)
       </li>
-      {{#if (isThrottled @cpuThrottle)}}
+      {{#if (isThrottled @set.cpuThrottle)}}
         <li>
-          {{throttleLabel @cpuThrottle}}
+          {{@set.throttleLabel}}
         </li>
       {{/if}}
-      {{#if @timing}}
+      {{#if @set.timing}}
         <li>
           Ran in
-          {{formatDuration @timing.totalMs}}
-          {{#if @timing.buildMs}}
+          {{formatDuration @set.timing.totalMs}}
+          {{#if @set.timing.buildMs}}
             (build:
-            {{formatDuration @timing.buildMs}}, benchmark:
-            {{formatDuration @timing.benchmarkMs}})
+            {{formatDuration @set.timing.buildMs}}, benchmark:
+            {{formatDuration @set.timing.benchmarkMs}})
           {{else}}
             (benchmark only; build skipped)
           {{/if}}
@@ -69,11 +68,11 @@ export const Info = <template>
       {{/if}}
     </ul>
 
-    {{#if @prs.length}}
+    {{#if @set.prs.length}}
       <details class="pr-notes">
-        <summary>PRs since the previous result set ({{@prs.length}})</summary>
+        <summary>PRs since the previous result set ({{@set.prs.length}})</summary>
         <ul>
-          {{#each @prs as |pr|}}
+          {{#each @set.prs as |pr|}}
             <li>
               <a target="_blank" rel="noopener noreferrer" href={{pr.url}}>
                 {{pr.label}}
@@ -86,10 +85,5 @@ export const Info = <template>
     {{/if}}
   </div>
 </template> satisfies TOC<{
-  date: string;
-  sha: string;
-  env: ResultSet["environment"];
-  cpuThrottle: number | undefined;
-  timing: ResultSet["timing"];
-  prs: DisplayPr[];
+  set: ResultSet;
 }>;
