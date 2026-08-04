@@ -236,6 +236,15 @@ export function formatRunName(runName: string) {
 }
 
 /**
+ * Just the run's file number (`#6`) for places the full name is too wide,
+ * like a column header per run. A name with no metadata (an experiment)
+ * is already its own shortest form.
+ */
+export function shortRunName(runName: string) {
+  return metadata[runName] ? `#${runName}` : runName;
+}
+
+/**
  * The tooltip behind a displayed run name: the machine's CPU model --
  * too long for the name itself, still worth keeping within reach. The
  * name already leads with the file number, so nothing else belongs here.

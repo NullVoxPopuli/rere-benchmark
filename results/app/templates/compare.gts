@@ -23,6 +23,7 @@ import {
   percentileFrom,
   PERCENTILES,
   round,
+  shortRunName,
   throttleLabel,
   timeFor,
   titleOf,
@@ -91,10 +92,22 @@ function throttlesDiffer(a: ResultSet, b: ResultSet) {
   return (a.args?.CPU_THROTTLE ?? null) !== (b.args?.CPU_THROTTLE ?? null);
 }
 
+/**
+ * The header shows only the run's number, so the details the full name
+ * carries (environment, throttle, date) move into its tooltip, ahead of
+ * the CPU model that was already there.
+ */
+function headerTitleOf(runName: string) {
+  const cpu = titleOf(runName);
+  const full = formatRunName(runName);
+
+  return cpu ? `${full} — ${cpu}` : full;
+}
+
 const RunHeader = <template>
   <th class="run-header">
-    <LinkTo @route="results" @query={{qp @run.name}} title={{titleOf @run.name}}>
-      <time datetime={{isoOf @run.name}}>{{formatRunName @run.name}}</time>
+    <LinkTo @route="results" @query={{qp @run.name}} title={{headerTitleOf @run.name}}>
+      <time datetime={{isoOf @run.name}}>{{shortRunName @run.name}}</time>
     </LinkTo>
     <span class="small">
       <Version

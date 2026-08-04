@@ -296,10 +296,6 @@ table {
 }
 
 .compare-table {
-  /* wider than the results tables: these columns are headed by a
-     timestamp rather than a framework name */
-  --value-column: 10rem;
-
   .run-header {
     text-align: center;
 
