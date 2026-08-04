@@ -14,6 +14,7 @@ import { SortControl } from "#components/sort-control.gts";
 import { Variant } from "#components/variant.gts";
 import { Version } from "#components/version.gts";
 import {
+  effectsBenches,
   formatRunName,
   higherIsBetterBenches,
   isoOf,
@@ -475,6 +476,11 @@ export default class ResultsTables extends Component<{
     return lowerIsBetterBenches(this.benchmarkInfo);
   }
 
+  @cached
+  get effectBenches() {
+    return effectsBenches(this.benchmarkInfo);
+  }
+
   sorted(benches: BenchmarkInfo[]) {
     const sort = totalSortFrom(this.router);
 
@@ -491,6 +497,11 @@ export default class ResultsTables extends Component<{
   @cached
   get lowerFrameworks() {
     return this.sorted(this.lowerBenches);
+  }
+
+  @cached
+  get effectFrameworks() {
+    return this.sorted(this.effectBenches);
   }
 
   <template>
@@ -574,6 +585,20 @@ export default class ResultsTables extends Component<{
         @benches={{this.lowerBenches}}
         @file={{this.file}}
         @frameworkNames={{this.lowerFrameworks}}
+        @borrow={{this.borrow}}
+      />
+      <br />
+      <br />
+      <br />
+    {{/if}}
+
+    {{#if this.effectBenches.length}}
+      <h2>Effects (lower is better)</h2>
+
+      <Table
+        @benches={{this.effectBenches}}
+        @file={{this.file}}
+        @frameworkNames={{this.effectFrameworks}}
         @borrow={{this.borrow}}
       />
       <br />
