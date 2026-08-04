@@ -36,7 +36,7 @@
     "common": "link:../../../common",
     "decorator-transforms": "2.4.0",
     "ember-modifier": "^4.3.0",
-    "ember-source": "7.3.0-alpha.5",
+    "ember-source": "file:../../../ember-source-pr-21520-e19da48.tgz",
     "ember-strict-application-resolver": "0.1.1"
   },
   "devDependencies": {
