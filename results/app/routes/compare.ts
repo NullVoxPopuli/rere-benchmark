@@ -21,7 +21,20 @@ export interface NamedRun {
 
 export interface Model {
   a: NamedRun;
-  b: NamedRun;
+  bs: NamedRun[];
+}
+
+/**
+ * `b` holds every run the baseline is compared against, so a URL can name
+ * any number of them: ?a=run1&b=run2,run3. Links that only ever compared
+ * two runs keep working -- a single name is a list of one.
+ */
+export function splitRuns(b: string): string[] {
+  return b.split(",").filter(Boolean);
+}
+
+export function joinRuns(names: string[]): string {
+  return names.join(",");
 }
 
 export default class Compare extends Route<Model> {
@@ -57,12 +70,15 @@ export default class Compare extends Route<Model> {
     // SAFETY: verified in beforeModel
     const { a, b } = params as unknown as Params;
 
+    const names = [a].concat(splitRuns(b));
+
     try {
-      const [dataA, dataB] = await Promise.all([fetchResultSet(a), fetchResultSet(b)]);
+      const sets = await Promise.all(names.map((name) => fetchResultSet(name)));
+      const named = names.map((name, i) => ({ name, data: sets[i] as ResultSet }));
 
       return {
-        a: { name: a, data: dataA },
-        b: { name: b, data: dataB },
+        a: named[0] as NamedRun,
+        bs: named.slice(1),
       };
     } catch (e) {
       console.error(e);
@@ -99,7 +115,7 @@ function neighborOf(name: string, direction: "older" | "newer") {
  */
 function runsFor(a: string | undefined, b: string | undefined) {
   if (a && b) return { a, b };
-  if (b) return { a: neighborOf(b, "older"), b };
+  if (b) return { a: neighborOf(splitRuns(b)[0] ?? b, "older"), b };
   if (a) return { a, b: neighborOf(a, "newer") };
 
   // no runs named at all -- the two most recent

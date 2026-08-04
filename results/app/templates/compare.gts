@@ -11,6 +11,7 @@ import { FrameworkInfo } from "#components/framework-info.gts";
 import { Variant } from "#components/variant.gts";
 import { Version } from "#components/version.gts";
 import { nameOf } from "#frameworks";
+import { joinRuns } from "#routes/compare.ts";
 import {
   formatRunName,
   getFrameworks,
@@ -22,6 +23,7 @@ import {
   percentileFrom,
   PERCENTILES,
   round,
+  shortRunName,
   throttleLabel,
   timeFor,
   titleOf,
@@ -46,14 +48,21 @@ function qp(runName: string) {
 }
 
 /**
- * The options for one of the A/B run selectors: the official runs, plus
- * the experiments in their own group when there are any. Either side can
+ * The comparison runs are lettered after the baseline: B, C, D, ...
+ */
+function letterFor(index: number) {
+  return String.fromCharCode(66 + index);
+}
+
+/**
+ * The options for one of the run selectors: the official runs, plus the
+ * experiments in their own group when there are any. Any selector can
  * point at either category, so a run can be compared against an experiment.
  */
 const RunOptions = <template>
   <optgroup label="Runs">
     {{#each runs as |name|}}
-      <option value={{name}} selected={{@isRun @which name}} title={{titleOf name}}>{{formatRunName
+      <option value={{name}} selected={{eq name @current}} title={{titleOf name}}>{{formatRunName
           name
         }}</option>
     {{/each}}
@@ -61,17 +70,14 @@ const RunOptions = <template>
   {{#if experiments.length}}
     <optgroup label="Experiments">
       {{#each experiments as |name|}}
-        <option
-          value={{name}}
-          selected={{@isRun @which name}}
-          title={{titleOf name}}
-        >{{formatRunName name}}</option>
+        <option value={{name}} selected={{eq name @current}} title={{titleOf name}}>{{formatRunName
+            name
+          }}</option>
       {{/each}}
     </optgroup>
   {{/if}}
 </template> satisfies TOC<{
-  which: "a" | "b";
-  isRun: (which: "a" | "b", name: string) => boolean;
+  current: string;
 }>;
 
 /**
@@ -85,6 +91,39 @@ function throttleOf(file: ResultSet) {
 function throttlesDiffer(a: ResultSet, b: ResultSet) {
   return (a.args?.CPU_THROTTLE ?? null) !== (b.args?.CPU_THROTTLE ?? null);
 }
+
+/**
+ * The header shows only the run's number, so the details the full name
+ * carries (environment, throttle, date) move into its tooltip, ahead of
+ * the CPU model that was already there.
+ */
+function headerTitleOf(runName: string) {
+  const cpu = titleOf(runName);
+  const full = formatRunName(runName);
+
+  return cpu ? `${full} — ${cpu}` : full;
+}
+
+const RunHeader = <template>
+  <th class="run-header">
+    <LinkTo @route="results" @query={{qp @run.name}} title={{headerTitleOf @run.name}}>
+      <time datetime={{isoOf @run.name}}>{{shortRunName @run.name}}</time>
+    </LinkTo>
+    <span class="small">
+      <Version
+        @version={{versionOf @run.data @framework}}
+        @override={{overrideOf @run.data @framework}}
+      />
+    </span>
+    <span class="small throttle {{if @mismatch 'mismatch'}}">
+      {{throttleOf @run.data}}
+    </span>
+  </th>
+</template> satisfies TOC<{
+  run: NamedRun;
+  framework: string;
+  mismatch: boolean;
+}>;
 
 interface Comparison {
   label: string;
@@ -121,10 +160,26 @@ function display(time: number | undefined) {
 class CompareTable extends Component<{
   benches: BenchmarkInfo[];
   a: NamedRun;
-  b: NamedRun;
+  bs: NamedRun[];
   framework: string;
 }> {
   @service declare router: RouterService;
+
+  /**
+   * One entry per comparison run: the run itself, its letter, and whether
+   * its throttle disagrees with the baseline's.
+   */
+  get columns() {
+    return this.args.bs.map((run, index) => ({
+      run,
+      letter: letterFor(index),
+      throttleMismatch: throttlesDiffer(this.args.a.data, run.data),
+    }));
+  }
+
+  get anyThrottleMismatch() {
+    return this.columns.some((column) => column.throttleMismatch);
+  }
 
   @cached
   get rows() {
@@ -132,41 +187,44 @@ class CompareTable extends Component<{
 
     return this.args.benches.map((bench) => {
       const a = timeFor(this.args.a.data, this.args.framework, bench, percentile);
-      const b = timeFor(this.args.b.data, this.args.framework, bench, percentile);
+      const others = this.args.bs.map((run) => {
+        const time = timeFor(run.data, this.args.framework, bench, percentile);
 
-      return {
-        bench,
-        a,
-        b,
-        comparison: compareTimes(a, b, bench.whatsBetter === "bigger"),
-      };
+        return { time, comparison: compareTimes(a, time, bench.whatsBetter === "bigger") };
+      });
+
+      return { bench, a, others };
     });
-  }
-
-  get throttlesDiffer() {
-    return throttlesDiffer(this.args.a.data, this.args.b.data);
   }
 
   @cached
   get totals() {
-    // benches missing from either run would skew a summed comparison
-    const complete = this.rows.filter((row) => row.a !== undefined && row.b !== undefined);
+    // benches missing from any run would skew a summed comparison
+    const complete = this.rows.filter(
+      (row) => row.a !== undefined && row.others.every((other) => other.time !== undefined),
+    );
 
     if (complete.length < 2) return;
 
     let a = 0;
-    let b = 0;
+    const sums = this.args.bs.map(() => 0);
 
     for (const row of complete) {
       // SAFETY: filtered above
       a += row.a as number;
-      b += row.b as number;
+      row.others.forEach((other, index) => {
+        sums[index] = (sums[index] as number) + (other.time as number);
+      });
     }
+
+    const bestIsMax = this.args.benches[0]?.whatsBetter === "bigger";
 
     return {
       a: round(a),
-      b: round(b),
-      comparison: compareTimes(a, b, this.args.benches[0]?.whatsBetter === "bigger"),
+      others: sums.map((sum) => ({
+        time: round(sum),
+        comparison: compareTimes(a, sum, bestIsMax),
+      })),
     };
   }
 
@@ -176,40 +234,22 @@ class CompareTable extends Component<{
         <tr>
           <th></th>
           <th class="run-header"><span class="run-tag">A</span></th>
-          <th class="run-header"><span class="run-tag">B</span></th>
-          <th></th>
+          {{#each this.columns as |column|}}
+            <th class="run-header"><span class="run-tag">{{column.letter}}</span></th>
+            <th></th>
+          {{/each}}
         </tr>
         <tr>
           <th></th>
-          <th class="run-header">
-            <LinkTo @route="results" @query={{qp @a.name}} title={{titleOf @a.name}}>
-              <time datetime={{isoOf @a.name}}>{{formatRunName @a.name}}</time>
-            </LinkTo>
-            <span class="small">
-              <Version
-                @version={{versionOf @a.data @framework}}
-                @override={{overrideOf @a.data @framework}}
-              />
-            </span>
-            <span class="small throttle {{if this.throttlesDiffer 'mismatch'}}">
-              {{throttleOf @a.data}}
-            </span>
-          </th>
-          <th class="run-header">
-            <LinkTo @route="results" @query={{qp @b.name}} title={{titleOf @b.name}}>
-              <time datetime={{isoOf @b.name}}>{{formatRunName @b.name}}</time>
-            </LinkTo>
-            <span class="small">
-              <Version
-                @version={{versionOf @b.data @framework}}
-                @override={{overrideOf @b.data @framework}}
-              />
-            </span>
-            <span class="small throttle {{if this.throttlesDiffer 'mismatch'}}">
-              {{throttleOf @b.data}}
-            </span>
-          </th>
-          <th>B vs A</th>
+          <RunHeader @run={{@a}} @framework={{@framework}} @mismatch={{this.anyThrottleMismatch}} />
+          {{#each this.columns as |column|}}
+            <RunHeader
+              @run={{column.run}}
+              @framework={{@framework}}
+              @mismatch={{column.throttleMismatch}}
+            />
+            <th>{{column.letter}} vs A</th>
+          {{/each}}
         </tr>
       </thead>
       <tbody>
@@ -217,15 +257,17 @@ class CompareTable extends Component<{
           <tr>
             <BenchmarkName @bench={{row.bench}} />
             <td class="num">{{display row.a}}</td>
-            <td class="num">{{display row.b}}</td>
-            <td class="change {{row.comparison.direction}}">
-              {{#if row.comparison}}
-                <span class="value">{{row.comparison.label}}</span>
-                <span class="units">{{row.comparison.word}}</span>
-              {{else}}
-                —
-              {{/if}}
-            </td>
+            {{#each row.others as |other|}}
+              <td class="num">{{display other.time}}</td>
+              <td class="change {{other.comparison.direction}}">
+                {{#if other.comparison}}
+                  <span class="value">{{other.comparison.label}}</span>
+                  <span class="units">{{other.comparison.word}}</span>
+                {{else}}
+                  —
+                {{/if}}
+              </td>
+            {{/each}}
           </tr>
         {{/each}}
       </tbody>
@@ -235,11 +277,13 @@ class CompareTable extends Component<{
           <tr>
             <th style="text-align: right">Total</th>
             <td class="num">{{this.totals.a}}</td>
-            <td class="num">{{this.totals.b}}</td>
-            <td class="change {{this.totals.comparison.direction}}">
-              <span class="value">{{this.totals.comparison.label}}</span>
-              <span class="units">{{this.totals.comparison.word}}</span>
-            </td>
+            {{#each this.totals.others as |other|}}
+              <td class="num">{{other.time}}</td>
+              <td class="change {{other.comparison.direction}}">
+                <span class="value">{{other.comparison.label}}</span>
+                <span class="units">{{other.comparison.word}}</span>
+              </td>
+            {{/each}}
           </tr>
         </tfoot>
       {{/if}}
@@ -254,15 +298,23 @@ export default class Compare extends Component<{ model: Model }> {
     return this.args.model.a;
   }
 
-  get b() {
-    return this.args.model.b;
+  get bs() {
+    return this.args.model.bs;
+  }
+
+  get allRuns() {
+    return [this.a].concat(this.bs);
   }
 
   @cached
   get frameworkNames() {
-    const names = new Set(
-      getFrameworks(this.a.data.results).concat(getFrameworks(this.b.data.results)),
-    );
+    const names = new Set<string>();
+
+    for (const run of this.allRuns) {
+      for (const name of getFrameworks(run.data.results)) {
+        names.add(name);
+      }
+    }
 
     // the runs list them in whatever order they were benchmarked in
     return Array.from(names).sort((a, b) => nameOf(a).localeCompare(nameOf(b)));
@@ -275,11 +327,11 @@ export default class Compare extends Component<{ model: Model }> {
       return requested;
     }
 
-    const inBoth = this.frameworkNames.find(
-      (name) => this.a.data.results[name] && this.b.data.results[name],
+    const inAll = this.frameworkNames.find((name) =>
+      this.allRuns.every((run) => run.data.results[name]),
     );
 
-    return inBoth ?? this.frameworkNames[0] ?? "";
+    return inAll ?? this.frameworkNames[0] ?? "";
   }
 
   setFramework = (event: Event) => {
@@ -288,15 +340,58 @@ export default class Compare extends Component<{ model: Model }> {
     this.router.transitionTo({ queryParams: { framework: value } });
   };
 
-  setRun = (which: "a" | "b", event: Event) => {
+  setRunA = (event: Event) => {
     const { value } = event.target as HTMLSelectElement;
 
-    this.router.transitionTo({ queryParams: { [which]: value } });
+    this.router.transitionTo({ queryParams: { a: value } });
   };
 
+  bNames = () => this.bs.map((run) => run.name);
+
+  setRunB = (index: number, event: Event) => {
+    const { value } = event.target as HTMLSelectElement;
+    const names = this.bNames();
+
+    names[index] = value;
+    this.router.transitionTo({ queryParams: { b: joinRuns(names) } });
+  };
+
+  /**
+   * Another column to compare against A: the newest run not already in
+   * the comparison, falling back to an unused experiment, and to the
+   * newest run again once everything is on screen.
+   */
+  addRun = () => {
+    const used = new Set([this.a.name].concat(this.bNames()));
+    const next =
+      runs.find((name) => !used.has(name)) ??
+      experiments.find((name) => !used.has(name)) ??
+      runs[0];
+
+    if (!next) return;
+
+    this.router.transitionTo({ queryParams: { b: joinRuns(this.bNames().concat([next])) } });
+  };
+
+  removeRun = (index: number) => {
+    const names = this.bNames();
+
+    names.splice(index, 1);
+    this.router.transitionTo({ queryParams: { b: joinRuns(names) } });
+  };
+
+  get canRemove() {
+    return this.bs.length > 1;
+  }
+
+  get canSwap() {
+    return this.bs.length === 1;
+  }
+
   swap = () => {
+    // SAFETY: only reachable via canSwap, so there is exactly one comparee
     this.router.transitionTo({
-      queryParams: { a: this.b.name, b: this.a.name },
+      queryParams: { a: (this.bs[0] as NamedRun).name, b: this.a.name },
     });
   };
 
@@ -307,14 +402,16 @@ export default class Compare extends Component<{ model: Model }> {
   get environmentWarning() {
     const problems = [];
 
-    if (JSON.stringify(this.a.data.environment) !== JSON.stringify(this.b.data.environment)) {
+    const environment = JSON.stringify(this.a.data.environment);
+
+    if (this.bs.some((run) => JSON.stringify(run.data.environment) !== environment)) {
       problems.push("these runs were recorded in different environments (machine / browser)");
     }
 
-    if (throttlesDiffer(this.a.data, this.b.data)) {
-      problems.push(
-        `the CPU was throttled differently (${throttleOf(this.a.data)} vs ${throttleOf(this.b.data)})`,
-      );
+    if (this.bs.some((run) => throttlesDiffer(this.a.data, run.data))) {
+      const throttles = this.allRuns.map((run) => throttleOf(run.data));
+
+      problems.push(`the CPU was throttled differently (${throttles.join(" vs ")})`);
     }
 
     return problems.join("; ");
@@ -322,11 +419,14 @@ export default class Compare extends Component<{ model: Model }> {
 
   @cached
   get benchmarkInfo() {
-    // ordered by run B (the newer / candidate run), then anything only in A
+    // ordered by the comparison runs (the newer / candidate runs), then
+    // anything only in the baseline
     const byName = new Map<string, BenchmarkInfo>();
 
-    for (const bench of this.b.data.benchmarkInfo.concat(this.a.data.benchmarkInfo)) {
-      if (!byName.has(bench.name)) byName.set(bench.name, bench);
+    for (const run of this.bs.concat([this.a])) {
+      for (const bench of run.data.benchmarkInfo) {
+        if (!byName.has(bench.name)) byName.set(bench.name, bench);
+      }
     }
 
     return Array.from(byName.values());
@@ -343,18 +443,22 @@ export default class Compare extends Component<{ model: Model }> {
   }
 
   /**
-   * The variant either run recorded for the compared framework, preferring
-   * the candidate (B). Both runs are usually the same build, so this reads
-   * "what flavor of the framework am I looking at" rather than a per-run
-   * difference.
+   * The variant any run recorded for the compared framework, preferring
+   * the candidates (B onward). Runs are usually the same build, so this
+   * reads "what flavor of the framework am I looking at" rather than a
+   * per-run difference.
    */
   get variant() {
-    return variantOf(this.b.data, this.framework) ?? variantOf(this.a.data, this.framework);
+    for (const run of this.bs) {
+      const variant = variantOf(run.data, this.framework);
+
+      if (variant) return variant;
+    }
+
+    return variantOf(this.a.data, this.framework);
   }
 
   isFramework = (name: string) => this.framework === name;
-
-  isRun = (which: "a" | "b", name: string) => this[which].name === name;
 
   percentiles = PERCENTILES;
 
@@ -385,16 +489,31 @@ export default class Compare extends Component<{ model: Model }> {
       </label>
       <label>
         run A
-        <select name="run-a" {{on "change" (fn this.setRun "a")}}>
-          <RunOptions @which="a" @isRun={{this.isRun}} />
+        <select name="run-a" {{on "change" this.setRunA}}>
+          <RunOptions @current={{this.a.name}} />
         </select>
       </label>
-      <label>
-        run B
-        <select name="run-b" {{on "change" (fn this.setRun "b")}}>
-          <RunOptions @which="b" @isRun={{this.isRun}} />
-        </select>
-      </label>
+      {{#each this.bs as |run index|}}
+        <label>
+          run
+          {{letterFor index}}
+          <select name="run-{{letterFor index}}" {{on "change" (fn this.setRunB index)}}>
+            <RunOptions @current={{run.name}} />
+          </select>
+        </label>
+        {{#if this.canRemove}}
+          <button
+            type="button"
+            class="remove-run"
+            aria-label="remove run {{letterFor index}}"
+            {{on "click" (fn this.removeRun index)}}
+          >×</button>
+        {{/if}}
+      {{/each}}
+      <button type="button" {{on "click" this.addRun}}>+ add run</button>
+      {{#if this.canSwap}}
+        <button type="button" {{on "click" this.swap}}>swap A ⇄ B</button>
+      {{/if}}
       <label>
         statistic
         <select name="percentile" {{on "change" this.setPercentile}}>
@@ -405,7 +524,6 @@ export default class Compare extends Component<{ model: Model }> {
           {{/each}}
         </select>
       </label>
-      <button type="button" {{on "click" this.swap}}>swap A ⇄ B</button>
     </fieldset>
 
     {{#if this.environmentWarning}}
@@ -426,7 +544,7 @@ export default class Compare extends Component<{ model: Model }> {
         <CompareTable
           @benches={{this.higherBenches}}
           @a={{this.a}}
-          @b={{this.b}}
+          @bs={{this.bs}}
           @framework={{this.framework}}
         />
       {{/if}}
@@ -437,7 +555,7 @@ export default class Compare extends Component<{ model: Model }> {
         <CompareTable
           @benches={{this.lowerBenches}}
           @a={{this.a}}
-          @b={{this.b}}
+          @bs={{this.bs}}
           @framework={{this.framework}}
         />
       {{/if}}

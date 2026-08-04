@@ -296,10 +296,6 @@ table {
 }
 
 .compare-table {
-  /* wider than the results tables: these columns are headed by a
-     timestamp rather than a framework name */
-  --value-column: 10rem;
-
   .run-header {
     text-align: center;
 
@@ -459,6 +455,13 @@ table {
 .compare-controls select,
 .borrow-controls select {
   max-width: 40vw;
+}
+
+/* pulls each "remove run" button back against the selector it removes,
+   undoing most of the control bar's column gap */
+.compare-controls .remove-run {
+  margin-inline-start: -1rem;
+  line-height: 1;
 }
 
 /* history: run links line up with their "how long ago" hint */
