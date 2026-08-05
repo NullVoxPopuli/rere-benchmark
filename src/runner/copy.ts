@@ -36,7 +36,7 @@ if (clack.isCancel(fws)) {
 const newName = await clack.text({
   message: 'What is the name of the new bench?',
   validate(value) {
-    if (value.length === 0) return `Value is required!`;
+    if (!value || value.length === 0) return `Value is required!`;
   },
 });
 

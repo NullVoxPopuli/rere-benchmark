@@ -5,45 +5,31 @@ import * as clack from '@clack/prompts';
 import { $ } from 'execa';
 import puppeteer, { type Browser } from 'puppeteer';
 
-import { COUNT, CPU_THROTTLE, HEADLESS, SKIP_BUILD, TIMEOUT } from './arg.ts';
-import { getBenchInfo } from './bench-info.ts';
-import { chromeLocation } from './environment.ts';
 import {
-  addResult,
-  info as environmentInfo,
-  prepareForResults as prepareForResults,
-  saveTiming,
-} from './results.ts';
+  COUNT,
+  CPU_THROTTLE,
+  HEADLESS,
+  printFlagTable,
+  SKIP_BUILD,
+  TIMEOUT,
+} from './arg.ts';
+import { getBenchInfo } from './bench-info.ts';
+import { chromeLocation, info as environmentInfo } from './environment.ts';
 import { serve } from './serve.ts';
 
-import type { BenchmarkInfo } from './bench-info.ts';
+import type { BenchmarkInfo } from './benchmarks.ts';
+import type { RecordedMark } from './result-file.ts';
+
+printFlagTable();
 
 const info = await getBenchInfo();
-
-interface MarkEntry {
-  /**
-   * name of the performance.mark
-   */
-  name: string;
-  /**
-   * startTime of the perfromance.mark
-   */
-  at: number;
-
-  /**
-   * extra detail from the performance.mark
-   *
-   * (in the case of the dbmon test, this could be the FPS (for example))
-   */
-  detail?: unknown;
-}
 
 const frameCap = HEADLESS ? 60 : environmentInfo.environment.monitor.hz;
 
 function warnIfCapped(
   framework: string,
   bench: BenchmarkInfo,
-  marks: MarkEntry[],
+  marks: RecordedMark[],
 ) {
   if (bench.measure !== 'fps') return;
   if (!frameCap) return;
@@ -145,7 +131,7 @@ async function getMarks(browser: Browser, url: string) {
       delete entry.detail;
     }
 
-    return entry as MarkEntry;
+    return entry as RecordedMark;
   });
 
   await page.close();
@@ -275,7 +261,7 @@ for (const framework of info.frameworks) {
     for (const bench of info.benches) {
       if (bench.app !== app) continue;
 
-      await prepareForResults(framework, bench, info.filePath);
+      await info.file.prepareFor(framework, bench);
 
       for (const variant of info.variants) {
         const url = serverUrl + '/?' + bench.query + variant.query;
@@ -295,13 +281,7 @@ for (const framework of info.frameworks) {
             ? `${bench.name} ${variant.name}`
             : bench.name;
 
-          await addResult(
-            framework,
-            name,
-            performanceMarks,
-            info.filePath,
-            bench,
-          );
+          await info.file.addResult(framework, name, performanceMarks, bench);
         }
       }
     }
@@ -310,8 +290,6 @@ for (const framework of info.frameworks) {
       server.on('close', resolve);
     });
 
-    // We add this via the killable package
-    // @ts-expect-error
     server.kill();
 
     clack.log.info(`Waiting for server to exit`);
@@ -323,14 +301,11 @@ const now = Date.now();
 const benchmarkMs = now - benchmarkStart;
 const totalMs = now - runStart;
 
-await saveTiming(
-  {
-    ...(buildMs !== undefined ? { buildMs } : {}),
-    benchmarkMs,
-    totalMs,
-  },
-  info.filePath,
-);
+await info.file.saveTiming({
+  ...(buildMs !== undefined ? { buildMs } : {}),
+  benchmarkMs,
+  totalMs,
+});
 
 clack.log.info(
   buildMs !== undefined

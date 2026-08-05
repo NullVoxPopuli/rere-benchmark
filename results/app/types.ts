@@ -13,13 +13,18 @@ export interface Mark {
   at: number;
   detail: number;
 }
+/**
+ * What the runner records per framework per bench: which app ran with
+ * which query, the framework version it ran, and the marks of every sample.
+ */
 export interface ResultData {
   [framework: string]: {
     [benchName: string]: {
-      url: string;
+      app: string;
+      query: string;
       version: string;
       measure?: string;
-      whatsBetter?: "bigger";
+      whatsBetter?: "bigger" | "smaller";
       times: Array<Mark[]>;
     };
   };
@@ -67,11 +72,32 @@ export interface FrameworkNotes {
 }
 
 export interface BenchmarkInfo {
+  /**
+   * The benchmark's display name.
+   */
   name: string;
+  /**
+   * The name of the app that runs it. Every framework must have a matching
+   * app name for each benchmark.
+   */
   app: string;
+  /**
+   * Configuration passed to the benchmark via query params.
+   */
   query: string;
+  /**
+   * All benchmarks emit a :start and :done mark, and most are measured by
+   * the time between them. Benches that sample instead (dbmon) name the
+   * mark whose `detail` carries each sample -- e.g. "fps".
+   */
   measure?: string;
+  /**
+   * For the measured value, whether smaller or bigger is better.
+   */
   whatsBetter: "bigger" | "smaller";
+  /**
+   * What units are measured? this will be displayed in the UI
+   */
   units: string;
 }
 
@@ -90,22 +116,14 @@ export interface ResultSet {
     CPU_THROTTLE?: number;
     HEADLESS?: boolean;
     COUNT?: number;
+    /**
+     * ms a single sample was allowed to take before the run failed.
+     */
+    TIMEOUT?: number;
+    FRAMEWORK?: string | undefined;
+    BENCH_NAME?: string | undefined;
   };
-  timing?: {
-    /**
-     * Wall-clock time (ms) spent installing + building all apps.
-     * Omitted when the build was skipped.
-     */
-    buildMs?: number;
-    /**
-     * Wall-clock time (ms) spent running the benchmark suite.
-     */
-    benchmarkMs: number;
-    /**
-     * Total wall-clock time (ms) for the whole run, build + benchmark.
-     */
-    totalMs: number;
-  };
+  timing?: Timing;
   selections: {
     benches: string[];
     frameworks: string[];
@@ -146,4 +164,20 @@ export interface ResultSet {
     };
   };
   results: ResultData;
+}
+
+export interface Timing {
+  /**
+   * Wall-clock time (ms) spent installing + building all apps.
+   * Omitted when the build was skipped.
+   */
+  buildMs?: number;
+  /**
+   * Wall-clock time (ms) spent running the benchmark suite.
+   */
+  benchmarkMs: number;
+  /**
+   * Total wall-clock time (ms) for the whole run, build + benchmark.
+   */
+  totalMs: number;
 }
