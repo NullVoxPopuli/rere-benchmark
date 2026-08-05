@@ -6,9 +6,9 @@
  * the file was recorded with. Ends by handing off to `pnpm bench` with
  * the equivalent flags, so the run itself is the same code path as always.
  *
- * Deliberately does not import arg.ts (directly or via repo.ts): importing
- * it prints the runner's flag table, which describes the flags of *this*
- * process rather than the ones this wizard assembles.
+ * Deliberately does not import arg.ts (directly or via repo.ts): this
+ * wizard assembles flags for the `pnpm bench` hand-off rather than
+ * reading this process's.
  */
 import assert from 'node:assert';
 import { readdir, readFile } from 'node:fs/promises';

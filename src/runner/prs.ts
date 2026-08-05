@@ -103,8 +103,10 @@ function fromSquashCommit(subject: string): PullRequestNote | undefined {
 
   if (!squash?.groups) return;
 
+  const title = squash.groups['title'];
+
   return {
     url: `${REPO_URL}/pull/${squash.groups['number']}`,
-    title: squash.groups['title'],
+    ...(title ? { title } : {}),
   };
 }

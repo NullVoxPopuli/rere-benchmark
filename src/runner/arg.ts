@@ -41,50 +41,60 @@ function row(...cols: string[]) {
   return cols.join('');
 }
 
-console.log(
-  [
-    `Flag            Value           Description`,
-    `------------------------------------------------------------`,
-    row(
-      col1('--skip-build'),
-      col2(SKIP_BUILD),
-      col3('re-use an existing build'),
-    ),
-    row(
-      col1('--cpu-throttle'),
-      col2(CPU_THROTTLE),
-      col3('x emulated CPU slowdown'),
-    ),
-    row(col1('--headless'), col2(HEADLESS), col3('limited to 60 fps')),
-    row(col1('--count'), col2(COUNT), col3('sample count')),
-    row(col1('--timeout'), col2(TIMEOUT), col3('ms a single sample may take')),
-    row(col1('--framework'), col2(FRAMEWORK), col3(`or '${ALL}'`)),
-    row(
-      col1('--bench'),
-      col2(BENCH_NAME),
-      col3(`or '${ALL}'; repeatable to select several`),
-    ),
-    row(
-      col1('--include-prs'),
-      col2(INCLUDE_PRS),
-      col3('record PRs merged since the previous result set'),
-    ),
-    row(
-      col1('--file'),
-      col2(FILE),
-      col3('append to this result file, re-using its bench selection'),
-    ),
-    ...Object.entries(VERSION_OVERRIDES).map(([framework, override]) =>
+/**
+ * The flags as this process resolved them -- printed by `pnpm bench` on
+ * startup so a run's settings are always visible in its output.
+ */
+export function printFlagTable() {
+  console.log(
+    [
+      `Flag            Value           Description`,
+      `------------------------------------------------------------`,
       row(
-        col1(`--${framework}`),
-        col2(`#${override.number}`),
-        col3(override.url),
+        col1('--skip-build'),
+        col2(SKIP_BUILD),
+        col3('re-use an existing build'),
       ),
-    ),
-  ]
-    .map((line) => '\t' + line)
-    .join('\n'),
-);
+      row(
+        col1('--cpu-throttle'),
+        col2(CPU_THROTTLE),
+        col3('x emulated CPU slowdown'),
+      ),
+      row(col1('--headless'), col2(HEADLESS), col3('limited to 60 fps')),
+      row(col1('--count'), col2(COUNT), col3('sample count')),
+      row(
+        col1('--timeout'),
+        col2(TIMEOUT),
+        col3('ms a single sample may take'),
+      ),
+      row(col1('--framework'), col2(FRAMEWORK), col3(`or '${ALL}'`)),
+      row(
+        col1('--bench'),
+        col2(BENCH_NAME),
+        col3(`or '${ALL}'; repeatable to select several`),
+      ),
+      row(
+        col1('--include-prs'),
+        col2(INCLUDE_PRS),
+        col3('record PRs merged since the previous result set'),
+      ),
+      row(
+        col1('--file'),
+        col2(FILE),
+        col3('append to this result file, re-using its bench selection'),
+      ),
+      ...Object.entries(VERSION_OVERRIDES).map(([framework, override]) =>
+        row(
+          col1(`--${framework}`),
+          col2(`#${override.number}`),
+          col3(override.url),
+        ),
+      ),
+    ]
+      .map((line) => '\t' + line)
+      .join('\n'),
+  );
+}
 
 function bool(name: string) {
   return args.includes(name);

@@ -7,199 +7,13 @@ import { inspect } from 'node:util';
 import * as clack from '@clack/prompts';
 
 import * as args from './arg.ts';
+import { benchmarks, variants } from './benchmarks.ts';
+import { info } from './environment.ts';
 import { prsSinceLastResultSet } from './prs.ts';
 import { frameworks } from './repo.ts';
-import {
-  assertSameEnvironment,
-  info,
-  saveBenchmarkInfo,
-  saveNotes,
-  savePrNotes,
-  saveVersionOverrides,
-} from './results.ts';
+import { ResultFile } from './result-file.ts';
 
 import type { PullRequestNote } from '../../results/app/types.ts';
-
-export interface BenchmarkInfo {
-  /**
-   * The benchmark name.
-   */
-  name: string;
-  /**
-   * The name of the app to launch.
-   * Every framework must have a matching app name
-   * for each benchmark.
-   */
-  app: string;
-  /**
-   * Configuration passed to the benchmark via query params
-   */
-  query: string;
-  /**
-   * Certain benchmarks intended to have observation, such as the dbmon bench -- where we take FPS samples of sliding window averages.
-   *
-   * Most benchmarks though will start a task and measure the time to completion of that task.
-   *
-   * The dbmon bench doesn't have completion,
-   * as instead of measuring "duration of a task",
-   * we are measuring "responsiveness" of the web page.
-   */
-  ignoreCount?: boolean;
-  /**
-   * All benchmarks emit a :start and :done mark.
-   * But for some benchmarks, we don't care about those,
-   * and instead want a different measurement.
-   *
-   * This option tells us which mark names to use for measurement.
-   * and when doing so, we'll use the "detail", instead of the at/startTime
-   *
-   */
-  measure?: string;
-
-  /**
-   * For the measured value, assume smaller values are better unless this is set to bigger.
-   */
-  whatsBetter: 'bigger' | 'smaller';
-
-  /**
-   * What units are measured? this will be displayed in the UI
-   */
-  units: string;
-}
-
-const variants = [
-  // Batching is a fair (low-level) technique, but I don't know if I want it always present.
-  // We'll see if I change my mind when Solid v2 comes out.
-  //
-  // I don't think users should have to think about whether or not to use batching.
-  // This is why by defaultl it is "off"
-  { name: '', query: '' },
-  // { name: 'w/ manual batching', query: '&manualBatch=true' },
-];
-
-const randomAwaitChance = 100;
-
-/**
- * TODO: make the bigger is better benchmark mutually exclusive
- *       to the smaller is better benchmarks
- */
-const benchmarks: BenchmarkInfo[] = [
-  {
-    name: 'DB Monitor w/ chat simulation',
-    app: 'dbmon-with-chat',
-    query: '',
-    // This is a long running bench which we'll be taking multiple samples from
-    ignoreCount: true,
-    measure: 'fps',
-    whatsBetter: 'bigger',
-    units: 'FPS',
-  },
-  {
-    name: 'Incrementing Render Effect',
-    app: 'incrementing-render-effect',
-    query: '&updates=100000',
-    whatsBetter: 'smaller',
-    units: 'ms',
-  },
-  {
-    name: '1 item, 1k updates (async)',
-    app: 'one-item-many-updates',
-    query: `&updates=1000&percentRandomAwait=${randomAwaitChance}`,
-    whatsBetter: 'smaller',
-    units: 'ms',
-  },
-  {
-    name: '1 item, 1k updates',
-    app: 'one-item-many-updates',
-    query: '&updates=1000&percentRandomAwait=0',
-    whatsBetter: 'smaller',
-    units: 'ms',
-  },
-  // {
-  //   name: '1 item, 1k updates, triggered by render',
-  //   app: 'one-item-many-updates',
-  //   query: '&updates=1000&percentRandomAwait=0',
-  // whatsBetter: 'smaller',
-  // units: 'ms',
-  // },
-  {
-    name: '1 item, 100k updates (async)',
-    app: 'one-item-many-updates',
-    query: `&updates=100000&percentRandomAwait=${randomAwaitChance}`,
-    whatsBetter: 'smaller',
-    units: 'ms',
-  },
-  {
-    name: '1 item, 100k updates',
-    app: 'one-item-many-updates',
-    query: '&updates=100000&percentRandomAwait=0',
-    whatsBetter: 'smaller',
-    units: 'ms',
-  },
-  {
-    name: '1k items, 1 update each (sequentially, async)',
-    app: 'ten-k-items-one-time',
-    query: `&items=1000&updates=1000&percentRandomAwait=${randomAwaitChance}`,
-    whatsBetter: 'smaller',
-    units: 'ms',
-  },
-  {
-    name: '1k items, 1 update each (sequentially)',
-    app: 'ten-k-items-one-time',
-    query: '&items=1000&updates=1000&percentRandomAwait=0',
-    whatsBetter: 'smaller',
-    units: 'ms',
-  },
-  {
-    name: '1k items 1 update on 5% (random, async)',
-    app: 'ten-k-items-one-time',
-    query: `&items=1000&updates=50&random=true&percentRandomAwait=${randomAwaitChance}`,
-    whatsBetter: 'smaller',
-    units: 'ms',
-  },
-  {
-    name: '1k items 1 update on 5% (random)',
-    app: 'ten-k-items-one-time',
-    query: '&items=1000&updates=50&random=true&percentRandomAwait=0',
-    whatsBetter: 'smaller',
-    units: 'ms',
-  },
-  {
-    name: '1k items 1 update on 25% (random, async)',
-    app: 'ten-k-items-one-time',
-    query: `&items=1000&updates=250&random=true&percentRandomAwait=${randomAwaitChance}`,
-    whatsBetter: 'smaller',
-    units: 'ms',
-  },
-  {
-    name: '1k items 1 update on 25% (random)',
-    app: 'ten-k-items-one-time',
-    query: '&items=1000&updates=250&random=true&percentRandomAwait=0',
-    whatsBetter: 'smaller',
-    units: 'ms',
-  },
-  {
-    name: '1 value, 1k consumers, 10k updates (bursts of 100)',
-    app: 'fan-out',
-    query: '&consumers=1000&updates=10000&burstSize=100',
-    whatsBetter: 'smaller',
-    units: 'ms',
-  },
-  {
-    name: '1 value, 1k consumers, 10k updates (bursts of 1000)',
-    app: 'fan-out',
-    query: '&consumers=1000&updates=10000&burstSize=1000',
-    whatsBetter: 'smaller',
-    units: 'ms',
-  },
-  {
-    name: '1 value, 1k consumers, 10k updates (single burst)',
-    app: 'fan-out',
-    query: '&consumers=1000&updates=10000&burstSize=10000',
-    whatsBetter: 'smaller',
-    units: 'ms',
-  },
-];
 
 async function getFrameworks() {
   if (args.FRAMEWORK === args.ALL) {
@@ -404,16 +218,16 @@ export async function getBenchInfo() {
   }
 
   const selectedBenches = await getBenches();
-  const filePath = await getFilePath();
+  const file = new ResultFile(await getFilePath());
 
-  await assertSameEnvironment(filePath);
+  await file.assertSameEnvironment();
 
   // resolved before the confirm below, so what will be recorded is part
   // of the "does this look correct?" review
   let prNotes: PullRequestNote[] = [];
 
   if (args.INCLUDE_PRS) {
-    const found = await prsSinceLastResultSet(filePath);
+    const found = await prsSinceLastResultSet(file.path);
 
     if (found && found.prs.length > 0) {
       prNotes = found.prs;
@@ -433,7 +247,7 @@ export async function getBenchInfo() {
 
   console.info(inspect(info, { showHidden: false, depth: null, colors: true }));
   console.log(`
-    Results will be written to ${filePath}
+    Results will be written to ${file.path}
   `);
 
   const letsgo = await clack.confirm({
@@ -450,23 +264,20 @@ export async function getBenchInfo() {
 
   const apps = new Set(selectedBenches.map((b) => b.app));
 
-  await saveBenchmarkInfo(
-    {
-      benches: selectedBenches,
-      frameworks: selectedFrameworks,
-    },
-    filePath,
-  );
+  await file.saveBenchmarkInfo({
+    benches: selectedBenches,
+    frameworks: selectedFrameworks,
+  });
 
-  await saveVersionOverrides(args.VERSION_OVERRIDES, filePath);
-  await saveNotes(selectedFrameworks, filePath);
-  await savePrNotes(prNotes, filePath);
+  await file.saveVersionOverrides(args.VERSION_OVERRIDES);
+  await file.saveNotes(selectedFrameworks);
+  await file.savePrNotes(prNotes);
 
   return {
     apps,
     benches: selectedBenches,
     frameworks: selectedFrameworks,
     variants: variants,
-    filePath,
+    file,
   };
 }

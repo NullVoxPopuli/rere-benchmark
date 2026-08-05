@@ -72,7 +72,13 @@ function getFastestDisplayHz(graphics: si.Systeminformation.GraphicsData) {
 
   assert(fastestDisplay, `Could not find display`);
 
-  return fastestDisplay?.currentRefreshRate;
+  const hz = fastestDisplay.currentRefreshRate;
+
+  // the frame-rate bench is meaningless without knowing the display's
+  // ceiling, and the results app displays it for every run
+  assert(hz, `Could not read the display's refresh rate`);
+
+  return hz;
 }
 
 /**
@@ -100,7 +106,7 @@ export async function getCommitSha() {
   return stdout;
 }
 
-export async function getInfo() {
+async function getInfo() {
   const [cpu, graphics, memory, os, browser, sha] = await Promise.all([
     si.cpu(),
     si.graphics(),
@@ -147,3 +153,9 @@ export async function getInfo() {
 
   return result;
 }
+
+/**
+ * The header of every result file: when and where the run happened, with
+ * which flags. Resolved once at startup.
+ */
+export const info = await getInfo();

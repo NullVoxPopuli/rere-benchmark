@@ -24,7 +24,9 @@ const mimeTypes: Record<string, string> = {
   // '.wasm': 'application/wasm',
 };
 
-export function serve(directory: string, port = 3000): Promise<http.Server> {
+export type KillableServer = http.Server & { kill(): void };
+
+export function serve(directory: string, port = 3000): Promise<KillableServer> {
   const server = http.createServer((req, res) => {
     if (!req.url) {
       throw new Error(`No request url?`);
@@ -68,8 +70,7 @@ export function serve(directory: string, port = 3000): Promise<http.Server> {
     server.on('error', reject);
 
     server.listen(port, () => {
-      killable(server);
-      resolve(server);
+      resolve(killable(server));
     });
   });
 }

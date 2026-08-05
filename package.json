@@ -11,6 +11,7 @@
     "lint:fix": "concurrently \"pnpm:lint:*:fix\" --names \"fix:\" --prefixColors auto && pnpm format",
     "lint:js": "eslint . --cache",
     "lint:js:fix": "eslint . --fix",
+    "lint:types": "tsc --noEmit",
     "install:common": "cd common; pnpm install",
     "install:results": "cd results; pnpm install",
     "start": "cd ./results; pnpm start",
