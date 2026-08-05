@@ -28,6 +28,6 @@ test.doit((value) => {
 });
 ```
 
-Because the apps link this package, `pnpm install` must run *here* before
+Because the apps link this package, `pnpm install` must run _here_ before
 the apps build -- the runner does that automatically (pnpm does not install
 dependencies of linked packages).
