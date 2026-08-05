@@ -3,25 +3,9 @@
 > [!NOTE]  
 > This whole repo should be taken with a grain of salt right now. The benchmarks are still being developed. 
 
-
-## TODOs
-
-- create lints 
-  - we don't want to prescribe pnpm vs npm vs yarn, so folks should provide an
-    - install.sh and a build.sh?
-    - config file? yaml? everyone loves yaml
-
-- create ci check to comment back on the PR if the src/runner can't access the build:prod output
-    - require that all apps in a framework folder have the same
-      - install
-      - build
-      - framework version
-
------------------------------------------
-
-
 This is the Reactivity and Rendering Benchmark for frontend application and component frameworks.
 
+- [Repository layout](#repository-layout)
 - [Motivation](#motivation)
 - [Methodology](#methodology)
   - [The Benchmarks](#the-benchmarks)
@@ -29,6 +13,22 @@ This is the Reactivity and Rendering Benchmark for frontend application and comp
   - [Reliability](#reliability)
 - [Adding a new framework](#adding-a-new-framework)
 - [Running the Benchmark](#running-the-benchmark)
+- [Roadmap](#roadmap)
+
+## Repository layout
+
+| directory | what it is |
+| --- | --- |
+| [`src/runner/`](./src/runner/) | the benchmark runner: builds and serves each app, drives Chrome over puppeteer, records `performance.mark`s into a result file |
+| [`frameworks/<framework>/<bench>/`](./frameworks/) | one standalone app per framework per bench -- what actually gets measured |
+| [`common/`](./common/) | the shared bench harness every app links: the workloads, DOM verification, and the FPS meter |
+| [`results/`](./results/) | the results viewer (an Ember app) *and* the recorded data it renders (`results/public/results/*.json`, experiments in `results/public/experiments/`) |
+| [`tests/`](./tests/) | playwright suite asserting every app works and (opt-in) that every framework does identical work |
+
+The pipeline: the runner loads each app from `frameworks/`, the app runs a
+workload from `common/` and emits performance marks, the runner writes them
+to a JSON file under `results/public/`, and the app in `results/` renders
+those files.
 
 
 ## Motivation
@@ -321,3 +321,15 @@ PR on `emberjs/ember.js` (or just its number). It builds that PR, installs the b
 in every ember app, and opens a draft PR here with the result -- check it out, and
 `pnpm bench`.
 
+
+## Roadmap
+
+- create lints
+  - we don't want to prescribe pnpm vs npm vs yarn, so folks should provide an
+    - install.sh and a build.sh?
+    - config file? yaml? everyone loves yaml
+- create ci check to comment back on the PR if the src/runner can't access the build:prod output
+  - require that all apps in a framework folder have the same
+    - install
+    - build
+    - framework version
