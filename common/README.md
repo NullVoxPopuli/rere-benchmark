@@ -3,7 +3,7 @@
 The shared bench harness. Every app in `frameworks/<framework>/<bench>/`
 depends on this package (via `link:../../../common`), so all frameworks run
 **the same workload, verification, and measurement code** -- the only thing
-a framework app supplies is the rendering.
+a framework app supplies is the rendering and reactivity.
 
 What's here:
 
