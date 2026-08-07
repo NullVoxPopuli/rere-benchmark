@@ -38,8 +38,27 @@ import type { Model } from "#routes/results.ts";
 import type { BenchmarkInfo, ResultSet } from "#types";
 import type { Percentile } from "#utils";
 
-const start = "#ff7777";
-const end = "#77ff77";
+const worst = "#ff7777";
+const best = "#77ff77";
+
+/** green at 0, red at 1, so the ramp is always indexed by distance from the best value */
+const gradient = interpolate([best, worst], "oklch");
+
+/** how hard the ramp bends toward the best value; 0 is linear */
+const CURVE = 9;
+
+/**
+ * Where a value sits on the gradient, given how far it is from the row's
+ * best result as a fraction of the row's spread.
+ *
+ * Spending that distance linearly hands the whole scale to the slowest
+ * framework: when the worst result is 20x the best, everything within 2x
+ * of the winner lands on the same green. A log ramp gives the close race
+ * at the top most of the colors and lets the tail share the red.
+ */
+function rampFromBest(distance: number) {
+  return Math.log1p(CURVE * distance) / Math.log1p(CURVE);
+}
 
 function colorFor(
   speed: number | undefined,
@@ -49,10 +68,8 @@ function colorFor(
 ) {
   if (!speed || !min || !max) return;
 
-  const interpolation = interpolate(reverse ? [start, end] : [end, start], "oklch");
-
   const normalized = (speed - min) / (max - min);
-  const color = interpolation(normalized);
+  const color = gradient(rampFromBest(reverse ? 1 - normalized : normalized));
 
   return `oklch(${color.l} ${color.c} ${color.h}deg)`;
 }
