@@ -69,10 +69,27 @@ export const frameworks: Record<string, FrameworkInfo> = {
     url: "https://react.dev/",
     package: "react",
   },
+  // The folder name before the solid-1 / solid-2 split; kept so
+  // historical result files still resolve
   solid: {
     color: "#2c4f7c",
     logo: "/solid.svg",
     name: "SolidJS",
+    url: "https://www.solidjs.com/",
+    package: "solid-js",
+  },
+  ["solid-1"]: {
+    color: "#2c4f7c",
+    logo: "/solid.svg",
+    name: "SolidJS 1",
+    url: "https://www.solidjs.com/",
+    package: "solid-js",
+  },
+  ["solid-2"]: {
+    // the logo's lighter blue, to distinguish from SolidJS 1 in charts
+    color: "#76b3e1",
+    logo: "/solid.svg",
+    name: "SolidJS 2",
     url: "https://www.solidjs.com/",
     package: "solid-js",
   },
