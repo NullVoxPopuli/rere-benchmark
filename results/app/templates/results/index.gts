@@ -45,7 +45,7 @@ const best = "#77ff77";
 const gradient = interpolate([best, worst], "oklch");
 
 /** how hard the ramp bends toward the best value; 0 is linear */
-const CURVE = 13;
+const CURVE = 20;
 
 /**
  * Where a value sits on the gradient, given how far it is from the row's
