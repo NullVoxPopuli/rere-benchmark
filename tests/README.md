@@ -5,14 +5,14 @@ bench actually works**, so PRs can't silently break an app.
 
 ## What is covered
 
-- all 30 apps (6 frameworks x 5 benches), built and served like the bench
+- every app (each framework x each bench), built and served like the bench
   runner serves them
   - benches that end (fan-out, one-item, ten-k, incrementing) self-verify
     their DOM via `tryVerify` in `common` — the tests wait for the `:done`
     performance mark and fail on any page error
   - dbmon runs forever, so the tests assert both data streams render and
     keep updating
-- the dev server (`vite dev`, or `ng serve` for angular) for the 6 dbmon
+- the dev server (`vite dev`, or `ng serve` for angular) for the dbmon
   apps: dev serves the linked `common` package's web workers via `/@fs`,
   which `server.fs.allow` can block — a failure mode production builds
   do not have

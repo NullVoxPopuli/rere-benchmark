@@ -15,6 +15,7 @@ export const FRAMEWORKS = [
   'solid',
   'svelte',
   'vue',
+  'vue-vapor',
 ] as const;
 
 export interface BenchSpec {
