@@ -414,6 +414,24 @@ export function percentileFrom(router: RouterService): Percentile {
   return found ?? DEFAULT_PERCENTILE;
 }
 
+export const DEFAULT_CURVE = 1;
+
+/**
+ * The `?curve=` query param: how hard the heatmap's color ramp bends
+ * toward the best value in each row. 0 is a straight linear ramp, positive
+ * spends more of the gradient on the results nearest the best one, and
+ * negative does the same for the ones nearest the worst.
+ */
+export function curveFrom(router: RouterService): number {
+  const raw = router.currentRoute?.queryParams["curve"];
+
+  if (raw === undefined || raw === "") return DEFAULT_CURVE;
+
+  const curve = Number(raw);
+
+  return Number.isFinite(curve) ? curve : DEFAULT_CURVE;
+}
+
 export type TotalSort = "best" | "worst";
 
 /**
