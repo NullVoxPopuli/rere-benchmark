@@ -418,9 +418,9 @@ export const DEFAULT_CURVE = 1;
 
 /**
  * The `?curve=` query param: how hard the heatmap's color ramp bends
- * toward the best value in each row. 0 is a straight linear ramp, and
- * every step up spends more of the gradient on the results nearest the
- * best one.
+ * toward the best value in each row. 0 is a straight linear ramp, positive
+ * spends more of the gradient on the results nearest the best one, and
+ * negative does the same for the ones nearest the worst.
  */
 export function curveFrom(router: RouterService): number {
   const raw = router.currentRoute?.queryParams["curve"];
@@ -429,7 +429,7 @@ export function curveFrom(router: RouterService): number {
 
   const curve = Number(raw);
 
-  return Number.isFinite(curve) && curve >= 0 ? curve : DEFAULT_CURVE;
+  return Number.isFinite(curve) ? curve : DEFAULT_CURVE;
 }
 
 export type TotalSort = "best" | "worst";

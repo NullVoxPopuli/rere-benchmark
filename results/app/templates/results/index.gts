@@ -54,10 +54,18 @@ const gradient = interpolate([best, worst], "oklch");
  * framework: when the worst result is 20x the best, everything within 2x
  * of the winner lands on the same green. Bending it logarithmically gives
  * the close race at the top more of the colors and lets the tail share the
- * red. `curve` is how hard it bends -- 0 is the straight linear ramp.
+ * red.
+ *
+ * `curve` is how hard it bends: 0 is the straight linear ramp, positive
+ * spends more of the gradient on the results nearest the best one, and
+ * negative does the same for the ones nearest the worst. Every real
+ * number lands somewhere useful, so the setting takes anything.
  */
-function rampFromBest(distance: number, curve: number) {
-  if (curve <= 0) return distance;
+function rampFromBest(distance: number, curve: number): number {
+  if (curve === 0) return distance;
+  // bending away from best is the same curve read from the other end.
+  // Feeding a negative straight to log1p would go imaginary past -1.
+  if (curve < 0) return 1 - rampFromBest(1 - distance, -curve);
 
   return Math.log1p(curve * distance) / Math.log1p(curve);
 }
@@ -467,7 +475,7 @@ export default class ResultsTables extends Component<{
     const { valueAsNumber } = event.target as HTMLInputElement;
     // an emptied or unparseable field falls back to the default rather
     // than leaving the tables uncolored while you retype
-    const curve = Number.isFinite(valueAsNumber) ? Math.max(0, valueAsNumber) : DEFAULT_CURVE;
+    const curve = Number.isFinite(valueAsNumber) ? valueAsNumber : DEFAULT_CURVE;
 
     this.router.transitionTo({
       queryParams: { curve: curve === DEFAULT_CURVE ? null : curve },
@@ -581,14 +589,13 @@ export default class ResultsTables extends Component<{
           <input
             type="number"
             name="color-curve"
-            min="0"
             step="any"
             value={{this.curve}}
             {{on "change" this.setCurve}}
           />
           bend toward best
         </label>
-        <span class="units">0 is a straight ramp; higher favors the leaders</span>
+        <span class="units">0 is a straight ramp; negative bends toward the tail</span>
       </fieldset>
 
       <SortControl />
