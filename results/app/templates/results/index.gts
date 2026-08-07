@@ -14,6 +14,8 @@ import { SortControl } from "#components/sort-control.gts";
 import { Variant } from "#components/variant.gts";
 import { Version } from "#components/version.gts";
 import {
+  curveFrom,
+  DEFAULT_CURVE,
   formatRunName,
   higherIsBetterBenches,
   isoOf,
@@ -44,20 +46,20 @@ const best = "#77ff77";
 /** green at 0, red at 1, so the ramp is always indexed by distance from the best value */
 const gradient = interpolate([best, worst], "oklch");
 
-/** how hard the ramp bends toward the best value; 0 is linear */
-const CURVE = 2;
-
 /**
  * Where a value sits on the gradient, given how far it is from the row's
  * best result as a fraction of the row's spread.
  *
  * Spending that distance linearly hands the whole scale to the slowest
  * framework: when the worst result is 20x the best, everything within 2x
- * of the winner lands on the same green. A log ramp gives the close race
- * at the top most of the colors and lets the tail share the red.
+ * of the winner lands on the same green. Bending it logarithmically gives
+ * the close race at the top more of the colors and lets the tail share the
+ * red. `curve` is how hard it bends -- 0 is the straight linear ramp.
  */
-function rampFromBest(distance: number) {
-  return Math.log1p(CURVE * distance) / Math.log1p(CURVE);
+function rampFromBest(distance: number, curve: number) {
+  if (curve <= 0) return distance;
+
+  return Math.log1p(curve * distance) / Math.log1p(curve);
 }
 
 function colorFor(
@@ -65,11 +67,12 @@ function colorFor(
   min: number | undefined,
   max: number | undefined,
   reverse = false,
+  curve = DEFAULT_CURVE,
 ) {
   if (!speed || !min || !max) return;
 
   const normalized = (speed - min) / (max - min);
-  const color = gradient(rampFromBest(reverse ? 1 - normalized : normalized));
+  const color = gradient(rampFromBest(reverse ? 1 - normalized : normalized, curve));
 
   return `oklch(${color.l} ${color.c} ${color.h}deg)`;
 }
@@ -175,13 +178,14 @@ class TableRow extends Component<{
     }
 
     const reverse = this.args.benchInfo.whatsBetter === "bigger";
+    const curve = curveFrom(this.router);
     const colors: Record<string, string | undefined> = {};
 
     for (const framework of this.args.frameworkNames) {
-      colors[framework] = colorFor(speeds[framework], lo, hi, reverse);
+      colors[framework] = colorFor(speeds[framework], lo, hi, reverse, curve);
     }
 
-    const borrowedColor = colorFor(borrowedSpeed, lo, hi, reverse);
+    const borrowedColor = colorFor(borrowedSpeed, lo, hi, reverse, curve);
 
     return { speeds, min: lo, max: hi, colors, borrowedSpeed, borrowedColor };
   }
@@ -321,6 +325,17 @@ class Table extends Component<{
     return throttleLabel(theirs);
   }
 
+  /**
+   * Every bench in one area shares a direction, so the totals row reads
+   * in that area's direction too.
+   */
+  get bestIsMax() {
+    return this.args.benches[0]?.whatsBetter === "bigger";
+  }
+
+  totalColor = (total: number | undefined) =>
+    colorFor(total, this.totals.min, this.totals.max, this.bestIsMax, curveFrom(this.router));
+
   totalValue = (framework: string) => {
     const total = this.totals[framework];
 
@@ -329,12 +344,7 @@ class Table extends Component<{
         return scoreFor(total, this.totals.min, this.totals.max);
       case "times": {
         // times-best of the raw totals, so the best column reads 1x
-        const ratio = timesBestFor(
-          total,
-          this.totals.min,
-          this.totals.max,
-          this.args.benches[0]?.whatsBetter === "bigger",
-        );
+        const ratio = timesBestFor(total, this.totals.min, this.totals.max, this.bestIsMax);
 
         return ratio === undefined ? undefined : formatTimes(ratio);
       }
@@ -405,26 +415,13 @@ class Table extends Component<{
         <tfoot>
           <tr><th style="text-align: right">Total</th>
             {{#each this.frameworkNames as |framework|}}
-              <td
-                style="background: {{colorFor
-                  (get this.totals framework)
-                  this.totals.min
-                  this.totals.max
-                }}"
-              >
+              <td style="background: {{this.totalColor (get this.totals framework)}}">
                 <span class="value">{{this.totalValue framework}}</span>
               </td>
             {{/each}}
 
             {{#if @borrow}}
-              <td
-                class="borrowed"
-                style="background: {{colorFor
-                  this.totals.borrowed
-                  this.totals.min
-                  this.totals.max
-                }}"
-              >
+              <td class="borrowed" style="background: {{this.totalColor this.totals.borrowed}}">
                 <span class="value">{{this.totalValue "borrowed"}}</span>
               </td>
             {{/if}}
@@ -462,6 +459,21 @@ export default class ResultsTables extends Component<{
 
   isPercentile = (percentile: Percentile) => this.percentile === percentile;
 
+  get curve() {
+    return curveFrom(this.router);
+  }
+
+  setCurve = (event: Event) => {
+    const { valueAsNumber } = event.target as HTMLInputElement;
+    // an emptied or unparseable field falls back to the default rather
+    // than leaving the tables uncolored while you retype
+    const curve = Number.isFinite(valueAsNumber) ? Math.max(0, valueAsNumber) : DEFAULT_CURVE;
+
+    this.router.transitionTo({
+      queryParams: { curve: curve === DEFAULT_CURVE ? null : curve },
+    });
+  };
+
   labelFor = labelFor;
 
   get file() {
@@ -476,7 +488,7 @@ export default class ResultsTables extends Component<{
     return visibleFrameworksOf(this.router, this.file);
   }
 
-  settingParams = ["mode", "p", "hide", "from", "sort"];
+  settingParams = ["mode", "p", "hide", "from", "sort", "curve"];
 
   get benchmarkInfo() {
     return this.args.model.data.benchmarkInfo;
@@ -561,6 +573,22 @@ export default class ResultsTables extends Component<{
         {{! percentiles run toward the worse end either way, so the same
           number means the same thing on both tables }}
         <span class="units">of each run's samples</span>
+      </fieldset>
+
+      <fieldset class="value-mode">
+        <legend>color curve</legend>
+        <label>
+          <input
+            type="number"
+            name="color-curve"
+            min="0"
+            step="any"
+            value={{this.curve}}
+            {{on "change" this.setCurve}}
+          />
+          bend toward best
+        </label>
+        <span class="units">0 is a straight ramp; higher favors the leaders</span>
       </fieldset>
 
       <SortControl />

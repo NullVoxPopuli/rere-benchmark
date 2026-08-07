@@ -36,6 +36,9 @@ export default class Results extends Route<Model> {
     sort: {},
     // display mode for the tables page (raw | linear | log); no model impact
     mode: {},
+    // how hard the heatmap ramp bends toward each row's best value;
+    // purely a color choice, so no model impact
+    curve: {},
     // which percentile of each run's samples to show (50 | 75 | 90);
     // every sample is already loaded, so no model impact
     p: {},

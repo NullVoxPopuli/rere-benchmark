@@ -1,7 +1,7 @@
 import Component from "@glimmer/component";
 import { service } from "@ember/service";
 
-import { DEFAULT_PERCENTILE } from "#utils";
+import { DEFAULT_CURVE, DEFAULT_PERCENTILE } from "#utils";
 
 import type Owner from "@ember/owner";
 import type RouterService from "@ember/routing/router-service";
@@ -9,6 +9,7 @@ import type RouterService from "@ember/routing/router-service";
 const DEFAULTS: Record<string, string> = {
   mode: "raw",
   p: String(DEFAULT_PERCENTILE),
+  curve: String(DEFAULT_CURVE),
 };
 
 function hasNonDefaults(router: RouterService, params: string[]) {

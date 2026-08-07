@@ -432,7 +432,8 @@ table {
      the page; a hairline like the fieldset's own suits it better. The
      dropdown itself stays native, and color-scheme keeps it legible. */
   select,
-  button {
+  button,
+  input[type="number"] {
     font-family: inherit;
     font-size: 0.9rem;
     padding: 0.125rem 0.375rem;
@@ -449,6 +450,15 @@ table {
 
   button {
     cursor: pointer;
+  }
+
+  /* a number field defaults to a text field's width, which would make its
+     fieldset twice as wide as every other one in the stack */
+  input[type="number"] {
+    width: 4rem;
+    cursor: text;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
   }
 }
 
