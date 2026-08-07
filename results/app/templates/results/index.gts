@@ -591,7 +591,7 @@ export default class ResultsTables extends Component<{
             name="color-curve"
             step="any"
             value={{this.curve}}
-            {{on "change" this.setCurve}}
+            {{on "input" this.setCurve}}
           />
           bend toward best
         </label>
