@@ -473,12 +473,15 @@ export default class ResultsTables extends Component<{
 
   setCurve = (event: Event) => {
     const { valueAsNumber } = event.target as HTMLInputElement;
-    // an emptied or unparseable field falls back to the default rather
-    // than leaving the tables uncolored while you retype
-    const curve = Number.isFinite(valueAsNumber) ? valueAsNumber : DEFAULT_CURVE;
+
+    // Half-typed input is briefly unparseable -- "", "-", "0." -- and this
+    // fires on every keystroke. Keep the last good curve instead of writing
+    // a fallback back into the field, which would eat the keystroke and
+    // make a negative impossible to type.
+    if (!Number.isFinite(valueAsNumber)) return;
 
     this.router.transitionTo({
-      queryParams: { curve: curve === DEFAULT_CURVE ? null : curve },
+      queryParams: { curve: valueAsNumber === DEFAULT_CURVE ? null : valueAsNumber },
     });
   };
 
@@ -589,7 +592,7 @@ export default class ResultsTables extends Component<{
           <input
             type="number"
             name="color-curve"
-            step="any"
+            step="0.1"
             value={{this.curve}}
             {{on "input" this.setCurve}}
           />
