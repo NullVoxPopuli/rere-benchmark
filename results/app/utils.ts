@@ -222,7 +222,7 @@ export function formatRunName(runName: string) {
   const parts: string[] = [];
 
   if (meta.browser) parts.push(browserLabel(meta.browser));
-  if (meta.hz !== undefined) parts.push(`${displayHz(meta.hz)} Hz`);
+  if (meta.hz !== undefined) parts.push(`${meta.hz} Hz`);
 
   if (meta.throttle !== undefined) {
     parts.push(meta.throttle > 1 ? `${meta.throttle}x throttle` : "no throttle");
@@ -289,20 +289,10 @@ export function relativeToNow(runName: string) {
   return RELATIVE_FORMAT.format(0, "second");
 }
 
-/**
- * The recorded refresh rate is 0-indexed -- a 120 Hz monitor records 119.
- * Every rendered rate (and anything derived from one, like the frame
- * budget) goes through here; comparisons between recorded values stay on
- * the recorded convention.
- */
-export function displayHz(recorded: number) {
-  return recorded + 1;
-}
-
 const msInOneHz = 1_000;
 
 export function msOfFrameAt(recordedHz: number) {
-  const result = msInOneHz / displayHz(recordedHz);
+  const result = msInOneHz / recordedHz;
 
   return Math.round(result * 100) / 100;
 }
