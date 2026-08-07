@@ -83,6 +83,14 @@ export const frameworks: Record<string, FrameworkInfo> = {
     url: "https://vuejs.org/",
     package: "vue",
   },
+  ["vue-vapor"]: {
+    // Vue's darker brand blue-green, to distinguish from VDOM Vue in charts
+    color: "#35495e",
+    logo: "/vue.svg",
+    name: "Vue.js Vapor",
+    url: "https://vuejs.org/",
+    package: "vue",
+  },
   svelte: {
     color: "#ff3e00",
     logo: "/svelte.svg",
