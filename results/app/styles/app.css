@@ -240,11 +240,14 @@ table {
     white-space: nowrap;
   }
 
+  /* No position of its own: `thead th` above is already sticky, which both
+     pins the row and gives the borrow badge something to anchor against.
+     Setting position here outranks that rule (0,1,1 over 0,0,3), and the
+     `top` meant for the sticky offset becomes a relative one -- shoving
+     the headers a header-height down, over the first rows of the table. */
   .fw-header {
     text-align: center;
     vertical-align: bottom;
-    /* anchors the borrow badge */
-    position: relative;
   }
 
   /* benchmark names stay readable while the value columns scroll under them */
