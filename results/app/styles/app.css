@@ -275,9 +275,12 @@ table {
     mix-blend-mode: difference;
   }
 
+  /* the borrowed column sorts in among the others now, so it is bracketed
+     on both sides -- a single leading edge only read as a separator back
+     when the column was pinned to the end of the table */
   th.borrowed,
   td.borrowed {
-    border-inline-start: 1px dashed color-mix(in oklch, currentColor 35%, transparent);
+    border-inline: 1px dashed color-mix(in oklch, currentColor 35%, transparent);
   }
 
   .borrow-tag {

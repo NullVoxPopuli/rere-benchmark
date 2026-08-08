@@ -147,3 +147,26 @@ export interface ResultSet {
   };
   results: ResultData;
 }
+
+/**
+ * One value column in a results view.
+ *
+ * Most columns read from the run the page is showing, but a borrowed one
+ * reads from whichever run it was picked out of. Keeping the source on the
+ * column is what lets a borrowed column sort and colour alongside the rest
+ * instead of being appended to the end as a special case.
+ */
+export interface Column {
+  /**
+   * Identity for per-column lookups. A borrowed column can repeat a
+   * framework already in the table, so this is not just the framework name.
+   */
+  key: string;
+  framework: string;
+  data: ResultSet;
+  /**
+   * The run a borrowed column came from. Absent on the table's own columns,
+   * so it doubles as the "is this borrowed" test.
+   */
+  borrowedFrom?: string;
+}

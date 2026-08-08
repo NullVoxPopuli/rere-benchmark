@@ -5,7 +5,7 @@ import { experiments, metadata } from "virtual:result-sets";
 import { frameworks } from "./frameworks.ts";
 
 import type RouterService from "@ember/routing/router-service";
-import type { BenchmarkInfo, Mark, ResultData, ResultSet } from "#types";
+import type { BenchmarkInfo, Column, Mark, ResultData, ResultSet } from "#types";
 
 function versionsOf(file: ResultSet, framework: string) {
   return new Set(Object.values(file.results[framework] ?? {}).map((result) => result.version));
@@ -445,37 +445,39 @@ export function totalSortFrom(router: RouterService): TotalSort | undefined {
 }
 
 /**
- * Frameworks ordered by their summed result over one area's benches.
+ * Columns ordered by their summed result over one area's benches.
  *
  * "best" and "worst" are stated in the area's own direction -- best-first
  * is the highest total when bigger is better and the lowest when smaller
- * is -- so the same setting reads coherently across both areas. Frameworks
- * the set has no data for go last either way.
+ * is -- so the same setting reads coherently across both areas. Columns
+ * with no data for the area go last either way.
+ *
+ * Each column carries the run it reads from, so a borrowed column sorts on
+ * its own numbers rather than being pinned to one end.
  */
 export function sortedByTotal(
-  frameworkNames: string[],
-  file: ResultSet,
+  columns: Column[],
   benches: BenchmarkInfo[],
   percentile: Percentile,
   sort: TotalSort,
 ) {
-  const totals: Record<string, number> = {};
+  const totals = new Map<string, number>();
 
-  for (const framework of frameworkNames) {
+  for (const column of columns) {
     for (const bench of benches) {
-      const time = timeFor(file, framework, bench, percentile);
+      const time = timeFor(column.data, column.framework, bench, percentile);
 
       if (time === undefined) continue;
 
-      totals[framework] = (totals[framework] ?? 0) + time;
+      totals.set(column.key, (totals.get(column.key) ?? 0) + time);
     }
   }
 
   const descending = (sort === "best") === (benches[0]?.whatsBetter === "bigger");
 
-  return frameworkNames.toSorted((a, b) => {
-    const totalA = totals[a];
-    const totalB = totals[b];
+  return columns.toSorted((a, b) => {
+    const totalA = totals.get(a.key);
+    const totalB = totals.get(b.key);
 
     if (totalA === undefined && totalB === undefined) return 0;
     if (totalA === undefined) return 1;
@@ -483,6 +485,43 @@ export function sortedByTotal(
 
     return descending ? totalB - totalA : totalA - totalB;
   });
+}
+
+/**
+ * The table's own columns, plus the borrowed one if a column is on loan.
+ *
+ * In the recorded order the borrowed column sits directly beside the
+ * framework it is on loan against, so the two read as a pair. Sorting then
+ * moves it on its own total like any other column.
+ */
+export function columnsFor(
+  file: ResultSet,
+  frameworks: string[],
+  borrow: { name: string; data: ResultSet; framework: string } | undefined,
+): Column[] {
+  const columns: Column[] = frameworks.map((framework) => ({
+    key: framework,
+    framework,
+    data: file,
+  }));
+
+  if (!borrow) return columns;
+
+  const borrowed: Column = {
+    // a borrowed column can repeat a framework the table already shows, so
+    // the run it came from has to be part of its identity
+    key: `borrowed:${borrow.name}:${borrow.framework}`,
+    framework: borrow.framework,
+    data: borrow.data,
+    borrowedFrom: borrow.name,
+  };
+
+  const counterpart = columns.findIndex((column) => column.framework === borrow.framework);
+
+  // the framework can be hidden, or absent from this run entirely
+  if (counterpart === -1) return columns.concat(borrowed);
+
+  return columns.toSpliced(counterpart + 1, 0, borrowed);
 }
 
 export function labelFor(percentile: Percentile) {
