@@ -13,6 +13,7 @@ import { Settings } from "#components/settings.gts";
 import { SortControl } from "#components/sort-control.gts";
 import { frameworks } from "#frameworks";
 import {
+  columnsFor,
   formatRunName,
   higherIsBetterBenches,
   lowerIsBetterBenches,
@@ -23,20 +24,14 @@ import {
 } from "#utils";
 
 import type RouterService from "@ember/routing/router-service";
-import type { Borrow } from "#components/borrow-picker.gts";
 import type { Model } from "#routes/results.ts";
-import type { BenchmarkInfo, ResultSet } from "#types";
+import type { BenchmarkInfo, Column, ResultSet } from "#types";
 
 const HSL = converter("hsl");
 const BRIGHTEN = filterBrightness(1.5, "lrgb");
 const DARKEN = filterBrightness(0.5, "lrgb");
 
-function boxData(
-  file: ResultSet,
-  benchInfo: BenchmarkInfo,
-  frameworkNames: string[],
-  borrow: Borrow | undefined,
-) {
+function boxData(benchInfo: BenchmarkInfo, columns: Column[]) {
   // Why is chartjs like this?
   // managing this many arrays in sync across indicies is annoying
   const labels: Array<string | string[]> = [];
@@ -74,12 +69,12 @@ function boxData(
     lowerBackgroundColor.push(brighter);
   };
 
-  for (const framework of frameworkNames) {
-    add(framework, file, framework);
-  }
+  for (const column of columns) {
+    const label = column.borrowedFrom
+      ? [column.framework, `from ${formatRunName(column.borrowedFrom)}`]
+      : column.framework;
 
-  if (borrow) {
-    add([borrow.framework, `from ${formatRunName(borrow.name)}`], borrow.data, borrow.framework);
+    add(label, column.data, column.framework);
   }
 
   const datasets = [
@@ -102,14 +97,9 @@ function boxData(
 
 const renderChart = modifier(function boxplot(
   element: HTMLCanvasElement,
-  [file, benchInfo, frameworkNames, borrow]: [
-    ResultSet,
-    BenchmarkInfo,
-    string[],
-    Borrow | undefined,
-  ],
+  [benchInfo, columns]: [BenchmarkInfo, Column[]],
 ) {
-  const { datasets, labels } = boxData(file, benchInfo, frameworkNames, borrow);
+  const { datasets, labels } = boxData(benchInfo, columns);
   // https://www.sgratzl.com/chartjs-chart-boxplot/examples/styling.html
   const chart = new BoxPlotChart(element, {
     data: {
@@ -185,32 +175,31 @@ export default class Boxplat extends Component<{
     return visibleFrameworksOf(this.router, this.args.model.data);
   }
 
+  @cached
+  get columns() {
+    return columnsFor(this.args.model.data, this.frameworks, this.borrow);
+  }
+
   sorted(benches: BenchmarkInfo[]) {
     const sort = totalSortFrom(this.router);
 
-    if (!sort) return this.frameworks;
+    if (!sort) return this.columns;
 
-    return sortedByTotal(
-      this.frameworks,
-      this.args.model.data,
-      benches,
-      percentileFrom(this.router),
-      sort,
-    );
+    return sortedByTotal(this.columns, benches, percentileFrom(this.router), sort);
   }
 
   @cached
-  get higherFrameworks() {
+  get higherColumns() {
     return this.sorted(higherIsBetterBenches(this.args.model.data.benchmarkInfo));
   }
 
   @cached
-  get lowerFrameworks() {
+  get lowerColumns() {
     return this.sorted(lowerIsBetterBenches(this.args.model.data.benchmarkInfo));
   }
 
-  frameworksFor = (benchInfo: BenchmarkInfo) =>
-    isBiggerBetter(benchInfo) ? this.higherFrameworks : this.lowerFrameworks;
+  columnsForBench = (benchInfo: BenchmarkInfo) =>
+    isBiggerBetter(benchInfo) ? this.higherColumns : this.lowerColumns;
 
   settingParams = ["hide", "from", "sort"];
 
@@ -254,9 +243,7 @@ export default class Boxplat extends Component<{
         {{! chart.js responsive sizing tracks the parent element,
             so the fixed height goes on a wrapper, not the canvas }}
         <div style="position: relative; height:{{this.height}}px;">
-          <canvas
-            {{renderChart @model.data benchInfo (this.frameworksFor benchInfo) this.borrow}}
-          ></canvas>
+          <canvas {{renderChart benchInfo (this.columnsForBench benchInfo)}}></canvas>
         </div>
       </section>
     {{/each}}

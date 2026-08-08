@@ -243,6 +243,8 @@ table {
   .fw-header {
     text-align: center;
     vertical-align: bottom;
+    /* anchors the borrow badge */
+    position: relative;
   }
 
   /* benchmark names stay readable while the value columns scroll under them */
@@ -275,23 +277,22 @@ table {
     mix-blend-mode: difference;
   }
 
+  /* the borrowed column sorts in among the others now, so it is bracketed
+     on both sides -- a single leading edge only read as a separator back
+     when the column was pinned to the end of the table */
   th.borrowed,
   td.borrowed {
-    border-inline-start: 1px dashed color-mix(in oklch, currentColor 35%, transparent);
+    border-inline: 1px dashed color-mix(in oklch, currentColor 35%, transparent);
   }
 
-  .borrow-tag {
-    font-size: 0.7rem;
-    border: 1px solid currentColor;
-    border-radius: 0.25rem;
-    padding: 0 0.25rem;
-    opacity: 0.7;
-  }
-
-  .borrow-source {
-    display: block;
-    font-weight: normal;
-    opacity: 0.75;
+  /* out of the flow, so a borrowed header is the same height as every other
+     one -- the run it came from is named on the borrow picker and in this
+     badge's own tooltip */
+  .borrow-label {
+    position: absolute;
+    top: 0;
+    inset-inline-start: 0;
+    cursor: help;
   }
 
   .throttle-mismatch {
@@ -299,6 +300,17 @@ table {
     font-weight: normal;
     color: darkorange;
   }
+}
+
+/* names which borrow a column is. Shared so the badge on a table header and
+   the one on the borrow picker that explains it read as the same thing. */
+.borrow-label {
+  padding: 0 0.3rem;
+  font-size: 0.7rem;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+  border: 1px dashed color-mix(in oklch, currentColor 35%, transparent);
+  border-radius: var(--radius);
 }
 
 .compare-title {

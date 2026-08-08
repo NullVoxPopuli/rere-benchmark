@@ -14,11 +14,11 @@ import { SortControl } from "#components/sort-control.gts";
 import { Variant } from "#components/variant.gts";
 import { Version } from "#components/version.gts";
 import {
+  columnsFor,
   curveFrom,
   DEFAULT_CURVE,
   formatRunName,
   higherIsBetterBenches,
-  isoOf,
   labelFor,
   lowerIsBetterBenches,
   overrideOf,
@@ -28,16 +28,14 @@ import {
   sortedByTotal,
   throttleLabel,
   timeFor,
-  titleOf,
   totalSortFrom,
   variantOf,
   versionOf,
 } from "#utils";
 
 import type RouterService from "@ember/routing/router-service";
-import type { Borrow } from "#components/borrow-picker.gts";
 import type { Model } from "#routes/results.ts";
-import type { BenchmarkInfo, ResultSet } from "#types";
+import type { BenchmarkInfo, Column, ResultSet } from "#types";
 import type { Percentile } from "#utils";
 
 const worst = "#ff7777";
@@ -127,22 +125,17 @@ function formatTimes(ratio: number) {
   return `${Math.round(ratio * 100) / 100}x`;
 }
 
-function speedsFor(
-  file: ResultSet,
-  benchInfo: BenchmarkInfo,
-  frameworkNames: string[],
-  percentile: Percentile,
-) {
+function speedsFor(columns: Column[], benchInfo: BenchmarkInfo, percentile: Percentile) {
   const speeds: Record<string, number | undefined> = {};
   let min = Infinity;
   let max = -Infinity;
 
-  for (const framework of frameworkNames) {
-    const time = timeFor(file, framework, benchInfo, percentile);
+  for (const column of columns) {
+    const time = timeFor(column.data, column.framework, benchInfo, percentile);
 
     if (time === undefined) continue;
 
-    speeds[framework] = time;
+    speeds[column.key] = time;
 
     if (time > max) max = time;
     if (time < min) min = time;
@@ -152,10 +145,8 @@ function speedsFor(
 }
 
 class TableRow extends Component<{
-  file: ResultSet;
   benchInfo: BenchmarkInfo;
-  frameworkNames: string[];
-  borrow: Borrow | undefined;
+  columns: Column[];
 }> {
   @service declare router: RouterService;
 
@@ -165,37 +156,23 @@ class TableRow extends Component<{
    */
   @cached
   get row() {
+    // a borrowed column is one of these, so it widens the row's range on
+    // its own rather than having to be folded in afterwards
     const { speeds, min, max } = speedsFor(
-      this.args.file,
+      this.args.columns,
       this.args.benchInfo,
-      this.args.frameworkNames,
       percentileFrom(this.router),
     );
-
-    const { borrow } = this.args;
-    const borrowedSpeed = borrow
-      ? timeFor(borrow.data, borrow.framework, this.args.benchInfo, percentileFrom(this.router))
-      : undefined;
-
-    let lo = min;
-    let hi = max;
-
-    if (borrowedSpeed !== undefined) {
-      if (borrowedSpeed < lo) lo = borrowedSpeed;
-      if (borrowedSpeed > hi) hi = borrowedSpeed;
-    }
 
     const reverse = this.args.benchInfo.whatsBetter === "bigger";
     const curve = curveFrom(this.router);
     const colors: Record<string, string | undefined> = {};
 
-    for (const framework of this.args.frameworkNames) {
-      colors[framework] = colorFor(speeds[framework], lo, hi, reverse, curve);
+    for (const column of this.args.columns) {
+      colors[column.key] = colorFor(speeds[column.key], min, max, reverse, curve);
     }
 
-    const borrowedColor = colorFor(borrowedSpeed, lo, hi, reverse, curve);
-
-    return { speeds, min: lo, max: hi, colors, borrowedSpeed, borrowedColor };
+    return { speeds, min, max, colors };
   }
 
   get colors() {
@@ -220,36 +197,27 @@ class TableRow extends Component<{
     }
   };
 
-  value = (framework: string) => this.displayOf(this.row.speeds[framework]);
-
-  get borrowedValue() {
-    return this.displayOf(this.row.borrowedSpeed);
-  }
+  value = (key: string) => this.displayOf(this.row.speeds[key]);
 
   <template>
     <tr>
       <BenchmarkName @bench={{@benchInfo}} />
 
-      {{#each @frameworkNames as |framework|}}
-        <td style="background: {{get this.colors framework}};"><span class="value">{{this.value
-              framework
-            }}</span></td>
+      {{#each @columns as |column|}}
+        <td
+          class={{if column.borrowedFrom "borrowed"}}
+          style="background: {{get this.colors column.key}};"
+        ><span class="value">{{this.value column.key}}</span></td>
       {{/each}}
-
-      {{#if @borrow}}
-        <td class="borrowed" style="background: {{this.row.borrowedColor}};"><span
-            class="value"
-          >{{this.borrowedValue}}</span></td>
-      {{/if}}
     </tr>
   </template>
 }
 
 class Table extends Component<{
   benches: BenchmarkInfo[];
+  /** the run the page is showing, to compare a borrowed column's setup against */
   file: ResultSet;
-  frameworkNames: string[];
-  borrow: Borrow | undefined;
+  columns: Column[];
 }> {
   @service declare router: RouterService;
 
@@ -271,67 +239,47 @@ class Table extends Component<{
    */
   @cached
   get totals() {
-    const totals: Record<string, number> = {};
+    // byKey rather than a flat record: column keys are arbitrary now, so
+    // min/max can no longer share a namespace with them
+    const byKey: Record<string, number> = {};
+    let min = Infinity;
+    let max = -Infinity;
 
-    if (!this.shouldShowTotals) return totals;
+    if (!this.shouldShowTotals) return { byKey, min, max };
 
-    for (const bench of this.args.benches) {
-      for (const framework of this.args.frameworkNames) {
-        totals[framework] ??= 0;
-
-        const time = timeFor(this.args.file, framework, bench, this.percentile);
-
-        if (time === undefined) continue;
-
-        totals[framework] += time;
-      }
-    }
-
-    const { borrow } = this.args;
-
-    if (borrow) {
-      totals.borrowed = 0;
+    for (const column of this.args.columns) {
+      let total = 0;
 
       for (const bench of this.args.benches) {
-        const time = timeFor(borrow.data, borrow.framework, bench, this.percentile);
+        const time = timeFor(column.data, column.framework, bench, this.percentile);
 
         if (time === undefined) continue;
 
-        totals.borrowed += time;
+        total += time;
       }
+
+      byKey[column.key] = round(total);
+
+      if (total > max) max = total;
+      if (total < min) min = total;
     }
 
-    let max = -Infinity;
-    let min = Infinity;
-
-    for (const [key, value] of Object.entries(totals)) {
-      totals[key] = round(value);
-
-      if (value > max) max = value;
-      if (value < min) min = value;
-    }
-
-    totals.max = max;
-    totals.min = min;
-
-    return totals;
+    return { byKey, min, max };
   }
 
-  get frameworkNames() {
-    return this.args.frameworkNames;
-  }
+  /**
+   * Timings are only comparable at the same CPU throttle, so a borrowed
+   * column recorded at a different one has to say so in its header.
+   */
+  throttleMismatch = (column: Column) => {
+    if (!column.borrowedFrom) return;
 
-  get borrowedThrottle() {
-    const { borrow, file } = this.args;
+    const theirs = column.data.args?.CPU_THROTTLE;
 
-    if (!borrow) return;
-
-    const theirs = borrow.data.args?.CPU_THROTTLE;
-
-    if ((theirs ?? null) === (file.args?.CPU_THROTTLE ?? null)) return;
+    if ((theirs ?? null) === (this.args.file.args?.CPU_THROTTLE ?? null)) return;
 
     return throttleLabel(theirs);
-  }
+  };
 
   /**
    * Every bench in one area shares a direction, so the totals row reads
@@ -341,11 +289,17 @@ class Table extends Component<{
     return this.args.benches[0]?.whatsBetter === "bigger";
   }
 
-  totalColor = (total: number | undefined) =>
-    colorFor(total, this.totals.min, this.totals.max, this.bestIsMax, curveFrom(this.router));
+  totalColor = (key: string) =>
+    colorFor(
+      this.totals.byKey[key],
+      this.totals.min,
+      this.totals.max,
+      this.bestIsMax,
+      curveFrom(this.router),
+    );
 
-  totalValue = (framework: string) => {
-    const total = this.totals[framework];
+  totalValue = (key: string) => {
+    const total = this.totals.byKey[key];
 
     switch (modeFrom(this.router)) {
       case "linear":
@@ -373,66 +327,52 @@ class Table extends Component<{
           <th class="stat-label" title="every cell is the {{this.statLabel}} of that run's samples">
             {{this.statLabel}}
           </th>
-          {{#each this.frameworkNames as |framework|}}
-            <th class="fw-header">
-              <FrameworkInfo @name={{framework}} />
-              <Variant @variant={{variantOf @file framework}} />
+          {{#each @columns as |column|}}
+            <th class="fw-header {{if column.borrowedFrom 'borrowed'}}">
+              {{#if column.borrowedFrom}}
+                {{! which borrow this is; the run it names is spelled out on
+                    the borrow picker, so the header only carries the letter }}
+                <span
+                  class="borrow-label"
+                  title="borrowed from {{formatRunName column.borrowedFrom}}"
+                >{{column.label}}</span>
+              {{/if}}
+              <FrameworkInfo @name={{column.framework}} />
+              <Variant @variant={{variantOf column.data column.framework}} />
               <span class="small">
                 <Version
-                  @version={{versionOf @file framework}}
-                  @override={{overrideOf @file framework}}
+                  @version={{versionOf column.data column.framework}}
+                  @override={{overrideOf column.data column.framework}}
                 />
               </span>
+              {{! only borrowed columns can mismatch, and only a mismatch is
+                  worth the reader's attention }}
+              {{#let (this.throttleMismatch column) as |mismatch|}}
+                {{#if mismatch}}
+                  <span class="small throttle-mismatch">{{mismatch}}</span>
+                {{/if}}
+              {{/let}}
             </th>
           {{/each}}
-
-          {{#if @borrow}}
-            <th class="fw-header borrowed">
-              <span class="borrow-tag">borrowed</span>
-              <FrameworkInfo @name={{@borrow.framework}} />
-              <Variant @variant={{variantOf @borrow.data @borrow.framework}} />
-              <span class="small">
-                <Version
-                  @version={{versionOf @borrow.data @borrow.framework}}
-                  @override={{overrideOf @borrow.data @borrow.framework}}
-                />
-              </span>
-              <span class="borrow-source small" title={{titleOf @borrow.name}}>
-                from
-                <time datetime={{isoOf @borrow.name}}>{{formatRunName @borrow.name}}</time>
-              </span>
-              {{#if this.borrowedThrottle}}
-                <span class="small throttle-mismatch">{{this.borrowedThrottle}}</span>
-              {{/if}}
-            </th>
-          {{/if}}
         </tr>
       </thead>
       <tbody>
         {{#each @benches as |bench|}}
-          <TableRow
-            @file={{@file}}
-            @benchInfo={{bench}}
-            @frameworkNames={{this.frameworkNames}}
-            @borrow={{@borrow}}
-          />
+          <TableRow @benchInfo={{bench}} @columns={{@columns}} />
         {{/each}}
       </tbody>
 
       {{#if this.shouldShowTotals}}
         <tfoot>
           <tr><th style="text-align: right">Total</th>
-            {{#each this.frameworkNames as |framework|}}
-              <td style="background: {{this.totalColor (get this.totals framework)}}">
-                <span class="value">{{this.totalValue framework}}</span>
+            {{#each @columns as |column|}}
+              <td
+                class={{if column.borrowedFrom "borrowed"}}
+                style="background: {{this.totalColor column.key}}"
+              >
+                <span class="value">{{this.totalValue column.key}}</span>
               </td>
             {{/each}}
-
-            {{#if @borrow}}
-              <td class="borrowed" style="background: {{this.totalColor this.totals.borrowed}}">
-                <span class="value">{{this.totalValue "borrowed"}}</span>
-              </td>
-            {{/if}}
           </tr>
         </tfoot>
       {{/if}}
@@ -499,6 +439,11 @@ export default class ResultsTables extends Component<{
     return visibleFrameworksOf(this.router, this.file);
   }
 
+  @cached
+  get columns() {
+    return columnsFor(this.file, this.visibleFrameworks, this.borrow);
+  }
+
   settingParams = ["mode", "p", "hide", "from", "sort", "curve"];
 
   get benchmarkInfo() {
@@ -518,18 +463,18 @@ export default class ResultsTables extends Component<{
   sorted(benches: BenchmarkInfo[]) {
     const sort = totalSortFrom(this.router);
 
-    if (!sort) return this.visibleFrameworks;
+    if (!sort) return this.columns;
 
-    return sortedByTotal(this.visibleFrameworks, this.file, benches, this.percentile, sort);
+    return sortedByTotal(this.columns, benches, this.percentile, sort);
   }
 
   @cached
-  get higherFrameworks() {
+  get higherColumns() {
     return this.sorted(this.higherBenches);
   }
 
   @cached
-  get lowerFrameworks() {
+  get lowerColumns() {
     return this.sorted(this.lowerBenches);
   }
 
@@ -611,12 +556,7 @@ export default class ResultsTables extends Component<{
     {{#if this.higherBenches.length}}
       <h2>higher is better</h2>
 
-      <Table
-        @benches={{this.higherBenches}}
-        @file={{this.file}}
-        @frameworkNames={{this.higherFrameworks}}
-        @borrow={{this.borrow}}
-      />
+      <Table @benches={{this.higherBenches}} @file={{this.file}} @columns={{this.higherColumns}} />
       <br />
       <br />
       <br />
@@ -625,12 +565,7 @@ export default class ResultsTables extends Component<{
     {{#if this.lowerBenches.length}}
       <h2>lower is better</h2>
 
-      <Table
-        @benches={{this.lowerBenches}}
-        @file={{this.file}}
-        @frameworkNames={{this.lowerFrameworks}}
-        @borrow={{this.borrow}}
-      />
+      <Table @benches={{this.lowerBenches}} @file={{this.file}} @columns={{this.lowerColumns}} />
       <br />
       <br />
       <br />
