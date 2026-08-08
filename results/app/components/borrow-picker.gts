@@ -8,6 +8,7 @@ import { borrowLabel, formatRunName, titleOf } from "#utils";
 
 import type RouterService from "@ember/routing/router-service";
 import type { Borrowed } from "#routes/results.ts";
+import type QueryParams from "#services/query-params.ts";
 import type { ResultSet } from "#types";
 
 export interface Borrow {
@@ -16,16 +17,13 @@ export interface Borrow {
   framework: string;
 }
 
-export function borrowOf(
-  router: RouterService,
-  borrowed: Borrowed | undefined,
-): Borrow | undefined {
+export function borrowOf(qp: QueryParams, borrowed: Borrowed | undefined): Borrow | undefined {
   if (!borrowed) return;
 
   const available = borrowed.data.selections.frameworks;
-  const requested = router.currentRoute?.queryParams["col"];
+  const requested = qp.get("col");
   const framework =
-    typeof requested === "string" && available.includes(requested) ? requested : available[0];
+    requested !== undefined && available.includes(requested) ? requested : available[0];
 
   if (!framework) return;
 
@@ -36,11 +34,10 @@ export class BorrowPicker extends Component<{
   borrowed: Borrowed | undefined;
 }> {
   @service declare router: RouterService;
+  @service declare queryParams: QueryParams;
 
   get current() {
-    const q = this.router.currentRoute?.queryParams["q"];
-
-    return typeof q === "string" ? q : "";
+    return this.queryParams.get("q") ?? "";
   }
 
   get runOptions() {
@@ -56,7 +53,7 @@ export class BorrowPicker extends Component<{
   label = borrowLabel(0);
 
   get framework() {
-    return borrowOf(this.router, this.args.borrowed)?.framework ?? "";
+    return borrowOf(this.queryParams, this.args.borrowed)?.framework ?? "";
   }
 
   get isNone() {

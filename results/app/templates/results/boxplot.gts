@@ -23,8 +23,8 @@ import {
   totalSortFrom,
 } from "#utils";
 
-import type RouterService from "@ember/routing/router-service";
 import type { Model } from "#routes/results.ts";
+import type QueryParams from "#services/query-params.ts";
 import type { BenchmarkInfo, Column, ResultSet } from "#types";
 
 const HSL = converter("hsl");
@@ -163,7 +163,7 @@ const renderChart = modifier(function boxplot(
 export default class Boxplat extends Component<{
   model: Model;
 }> {
-  @service declare router: RouterService;
+  @service declare queryParams: QueryParams;
 
   get benchmarkInfo() {
     return this.args.model.data.benchmarkInfo
@@ -172,7 +172,7 @@ export default class Boxplat extends Component<{
   }
 
   get frameworks() {
-    return visibleFrameworksOf(this.router, this.args.model.data);
+    return visibleFrameworksOf(this.queryParams, this.args.model.data);
   }
 
   @cached
@@ -181,11 +181,11 @@ export default class Boxplat extends Component<{
   }
 
   sorted(benches: BenchmarkInfo[]) {
-    const sort = totalSortFrom(this.router);
+    const sort = totalSortFrom(this.queryParams);
 
     if (!sort) return this.columns;
 
-    return sortedByTotal(this.columns, benches, percentileFrom(this.router), sort);
+    return sortedByTotal(this.columns, benches, percentileFrom(this.queryParams), sort);
   }
 
   @cached
@@ -201,10 +201,10 @@ export default class Boxplat extends Component<{
   columnsForBench = (benchInfo: BenchmarkInfo) =>
     isBiggerBetter(benchInfo) ? this.higherColumns : this.lowerColumns;
 
-  settingParams = ["hide", "from", "sort"];
+  settingParams = ["hide", "from", "sort"] as const;
 
   get borrow() {
-    return borrowOf(this.router, this.args.model.borrowed);
+    return borrowOf(this.queryParams, this.args.model.borrowed);
   }
 
   get rows() {

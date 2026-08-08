@@ -34,6 +34,7 @@ import {
 import type { TOC } from "@ember/component/template-only";
 import type RouterService from "@ember/routing/router-service";
 import type { Model, NamedRun } from "#routes/compare.ts";
+import type QueryParams from "#services/query-params.ts";
 import type { BenchmarkInfo, ResultSet } from "#types";
 import type { Percentile } from "#utils";
 
@@ -164,6 +165,7 @@ class CompareTable extends Component<{
   framework: string;
 }> {
   @service declare router: RouterService;
+  @service declare queryParams: QueryParams;
 
   /**
    * One entry per comparison run: the run itself, its letter, and whether
@@ -183,7 +185,7 @@ class CompareTable extends Component<{
 
   @cached
   get rows() {
-    const percentile = percentileFrom(this.router);
+    const percentile = percentileFrom(this.queryParams);
 
     return this.args.benches.map((bench) => {
       const a = timeFor(this.args.a.data, this.args.framework, bench, percentile);
@@ -293,6 +295,7 @@ class CompareTable extends Component<{
 
 export default class Compare extends Component<{ model: Model }> {
   @service declare router: RouterService;
+  @service declare queryParams: QueryParams;
 
   get a() {
     return this.args.model.a;
@@ -321,9 +324,9 @@ export default class Compare extends Component<{ model: Model }> {
   }
 
   get framework(): string {
-    const requested = this.router.currentRoute?.queryParams["framework"];
+    const requested = this.queryParams.get("framework");
 
-    if (typeof requested === "string" && this.frameworkNames.includes(requested)) {
+    if (requested !== undefined && this.frameworkNames.includes(requested)) {
       return requested;
     }
 
@@ -464,7 +467,7 @@ export default class Compare extends Component<{ model: Model }> {
 
   labelFor = labelFor;
 
-  isPercentile = (percentile: Percentile) => percentileFrom(this.router) === percentile;
+  isPercentile = (percentile: Percentile) => percentileFrom(this.queryParams) === percentile;
 
   setPercentile = (event: Event) => {
     const { value } = event.target as HTMLSelectElement;

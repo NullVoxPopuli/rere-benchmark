@@ -8,17 +8,17 @@ import { Variant } from "#components/variant.gts";
 import { Version } from "#components/version.gts";
 import { dataOf, percentileFrom, round, variantOf } from "#utils";
 
-import type RouterService from "@ember/routing/router-service";
 import type { Model } from "#routes/results.ts";
+import type QueryParams from "#services/query-params.ts";
 import type { BenchmarkInfo, Results, ResultSet } from "#types";
 
 export default class Animated extends Component<{
   model: Model;
 }> {
-  @service declare router: RouterService;
+  @service declare queryParams: QueryParams;
 
   get percentile() {
-    return percentileFrom(this.router);
+    return percentileFrom(this.queryParams);
   }
 
   get benchmarkInfo() {

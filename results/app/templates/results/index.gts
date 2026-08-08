@@ -35,6 +35,7 @@ import {
 
 import type RouterService from "@ember/routing/router-service";
 import type { Model } from "#routes/results.ts";
+import type QueryParams from "#services/query-params.ts";
 import type { BenchmarkInfo, Column, ResultSet } from "#types";
 import type { Percentile } from "#utils";
 
@@ -87,10 +88,9 @@ type ValueMode = "raw" | "linear" | "times";
 
 /**
  * The ?mode= query param, wherever a component needs it.
- * router.currentRoute is tracked, so reads stay live across transitions.
  */
-function modeFrom(router: RouterService): ValueMode {
-  const mode = router.currentRoute?.queryParams["mode"];
+function modeFrom(qp: QueryParams): ValueMode {
+  const mode = qp.get("mode");
 
   return mode === "linear" || mode === "times" ? mode : "raw";
 }
@@ -148,7 +148,7 @@ class TableRow extends Component<{
   benchInfo: BenchmarkInfo;
   columns: Column[];
 }> {
-  @service declare router: RouterService;
+  @service declare queryParams: QueryParams;
 
   /**
    * Derived, not constructor-assigned: the percentile is read off the URL,
@@ -161,11 +161,11 @@ class TableRow extends Component<{
     const { speeds, min, max } = speedsFor(
       this.args.columns,
       this.args.benchInfo,
-      percentileFrom(this.router),
+      percentileFrom(this.queryParams),
     );
 
     const reverse = this.args.benchInfo.whatsBetter === "bigger";
-    const curve = curveFrom(this.router);
+    const curve = curveFrom(this.queryParams);
     const colors: Record<string, string | undefined> = {};
 
     for (const column of this.args.columns) {
@@ -183,7 +183,7 @@ class TableRow extends Component<{
     const { min, max } = this.row;
     const bestIsMax = this.args.benchInfo.whatsBetter === "bigger";
 
-    switch (modeFrom(this.router)) {
+    switch (modeFrom(this.queryParams)) {
       case "linear":
         return scoreFor(speed, min, max);
       case "times": {
@@ -219,14 +219,14 @@ class Table extends Component<{
   file: ResultSet;
   columns: Column[];
 }> {
-  @service declare router: RouterService;
+  @service declare queryParams: QueryParams;
 
   get shouldShowTotals() {
     return this.args.benches.length > 1;
   }
 
   get percentile() {
-    return percentileFrom(this.router);
+    return percentileFrom(this.queryParams);
   }
 
   get statLabel() {
@@ -295,13 +295,13 @@ class Table extends Component<{
       this.totals.min,
       this.totals.max,
       this.bestIsMax,
-      curveFrom(this.router),
+      curveFrom(this.queryParams),
     );
 
   totalValue = (key: string) => {
     const total = this.totals.byKey[key];
 
-    switch (modeFrom(this.router)) {
+    switch (modeFrom(this.queryParams)) {
       case "linear":
         return scoreFor(total, this.totals.min, this.totals.max);
       case "times": {
@@ -384,9 +384,10 @@ export default class ResultsTables extends Component<{
   model: Model;
 }> {
   @service declare router: RouterService;
+  @service declare queryParams: QueryParams;
 
   get mode(): ValueMode {
-    return modeFrom(this.router);
+    return modeFrom(this.queryParams);
   }
 
   setMode = (mode: ValueMode) => {
@@ -398,7 +399,7 @@ export default class ResultsTables extends Component<{
   percentiles = PERCENTILES;
 
   get percentile(): Percentile {
-    return percentileFrom(this.router);
+    return percentileFrom(this.queryParams);
   }
 
   setPercentile = (percentile: Percentile) => {
@@ -408,7 +409,7 @@ export default class ResultsTables extends Component<{
   isPercentile = (percentile: Percentile) => this.percentile === percentile;
 
   get curve() {
-    return curveFrom(this.router);
+    return curveFrom(this.queryParams);
   }
 
   setCurve = (event: Event) => {
@@ -432,11 +433,11 @@ export default class ResultsTables extends Component<{
   }
 
   get borrow() {
-    return borrowOf(this.router, this.args.model.borrowed);
+    return borrowOf(this.queryParams, this.args.model.borrowed);
   }
 
   get visibleFrameworks() {
-    return visibleFrameworksOf(this.router, this.file);
+    return visibleFrameworksOf(this.queryParams, this.file);
   }
 
   @cached
@@ -444,7 +445,7 @@ export default class ResultsTables extends Component<{
     return columnsFor(this.file, this.visibleFrameworks, this.borrow);
   }
 
-  settingParams = ["mode", "p", "hide", "from", "sort", "curve"];
+  settingParams = ["mode", "p", "hide", "from", "sort", "curve"] as const;
 
   get benchmarkInfo() {
     return this.args.model.data.benchmarkInfo;
@@ -461,7 +462,7 @@ export default class ResultsTables extends Component<{
   }
 
   sorted(benches: BenchmarkInfo[]) {
-    const sort = totalSortFrom(this.router);
+    const sort = totalSortFrom(this.queryParams);
 
     if (!sort) return this.columns;
 
