@@ -42,8 +42,8 @@ importers:
         specifier: 0.1.1
         version: 0.1.1(@babel/core@7.29.7)
       nvp.ui:
-        specifier: ^0.9.0
-        version: 0.9.0(@babel/core@7.29.7)(ember-source@7.1.0(@glimmer/component@2.1.1))
+        specifier: ^0.9.1
+        version: 0.9.1(@babel/core@7.29.7)(ember-source@7.1.0(@glimmer/component@2.1.1))
     devDependencies:
       '@babel/core':
         specifier: 7.29.7
@@ -3667,8 +3667,8 @@ packages:
   node-releases@2.0.27:
     resolution: {integrity: sha512-nmh3lCkYZ3grZvqcCH+fjmQ7X+H0OeZgP40OierEaAptX4XofMh5kwNbWh7lBduUzCcV/8kZ+NDLCwm2iorIlA==}
 
-  nvp.ui@0.9.0:
-    resolution: {integrity: sha512-vZ15fsJJK9l6W+VV1vhM2fK74miJyodx5xGocp6KbRk6YnlZvbuhtR77yN1Ho7DUvOM9ioj+8vhuAxeQRJ6DaQ==}
+  nvp.ui@0.9.1:
+    resolution: {integrity: sha512-e9AXYZ4wO/xHBLbIm/4Ub121FHiKr5C4HjLLOL2CMf0YB7sSnBSh2ub9T65vbZgzOXyB7H6FYoKSWG5K+S0EQQ==}
 
   nwsapi@2.2.23:
     resolution: {integrity: sha512-7wfH4sLbt4M0gCDzGE6vzQBo0bfTKjU7Sfpqy/7gs1qBfYz2vEJH6vXcBKpO3+6Yu1telwd0t9HpyOoLEQQbIQ==}
@@ -9072,7 +9072,7 @@ snapshots:
 
   node-releases@2.0.27: {}
 
-  nvp.ui@0.9.0(@babel/core@7.29.7)(ember-source@7.1.0(@glimmer/component@2.1.1)):
+  nvp.ui@0.9.1(@babel/core@7.29.7)(ember-source@7.1.0(@glimmer/component@2.1.1)):
     dependencies:
       '@ember/test-helpers': 5.4.3(@babel/core@7.29.7)
       '@ember/test-waiters': 4.1.2
