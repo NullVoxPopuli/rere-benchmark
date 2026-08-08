@@ -73,6 +73,11 @@ export interface BenchmarkInfo {
   measure?: string;
   whatsBetter: "bigger" | "smaller";
   units: string;
+  /**
+   * Which table section this bench is shown under.
+   * Benches without a section are grouped by `whatsBetter` alone.
+   */
+  section?: "effects";
 }
 
 export interface ResultSet {

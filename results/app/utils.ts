@@ -497,9 +497,21 @@ export function higherIsBetterBenches(benchmarkInfo: BenchmarkInfo[]) {
   return benchmarkInfo.filter((bench) => bench.whatsBetter === "bigger");
 }
 
+/**
+ * Result sets recorded before `section` existed don't carry it,
+ * so the app name backfills membership for them.
+ */
+export function isEffectsBench(bench: BenchmarkInfo) {
+  return bench.section === "effects" || bench.app === "incrementing-render-effect";
+}
+
+export function effectsBenches(benchmarkInfo: BenchmarkInfo[]) {
+  return benchmarkInfo.filter((bench) => isEffectsBench(bench));
+}
+
 export function lowerIsBetterBenches(benchmarkInfo: BenchmarkInfo[]) {
   return benchmarkInfo
-    .filter((bench) => bench.whatsBetter !== "bigger")
+    .filter((bench) => bench.whatsBetter !== "bigger" && !isEffectsBench(bench))
     .toSorted()
     .toSorted((a, b) => (a.name.includes("async") ? 1 : 0) - (b.name.includes("async") ? 1 : 0));
 }

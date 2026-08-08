@@ -65,6 +65,12 @@ export interface BenchmarkInfo {
    * What units are measured? this will be displayed in the UI
    */
   units: string;
+
+  /**
+   * Which table section the results app shows this bench under.
+   * Benches without a section are grouped by `whatsBetter` alone.
+   */
+  section?: 'effects';
 }
 
 const variants = [
@@ -100,6 +106,7 @@ const benchmarks: BenchmarkInfo[] = [
     query: '&updates=100000',
     whatsBetter: 'smaller',
     units: 'ms',
+    section: 'effects',
   },
   {
     name: '1 item, 1k updates (async)',

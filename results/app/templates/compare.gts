@@ -13,6 +13,7 @@ import { Version } from "#components/version.gts";
 import { nameOf } from "#frameworks";
 import { joinRuns } from "#routes/compare.ts";
 import {
+  effectsBenches,
   formatRunName,
   getFrameworks,
   higherIsBetterBenches,
@@ -442,6 +443,11 @@ export default class Compare extends Component<{ model: Model }> {
     return lowerIsBetterBenches(this.benchmarkInfo);
   }
 
+  @cached
+  get effectBenches() {
+    return effectsBenches(this.benchmarkInfo);
+  }
+
   /**
    * The variant any run recorded for the compared framework, preferring
    * the candidates (B onward). Runs are usually the same build, so this
@@ -556,6 +562,17 @@ export default class Compare extends Component<{ model: Model }> {
           @benches={{this.lowerBenches}}
           @a={{this.a}}
           @bs={{this.bs}}
+          @framework={{this.framework}}
+        />
+      {{/if}}
+
+      {{#if this.effectBenches.length}}
+        <h2>Effects (lower is better)</h2>
+
+        <CompareTable
+          @benches={{this.effectBenches}}
+          @a={{this.a}}
+          @b={{this.b}}
           @framework={{this.framework}}
         />
       {{/if}}
