@@ -1,3 +1,8 @@
+/* nvp.ui's design tokens -- radius, spacing, hairlines, shadows, and the
+   .surface/.elevation-* classes. First, so the rules below win over the
+   page-level defaults it ships alongside them. */
+@import "nvp.ui/variables.css";
+
 :root {
   /* selects, buttons, radios and scrollbars are painted by the browser;
      without this they stay light while the rest of the page goes dark */
@@ -13,6 +18,15 @@
 
   /* whichever of the two is active, for elements that must be opaque */
   --page-bg: var(--light-bg);
+
+  /* nvp.ui themes by class (.theme-light / .theme-dark) and leaves :root
+     on the light palette. This app follows the OS instead, so it restates
+     its own palette in the kit's token names and flips them in the dark
+     block below. Everything the kit derives from these -- .surface,
+     hairlines, focus rings -- then follows the OS too. */
+  --color-page-background: var(--light-bg);
+  --color-text: var(--light-fg);
+  --border-color: #e3e3e3;
 }
 
 body {
@@ -29,6 +43,10 @@ header {
 @media (prefers-color-scheme: dark) {
   :root {
     --page-bg: var(--dark-bg);
+
+    --color-page-background: var(--dark-bg);
+    --color-text: var(--dark-fg);
+    --border-color: #2e2e2e;
   }
 
   body {
@@ -359,29 +377,61 @@ table {
 .settings {
   justify-self: center;
 
+  /* the panel is chrome, not data: without a cap it inherits the width of
+     the widest results table behind it and the cards stretch to match */
+  width: min(100%, 60rem);
+
   summary {
     width: fit-content;
     margin-inline: auto;
     cursor: pointer;
-    padding: 0.25rem 1rem;
+    padding: var(--padding-1) var(--padding-4);
     font-size: 0.7rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     opacity: 0.7;
-    border: 1px solid color-mix(in oklch, currentColor 25%, transparent);
-    border-radius: 0.5rem;
+    border: var(--border-width) var(--border-style) var(--border-color);
+    border-radius: var(--radius);
 
     &:hover,
     &:focus-visible {
       opacity: 1;
-      border-color: color-mix(in oklch, currentColor 60%, transparent);
+      border-color: color-mix(in oklch, currentColor 40%, var(--border-color));
     }
   }
 
+  /* one card per group, as many across as fit. Each card is its own
+     fieldset, so a group never splits across a column boundary. */
   .fields {
     display: grid;
-    justify-items: center;
-    padding-top: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+    align-items: start;
+    gap: var(--gap-4);
+    padding-top: var(--padding-4);
+  }
+
+  /* the stacked layout spaced its groups with margins; the grid's own
+     gutters do that now */
+  .fields > * {
+    margin-bottom: 0;
+
+    /* a grid item's floor is its content, so the borrow card's <select>
+       would push its column -- and the centred panel -- out of line */
+    min-width: 0;
+    max-width: none;
+  }
+
+  /* the run names are long; let the control shrink to its card instead of
+     sizing the card to the longest name. Both the label and the select
+     need the floor lifted -- each is a flex item whose automatic minimum
+     is its own content. */
+  .fields label {
+    min-width: 0;
+  }
+
+  .fields select {
+    min-width: 0;
+    max-width: 100%;
   }
 }
 
@@ -393,13 +443,12 @@ table {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem 1.5rem;
+  gap: var(--gap-2) var(--gap-4);
   max-width: calc(100vw - 1rem);
-  margin-bottom: 1rem;
-  padding: 0.5rem 1rem 0.75rem;
-  /* hairline in either color scheme, unlike a hard-coded gray */
-  border: 1px solid color-mix(in oklch, currentColor 25%, transparent);
-  border-radius: 0.5rem;
+  margin-bottom: var(--gap-4);
+  padding: var(--padding-2) var(--padding-4) var(--padding-3);
+  border: var(--border-width) var(--border-style) var(--border-color);
+  border-radius: var(--radius);
 
   legend {
     padding-inline: 0.375rem;
@@ -412,7 +461,7 @@ table {
   label {
     display: inline-flex;
     align-items: center;
-    gap: 0.375rem;
+    gap: var(--gap-1);
     white-space: nowrap;
     cursor: pointer;
   }
@@ -436,15 +485,16 @@ table {
   input[type="number"] {
     font-family: inherit;
     font-size: 0.9rem;
-    padding: 0.125rem 0.375rem;
+    padding: 0.125rem var(--padding-1);
     color: inherit;
     background: transparent;
-    border: 1px solid color-mix(in oklch, currentColor 35%, transparent);
-    border-radius: 0.25rem;
+    border: var(--border-width) var(--border-style)
+      color-mix(in oklch, currentColor 20%, var(--border-color));
+    border-radius: var(--radius);
 
     &:hover,
     &:focus-visible {
-      border-color: color-mix(in oklch, currentColor 60%, transparent);
+      border-color: color-mix(in oklch, currentColor 45%, var(--border-color));
     }
   }
 

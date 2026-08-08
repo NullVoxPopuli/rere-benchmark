@@ -80,7 +80,7 @@ export class BorrowPicker extends Component<{
   };
 
   <template>
-    <fieldset class="borrow-controls">
+    <fieldset class="borrow-controls surface">
       <legend>borrow a column</legend>
       <label>
         from run
