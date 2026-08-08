@@ -12,9 +12,11 @@ export const FRAMEWORKS = [
   'lit-signals',
   'preact',
   'react',
-  'solid',
+  'solid-1',
+  'solid-2',
   'svelte',
   'vue',
+  'vue-vapor',
 ] as const;
 
 export interface BenchSpec {

@@ -1,4 +1,4 @@
-import { displayHz, formatDuration, formatTimestamp, msOfFrameAt, throttleLabel } from "#utils";
+import { formatDuration, formatTimestamp, msOfFrameAt, throttleLabel } from "#utils";
 
 import type { TOC } from "@ember/component/template-only";
 import type { ResultSet } from "#types";
@@ -46,7 +46,7 @@ export const Info = <template>
         (non-headless)
       </li>
       <li>
-        {{displayHz @env.monitor.hz}}hz Monitor (1 frame =
+        {{@env.monitor.hz}}hz Monitor (1 frame =
         {{msOfFrameAt @env.monitor.hz}}ms)
       </li>
       {{#if (isThrottled @cpuThrottle)}}

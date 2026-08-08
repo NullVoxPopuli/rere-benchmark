@@ -69,6 +69,8 @@ export const frameworks: Record<string, FrameworkInfo> = {
     url: "https://react.dev/",
     package: "react",
   },
+  // The folder name before the solid-1 / solid-2 split; kept so
+  // historical result files still resolve
   solid: {
     color: "#2c4f7c",
     logo: "/solid.svg",
@@ -76,10 +78,33 @@ export const frameworks: Record<string, FrameworkInfo> = {
     url: "https://www.solidjs.com/",
     package: "solid-js",
   },
+  ["solid-1"]: {
+    color: "#2c4f7c",
+    logo: "/solid.svg",
+    name: "SolidJS 1",
+    url: "https://www.solidjs.com/",
+    package: "solid-js",
+  },
+  ["solid-2"]: {
+    // the logo's lighter blue, to distinguish from SolidJS 1 in charts
+    color: "#76b3e1",
+    logo: "/solid.svg",
+    name: "SolidJS 2",
+    url: "https://www.solidjs.com/",
+    package: "solid-js",
+  },
   vue: {
     color: "#42b883",
     logo: "/vue.svg",
     name: "Vue.js",
+    url: "https://vuejs.org/",
+    package: "vue",
+  },
+  ["vue-vapor"]: {
+    // Vue's darker brand blue-green, to distinguish from VDOM Vue in charts
+    color: "#35495e",
+    logo: "/vue.svg",
+    name: "Vue.js Vapor",
     url: "https://vuejs.org/",
     package: "vue",
   },

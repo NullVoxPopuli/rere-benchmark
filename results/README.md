@@ -1,57 +1,35 @@
 # results
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+Two things live here:
 
-## Prerequisites
+- **the recorded data**: `public/results/*.json` (official runs, numbered
+  sequentially) and `public/experiments/*.json` (one-off runs, e.g. from
+  `pnpm use-tar-for`). These files are written by the runner in
+  `../src/runner/` -- their shape is described by `ResultSet` in
+  [`app/types.ts`](./app/types.ts).
+- **the viewer**: an Ember app that renders those files -- the tables,
+  boxplots, animated view, and run-to-run compare.
 
-You will need the following things properly installed on your computer.
+## Running the viewer
 
-- [Git](https://git-scm.com/)
-- [Node.js](https://nodejs.org/)
-- [pnpm](https://pnpm.io/)
-- [Ember CLI](https://cli.emberjs.com/release/)
-- [Google Chrome](https://google.com/chrome/)
+```bash
+cd results
+pnpm install
+pnpm start
+```
 
-## Installation
+`pnpm build` produces the production build, `pnpm lint:types` type-checks.
 
-- `git clone <repository-url>` this repository
-- `cd results`
-- `pnpm install`
+## Where things are
 
-## Running / Development
+| path | what it is |
+| --- | --- |
+| `app/types.ts` | the shape of a result file -- the contract with the runner |
+| `app/utils.ts` | formatting, query-param readers, statistics |
+| `app/frameworks.ts` | the framework registry (display name, color, logo, package to read the version from) -- shared with the runner |
+| `app/templates/results/` | the three views of one run: table, boxplot, animated |
+| `app/templates/compare.gts` | one framework across N runs |
+| `vite.config.mjs` | builds `virtual:result-sets`: the list of runs and the build-time metadata (date, browser, throttle) their display names are made of |
 
-- `pnpm start`
-- Visit your app at [http://localhost:4200](http://localhost:4200).
-- Visit your tests at [http://localhost:4200/tests](http://localhost:4200/tests).
-
-### Code Generators
-
-Make use of the many generators for code, try `ember help generate` for more details
-
-### Running Tests
-
-- `pnpm test`
-- `pnpm test:ember --server`
-
-### Linting
-
-- `pnpm lint`
-- `pnpm lint:fix`
-
-### Building
-
-- `pnpm ember build` (development)
-- `pnpm build` (production)
-
-### Deploying
-
-Specify what it takes to deploy your app.
-
-## Further Reading / Useful Links
-
-- [ember.js](https://emberjs.com/)
-- [ember-cli](https://cli.emberjs.com/release/)
-- Development Browser Extensions
-  - [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
-  - [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
+Result files are fetched at runtime by name; nothing needs rebuilding when
+a new JSON lands in `public/results/`.

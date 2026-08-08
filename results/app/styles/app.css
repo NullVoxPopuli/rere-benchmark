@@ -296,10 +296,6 @@ table {
 }
 
 .compare-table {
-  /* wider than the results tables: these columns are headed by a
-     timestamp rather than a framework name */
-  --value-column: 10rem;
-
   .run-header {
     text-align: center;
 
@@ -436,7 +432,8 @@ table {
      the page; a hairline like the fieldset's own suits it better. The
      dropdown itself stays native, and color-scheme keeps it legible. */
   select,
-  button {
+  button,
+  input[type="number"] {
     font-family: inherit;
     font-size: 0.9rem;
     padding: 0.125rem 0.375rem;
@@ -454,11 +451,27 @@ table {
   button {
     cursor: pointer;
   }
+
+  /* a number field defaults to a text field's width, which would make its
+     fieldset twice as wide as every other one in the stack */
+  input[type="number"] {
+    width: 4rem;
+    cursor: text;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
 }
 
 .compare-controls select,
 .borrow-controls select {
   max-width: 40vw;
+}
+
+/* pulls each "remove run" button back against the selector it removes,
+   undoing most of the control bar's column gap */
+.compare-controls .remove-run {
+  margin-inline-start: -1rem;
+  line-height: 1;
 }
 
 /* history: run links line up with their "how long ago" hint */

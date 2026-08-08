@@ -10,11 +10,5 @@ export default defineConfig({
       allow: [searchForWorkspaceRoot(process.cwd()), '../../../common'],
     },
   },
-  plugins: [
-    vue({
-      features: {
-        vapor: true,
-      },
-    }),
-  ],
+  plugins: [vue()],
 })

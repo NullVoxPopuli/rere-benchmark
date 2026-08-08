@@ -222,7 +222,7 @@ export function formatRunName(runName: string) {
   const parts: string[] = [];
 
   if (meta.browser) parts.push(browserLabel(meta.browser));
-  if (meta.hz !== undefined) parts.push(`${displayHz(meta.hz)} Hz`);
+  if (meta.hz !== undefined) parts.push(`${meta.hz} Hz`);
 
   if (meta.throttle !== undefined) {
     parts.push(meta.throttle > 1 ? `${meta.throttle}x throttle` : "no throttle");
@@ -233,6 +233,15 @@ export function formatRunName(runName: string) {
   if (parts.length === 0) return runName;
 
   return `#${runName} ${parts.join(" - ")}`;
+}
+
+/**
+ * Just the run's file number (`#6`) for places the full name is too wide,
+ * like a column header per run. A name with no metadata (an experiment)
+ * is already its own shortest form.
+ */
+export function shortRunName(runName: string) {
+  return metadata[runName] ? `#${runName}` : runName;
 }
 
 /**
@@ -280,20 +289,10 @@ export function relativeToNow(runName: string) {
   return RELATIVE_FORMAT.format(0, "second");
 }
 
-/**
- * The recorded refresh rate is 0-indexed -- a 120 Hz monitor records 119.
- * Every rendered rate (and anything derived from one, like the frame
- * budget) goes through here; comparisons between recorded values stay on
- * the recorded convention.
- */
-export function displayHz(recorded: number) {
-  return recorded + 1;
-}
-
 const msInOneHz = 1_000;
 
 export function msOfFrameAt(recordedHz: number) {
-  const result = msInOneHz / displayHz(recordedHz);
+  const result = msInOneHz / recordedHz;
 
   return Math.round(result * 100) / 100;
 }
@@ -413,6 +412,24 @@ export function percentileFrom(router: RouterService): Percentile {
   const found = PERCENTILES.find((p) => String(p) === router.currentRoute?.queryParams["p"]);
 
   return found ?? DEFAULT_PERCENTILE;
+}
+
+export const DEFAULT_CURVE = 1;
+
+/**
+ * The `?curve=` query param: how hard the heatmap's color ramp bends
+ * toward the best value in each row. 0 is a straight linear ramp, positive
+ * spends more of the gradient on the results nearest the best one, and
+ * negative does the same for the ones nearest the worst.
+ */
+export function curveFrom(router: RouterService): number {
+  const raw = router.currentRoute?.queryParams["curve"];
+
+  if (raw === undefined || raw === "") return DEFAULT_CURVE;
+
+  const curve = Number(raw);
+
+  return Number.isFinite(curve) ? curve : DEFAULT_CURVE;
 }
 
 export type TotalSort = "best" | "worst";
