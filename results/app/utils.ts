@@ -4,7 +4,7 @@ import { experiments, metadata } from "virtual:result-sets";
 
 import { frameworks } from "./frameworks.ts";
 
-import type RouterService from "@ember/routing/router-service";
+import type QueryParams from "#services/query-params.ts";
 import type { BenchmarkInfo, Column, Mark, ResultData, ResultSet } from "#types";
 
 function versionsOf(file: ResultSet, framework: string) {
@@ -406,10 +406,9 @@ export function timeFromMarks(
 
 /**
  * The `?p=` query param, wherever a component needs it.
- * router.currentRoute is tracked, so reads stay live across transitions.
  */
-export function percentileFrom(router: RouterService): Percentile {
-  const found = PERCENTILES.find((p) => String(p) === router.currentRoute?.queryParams["p"]);
+export function percentileFrom(qp: QueryParams): Percentile {
+  const found = PERCENTILES.find((percentile) => String(percentile) === qp.p);
 
   return found ?? DEFAULT_PERCENTILE;
 }
@@ -422,10 +421,10 @@ export const DEFAULT_CURVE = 1;
  * spends more of the gradient on the results nearest the best one, and
  * negative does the same for the ones nearest the worst.
  */
-export function curveFrom(router: RouterService): number {
-  const raw = router.currentRoute?.queryParams["curve"];
+export function curveFrom(qp: QueryParams): number {
+  const raw = qp.curve;
 
-  if (raw === undefined || raw === "") return DEFAULT_CURVE;
+  if (raw === undefined) return DEFAULT_CURVE;
 
   const curve = Number(raw);
 
@@ -438,8 +437,8 @@ export type TotalSort = "best" | "worst";
  * The `?sort=` query param, wherever a component needs it.
  * Absent (or anything unrecognized) means the recorded order.
  */
-export function totalSortFrom(router: RouterService): TotalSort | undefined {
-  const sort = router.currentRoute?.queryParams["sort"];
+export function totalSortFrom(qp: QueryParams): TotalSort | undefined {
+  const { sort } = qp;
 
   return sort === "best" || sort === "worst" ? sort : undefined;
 }

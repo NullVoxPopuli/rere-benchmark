@@ -11,7 +11,8 @@
     "#utils": "./app/utils.ts",
     "#frameworks": "./app/frameworks.ts",
     "#routes/*": "./app/routes/*",
-    "#components/*": "./app/components/*"
+    "#components/*": "./app/components/*",
+    "#services/*": "./app/services/*"
   },
   "exports": {
     "./*": "./app/*"

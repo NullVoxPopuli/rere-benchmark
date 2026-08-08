@@ -4,12 +4,14 @@ import { service } from "@ember/service";
 import { totalSortFrom } from "#utils";
 
 import type RouterService from "@ember/routing/router-service";
+import type QueryParams from "#services/query-params.ts";
 import type { TotalSort } from "#utils";
 
 export class SortControl extends Component {
   @service declare router: RouterService;
+  @service declare queryParams: QueryParams;
 
-  isSort = (sort: TotalSort | undefined) => totalSortFrom(this.router) === sort;
+  isSort = (sort: TotalSort | undefined) => totalSortFrom(this.queryParams) === sort;
 
   setSort = (sort: TotalSort | null) => {
     this.router.transitionTo({ queryParams: { sort } });

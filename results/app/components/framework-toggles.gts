@@ -4,16 +4,15 @@ import { service } from "@ember/service";
 import { nameOf } from "#frameworks";
 
 import type RouterService from "@ember/routing/router-service";
+import type QueryParams from "#services/query-params.ts";
 import type { ResultSet } from "#types";
 
-export function hiddenFrameworksFrom(router: RouterService) {
-  const raw = router.currentRoute?.queryParams["hide"];
-
-  return typeof raw === "string" && raw.length > 0 ? raw.split(",") : [];
+export function hiddenFrameworksFrom(qp: QueryParams) {
+  return qp.hide ? qp.hide.split(",") : [];
 }
 
-export function visibleFrameworksOf(router: RouterService, file: ResultSet) {
-  const hidden = hiddenFrameworksFrom(router);
+export function visibleFrameworksOf(qp: QueryParams, file: ResultSet) {
+  const hidden = hiddenFrameworksFrom(qp);
 
   return file.selections.frameworks.filter((name) => !hidden.includes(name));
 }
@@ -22,12 +21,13 @@ export class FrameworkToggles extends Component<{
   file: ResultSet;
 }> {
   @service declare router: RouterService;
+  @service declare queryParams: QueryParams;
 
-  isShown = (name: string) => !hiddenFrameworksFrom(this.router).includes(name);
+  isShown = (name: string) => !hiddenFrameworksFrom(this.queryParams).includes(name);
 
   toggle = (name: string, event: Event) => {
     const { checked } = event.target as HTMLInputElement;
-    const hidden = hiddenFrameworksFrom(this.router).filter((entry) => entry !== name);
+    const hidden = hiddenFrameworksFrom(this.queryParams).filter((entry) => entry !== name);
 
     if (!checked) hidden.push(name);
 

@@ -4,7 +4,8 @@ import { service } from "@ember/service";
 import { DEFAULT_CURVE, DEFAULT_PERCENTILE } from "#utils";
 
 import type Owner from "@ember/owner";
-import type RouterService from "@ember/routing/router-service";
+import type QueryParams from "#services/query-params.ts";
+import type { ParamName } from "#services/query-params.ts";
 
 const DEFAULTS: Record<string, string> = {
   mode: "raw",
@@ -12,27 +13,25 @@ const DEFAULTS: Record<string, string> = {
   curve: String(DEFAULT_CURVE),
 };
 
-function hasNonDefaults(router: RouterService, params: string[]) {
-  const qps = router.currentRoute?.queryParams ?? {};
-
+function hasNonDefaults(qp: QueryParams, params: readonly ParamName[]) {
   return params.some((param) => {
-    const value = qps[param];
+    const value = qp[param];
 
-    return value !== undefined && value !== "" && value !== DEFAULTS[param];
+    return value !== undefined && value !== DEFAULTS[param];
   });
 }
 
 export class Settings extends Component<{
-  Args: { params: string[] };
+  Args: { params: readonly ParamName[] };
   Blocks: { default: [] };
 }> {
-  @service declare router: RouterService;
+  @service declare queryParams: QueryParams;
 
   open: boolean;
 
-  constructor(owner: Owner, args: { params: string[] }) {
+  constructor(owner: Owner, args: { params: readonly ParamName[] }) {
     super(owner, args);
-    this.open = hasNonDefaults(this.router, args.params);
+    this.open = hasNonDefaults(this.queryParams, args.params);
   }
 
   <template>
