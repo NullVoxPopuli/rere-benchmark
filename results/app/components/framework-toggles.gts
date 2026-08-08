@@ -35,7 +35,7 @@ export class FrameworkToggles extends Component<{
   };
 
   <template>
-    <fieldset class="value-mode">
+    <fieldset class="value-mode surface">
       <legend>frameworks</legend>
       {{#each @file.selections.frameworks as |name|}}
         <label>

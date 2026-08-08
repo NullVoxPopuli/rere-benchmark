@@ -16,7 +16,7 @@ export class SortControl extends Component {
   };
 
   <template>
-    <fieldset class="value-mode">
+    <fieldset class="value-mode surface">
       <legend>sort</legend>
       <label>
         <input

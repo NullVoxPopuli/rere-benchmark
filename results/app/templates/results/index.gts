@@ -535,7 +535,7 @@ export default class ResultsTables extends Component<{
 
   <template>
     <Settings @params={{this.settingParams}}>
-      <fieldset class="value-mode">
+      <fieldset class="value-mode surface">
         <legend>values</legend>
         <label>
           <input
@@ -568,7 +568,7 @@ export default class ResultsTables extends Component<{
         </label>
       </fieldset>
 
-      <fieldset class="value-mode">
+      <fieldset class="value-mode surface">
         <legend>statistic</legend>
         {{#each this.percentiles as |percentile|}}
           <label>
@@ -586,7 +586,7 @@ export default class ResultsTables extends Component<{
         <span class="units">of each run's samples</span>
       </fieldset>
 
-      <fieldset class="value-mode">
+      <fieldset class="value-mode surface">
         <legend>color curve</legend>
         <label>
           <input
