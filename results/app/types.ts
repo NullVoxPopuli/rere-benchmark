@@ -156,7 +156,7 @@ export interface ResultSet {
  * column is what lets a borrowed column sort and colour alongside the rest
  * instead of being appended to the end as a special case.
  */
-export interface Column {
+interface ColumnBase {
   /**
    * Identity for per-column lookups. A borrowed column can repeat a
    * framework already in the table, so this is not just the framework name.
@@ -164,9 +164,23 @@ export interface Column {
   key: string;
   framework: string;
   data: ResultSet;
-  /**
-   * The run a borrowed column came from. Absent on the table's own columns,
-   * so it doubles as the "is this borrowed" test.
-   */
-  borrowedFrom?: string;
 }
+
+/** A column reading from the run the page is showing. */
+export interface OwnColumn extends ColumnBase {
+  borrowedFrom?: undefined;
+  label?: undefined;
+}
+
+export interface BorrowedColumn extends ColumnBase {
+  /** The run this column is on loan from. */
+  borrowedFrom: string;
+  /** Which borrow this is -- A, B, and so on -- as shown on its header. */
+  label: string;
+}
+
+/**
+ * A borrowed column always knows both where it came from and which borrow
+ * it is, so testing either one tells you about the other.
+ */
+export type Column = OwnColumn | BorrowedColumn;

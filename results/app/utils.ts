@@ -487,6 +487,16 @@ export function sortedByTotal(
   });
 }
 
+const BORROW_LABELS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+/**
+ * Which borrow a column is, as the letter its header badge shows. Numbers
+ * past Z, which needs twenty-seven columns on loan at once to reach.
+ */
+export function borrowLabel(index: number) {
+  return BORROW_LABELS[index] ?? String(index + 1);
+}
+
 /**
  * The table's own columns, plus the borrowed one if a column is on loan.
  *
@@ -514,6 +524,9 @@ export function columnsFor(
     framework: borrow.framework,
     data: borrow.data,
     borrowedFrom: borrow.name,
+    // only one borrow is possible so far; this becomes its position once
+    // several can be on loan at once
+    label: borrowLabel(0),
   };
 
   const counterpart = columns.findIndex((column) => column.framework === borrow.framework);

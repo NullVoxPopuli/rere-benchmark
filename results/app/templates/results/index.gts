@@ -19,7 +19,6 @@ import {
   DEFAULT_CURVE,
   formatRunName,
   higherIsBetterBenches,
-  isoOf,
   labelFor,
   lowerIsBetterBenches,
   overrideOf,
@@ -29,7 +28,6 @@ import {
   sortedByTotal,
   throttleLabel,
   timeFor,
-  titleOf,
   totalSortFrom,
   variantOf,
   versionOf,
@@ -332,7 +330,12 @@ class Table extends Component<{
           {{#each @columns as |column|}}
             <th class="fw-header {{if column.borrowedFrom 'borrowed'}}">
               {{#if column.borrowedFrom}}
-                <span class="borrow-tag">borrowed</span>
+                {{! which borrow this is; the run it names is spelled out on
+                    the borrow picker, so the header only carries the letter }}
+                <span
+                  class="borrow-label"
+                  title="borrowed from {{formatRunName column.borrowedFrom}}"
+                >{{column.label}}</span>
               {{/if}}
               <FrameworkInfo @name={{column.framework}} />
               <Variant @variant={{variantOf column.data column.framework}} />
@@ -342,19 +345,13 @@ class Table extends Component<{
                   @override={{overrideOf column.data column.framework}}
                 />
               </span>
-              {{#if column.borrowedFrom}}
-                <span class="borrow-source small" title={{titleOf column.borrowedFrom}}>
-                  from
-                  <time datetime={{isoOf column.borrowedFrom}}>
-                    {{formatRunName column.borrowedFrom}}
-                  </time>
-                </span>
-                {{#let (this.throttleMismatch column) as |mismatch|}}
-                  {{#if mismatch}}
-                    <span class="small throttle-mismatch">{{mismatch}}</span>
-                  {{/if}}
-                {{/let}}
-              {{/if}}
+              {{! only borrowed columns can mismatch, and only a mismatch is
+                  worth the reader's attention }}
+              {{#let (this.throttleMismatch column) as |mismatch|}}
+                {{#if mismatch}}
+                  <span class="small throttle-mismatch">{{mismatch}}</span>
+                {{/if}}
+              {{/let}}
             </th>
           {{/each}}
         </tr>

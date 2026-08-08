@@ -4,7 +4,7 @@ import { service } from "@ember/service";
 import { experiments, runs } from "virtual:result-sets";
 
 import { nameOf } from "#frameworks";
-import { formatRunName, titleOf } from "#utils";
+import { borrowLabel, formatRunName, titleOf } from "#utils";
 
 import type RouterService from "@ember/routing/router-service";
 import type { Borrowed } from "#routes/results.ts";
@@ -50,6 +50,10 @@ export class BorrowPicker extends Component<{
   get experimentOptions() {
     return experiments.filter((name) => name !== this.current);
   }
+
+  // only one borrow is possible so far; this becomes its position once
+  // several can be on loan at once
+  label = borrowLabel(0);
 
   get framework() {
     return borrowOf(this.router, this.args.borrowed)?.framework ?? "";
@@ -117,6 +121,9 @@ export class BorrowPicker extends Component<{
             {{/each}}
           </select>
         </label>
+        {{! the table header carries only this letter, so the run it stands
+            for has to be readable here }}
+        <span class="units">shown as <span class="borrow-label">{{this.label}}</span></span>
         <button type="button" {{on "click" this.remove}}>remove</button>
       {{/if}}
     </fieldset>
