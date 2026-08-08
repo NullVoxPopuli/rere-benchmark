@@ -8,7 +8,9 @@ import type QueryParams from "#services/query-params.ts";
 import type { ResultSet } from "#types";
 
 export function hiddenFrameworksFrom(qp: QueryParams) {
-  return qp.hide ? qp.hide.split(",") : [];
+  const hide = qp.get("hide");
+
+  return hide ? hide.split(",") : [];
 }
 
 export function visibleFrameworksOf(qp: QueryParams, file: ResultSet) {

@@ -1,31 +1,11 @@
-import { tracked } from "@glimmer/tracking";
+import { trackedMap } from "@ember/reactive/collections";
 import Service, { service } from "@ember/service";
 
 import type Owner from "@ember/owner";
 import type RouterService from "@ember/routing/router-service";
 
 /**
- * Every query param the app reads. Anything absent from this list is
- * invisible to the rest of the app, which is the point of the list.
- */
-const PARAMS = [
-  "q",
-  "from",
-  "col",
-  "hide",
-  "sort",
-  "mode",
-  "p",
-  "curve",
-  "a",
-  "b",
-  "framework",
-] as const;
-
-export type ParamName = (typeof PARAMS)[number];
-
-/**
- * The query params, one tracked cell each.
+ * The query params, tracked one key at a time.
  *
  * Reading them off `router.currentRoute` looks equivalent and is not.
  * `currentRoute` is one tracked value replaced on every transition, so a
@@ -33,23 +13,22 @@ export type ParamName = (typeof PARAMS)[number];
  * one: switching `?mode=` used to recompute every row's speeds, extremes
  * and colors, none of which depend on it.
  *
- * Here each param is its own cell, written only when its value actually
- * changes, so a reader is only invalidated by the param it actually read.
+ * A tracked Map tags each key separately, and a key is written only when
+ * its value actually changes, so a reader is only invalidated by the param
+ * it actually read.
  */
 export default class QueryParams extends Service {
   @service declare router: RouterService;
 
-  @tracked q?: string;
-  @tracked from?: string;
-  @tracked col?: string;
-  @tracked hide?: string;
-  @tracked sort?: string;
-  @tracked mode?: string;
-  @tracked p?: string;
-  @tracked curve?: string;
-  @tracked a?: string;
-  @tracked b?: string;
-  @tracked framework?: string;
+  /** what readers consume, so reading one param is not reading all of them */
+  #values = trackedMap<string, string>();
+
+  /**
+   * The same key set, untracked. Diffing against the map itself would
+   * entangle its collection tag, which every reader would then share --
+   * the coarse invalidation this service exists to avoid.
+   */
+  #known = new Set<string>();
 
   constructor(owner: Owner) {
     super(owner);
@@ -66,17 +45,32 @@ export default class QueryParams extends Service {
     super.willDestroy();
   }
 
+  /** A param's raw value, or undefined when it is absent or empty. */
+  get(name: string) {
+    return this.#values.get(name);
+  }
+
   sync = () => {
     const qps = this.router.currentRoute?.queryParams ?? {};
+    const gone = new Set(this.#known);
 
-    for (const name of PARAMS) {
-      const raw = qps[name];
+    for (const [name, raw] of Object.entries(qps)) {
       const next = typeof raw === "string" && raw !== "" ? raw : undefined;
 
-      // Writing an unchanged value still dirties the cell, and dirtying
-      // every cell on every transition is the problem this service exists
-      // to solve. The diff is the whole mechanism.
-      if (this[name] !== next) this[name] = next;
+      if (next === undefined) continue;
+
+      gone.delete(name);
+      this.#known.add(name);
+
+      // Writing an unchanged value still dirties the key, and dirtying
+      // every param on every transition is the problem being solved. The
+      // diff is the whole mechanism.
+      if (this.#values.get(name) !== next) this.#values.set(name, next);
+    }
+
+    for (const name of gone) {
+      this.#known.delete(name);
+      this.#values.delete(name);
     }
   };
 }

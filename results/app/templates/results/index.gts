@@ -90,7 +90,7 @@ type ValueMode = "raw" | "linear" | "times";
  * The ?mode= query param, wherever a component needs it.
  */
 function modeFrom(qp: QueryParams): ValueMode {
-  const { mode } = qp;
+  const mode = qp.get("mode");
 
   return mode === "linear" || mode === "times" ? mode : "raw";
 }

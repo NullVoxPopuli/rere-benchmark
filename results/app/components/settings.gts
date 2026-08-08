@@ -5,7 +5,6 @@ import { DEFAULT_CURVE, DEFAULT_PERCENTILE } from "#utils";
 
 import type Owner from "@ember/owner";
 import type QueryParams from "#services/query-params.ts";
-import type { ParamName } from "#services/query-params.ts";
 
 const DEFAULTS: Record<string, string> = {
   mode: "raw",
@@ -13,23 +12,23 @@ const DEFAULTS: Record<string, string> = {
   curve: String(DEFAULT_CURVE),
 };
 
-function hasNonDefaults(qp: QueryParams, params: readonly ParamName[]) {
+function hasNonDefaults(qp: QueryParams, params: readonly string[]) {
   return params.some((param) => {
-    const value = qp[param];
+    const value = qp.get(param);
 
     return value !== undefined && value !== DEFAULTS[param];
   });
 }
 
 export class Settings extends Component<{
-  Args: { params: readonly ParamName[] };
+  Args: { params: readonly string[] };
   Blocks: { default: [] };
 }> {
   @service declare queryParams: QueryParams;
 
   open: boolean;
 
-  constructor(owner: Owner, args: { params: readonly ParamName[] }) {
+  constructor(owner: Owner, args: { params: readonly string[] }) {
     super(owner, args);
     this.open = hasNonDefaults(this.queryParams, args.params);
   }

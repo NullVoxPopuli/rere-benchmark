@@ -408,7 +408,7 @@ export function timeFromMarks(
  * The `?p=` query param, wherever a component needs it.
  */
 export function percentileFrom(qp: QueryParams): Percentile {
-  const found = PERCENTILES.find((percentile) => String(percentile) === qp.p);
+  const found = PERCENTILES.find((percentile) => String(percentile) === qp.get("p"));
 
   return found ?? DEFAULT_PERCENTILE;
 }
@@ -422,7 +422,7 @@ export const DEFAULT_CURVE = 1;
  * negative does the same for the ones nearest the worst.
  */
 export function curveFrom(qp: QueryParams): number {
-  const raw = qp.curve;
+  const raw = qp.get("curve");
 
   if (raw === undefined) return DEFAULT_CURVE;
 
@@ -438,7 +438,7 @@ export type TotalSort = "best" | "worst";
  * Absent (or anything unrecognized) means the recorded order.
  */
 export function totalSortFrom(qp: QueryParams): TotalSort | undefined {
-  const { sort } = qp;
+  const sort = qp.get("sort");
 
   return sort === "best" || sort === "worst" ? sort : undefined;
 }

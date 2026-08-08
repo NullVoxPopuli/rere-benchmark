@@ -21,7 +21,7 @@ export function borrowOf(qp: QueryParams, borrowed: Borrowed | undefined): Borro
   if (!borrowed) return;
 
   const available = borrowed.data.selections.frameworks;
-  const requested = qp.col;
+  const requested = qp.get("col");
   const framework =
     requested !== undefined && available.includes(requested) ? requested : available[0];
 
@@ -37,7 +37,7 @@ export class BorrowPicker extends Component<{
   @service declare queryParams: QueryParams;
 
   get current() {
-    return this.queryParams.q ?? "";
+    return this.queryParams.get("q") ?? "";
   }
 
   get runOptions() {

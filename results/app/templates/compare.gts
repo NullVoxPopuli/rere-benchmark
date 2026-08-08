@@ -324,7 +324,7 @@ export default class Compare extends Component<{ model: Model }> {
   }
 
   get framework(): string {
-    const requested = this.queryParams.framework;
+    const requested = this.queryParams.get("framework");
 
     if (requested !== undefined && this.frameworkNames.includes(requested)) {
       return requested;
