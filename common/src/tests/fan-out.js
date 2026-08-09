@@ -1,5 +1,5 @@
 import { BaseTest, RUN } from './base-test.js';
-import { nextMacrotask, qpNum, tryVerify } from './utils.js';
+import { nextFrameTask, nextMacrotask, qp, qpNum, tryVerify } from './utils.js';
 
 /**
  * One value, rendered in many places.
@@ -53,6 +53,15 @@ export class FanOut extends BaseTest {
    * @type {number[]}
    */
   #range;
+
+  /**
+   * Messages arrive as real tasks (that is what sockets do). `?yield=frame`
+   * spaces them a frame apart instead, so the conformance suite can trace
+   * frameworks whose scheduler renders at most once per frame.
+   *
+   * @type {() => Promise<unknown>}
+   */
+  #nextMessage = qp('yield') === 'frame' ? nextFrameTask : nextMacrotask;
 
   constructor({
     consumers = qpNum('consumers', 1_000),
@@ -137,7 +146,7 @@ export class FanOut extends BaseTest {
     // the first value never reached the DOM (found by
     // tests/specs/conformance.spec.ts). Before `:start`, so the hop is
     // not part of the measurement.
-    await nextMacrotask();
+    await this.#nextMessage();
 
     performance.mark(`:start`);
 
@@ -159,7 +168,7 @@ export class FanOut extends BaseTest {
 
       // The next message arrives as a new (macro)task,
       // like a real `websocket.on('message', ...)` would.
-      await nextMacrotask();
+      await this.#nextMessage();
     }
 
     tryVerify(name, this.verify);
