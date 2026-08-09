@@ -1,0 +1,13 @@
+import { helpers } from "common";
+
+static const test = helpers.fanOut();
+
+<let/value=(test.getData())>
+
+<lifecycle onMount() { test.doit((v) => { value = v; }); }>
+
+<output>
+  <for|c| of=(test.consumerRange)>
+    <span>${test.formatItem(value)}</span>
+  </for>
+</output>
