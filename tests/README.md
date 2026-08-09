@@ -47,6 +47,13 @@ between `:start` and `:done`, and the tests assert:
 dbmon-with-chat is excluded: it runs forever off worker-driven timing,
 so there is no deterministic finite trace to compare.
 
+Frameworks whose scheduler has a frame-rate floor (marko: after the
+first write in a frame, further renders wait for the next animation
+frame) run the externally-paced specs with `yield=frame` instead of
+`yield=macro`: the same workload delivered one write per *frame*
+(a rAF and then a task), which leaves nothing to coalesce even at a
+frame-rate floor. Every trace assertion still applies to them.
+
 ## Running
 
 ```bash

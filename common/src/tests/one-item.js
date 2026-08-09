@@ -26,7 +26,7 @@ export class OneItem extends BaseTest {
   #percentRandomAwait = 0;
 
   /**
-   * @type {'micro' | 'macro'}
+   * @type {'micro' | 'macro' | 'frame'}
    */
   #yieldKind = yieldKind();
 
