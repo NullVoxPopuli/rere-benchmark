@@ -1,0 +1,14 @@
+import { helpers } from "common";
+
+static const test = helpers.tenKitems1UpdateEach();
+static const format = (item) => test.formatItem(item);
+// one <let> per item, owned by <bench-item>: each row tracks only its
+// own state, and the list itself never changes, so <for> renders once
+static const setters = [];
+static const register = (index, set) => { setters[index] = set; };
+
+<lifecycle onMount() { test.doit((i) => setters[i]?.(i)); }>
+
+<for|item, index| of=(test.getData())>
+  <bench-item value=item index=index format=format register=register/>
+</for>
