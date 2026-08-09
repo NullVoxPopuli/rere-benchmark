@@ -64,6 +64,13 @@ export interface FrameworkNotes {
    * Vapor build. Shown under the framework's name, above its version.
    */
   variant?: string;
+  /**
+   * Benches (by app name) this framework cannot run through the standard
+   * command, with the reason. The runner logs and skips these instead of
+   * aborting the run when the sample can never finish -- e.g. marko's
+   * frame-rate-floor scheduler and incrementing-render-effect.
+   */
+  skip?: Record<string, string>;
 }
 
 export interface BenchmarkInfo {

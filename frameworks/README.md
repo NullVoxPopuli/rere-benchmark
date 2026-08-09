@@ -26,7 +26,11 @@ Optional per-framework files:
 
 - `README.md` -- how to scaffold a new bench app for this framework
 - `notes.json` -- small labels recorded into a run, e.g. Vue's
-  `{ "variant": "Vapor" }`, shown in the results app
+  `{ "variant": "Vapor" }`, shown in the results app. It can also declare
+  benches the framework cannot run through the standard command, with the
+  reason: `{ "skip": { "<bench app>": "why" } }` -- the runner logs and
+  skips those instead of aborting the run, and the reason is recorded
+  into the result file with the rest of the notes
 
 ## Adding a framework
 
