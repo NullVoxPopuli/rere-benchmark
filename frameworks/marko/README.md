@@ -27,10 +27,13 @@ Notes:
 - Marko's update scheduler has a frame-rate floor (`schedule()` in
   marko's `src/dom/schedule.ts`): the first write in a frame renders in
   a microtask, every later write waits for the next animation frame.
-  Bursts coalesce to one render per frame -- and the ping-pong
-  `incrementing-render-effect` bench advances exactly one update per
-  frame, so at its default 100k updates it will not finish inside the
-  runner's default `--timeout`. That pacing is the framework's real
-  behavior; run that bench with fewer `?updates=` or a larger timeout
-  rather than forcing `run()` (from `marko/dom`) into the app, which
-  would measure manual flushing instead of Marko.
+  Bursts coalesce to one render per frame. Two consequences, neither of
+  which should be "fixed" by forcing `run()` (from `marko/dom`) into the
+  apps -- that would measure manual flushing instead of Marko:
+  - the ping-pong `incrementing-render-effect` bench advances exactly
+    one update per frame, so at its default 100k updates a sample can
+    never finish; `notes.json` declares it skipped (the runner logs and
+    records the reason instead of aborting the run)
+  - the conformance suite paces its writes with `yield=frame` for marko
+    (see `FRAME_THROTTLED` in `tests/specs/conformance.spec.ts`), so the
+    anti-cheat trace assertions still fully apply

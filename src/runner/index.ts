@@ -1,4 +1,6 @@
 import assert from 'node:assert';
+import { existsSync } from 'node:fs';
+import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import * as clack from '@clack/prompts';
@@ -19,6 +21,34 @@ import { serve } from './serve.ts';
 import type { BenchmarkInfo } from './bench-info.ts';
 
 const info = await getBenchInfo();
+
+/**
+ * A framework's `notes.json` can declare benches it cannot run through
+ * the standard command, with the reason (see `frameworks/README.md`):
+ *
+ *   { "skip": { "<bench app>": "why" } }
+ *
+ * The notes file already lands in the result file (`saveNotes`), so the
+ * reason travels with the run; here it just keeps the run alive -- a
+ * bench that can never reach `:done` inside the timeout would otherwise
+ * abort everything after ~`--timeout` ms per sample.
+ *
+ * @returns reason string, or undefined to run the bench
+ */
+async function skipReason(
+  framework: string,
+  app: string,
+): Promise<string | undefined> {
+  const notePath = join('frameworks', framework, 'notes.json');
+
+  if (!existsSync(notePath)) return;
+
+  const notes: { skip?: Record<string, string> } = JSON.parse(
+    (await readFile(notePath)).toString(),
+  );
+
+  return notes.skip?.[app];
+}
 
 interface MarkEntry {
   /**
@@ -274,6 +304,13 @@ for (const framework of info.frameworks) {
 
     for (const bench of info.benches) {
       if (bench.app !== app) continue;
+
+      const skipped = await skipReason(framework, bench.app);
+
+      if (skipped) {
+        clack.log.warn(`Skipping ${bench.name} for ${framework}: ${skipped}`);
+        continue;
+      }
 
       await prepareForResults(framework, bench, info.filePath);
 
