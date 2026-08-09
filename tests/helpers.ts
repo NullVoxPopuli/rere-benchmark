@@ -12,6 +12,7 @@ export const FRAMEWORKS = [
   'lit-signals',
   'preact',
   'react',
+  'react-starbeam',
   'solid-1',
   'solid-2',
   'svelte',
