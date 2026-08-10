@@ -44,6 +44,9 @@ export default class Results extends Route<Model> {
     // which percentile of each run's samples to show (50 | 75 | 90);
     // every sample is already loaded, so no model impact
     p: {},
+    // comma-separated: which bench groups get their own milliseconds
+    // table; purely layout, so no model impact
+    split: {},
   };
 
   beforeModel(transition: Transition) {

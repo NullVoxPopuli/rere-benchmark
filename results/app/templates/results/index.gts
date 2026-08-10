@@ -12,17 +12,17 @@ import { FrameworkToggles, visibleFrameworksOf } from "#components/framework-tog
 import { PercentileControl } from "#components/percentile-control.gts";
 import { Settings } from "#components/settings.gts";
 import { SortControl } from "#components/sort-control.gts";
+import { splitsFrom, TableSplits } from "#components/table-splits.gts";
 import { Variant } from "#components/variant.gts";
 import { Version } from "#components/version.gts";
 import {
   columnsFor,
   curveFrom,
   DEFAULT_CURVE,
-  effectsBenches,
   formatRunName,
   higherIsBetterBenches,
   labelFor,
-  lowerIsBetterBenches,
+  msBenchGroups,
   overrideOf,
   percentileFrom,
   round,
@@ -436,7 +436,7 @@ export default class ResultsTables extends Component<{
     return columnsFor(this.file, this.visibleFrameworks, this.borrows);
   }
 
-  settingParams = ["mode", "p", "hide", "from", "sort", "curve"] as const;
+  settingParams = ["mode", "p", "hide", "from", "sort", "curve", "split"] as const;
 
   get benchmarkInfo() {
     return this.args.model.data.benchmarkInfo;
@@ -445,16 +445,6 @@ export default class ResultsTables extends Component<{
   @cached
   get higherBenches() {
     return higherIsBetterBenches(this.benchmarkInfo);
-  }
-
-  @cached
-  get lowerBenches() {
-    return lowerIsBetterBenches(this.benchmarkInfo);
-  }
-
-  @cached
-  get effectBenches() {
-    return effectsBenches(this.benchmarkInfo);
   }
 
   sorted(benches: BenchmarkInfo[]) {
@@ -466,14 +456,17 @@ export default class ResultsTables extends Component<{
     return this.sorted(this.higherBenches);
   }
 
+  /**
+   * The millisecond tables the reader asked for -- one by default, plus
+   * one per checked split -- each sorted on its own totals.
+   */
   @cached
-  get lowerColumns() {
-    return this.sorted(this.lowerBenches);
-  }
-
-  @cached
-  get effectColumns() {
-    return this.sorted(this.effectBenches);
+  get msGroups() {
+    return msBenchGroups(this.benchmarkInfo, splitsFrom(this.queryParams)).map((group) => ({
+      heading: group.heading,
+      benches: group.benches,
+      columns: this.sorted(group.benches),
+    }));
   }
 
   <template>
@@ -530,6 +523,8 @@ export default class ResultsTables extends Component<{
 
       <SortControl />
 
+      <TableSplits @benchmarkInfo={{this.benchmarkInfo}} />
+
       <FrameworkToggles @file={{this.file}} />
 
       <BorrowPicker @borrowed={{@model.borrowed}} />
@@ -544,22 +539,13 @@ export default class ResultsTables extends Component<{
       <br />
     {{/if}}
 
-    {{#if this.lowerBenches.length}}
-      <h2>lower is better</h2>
+    {{#each this.msGroups key="heading" as |group|}}
+      <h2>{{group.heading}}</h2>
 
-      <Table @benches={{this.lowerBenches}} @file={{this.file}} @columns={{this.lowerColumns}} />
+      <Table @benches={{group.benches}} @file={{this.file}} @columns={{group.columns}} />
       <br />
       <br />
       <br />
-    {{/if}}
-
-    {{#if this.effectBenches.length}}
-      <h2>effects (lower is better)</h2>
-
-      <Table @benches={{this.effectBenches}} @file={{this.file}} @columns={{this.effectColumns}} />
-      <br />
-      <br />
-      <br />
-    {{/if}}
+    {{/each}}
   </template>
 }
