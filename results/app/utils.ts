@@ -573,11 +573,90 @@ export function effectsBenches(benchmarkInfo: BenchmarkInfo[]) {
   return benchmarkInfo.filter((bench) => isEffectsBench(bench));
 }
 
-export function lowerIsBetterBenches(benchmarkInfo: BenchmarkInfo[]) {
+/**
+ * Every millisecond bench, effects included, with the async variants
+ * reading below their synchronous counterparts.
+ */
+export function msBenches(benchmarkInfo: BenchmarkInfo[]) {
   return benchmarkInfo
-    .filter((bench) => bench.whatsBetter !== "bigger" && !isEffectsBench(bench))
-    .toSorted()
+    .filter((bench) => bench.whatsBetter !== "bigger")
     .toSorted((a, b) => (a.name.includes("async") ? 1 : 0) - (b.name.includes("async") ? 1 : 0));
+}
+
+export function lowerIsBetterBenches(benchmarkInfo: BenchmarkInfo[]) {
+  return msBenches(benchmarkInfo).filter((bench) => !isEffectsBench(bench));
+}
+
+/**
+ * The `?split=` token that would carve this bench out of the main
+ * milliseconds table: `effects` for the effects section, the bench's app
+ * for everything else. The effects benches answer only to `effects` --
+ * they are one group whatever apps they span.
+ */
+function splitTokenOf(bench: BenchmarkInfo) {
+  return isEffectsBench(bench) ? "effects" : bench.app;
+}
+
+/**
+ * One summary table's worth of milliseconds benches.
+ */
+export interface BenchGroup {
+  /** the `?split=` token that carved this group out; undefined for the main table */
+  token?: string;
+  heading: string;
+  benches: BenchmarkInfo[];
+}
+
+/**
+ * The milliseconds benches, dealt into one table per checked `?split=`
+ * token. Everything unchecked stays together in the main table, which
+ * always reads first; the split-out tables follow in bench order.
+ */
+export function msBenchGroups(
+  benchmarkInfo: BenchmarkInfo[],
+  splits: readonly string[],
+): BenchGroup[] {
+  const main: BenchGroup = { heading: "lower is better", benches: [] };
+  const carved = new Map<string, BenchGroup>();
+
+  for (const bench of msBenches(benchmarkInfo)) {
+    const token = splitTokenOf(bench);
+
+    if (!splits.includes(token)) {
+      main.benches.push(bench);
+      continue;
+    }
+
+    const group = carved.get(token) ?? {
+      token,
+      heading: `${token} (lower is better)`,
+      benches: [],
+    };
+
+    group.benches.push(bench);
+    carved.set(token, group);
+  }
+
+  const groups: BenchGroup[] = main.benches.length ? [main] : [];
+
+  return groups.concat(Array.from(carved.values()));
+}
+
+/**
+ * The tokens `?split=` answers to for a run, in bench order: `effects`
+ * when the run has any effects benches, plus one per app. What the split
+ * checkboxes offer.
+ */
+export function splitOptionsOf(benchmarkInfo: BenchmarkInfo[]) {
+  const options: string[] = [];
+
+  for (const bench of msBenches(benchmarkInfo)) {
+    const token = splitTokenOf(bench);
+
+    if (!options.includes(token)) options.push(token);
+  }
+
+  return options;
 }
 
 export function dataOf(results: ResultData, benchName: string, percentile: Percentile) {
