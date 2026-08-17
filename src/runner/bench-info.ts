@@ -217,6 +217,10 @@ async function getFrameworks() {
     ? [args.FRAMEWORK]
     : undefined;
 
+  if (!selectedFrameworks && args.YES) {
+    throw new Error(`--yes needs --framework, there is no default to take`);
+  }
+
   if (!selectedFrameworks) {
     const result = await clack.multiselect({
       message: 'Which frameworks?',
@@ -294,6 +298,10 @@ async function getBenches() {
     );
 
     return known;
+  }
+
+  if (args.YES) {
+    throw new Error(`--yes needs --bench, there is no default to take`);
   }
 
   const result = await clack.multiselect({
@@ -380,6 +388,11 @@ async function getFilePath() {
 
   const existing = await readdir(RESULTS_DIR);
   const fresh = nextResultFileName(existing);
+
+  if (args.YES) {
+    return `${RESULTS_DIR}/${fresh}`;
+  }
+
   const recent = await recentResultFiles(existing);
 
   const result = await clack.select({
@@ -443,9 +456,11 @@ export async function getBenchInfo() {
     Results will be written to ${filePath}
   `);
 
-  const letsgo = await clack.confirm({
-    message: 'Does this information look correct?',
-  });
+  const letsgo = args.YES
+    ? true
+    : await clack.confirm({
+        message: 'Does this information look correct?',
+      });
 
   if (!letsgo || clack.isCancel(letsgo)) {
     clack.log.info('Exiting');
