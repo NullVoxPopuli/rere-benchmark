@@ -233,8 +233,8 @@ window you've covered up.
     (Every flag is listed in the table the runner prints on start up.)
 
     Two prompts are left after that: where to save, and a confirmation. Add
-    `--yes` to take the default for both, which is what CI and any headless
-    machine needs:
+    `--yes` to take the default for both, which is what any non-interactive
+    environment needs:
 
     ```bash
     pnpm bench --framework=all --bench=all --yes
