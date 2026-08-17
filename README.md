@@ -232,6 +232,14 @@ window you've covered up.
     To skip the picking, `pnpm bench --framework=all --bench=all` runs everything.
     (Every flag is listed in the table the runner prints on start up.)
 
+    Two prompts are left after that: where to save, and a confirmation. Add
+    `--yes` to take the default for both, which is what any non-interactive
+    environment needs:
+
+    ```bash
+    pnpm bench --framework=all --bench=all --yes
+    ```
+
 4. Wait for it to finish
 5. View results:
     1. `cd results`
@@ -251,6 +259,7 @@ window you've covered up.
 | `--skip-build` | off | re-use an existing build |
 | `--include-prs` | off | record the PRs that landed since the previous result set in the run's notes (from git history; shown in the results app) |
 | `--file` | prompts | append to this existing result file; the bench selection comes from the file, so only `--framework` is left to pick |
+| `--yes` | off | take the default for every prompt, so the run needs no terminal; requires `--framework` and `--bench` |
 
 ### Adding one framework to an existing result set
 

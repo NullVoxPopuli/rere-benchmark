@@ -22,6 +22,7 @@ export const SKIP_BUILD = bool('--skip-build');
 export const TIMEOUT = int('--timeout', 60_000);
 export const INCLUDE_PRS = bool('--include-prs');
 export const FILE = str('--file');
+export const YES = bool('--yes');
 export const VERSION_OVERRIDES = versionOverrides();
 
 function col1(name: string) {
@@ -73,6 +74,11 @@ console.log(
       col1('--file'),
       col2(FILE),
       col3('append to this result file, re-using its bench selection'),
+    ),
+    row(
+      col1('--yes'),
+      col2(YES),
+      col3('take the default for every prompt, for non-interactive usage'),
     ),
     ...Object.entries(VERSION_OVERRIDES).map(([framework, override]) =>
       row(
