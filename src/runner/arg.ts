@@ -78,7 +78,7 @@ console.log(
     row(
       col1('--yes'),
       col2(YES),
-      col3('take the default for every prompt, for CI'),
+      col3('take the default for every prompt, for non-interactive usage'),
     ),
     ...Object.entries(VERSION_OVERRIDES).map(([framework, override]) =>
       row(
