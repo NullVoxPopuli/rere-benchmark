@@ -1,29 +1,34 @@
 import 'common/dbmon.css';
 import './layout.css';
-import { createSignal, For, onSettled } from 'solid-js';
+import { createStore, For, onSettled } from 'solid-js';
 import { helpers, type DBRow, type ChatMessage, type DBUpdate, type ChatUpdate } from 'common';
 
 const test = helpers.dbMonWithChat();
 
+const MAX_CHATS = 12;
+
 function App() {
-  const [db, setDb] = createSignal<Map<string, DBRow>>(new Map());
-  const [chats, setChats] = createSignal<ChatMessage[]>([]);
+  const [db, setDb] = createStore<Record<string, DBRow>>({});
+  const [chats, setChats] = createStore<ChatMessage[]>([]);
 
   onSettled(() => {
     test.doit({
       handleDbUpdate: (eventData: DBUpdate) => {
-        setDb(prev => {
-          const next = new Map(prev);
+        setDb(rows => {
           for (const d of eventData.data) {
-            next.set(d.dbname, d);
+            rows[d.dbname] = d;
           }
-          return next;
         });
       },
       handleChat: (eventData: ChatUpdate) => {
-        setChats(prev => {
-          const next = [...prev, ...eventData.data];
-          return next.length > 12 ? next.slice(next.length - 12) : next;
+        setChats(list => {
+          for (const d of eventData.data) {
+            list.push(d);
+          }
+
+          if (list.length > MAX_CHATS) {
+            list.shift();
+          }
         });
       },
     });
@@ -40,16 +45,16 @@ function App() {
           </tr>
         </thead>
         <tbody>
-          <For each={[...db().values()]} keyed={row => row.dbname}>
+          <For each={Object.values(db)}>
             {(row) => (
               <tr>
-                <td class="dbname">{row().dbname}</td>
+                <td class="dbname">{row.dbname}</td>
                 <td class="query-count">
-                  <span class={row().lastSample.countClassName}>
-                    {row().lastSample.queries.length}
+                  <span class={row.lastSample.countClassName}>
+                    {row.lastSample.queries.length}
                   </span>
                 </td>
-                <For each={row().lastSample.topFiveQueries} keyed={false}>
+                <For each={row.lastSample.topFiveQueries} keyed={false}>
                   {(query) => (
                     <td>
                       {query().elapsed}
@@ -69,7 +74,7 @@ function App() {
       <div class="chats">
         <div class="messages">
           <div class="messages-inner">
-            <For each={chats()}>
+            <For each={chats}>
               {(chat) => (
                 <div class="chat">
                   <div class="author">{chat.author}</div>
