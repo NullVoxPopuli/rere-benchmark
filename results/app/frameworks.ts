@@ -69,6 +69,14 @@ export const frameworks: Record<string, FrameworkInfo> = {
     url: "https://react.dev/",
     package: "react",
   },
+  ["react-starbeam"]: {
+    // starbeam's docs-site accent teal
+    color: "#00C2B3",
+    logo: "/react.svg",
+    name: "React (Starbeam)",
+    url: "https://starbeamjs.com/",
+    package: "@starbeam/react",
+  },
   // The folder name before the solid-1 / solid-2 split; kept so
   // historical result files still resolve
   solid: {
