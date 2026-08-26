@@ -1,5 +1,5 @@
 import { defineConfig, searchForWorkspaceRoot } from 'vite'
-import solid from 'vite-plugin-solid'
+import solid from '@solidjs/vite-plugin'
 
 export default defineConfig({
   // the linked `common` package lives outside this app's root; without this,
