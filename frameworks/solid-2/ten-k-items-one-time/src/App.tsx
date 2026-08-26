@@ -1,4 +1,4 @@
-import { createSignal, onSettled, Repeat } from 'solid-js'
+import { createSignal, createRenderEffect, onSettled, Repeat, type JSX } from 'solid-js'
 import { helpers } from 'common';
 
 const test = helpers.tenKitems1UpdateEach();
@@ -18,7 +18,16 @@ function App() {
     <Repeat count={items.length}>
       {index => {
         const item = items[index]![0];
-        return <>{test.formatItem(item())}</>;
+        // a bare text child (`<>{...}</>`) would flatten into the parent
+        // insert, which then re-normalizes the whole list on every update;
+        // owning the node keeps each update a per-row `.data` write
+        // (same pattern the solid-1 app uses)
+        const node = document.createTextNode('');
+        createRenderEffect(
+          () => test.formatItem(item()),
+          v => { node.data = v; },
+        );
+        return node as unknown as JSX.Element;
       }}
     </Repeat>
   )
