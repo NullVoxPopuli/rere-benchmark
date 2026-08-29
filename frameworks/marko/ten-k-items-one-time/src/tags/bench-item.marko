@@ -1,0 +1,7 @@
+<let/value=(input.value)>
+
+<lifecycle onMount() { input.register(input.index, (v) => { value = v; }); }>
+
+// `--` marks root-level text: a bare ${...} line would parse as a
+// dynamic tag name in concise mode
+-- ${input.format(value)}

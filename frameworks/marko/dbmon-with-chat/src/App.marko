@@ -1,0 +1,78 @@
+import "common/dbmon.css";
+import "./layout.css";
+import { helpers } from "common";
+
+static const test = helpers.dbMonWithChat();
+
+<let/db=(new Map())>
+<let/chats=[]>
+
+<lifecycle onMount() {
+  test.doit({
+    handleDbUpdate: (eventData) => {
+      const next = new Map(db);
+      for (const d of eventData.data) {
+        next.set(d.dbname, d);
+      }
+      db = next;
+    },
+    handleChat: (eventData) => {
+      let next = chats.concat(eventData.data);
+      if (next.length > 12) {
+        next = next.slice(next.length - 12);
+      }
+      chats = next;
+    },
+  });
+}>
+
+<div class="layout">
+  <table>
+    <thead>
+      <tr>
+        <th>dbname</th>
+        <th>queries</th>
+        <th colspan="5">elapsed times</th>
+      </tr>
+    </thead>
+    <tbody>
+      // every update replaces the row objects, but the set of dbnames is
+      // stable, so keying by dbname preserves the row DOM across updates
+      <for|row| of=(Array.from(db.values())) by="dbname">
+        <tr>
+          <td class="dbname">${row.dbname}</td>
+          <td class="query-count">
+            <span class=row.lastSample.countClassName>
+              ${row.lastSample.queries.length}
+            </span>
+          </td>
+          <for|query| of=(row.lastSample.topFiveQueries)>
+            <td>
+              ${query.elapsed}
+              <div class="popover bottom">
+                <div class="popover-content">${query.query}</div>
+                <div class="arrow"></div>
+              </div>
+            </td>
+          </for>
+        </tr>
+      </for>
+    </tbody>
+  </table>
+
+  <div class="chats">
+    <div class="messages">
+      <div class="messages-inner">
+        <for|chat| of=chats>
+          <div class="chat">
+            <div class="author">${chat.author}</div>
+            <p>${chat.message}</p>
+          </div>
+        </for>
+      </div>
+    </div>
+    <div class="entry">
+      <textarea placeholder="send a message"></textarea>
+    </div>
+  </div>
+</div>

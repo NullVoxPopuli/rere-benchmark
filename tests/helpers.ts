@@ -10,6 +10,7 @@ export const FRAMEWORKS = [
   'angular',
   'ember',
   'lit-signals',
+  'marko',
   'preact',
   'react',
   'solid-1',

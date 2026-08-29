@@ -55,6 +55,15 @@ export const frameworks: Record<string, FrameworkInfo> = {
     url: "https://lit.dev/",
     package: "lit",
   },
+  marko: {
+    // the magenta stripe of the logo's chevrons: the cyan / green /
+    // orange stripes all sit too close to react, vue, and ember
+    color: "#e63467",
+    logo: "/marko.svg",
+    name: "Marko",
+    url: "https://markojs.com/",
+    package: "marko",
+  },
   preact: {
     color: "#673ab8",
     logo: "/preact.svg",

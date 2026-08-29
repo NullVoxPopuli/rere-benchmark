@@ -1,0 +1,9 @@
+import { helpers } from "common";
+
+static const test = helpers.oneItem10kUpdates();
+
+<let/count=(test.getData())>
+
+<lifecycle onMount() { test.doit((i) => { count = i; }); }>
+
+<output>${test.formatItem(count)}</output>

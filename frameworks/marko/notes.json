@@ -1,0 +1,5 @@
+{
+  "skip": {
+    "incrementing-render-effect": "marko renders at most one update per animation frame (frame-rate-floor scheduler), and this bench advances one update per render: 100k updates is hours of frames, so the sample can never reach :done inside any practical --timeout"
+  }
+}
