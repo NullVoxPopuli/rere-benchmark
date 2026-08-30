@@ -135,6 +135,21 @@ export function nextMacrotask() {
 }
 
 /**
+ * A task that begins after the next animation frame has fired.
+ *
+ * setTimeout (not the MessageChannel hop): a frame-throttled scheduler
+ * (marko) parks pending renders on a rAF-posted MessageChannel message,
+ * and posted messages run before timers -- so by the time this resolves,
+ * such a framework has flushed and re-armed, and the next write renders
+ * on its own instead of coalescing into the previous frame.
+ */
+export function nextFrameTask() {
+  return new Promise((resolve) => {
+    requestAnimationFrame(() => setTimeout(resolve));
+  });
+}
+
+/**
  * How the update loops hand control back between updates.
  *
  * `micro` is `await 0`: one turn of the microtask queue. Frameworks that
@@ -147,22 +162,31 @@ export function nextMacrotask() {
  * `macro` is a real task, the same MessageChannel hop fan-out uses, which
  * is how a `websocket.on('message')` handler is actually reached.
  *
+ * `frame` is an animation frame and then a task ({@link nextFrameTask}):
+ * one write per *frame*, so even a scheduler with a frame-rate floor has
+ * nothing left to coalesce. The conformance suite uses it to trace
+ * frame-throttled frameworks; it is far too slow to measure with.
+ *
  * `micro` stays the default: it is what every recorded run so far used, and
  * a real task per update would put the 100k-update variants into the
  * minutes.
  *
- * @returns {'micro' | 'macro'}
+ * @returns {'micro' | 'macro' | 'frame'}
  */
 export function yieldKind() {
-  return qp('yield') === 'macro' ? 'macro' : 'micro';
+  const kind = qp('yield');
+
+  return kind === 'macro' || kind === 'frame' ? kind : 'micro';
 }
 
 /**
  * One turn of whichever queue {@link yieldKind} selects.
  *
- * @param {'micro' | 'macro'} kind
+ * @param {'micro' | 'macro' | 'frame'} kind
  */
 export function yieldTo(kind) {
+  if (kind === 'frame') return nextFrameTask();
+
   return kind === 'macro' ? nextMacrotask() : Promise.resolve();
 }
 

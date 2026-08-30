@@ -65,6 +65,13 @@ interface Trace {
 interface ConformanceSpec {
   app: string;
   query: string;
+  /**
+   * The query FRAME_THROTTLED frameworks run with: the same workload,
+   * delivered one write per frame instead of one per task. Absent on the
+   * self-advancing spec (incrementing-render-effect waits for each
+   * render, so a frame-floored framework already renders every state).
+   */
+  pacedQuery?: string;
   /** The exact sequence of page-text states the run must pass through */
   expectedStates: string[];
   /**
@@ -80,10 +87,26 @@ function range(start: number, end: number): number[] {
   return Array.from({ length: end - start }, (_, i) => start + i);
 }
 
+/*
+ * Frameworks whose scheduler has a frame-rate floor: the first write in a
+ * frame renders in a microtask, every later write waits for the next
+ * animation frame (marko's schedule() stays "scheduled" until a
+ * rAF-driven MessageChannel message resets it -- marko/src/dom/schedule.ts).
+ * One update per *task* still coalesces into one render per *frame*, so
+ * the task-paced queries cannot observe their per-write states. These
+ * frameworks run the externally-paced specs with `pacedQuery` instead:
+ * `yield=frame` delivers one write per frame (rAF + a task, see
+ * common/src/tests/utils.js nextFrameTask), which leaves nothing to
+ * coalesce even at a frame-rate floor -- and every trace assertion
+ * (exact states, zero element churn, the text-node budget) still applies.
+ */
+const FRAME_THROTTLED = new Set(['marko']);
+
 const SPECS: ConformanceSpec[] = [
   {
     app: 'one-item-many-updates',
     query: `?updates=${UPDATES}&percentRandomAwait=100&yield=macro`,
+    pacedQuery: `?updates=${UPDATES}&percentRandomAwait=100&yield=frame`,
     // the initial render already shows [0] before :start, and set(0)
     // re-renders the same text -- the first observable change is [1]
     expectedStates: range(1, UPDATES).map((i) => `[${i}]`),
@@ -92,6 +115,7 @@ const SPECS: ConformanceSpec[] = [
   {
     app: 'ten-k-items-one-time',
     query: `?items=${ITEMS}&updates=${ITEMS}&percentRandomAwait=100&yield=macro`,
+    pacedQuery: `?items=${ITEMS}&updates=${ITEMS}&percentRandomAwait=100&yield=frame`,
     // sequential updates: state k has items 0..k set, the rest untouched
     expectedStates: range(0, ITEMS).map((k) =>
       range(0, ITEMS)
@@ -103,6 +127,7 @@ const SPECS: ConformanceSpec[] = [
   {
     app: 'fan-out',
     query: `?consumers=${CONSUMERS}&updates=${UPDATES}&burstSize=1`,
+    pacedQuery: `?consumers=${CONSUMERS}&updates=${UPDATES}&burstSize=1&yield=frame`,
     // bursts of 1: nothing to coalesce, every value must reach every
     // consumer, and consumers must never tear (a state where they
     // disagree would not match)
@@ -214,8 +239,13 @@ async function runConformance(
 
     page.on('pageerror', (error) => errors.push(error.message));
 
+    const query =
+      FRAME_THROTTLED.has(framework) && spec.pacedQuery
+        ? spec.pacedQuery
+        : spec.query;
+
     await page.addInitScript(installTraceObserver);
-    await page.goto(`${server.url}/${spec.query}`);
+    await page.goto(`${server.url}/${query}`);
 
     await page.waitForFunction(
       () => performance.getEntriesByName(':done', 'mark').length > 0,
