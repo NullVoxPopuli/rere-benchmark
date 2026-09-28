@@ -11,7 +11,6 @@ import { FrameworkInfo } from "#components/framework-info.gts";
 import { Variant } from "#components/variant.gts";
 import { Version } from "#components/version.gts";
 import { nameOf } from "#frameworks";
-import { joinRuns } from "#routes/compare.ts";
 import {
   effectsBenches,
   formatRunName,
@@ -32,9 +31,11 @@ import {
   versionOf,
 } from "#utils";
 
+import { joinRuns } from "./+route.ts";
+
+import type { Model, NamedRun } from "./+route.ts";
 import type { TOC } from "@ember/component/template-only";
 import type RouterService from "@ember/routing/router-service";
-import type { Model, NamedRun } from "#routes/compare.ts";
 import type QueryParams from "#services/query-params.ts";
 import type { BenchmarkInfo, ResultSet } from "#types";
 import type { Percentile } from "#utils";

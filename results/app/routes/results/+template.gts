@@ -1,10 +1,11 @@
 import { LinkTo } from "@ember/routing";
 
-import { Info } from "#components/env.gts";
 import { prsOf } from "#utils";
 
+import { Info } from "./env.gts";
+
+import type { Model } from "./+route.ts";
 import type { TOC } from "@ember/component/template-only";
-import type { Model } from "#routes/results.ts";
 
 export default <template>
   <nav class="visualizations">

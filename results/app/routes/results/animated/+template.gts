@@ -3,11 +3,7 @@ import { cached } from "@glimmer/tracking";
 import { assert } from "@ember/debug";
 import { service } from "@ember/service";
 
-import { BorrowPicker, borrowsOf } from "#components/borrow-picker.gts";
 import { FrameworkInfo } from "#components/framework-info.gts";
-import { FrameworkToggles, visibleFrameworksOf } from "#components/framework-toggles.gts";
-import { PercentileControl } from "#components/percentile-control.gts";
-import { Settings } from "#components/settings.gts";
 import { Variant } from "#components/variant.gts";
 import { Version } from "#components/version.gts";
 import { frameworks } from "#frameworks";
@@ -22,7 +18,12 @@ import {
   versionOf,
 } from "#utils";
 
-import type { Model } from "#routes/results.ts";
+import { BorrowPicker, borrowsOf } from "../borrow-picker.gts";
+import { FrameworkToggles, visibleFrameworksOf } from "../framework-toggles.gts";
+import { PercentileControl } from "../percentile-control.gts";
+import { Settings } from "../settings.gts";
+
+import type { Model } from "../+route.ts";
 import type QueryParams from "#services/query-params.ts";
 import type { BenchmarkInfo, Column } from "#types";
 

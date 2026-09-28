@@ -27,8 +27,10 @@ pnpm start
 | `app/types.ts` | the shape of a result file -- the contract with the runner |
 | `app/utils.ts` | formatting, query-param readers, statistics |
 | `app/frameworks.ts` | the framework registry (display name, color, logo, package to read the version from) -- shared with the runner |
-| `app/templates/results/` | the three views of one run: table, boxplot, animated |
-| `app/templates/compare.gts` | one framework across N runs |
+| `app/routes/<name>/` | one folder per route: `+route.ts`, `+template.gts`, and the components only that route uses |
+| `app/routes/results/` | the three views of one run: table (`index/`), `boxplot/`, `animated/` |
+| `app/routes/compare/` | one framework across N runs |
+| `app/components/` | components more than one route uses |
 | `vite.config.mjs` | builds `virtual:result-sets`: the list of runs and the build-time metadata (date, browser, throttle) their display names are made of |
 
 Result files are fetched at runtime by name; nothing needs rebuilding when

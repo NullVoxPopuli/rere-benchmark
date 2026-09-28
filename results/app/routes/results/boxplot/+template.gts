@@ -7,10 +7,6 @@ import { BoxPlotChart } from "@sgratzl/chartjs-chart-boxplot";
 import { converter, filterBrightness, formatCss } from "culori";
 import { modifier } from "ember-modifier";
 
-import { BorrowPicker, borrowsOf } from "#components/borrow-picker.gts";
-import { FrameworkToggles, visibleFrameworksOf } from "#components/framework-toggles.gts";
-import { Settings } from "#components/settings.gts";
-import { SortControl } from "#components/sort-control.gts";
 import { frameworks } from "#frameworks";
 import {
   columnsFor,
@@ -25,7 +21,12 @@ import {
   totalSortFrom,
 } from "#utils";
 
-import type { Model } from "#routes/results.ts";
+import { BorrowPicker, borrowsOf } from "../borrow-picker.gts";
+import { FrameworkToggles, visibleFrameworksOf } from "../framework-toggles.gts";
+import { Settings } from "../settings.gts";
+import { SortControl } from "../sort-control.gts";
+
+import type { Model } from "../+route.ts";
 import type QueryParams from "#services/query-params.ts";
 import type { BenchmarkInfo, Column, ResultSet } from "#types";
 

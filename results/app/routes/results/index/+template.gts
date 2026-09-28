@@ -6,13 +6,7 @@ import { service } from "@ember/service";
 import { interpolate } from "culori";
 
 import { BenchmarkName } from "#components/benchmark-name.gts";
-import { BorrowPicker, borrowsOf } from "#components/borrow-picker.gts";
 import { FrameworkInfo } from "#components/framework-info.gts";
-import { FrameworkToggles, visibleFrameworksOf } from "#components/framework-toggles.gts";
-import { PercentileControl } from "#components/percentile-control.gts";
-import { Settings } from "#components/settings.gts";
-import { SortControl } from "#components/sort-control.gts";
-import { splitsFrom, TableSplits } from "#components/table-splits.gts";
 import { Variant } from "#components/variant.gts";
 import { Version } from "#components/version.gts";
 import {
@@ -34,8 +28,15 @@ import {
   versionOf,
 } from "#utils";
 
+import { BorrowPicker, borrowsOf } from "../borrow-picker.gts";
+import { FrameworkToggles, visibleFrameworksOf } from "../framework-toggles.gts";
+import { PercentileControl } from "../percentile-control.gts";
+import { Settings } from "../settings.gts";
+import { SortControl } from "../sort-control.gts";
+import { splitsFrom, TableSplits } from "./table-splits.gts";
+
+import type { Model } from "../+route.ts";
 import type RouterService from "@ember/routing/router-service";
-import type { Model } from "#routes/results.ts";
 import type QueryParams from "#services/query-params.ts";
 import type { BenchmarkInfo, Column, ResultSet } from "#types";
 import type { Percentile } from "#utils";
