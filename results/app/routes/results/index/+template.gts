@@ -95,18 +95,12 @@ export default class ResultsTables extends Component<{
           @file={{this.file}}
           @columns={{this.higherColumns}}
         />
-        <br />
-        <br />
-        <br />
       {{/if}}
 
       {{#each this.msGroups key="heading" as |group|}}
         <h2>{{group.heading}}</h2>
 
         <Table @benches={{group.benches}} @file={{this.file}} @columns={{group.columns}} />
-        <br />
-        <br />
-        <br />
       {{/each}}
     </div>
 
@@ -114,6 +108,15 @@ export default class ResultsTables extends Component<{
       .result-tables {
         display: grid;
         justify-items: end;
+        gap: 1.5rem;
+
+        h2 {
+          justify-self: center;
+        }
+
+        :global(table) {
+          margin-bottom: 3rem;
+        }
       }
     </style>
   </template>
