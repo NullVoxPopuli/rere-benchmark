@@ -314,10 +314,10 @@ table {
     max-width: none;
   }
 
-  /* the run names are long; let the control shrink to its card instead of
-     sizing the card to the longest name. Both the label and the select
-     need the floor lifted -- each is a flex item whose automatic minimum
-     is its own content. */
+  /* the run names are long; let the control shrink to its card
+     instead of sizing the card to the longest name.
+     Both the label and the select need the floor lifted --
+     each is a flex item whose automatic minimum is its own content. */
   label {
     min-width: 0;
   }
