@@ -28,15 +28,13 @@ import {
   versionOf,
 } from "#utils";
 
-import { BorrowPicker, borrowsOf } from "../borrow-picker.gts";
-import { FrameworkToggles, visibleFrameworksOf } from "../framework-toggles.gts";
-import { PercentileControl } from "../percentile-control.gts";
-import { Settings } from "../settings.gts";
-import { SortControl } from "../sort-control.gts";
-import { splitsFrom, TableSplits } from "./table-splits.gts";
+import { borrowsOf } from "../borrow-picker.gts";
+import { visibleFrameworksOf } from "../framework-toggles.gts";
+import { TableSettings } from "./table-settings.gts";
+import { splitsFrom } from "./table-splits.gts";
+import { modeFrom } from "./value-mode-control.gts";
 
 import type { Model } from "../+route.ts";
-import type RouterService from "@ember/routing/router-service";
 import type QueryParams from "#services/query-params.ts";
 import type { BenchmarkInfo, Column, ResultSet } from "#types";
 import type { Percentile } from "#utils";
@@ -84,17 +82,6 @@ function colorFor(
   const color = gradient(rampFromBest(reverse ? 1 - normalized : normalized, curve));
 
   return `oklch(${color.l} ${color.c} ${color.h}deg)`;
-}
-
-type ValueMode = "raw" | "linear" | "times";
-
-/**
- * The ?mode= query param, wherever a component needs it.
- */
-function modeFrom(qp: QueryParams): ValueMode {
-  const mode = qp.get("mode");
-
-  return mode === "linear" || mode === "times" ? mode : "raw";
 }
 
 /**
@@ -415,40 +402,11 @@ class Table extends Component<{
 export default class ResultsTables extends Component<{
   model: Model;
 }> {
-  @service declare router: RouterService;
   @service declare queryParams: QueryParams;
-
-  get mode(): ValueMode {
-    return modeFrom(this.queryParams);
-  }
-
-  setMode = (mode: ValueMode) => {
-    this.router.transitionTo({ queryParams: { mode } });
-  };
-
-  isMode = (mode: ValueMode) => this.mode === mode;
 
   get percentile(): Percentile {
     return percentileFrom(this.queryParams);
   }
-
-  get curve() {
-    return curveFrom(this.queryParams);
-  }
-
-  setCurve = (event: Event) => {
-    const { valueAsNumber } = event.target as HTMLInputElement;
-
-    // Half-typed input is briefly unparseable -- "", "-", "0." -- and this
-    // fires on every keystroke. Keep the last good curve instead of writing
-    // a fallback back into the field, which would eat the keystroke and
-    // make a negative impossible to type.
-    if (!Number.isFinite(valueAsNumber)) return;
-
-    this.router.transitionTo({
-      queryParams: { curve: valueAsNumber === DEFAULT_CURVE ? null : valueAsNumber },
-    });
-  };
 
   get file() {
     return this.args.model.data;
@@ -466,8 +424,6 @@ export default class ResultsTables extends Component<{
   get columns() {
     return columnsFor(this.file, this.visibleFrameworks, this.borrows);
   }
-
-  settingParams = ["mode", "p", "hide", "from", "sort", "curve", "split"] as const;
 
   get benchmarkInfo() {
     return this.args.model.data.benchmarkInfo;
@@ -501,65 +457,11 @@ export default class ResultsTables extends Component<{
   }
 
   <template>
-    <Settings @params={{this.settingParams}}>
-      <fieldset class="value-mode surface">
-        <legend>values</legend>
-        <label>
-          <input
-            type="radio"
-            name="value-mode"
-            checked={{this.isMode "raw"}}
-            {{on "change" (fn this.setMode "raw")}}
-          />
-          raw
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="value-mode"
-            checked={{this.isMode "linear"}}
-            {{on "change" (fn this.setMode "linear")}}
-          />
-          score
-          <span class="units">(normalized 0 to 1)</span>
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="value-mode"
-            checked={{this.isMode "times"}}
-            {{on "change" (fn this.setMode "times")}}
-          />
-          times best
-          <span class="units">(1x is best)</span>
-        </label>
-      </fieldset>
-
-      <PercentileControl />
-
-      <fieldset class="value-mode surface">
-        <legend>color curve</legend>
-        <label>
-          <input
-            type="number"
-            name="color-curve"
-            step="0.1"
-            value={{this.curve}}
-            {{on "input" this.setCurve}}
-          />
-          bend toward best
-        </label>
-        <span class="units">0 is a straight ramp; negative bends toward the tail</span>
-      </fieldset>
-
-      <SortControl />
-
-      <TableSplits @benchmarkInfo={{this.benchmarkInfo}} />
-
-      <FrameworkToggles @file={{this.file}} />
-
-      <BorrowPicker @borrowed={{@model.borrowed}} />
-    </Settings>
+    <TableSettings
+      @benchmarkInfo={{this.benchmarkInfo}}
+      @file={{this.file}}
+      @borrowed={{@model.borrowed}}
+    />
 
     {{#if this.higherBenches.length}}
       <h2>higher is better</h2>
