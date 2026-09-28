@@ -18,10 +18,9 @@ import {
   versionOf,
 } from "#utils";
 
-import { BorrowPicker, borrowsOf } from "../borrow-picker.gts";
-import { FrameworkToggles, visibleFrameworksOf } from "../framework-toggles.gts";
-import { PercentileControl } from "../percentile-control.gts";
-import { Settings } from "../settings.gts";
+import { borrowsOf } from "../borrow-picker.gts";
+import { visibleFrameworksOf } from "../framework-toggles.gts";
+import { AnimatedSettings } from "./animated-settings.gts";
 
 import type { Model } from "../+route.ts";
 import type QueryParams from "#services/query-params.ts";
@@ -47,9 +46,6 @@ export default class Animated extends Component<{
       .toSorted()
       .toSorted((a, b) => (a.name.includes("async") ? 1 : 0) - (b.name.includes("async") ? 1 : 0));
   }
-
-  // no sort control: the rows already order themselves by measured speed
-  settingParams = ["p", "hide", "from"] as const;
 
   get borrows() {
     return borrowsOf(this.queryParams, this.args.model.borrowed);
@@ -80,13 +76,7 @@ export default class Animated extends Component<{
   };
 
   <template>
-    <Settings @params={{this.settingParams}}>
-      <PercentileControl />
-
-      <FrameworkToggles @file={{@model.data}} />
-
-      <BorrowPicker @borrowed={{@model.borrowed}} />
-    </Settings>
+    <AnimatedSettings @file={{@model.data}} @borrowed={{@model.borrowed}} />
 
     {{#each this.benchmarkInfo as |benchInfo|}}
       <Visualize @benchInfo={{benchInfo}} @rows={{this.rowsFor benchInfo}} />

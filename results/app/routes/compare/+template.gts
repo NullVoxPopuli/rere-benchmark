@@ -4,7 +4,6 @@ import { LinkTo } from "@ember/routing";
 import { service } from "@ember/service";
 
 import { pageTitle } from "ember-page-title";
-import { experiments, runs } from "virtual:result-sets";
 
 import { BenchmarkName } from "#components/benchmark-name.gts";
 import { FrameworkInfo } from "#components/framework-info.gts";
@@ -17,11 +16,9 @@ import {
   getFrameworks,
   higherIsBetterBenches,
   isoOf,
-  labelFor,
   lowerIsBetterBenches,
   overrideOf,
   percentileFrom,
-  PERCENTILES,
   round,
   shortRunName,
   throttleLabel,
@@ -31,14 +28,13 @@ import {
   versionOf,
 } from "#utils";
 
-import { joinRuns } from "./+route.ts";
+import { CompareControls, letterFor } from "./compare-controls.gts";
 
 import type { Model, NamedRun } from "./+route.ts";
 import type { TOC } from "@ember/component/template-only";
 import type RouterService from "@ember/routing/router-service";
 import type QueryParams from "#services/query-params.ts";
 import type { BenchmarkInfo, ResultSet } from "#types";
-import type { Percentile } from "#utils";
 
 /**
  * Below this |% change|, runs are considered equivalent -- individual
@@ -49,39 +45,6 @@ const SAME_THRESHOLD = 1;
 function qp(runName: string) {
   return { q: runName };
 }
-
-/**
- * The comparison runs are lettered after the baseline: B, C, D, ...
- */
-function letterFor(index: number) {
-  return String.fromCharCode(66 + index);
-}
-
-/**
- * The options for one of the run selectors: the official runs, plus the
- * experiments in their own group when there are any. Any selector can
- * point at either category, so a run can be compared against an experiment.
- */
-const RunOptions = <template>
-  <optgroup label="Runs">
-    {{#each runs as |name|}}
-      <option value={{name}} selected={{eq name @current}} title={{titleOf name}}>{{formatRunName
-          name
-        }}</option>
-    {{/each}}
-  </optgroup>
-  {{#if experiments.length}}
-    <optgroup label="Experiments">
-      {{#each experiments as |name|}}
-        <option value={{name}} selected={{eq name @current}} title={{titleOf name}}>{{formatRunName
-            name
-          }}</option>
-      {{/each}}
-    </optgroup>
-  {{/if}}
-</template> satisfies TOC<{
-  current: string;
-}>;
 
 /**
  * Both runs state their throttle outright rather than leaving it to be
@@ -337,7 +300,6 @@ class CompareTable extends Component<{
 }
 
 export default class Compare extends Component<{ model: Model }> {
-  @service declare router: RouterService;
   @service declare queryParams: QueryParams;
 
   get a() {
@@ -379,67 +341,6 @@ export default class Compare extends Component<{ model: Model }> {
 
     return inAll ?? this.frameworkNames[0] ?? "";
   }
-
-  setFramework = (event: Event) => {
-    const { value } = event.target as HTMLSelectElement;
-
-    this.router.transitionTo({ queryParams: { framework: value } });
-  };
-
-  setRunA = (event: Event) => {
-    const { value } = event.target as HTMLSelectElement;
-
-    this.router.transitionTo({ queryParams: { a: value } });
-  };
-
-  bNames = () => this.bs.map((run) => run.name);
-
-  setRunB = (index: number, event: Event) => {
-    const { value } = event.target as HTMLSelectElement;
-    const names = this.bNames();
-
-    names[index] = value;
-    this.router.transitionTo({ queryParams: { b: joinRuns(names) } });
-  };
-
-  /**
-   * Another column to compare against A: the newest run not already in
-   * the comparison, falling back to an unused experiment, and to the
-   * newest run again once everything is on screen.
-   */
-  addRun = () => {
-    const used = new Set([this.a.name].concat(this.bNames()));
-    const next =
-      runs.find((name) => !used.has(name)) ??
-      experiments.find((name) => !used.has(name)) ??
-      runs[0];
-
-    if (!next) return;
-
-    this.router.transitionTo({ queryParams: { b: joinRuns(this.bNames().concat([next])) } });
-  };
-
-  removeRun = (index: number) => {
-    const names = this.bNames();
-
-    names.splice(index, 1);
-    this.router.transitionTo({ queryParams: { b: joinRuns(names) } });
-  };
-
-  get canRemove() {
-    return this.bs.length > 1;
-  }
-
-  get canSwap() {
-    return this.bs.length === 1;
-  }
-
-  swap = () => {
-    // SAFETY: only reachable via canSwap, so there is exactly one comparee
-    this.router.transitionTo({
-      queryParams: { a: (this.bs[0] as NamedRun).name, b: this.a.name },
-    });
-  };
 
   /**
    * Comparing runs from different machines / browsers / throttle settings
@@ -509,73 +410,17 @@ export default class Compare extends Component<{ model: Model }> {
     return variantOf(this.a.data, this.framework);
   }
 
-  isFramework = (name: string) => this.framework === name;
-
-  percentiles = PERCENTILES;
-
-  labelFor = labelFor;
-
-  isPercentile = (percentile: Percentile) => percentileFrom(this.queryParams) === percentile;
-
-  setPercentile = (event: Event) => {
-    const { value } = event.target as HTMLSelectElement;
-
-    this.router.transitionTo({ queryParams: { p: value } });
-  };
-
   <template>
     {{pageTitle "Compare"}}
 
     <h1 class="compare-title">Compare a framework across runs</h1>
 
-    <fieldset class="compare-controls">
-      <legend>compare</legend>
-      <label>
-        framework
-        <select name="framework" {{on "change" this.setFramework}}>
-          {{#each this.frameworkNames as |name|}}
-            <option value={{name}} selected={{this.isFramework name}}>{{nameOf name}}</option>
-          {{/each}}
-        </select>
-      </label>
-      <label>
-        run A
-        <select name="run-a" {{on "change" this.setRunA}}>
-          <RunOptions @current={{this.a.name}} />
-        </select>
-      </label>
-      {{#each this.bs as |run index|}}
-        <label>
-          run
-          {{letterFor index}}
-          <select name="run-{{letterFor index}}" {{on "change" (fn this.setRunB index)}}>
-            <RunOptions @current={{run.name}} />
-          </select>
-        </label>
-        {{#if this.canRemove}}
-          <button
-            type="button"
-            class="remove-run"
-            aria-label="remove run {{letterFor index}}"
-            {{on "click" (fn this.removeRun index)}}
-          >×</button>
-        {{/if}}
-      {{/each}}
-      <button type="button" {{on "click" this.addRun}}>+ add run</button>
-      {{#if this.canSwap}}
-        <button type="button" {{on "click" this.swap}}>swap A ⇄ B</button>
-      {{/if}}
-      <label>
-        statistic
-        <select name="percentile" {{on "change" this.setPercentile}}>
-          {{#each this.percentiles as |percentile|}}
-            <option value={{percentile}} selected={{this.isPercentile percentile}}>{{this.labelFor
-                percentile
-              }}</option>
-          {{/each}}
-        </select>
-      </label>
-    </fieldset>
+    <CompareControls
+      @a={{this.a}}
+      @bs={{this.bs}}
+      @framework={{this.framework}}
+      @frameworkNames={{this.frameworkNames}}
+    />
 
     {{#if this.environmentWarning}}
       <p class="compare-warning">
@@ -634,17 +479,6 @@ export default class Compare extends Component<{ model: Model }> {
         border: 1px solid darkorange;
         border-radius: 0.25rem;
         padding: 0.5rem 1rem;
-      }
-
-      select {
-        max-width: 40vw;
-      }
-
-      /* pulls each "remove run" button back against the selector it removes,
-         undoing most of the control bar's column gap */
-      .remove-run {
-        margin-inline-start: -1rem;
-        line-height: 1;
       }
     </style>
   </template>
