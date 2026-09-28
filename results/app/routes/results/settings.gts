@@ -41,5 +41,36 @@ export class Settings extends Component<{
         {{yield}}
       </div>
     </details>
+
+    <style scoped>
+      /* not .settings: a class named here is renamed at build time, and the
+         card grid in app.css finds this panel by that name */
+      details {
+        justify-self: center;
+
+        /* the panel is chrome, not data: without a cap it inherits the width of
+           the widest results table behind it and the cards stretch to match */
+        width: min(100%, 60rem);
+      }
+
+      summary {
+        width: fit-content;
+        margin-inline: auto;
+        cursor: pointer;
+        padding: var(--padding-1) var(--padding-4);
+        font-size: 0.7rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        opacity: 0.7;
+        border: var(--border-width) var(--border-style) var(--border-color);
+        border-radius: var(--radius);
+
+        &:hover,
+        &:focus-visible {
+          opacity: 1;
+          border-color: color-mix(in oklch, currentColor 40%, var(--border-color));
+        }
+      }
+    </style>
   </template>
 }

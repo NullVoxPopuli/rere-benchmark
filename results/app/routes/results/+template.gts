@@ -28,4 +28,11 @@ export default <template>
   <div class="all-results">
     {{outlet}}
   </div>
+
+  <style scoped>
+    .visualizations {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+  </style>
 </template> satisfies TOC<{ model: Model }>;

@@ -9,6 +9,32 @@ export const FrameworkInfo = <template>
       <span>{{info.name}}</span>
     </a>
   {{/let}}
+
+  <style scoped>
+    .fw-info {
+      display: grid;
+      justify-items: center;
+      align-content: center;
+      gap: 0.25rem;
+      text-decoration: none;
+      color: currentColor;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      img {
+        width: 32px;
+        height: 32px;
+        object-fit: contain;
+      }
+
+      span {
+        font-size: 0.8rem;
+        white-space: nowrap;
+      }
+    }
+  </style>
 </template> satisfies TOC<{
   name: string;
 }>;
