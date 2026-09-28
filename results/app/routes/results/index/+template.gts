@@ -86,22 +86,35 @@ export default class ResultsTables extends Component<{
       @borrowed={{@model.borrowed}}
     />
 
-    {{#if this.higherBenches.length}}
-      <h2>higher is better</h2>
+    <div class="result-tables">
+      {{#if this.higherBenches.length}}
+        <h2>higher is better</h2>
 
-      <Table @benches={{this.higherBenches}} @file={{this.file}} @columns={{this.higherColumns}} />
-      <br />
-      <br />
-      <br />
-    {{/if}}
+        <Table
+          @benches={{this.higherBenches}}
+          @file={{this.file}}
+          @columns={{this.higherColumns}}
+        />
+        <br />
+        <br />
+        <br />
+      {{/if}}
 
-    {{#each this.msGroups key="heading" as |group|}}
-      <h2>{{group.heading}}</h2>
+      {{#each this.msGroups key="heading" as |group|}}
+        <h2>{{group.heading}}</h2>
 
-      <Table @benches={{group.benches}} @file={{this.file}} @columns={{group.columns}} />
-      <br />
-      <br />
-      <br />
-    {{/each}}
+        <Table @benches={{group.benches}} @file={{this.file}} @columns={{group.columns}} />
+        <br />
+        <br />
+        <br />
+      {{/each}}
+    </div>
+
+    <style scoped>
+      .result-tables {
+        display: grid;
+        justify-items: end;
+      }
+    </style>
   </template>
 }
