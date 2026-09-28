@@ -7,8 +7,8 @@ import { experiments, runs } from "virtual:result-sets";
 import { nameOf } from "#frameworks";
 import { borrowLabel, formatRunName, titleOf } from "#utils";
 
+import type { Borrowed } from "./+route.ts";
 import type RouterService from "@ember/routing/router-service";
-import type { Borrowed } from "#routes/results.ts";
 import type QueryParams from "#services/query-params.ts";
 import type { ResultSet } from "#types";
 
