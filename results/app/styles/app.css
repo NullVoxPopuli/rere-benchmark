@@ -103,7 +103,6 @@ body {
      the centered grid from overflowing past the unreachable left edge */
   --body-margin: 8px;
   margin: var(--body-margin);
-  width: max-content;
   /* 100% would add the margins on top of the viewport width and leave a
      permanent 8px horizontal scroll */
   min-width: calc(100% - 2 * var(--body-margin));
