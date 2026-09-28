@@ -32,7 +32,7 @@
       "DB Monitor w/ chat simulation": {
         "app": "dbmon-with-chat",
         "query": "",
-        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators), headless 16x, Accessor Run #2",
+        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators)",
         "times": [
           [
             {
@@ -236,7 +236,7 @@
       "Incrementing Render Effect": {
         "app": "incrementing-render-effect",
         "query": "&updates=100000",
-        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators), headless 16x, Accessor Run #2",
+        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators)",
         "times": [
           [
             {
@@ -944,7 +944,7 @@
       "1 item, 1k updates (async)": {
         "app": "one-item-many-updates",
         "query": "&updates=1000&percentRandomAwait=100",
-        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators), headless 16x, Accessor Run #2",
+        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators)",
         "times": [
           [
             {
@@ -1652,7 +1652,7 @@
       "1 item, 1k updates": {
         "app": "one-item-many-updates",
         "query": "&updates=1000&percentRandomAwait=0",
-        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators), headless 16x, Accessor Run #2",
+        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators)",
         "times": [
           [
             {
@@ -2360,7 +2360,7 @@
       "1 item, 100k updates (async)": {
         "app": "one-item-many-updates",
         "query": "&updates=100000&percentRandomAwait=100",
-        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators), headless 16x, Accessor Run #2",
+        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators)",
         "times": [
           [
             {
@@ -3068,7 +3068,7 @@
       "1 item, 100k updates": {
         "app": "one-item-many-updates",
         "query": "&updates=100000&percentRandomAwait=0",
-        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators), headless 16x, Accessor Run #2",
+        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators)",
         "times": [
           [
             {
@@ -3776,7 +3776,7 @@
       "1k items, 1 update each (sequentially, async)": {
         "app": "ten-k-items-one-time",
         "query": "&items=1000&updates=1000&percentRandomAwait=100",
-        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators), headless 16x, Accessor Run #2",
+        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators)",
         "times": [
           [
             {
@@ -4484,7 +4484,7 @@
       "1k items, 1 update each (sequentially)": {
         "app": "ten-k-items-one-time",
         "query": "&items=1000&updates=1000&percentRandomAwait=0",
-        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators), headless 16x, Accessor Run #2",
+        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators)",
         "times": [
           [
             {
@@ -5192,7 +5192,7 @@
       "1k items 1 update on 5% (random, async)": {
         "app": "ten-k-items-one-time",
         "query": "&items=1000&updates=50&random=true&percentRandomAwait=100",
-        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators), headless 16x, Accessor Run #2",
+        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators)",
         "times": [
           [
             {
@@ -5900,7 +5900,7 @@
       "1k items 1 update on 5% (random)": {
         "app": "ten-k-items-one-time",
         "query": "&items=1000&updates=50&random=true&percentRandomAwait=0",
-        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators), headless 16x, Accessor Run #2",
+        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators)",
         "times": [
           [
             {
@@ -6608,7 +6608,7 @@
       "1k items 1 update on 25% (random, async)": {
         "app": "ten-k-items-one-time",
         "query": "&items=1000&updates=250&random=true&percentRandomAwait=100",
-        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators), headless 16x, Accessor Run #2",
+        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators)",
         "times": [
           [
             {
@@ -7316,7 +7316,7 @@
       "1k items 1 update on 25% (random)": {
         "app": "ten-k-items-one-time",
         "query": "&items=1000&updates=250&random=true&percentRandomAwait=0",
-        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators), headless 16x, Accessor Run #2",
+        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators)",
         "times": [
           [
             {
@@ -8024,7 +8024,7 @@
       "1 value, 1k consumers, 10k updates (bursts of 100)": {
         "app": "fan-out",
         "query": "&consumers=1000&updates=10000&burstSize=100",
-        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators), headless 16x, Accessor Run #2",
+        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators)",
         "times": [
           [
             {
@@ -8732,7 +8732,7 @@
       "1 value, 1k consumers, 10k updates (bursts of 1000)": {
         "app": "fan-out",
         "query": "&consumers=1000&updates=10000&burstSize=1000",
-        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators), headless 16x, Accessor Run #2",
+        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators)",
         "times": [
           [
             {
@@ -9440,7 +9440,7 @@
       "1 value, 1k consumers, 10k updates (single burst)": {
         "app": "fan-out",
         "query": "&consumers=1000&updates=10000&burstSize=10000",
-        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators), headless 16x, Accessor Run #2",
+        "version": "7.5.0-alpha.1 PR 20868 0ea35167d7 (2023-11 accessor decorators)",
         "times": [
           [
             {
@@ -10287,5 +10287,10 @@
   "timing": {
     "benchmarkMs": 1414411,
     "totalMs": 1414412
+  },
+  "notes": {
+    "ember": {
+      "variant": "Accessor Run #2 (headless 16x)"
+    }
   }
 }
