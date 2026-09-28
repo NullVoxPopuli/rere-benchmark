@@ -21,10 +21,9 @@ import {
   totalSortFrom,
 } from "#utils";
 
-import { BorrowPicker, borrowsOf } from "../borrow-picker.gts";
-import { FrameworkToggles, visibleFrameworksOf } from "../framework-toggles.gts";
-import { Settings } from "../settings.gts";
-import { SortControl } from "../sort-control.gts";
+import { borrowsOf } from "../borrow-picker.gts";
+import { visibleFrameworksOf } from "../framework-toggles.gts";
+import { BoxplotSettings } from "./boxplot-settings.gts";
 
 import type { Model } from "../+route.ts";
 import type QueryParams from "#services/query-params.ts";
@@ -214,8 +213,6 @@ export default class Boxplat extends Component<{
     return this.lowerColumns;
   };
 
-  settingParams = ["hide", "from", "sort"] as const;
-
   get borrows() {
     return borrowsOf(this.queryParams, this.args.model.borrowed);
   }
@@ -229,13 +226,7 @@ export default class Boxplat extends Component<{
   }
 
   <template>
-    <Settings @params={{this.settingParams}}>
-      <SortControl />
-
-      <FrameworkToggles @file={{@model.data}} />
-
-      <BorrowPicker @borrowed={{@model.borrowed}} />
-    </Settings>
+    <BoxplotSettings @file={{@model.data}} @borrowed={{@model.borrowed}} />
 
     {{#each this.benchmarkInfo as |benchInfo|}}
       <section>
