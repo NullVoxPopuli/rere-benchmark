@@ -379,6 +379,36 @@ class Table extends Component<{
         </tfoot>
       {{/if}}
     </table>
+
+    <style scoped>
+      table {
+        /* names the statistic every cell in the table is, over the column of
+           benchmark names it labels */
+        .stat-label {
+          text-align: right;
+          font-weight: normal;
+          font-size: 0.8rem;
+          opacity: 0.6;
+          white-space: nowrap;
+        }
+
+        /* No position of its own: `thead th` in app.css is already sticky,
+           which both pins the row and gives the borrow badge something to
+           anchor against. Setting position here outranks that rule, and the
+           `top` meant for the sticky offset becomes a relative one -- shoving
+           the headers a header-height down, over the first rows of the table. */
+        .fw-header {
+          text-align: center;
+          vertical-align: bottom;
+        }
+
+        .throttle-mismatch {
+          display: block;
+          font-weight: normal;
+          color: darkorange;
+        }
+      }
+    </style>
   </template>
 }
 

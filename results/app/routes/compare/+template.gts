@@ -122,6 +122,32 @@ const RunHeader = <template>
       {{throttleOf @run.data}}
     </span>
   </th>
+
+  <style scoped>
+    th {
+      /* LinkTo renders the <a>, so it is not an element of this template */
+      :global(a) {
+        white-space: nowrap;
+      }
+
+      /* :global keeps the shared .small font size */
+      :global(.small) {
+        display: block;
+        font-weight: normal;
+      }
+    }
+
+    .throttle {
+      opacity: 0.7;
+
+      /* timings from different throttle settings aren't comparable, so
+         the two labels have to be noticed, not just present */
+      &.mismatch {
+        opacity: 1;
+        color: darkorange;
+      }
+    }
+  </style>
 </template> satisfies TOC<{
   run: NamedRun;
   framework: string;
@@ -292,6 +318,44 @@ class CompareTable extends Component<{
         </tfoot>
       {{/if}}
     </table>
+
+    <style scoped>
+      .run-tag {
+        font-size: 0.7rem;
+        border: 1px solid currentColor;
+        border-radius: 0.25rem;
+        padding: 0 0.25rem;
+        opacity: 0.7;
+      }
+
+      .num {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .change {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+
+        /* the direction is a runtime value, so the build cannot rename it.
+           .value handles text contrast against these, same as the results tables */
+        &:global(.better) {
+          background: #77ff77;
+        }
+
+        &:global(.worse) {
+          background: #ff7777;
+        }
+
+        /* same contrast treatment the .value spans get, at label size */
+        .units {
+          font-size: 0.6rem;
+          color: white;
+          filter: contrast(0.4);
+          mix-blend-mode: difference;
+        }
+      }
+    </style>
   </template>
 }
 
@@ -581,5 +645,30 @@ export default class Compare extends Component<{ model: Model }> {
         />
       {{/if}}
     </div>
+
+    <style scoped>
+      .compare-title {
+        font-size: 1.25rem;
+        text-align: center;
+      }
+
+      .compare-warning {
+        max-width: 40rem;
+        border: 1px solid darkorange;
+        border-radius: 0.25rem;
+        padding: 0.5rem 1rem;
+      }
+
+      select {
+        max-width: 40vw;
+      }
+
+      /* pulls each "remove run" button back against the selector it removes,
+         undoing most of the control bar's column gap */
+      .remove-run {
+        margin-inline-start: -1rem;
+        line-height: 1;
+      }
+    </style>
   </template>
 }

@@ -9,6 +9,17 @@ export const Variant = <template>
   {{#if @variant}}
     <span class="variant">{{@variant}}</span>
   {{/if}}
+
+  <style scoped>
+    /* a block, so it lands on its own line under the name */
+    .variant {
+      display: block;
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      opacity: 0.75;
+    }
+  </style>
 </template> satisfies TOC<{
   variant: string | undefined;
 }>;

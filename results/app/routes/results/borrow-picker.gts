@@ -209,5 +209,27 @@ export class BorrowPicker extends Component<{
         </button>
       {{/if}}
     </fieldset>
+
+    <style scoped>
+      select {
+        max-width: 40vw;
+      }
+
+      /* one borrow per line: the card is a column of the settings grid, so the
+         row has to be allowed to shrink -- otherwise the longest run name sets
+         its width and the card overflows the column */
+      .borrow-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--gap-1) var(--gap-2);
+        flex: 1 0 100%;
+        min-width: 0;
+
+        select {
+          min-width: 0;
+        }
+      }
+    </style>
   </template>
 }

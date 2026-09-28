@@ -24,6 +24,21 @@ const ResultList = <template>
       {{/each}}
     </ul>
   </nav>
+
+  <style scoped>
+    /* run links line up with their "how long ago" hint */
+    .run-list {
+      li {
+        margin-block: 0.25rem;
+      }
+
+      /* :global keeps the shared .small font size */
+      :global(.small) {
+        margin-left: 0.5rem;
+        opacity: 0.75;
+      }
+    }
+  </style>
 </template> satisfies TOC<{ names: string[] }>;
 
 <template>

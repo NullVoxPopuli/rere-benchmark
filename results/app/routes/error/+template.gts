@@ -17,4 +17,26 @@ function getError() {
 
     <LinkTo @route="application">Home</LinkTo>
   </main>
+
+  <style scoped>
+    main.error-page {
+      display: grid;
+      gap: 1rem;
+
+      h1 {
+        margin: 0;
+      }
+
+      h2 {
+        margin: 0;
+        font-size: 1.25rem;
+      }
+
+      .error-box {
+        border: 1px solid darkred;
+        border-radius: 0.25rem;
+        padding: 1rem;
+      }
+    }
+  </style>
 </template>

@@ -212,7 +212,7 @@ export class Visualize extends Component<{
       </table>
     </section>
 
-    <style>
+    <style scoped>
       tr td {
         border-bottom: 1px solid lightgray;
       }

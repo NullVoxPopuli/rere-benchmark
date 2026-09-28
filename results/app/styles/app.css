@@ -34,12 +34,6 @@ body {
   color: var(--light-fg);
 }
 
-header {
-  background: var(--light-bg);
-  color: var(--light-fg);
-  box-shadow: 0 4px 4px -4px rgba(0, 0, 0, 0.2);
-}
-
 @media (prefers-color-scheme: dark) {
   :root {
     --page-bg: var(--dark-bg);
@@ -61,17 +55,6 @@ header {
       }
     }
   }
-
-  header {
-    background: var(--dark-bg);
-    color: var(--dark-fg);
-  }
-}
-
-@media (width <=450px) {
-  .hide-sm {
-    display: none;
-  }
 }
 
 h1 {
@@ -81,16 +64,6 @@ h1 {
 
 .small {
   font-size: 0.8rem;
-}
-
-/* a framework's build flavor (e.g. "Vapor"), sitting between the name and
-   the version -- a block so it lands on its own line under the name */
-.variant {
-  display: block;
-  text-align: center;
-  font-size: 0.8rem;
-  font-weight: 600;
-  opacity: 0.75;
 }
 
 body {
@@ -106,15 +79,6 @@ body {
   /* 100% would add the margins on top of the viewport width and leave a
      permanent 8px horizontal scroll */
   min-width: calc(100% - 2 * var(--body-margin));
-}
-
-.home-link {
-  text-decoration: none;
-  color: currentColor;
-
-  &:hover {
-    text-decoration: underline;
-  }
 }
 
 .all-results {
@@ -135,59 +99,10 @@ body {
   }
 }
 
-.visualizations {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
 main {
   min-width: 500px;
   display: grid;
   justify-items: center;
-}
-
-main.error-page {
-  display: grid;
-  gap: 1rem;
-
-  h1 {
-    margin: 0;
-  }
-
-  h2 {
-    margin: 0;
-    font-size: 1.25rem;
-  }
-
-  .error-box {
-    border: 1px solid darkred;
-    border-radius: 0.25rem;
-    padding: 1rem;
-  }
-}
-
-.fw-info {
-  display: grid;
-  justify-items: center;
-  align-content: center;
-  gap: 0.25rem;
-  text-decoration: none;
-  color: currentColor;
-
-  &:hover {
-    text-decoration: underline;
-  }
-
-  img {
-    width: 32px;
-    height: 32px;
-    object-fit: contain;
-  }
-
-  span {
-    font-size: 0.8rem;
-    white-space: nowrap;
-  }
 }
 
 /* Every value column is this wide in every table of data. Combined with
@@ -229,48 +144,13 @@ table {
     z-index: 3;
   }
 
-  /* names the statistic every cell in the table is, over the column of
-     benchmark names it labels */
-  .stat-label {
-    text-align: right;
-    font-weight: normal;
-    font-size: 0.8rem;
-    opacity: 0.6;
-    white-space: nowrap;
-  }
-
-  /* No position of its own: `thead th` above is already sticky, which both
-     pins the row and gives the borrow badge something to anchor against.
-     Setting position here outranks that rule (0,1,1 over 0,0,3), and the
-     `top` meant for the sticky offset becomes a relative one -- shoving
-     the headers a header-height down, over the first rows of the table. */
-  .fw-header {
-    text-align: center;
-    vertical-align: bottom;
-  }
-
-  /* benchmark names stay readable while the value columns scroll under them */
-  .benchmark-name,
+  /* the benchmark-name cells get the same pinning in their component */
   tfoot th {
     position: sticky;
     left: 0;
     background: var(--page-bg);
     /* cells later in the row otherwise paint over the sticky cell */
     z-index: 1;
-  }
-
-  .benchmark-name {
-    min-width: 11rem;
-    text-align: right;
-    display: flex;
-    justify-content: end;
-
-    .units {
-      position: absolute;
-      font-size: 0.5rem;
-      right: 0.5rem;
-      bottom: -0.25rem;
-    }
   }
 
   .value {
@@ -296,12 +176,6 @@ table {
     inset-inline-start: 0;
     cursor: help;
   }
-
-  .throttle-mismatch {
-    display: block;
-    font-weight: normal;
-    color: darkorange;
-  }
 }
 
 /* names which borrow a column is. Shared so the badge on a table header and
@@ -315,138 +189,9 @@ table {
   border-radius: var(--radius);
 }
 
-.compare-title {
-  font-size: 1.25rem;
+/* both header rows: the run letters and the runs they stand for */
+.compare-table .run-header {
   text-align: center;
-}
-
-.compare-warning {
-  max-width: 40rem;
-  border: 1px solid darkorange;
-  border-radius: 0.25rem;
-  padding: 0.5rem 1rem;
-}
-
-.compare-table {
-  .run-header {
-    text-align: center;
-
-    a {
-      white-space: nowrap;
-    }
-
-    .run-tag {
-      font-size: 0.7rem;
-      border: 1px solid currentColor;
-      border-radius: 0.25rem;
-      padding: 0 0.25rem;
-      opacity: 0.7;
-    }
-
-    .small {
-      display: block;
-      font-weight: normal;
-    }
-
-    .throttle {
-      opacity: 0.7;
-
-      /* timings from different throttle settings aren't comparable, so
-         the two labels have to be noticed, not just present */
-      &.mismatch {
-        opacity: 1;
-        color: darkorange;
-      }
-    }
-  }
-
-  .num {
-    text-align: right;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .change {
-    text-align: right;
-    font-variant-numeric: tabular-nums;
-
-    /* .value handles text contrast against these, same as the results tables */
-    &.better {
-      background: #77ff77;
-    }
-
-    &.worse {
-      background: #ff7777;
-    }
-
-    /* same contrast treatment the .value spans get, at label size */
-    .units {
-      font-size: 0.6rem;
-      color: white;
-      filter: contrast(0.4);
-      mix-blend-mode: difference;
-    }
-  }
-}
-
-.settings {
-  justify-self: center;
-
-  /* the panel is chrome, not data: without a cap it inherits the width of
-     the widest results table behind it and the cards stretch to match */
-  width: min(100%, 60rem);
-
-  summary {
-    width: fit-content;
-    margin-inline: auto;
-    cursor: pointer;
-    padding: var(--padding-1) var(--padding-4);
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    opacity: 0.7;
-    border: var(--border-width) var(--border-style) var(--border-color);
-    border-radius: var(--radius);
-
-    &:hover,
-    &:focus-visible {
-      opacity: 1;
-      border-color: color-mix(in oklch, currentColor 40%, var(--border-color));
-    }
-  }
-
-  /* one card per group, as many across as fit. Each card is its own
-     fieldset, so a group never splits across a column boundary. */
-  .fields {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
-    align-items: start;
-    gap: var(--gap-4);
-    padding-top: var(--padding-4);
-  }
-
-  /* the stacked layout spaced its groups with margins; the grid's own
-     gutters do that now */
-  .fields > * {
-    margin-bottom: 0;
-
-    /* a grid item's floor is its content, so the borrow card's <select>
-       would push its column -- and the centred panel -- out of line */
-    min-width: 0;
-    max-width: none;
-  }
-
-  /* the run names are long; let the control shrink to its card instead of
-     sizing the card to the longest name. Both the label and the select
-     need the floor lifted -- each is a flex item whose automatic minimum
-     is its own content. */
-  .fields label {
-    min-width: 0;
-  }
-
-  .fields select {
-    min-width: 0;
-    max-width: 100%;
-  }
 }
 
 /* The control bars above the tables: which value to show on a results
@@ -523,45 +268,5 @@ table {
     cursor: text;
     text-align: right;
     font-variant-numeric: tabular-nums;
-  }
-}
-
-.compare-controls select,
-.borrow-controls select {
-  max-width: 40vw;
-}
-
-/* one borrow per line: the card is a column of the settings grid, so the
-   row has to be allowed to shrink -- otherwise the longest run name sets
-   its width and the card overflows the column */
-.borrow-controls .borrow-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--gap-1) var(--gap-2);
-  flex: 1 0 100%;
-  min-width: 0;
-
-  select {
-    min-width: 0;
-  }
-}
-
-/* pulls each "remove run" button back against the selector it removes,
-   undoing most of the control bar's column gap */
-.compare-controls .remove-run {
-  margin-inline-start: -1rem;
-  line-height: 1;
-}
-
-/* history: run links line up with their "how long ago" hint */
-.run-list {
-  li {
-    margin-block: 0.25rem;
-  }
-
-  .small {
-    margin-left: 0.5rem;
-    opacity: 0.75;
   }
 }
