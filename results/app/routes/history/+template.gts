@@ -32,8 +32,9 @@ const ResultList = <template>
         margin-block: 0.25rem;
       }
 
-      /* :global keeps the shared .small font size */
-      :global(.small) {
+      /* the "how long ago" hint. Not .small: a class named here is renamed
+         at build time and would lose the shared .small font size. */
+      span {
         margin-left: 0.5rem;
         opacity: 0.75;
       }

@@ -124,19 +124,6 @@ const RunHeader = <template>
   </th>
 
   <style scoped>
-    th {
-      /* LinkTo renders the <a>, so it is not an element of this template */
-      :global(a) {
-        white-space: nowrap;
-      }
-
-      /* :global keeps the shared .small font size */
-      :global(.small) {
-        display: block;
-        font-weight: normal;
-      }
-    }
-
     .throttle {
       opacity: 0.7;
 
@@ -336,16 +323,6 @@ class CompareTable extends Component<{
       .change {
         text-align: right;
         font-variant-numeric: tabular-nums;
-
-        /* the direction is a runtime value, so the build cannot rename it.
-           .value handles text contrast against these, same as the results tables */
-        &:global(.better) {
-          background: #77ff77;
-        }
-
-        &:global(.worse) {
-          background: #ff7777;
-        }
 
         /* same contrast treatment the .value spans get, at label size */
         .units {

@@ -16,9 +16,9 @@ export const BenchmarkName = <template>
   </td>
 
   <style scoped>
-    /* :global keeps the class name as written, because the value-column
-       widths in app.css skip this cell by that name */
-    td:global(.benchmark-name) {
+    /* not .benchmark-name: a class named here is renamed at build time,
+       and the value-column widths in app.css skip this cell by that name */
+    td {
       /* stays readable while the value columns scroll under it */
       position: sticky;
       left: 0;

@@ -189,9 +189,30 @@ table {
   border-radius: var(--radius);
 }
 
-/* both header rows: the run letters and the runs they stand for */
-.compare-table .run-header {
-  text-align: center;
+.compare-table {
+  /* both header rows: the run letters and the runs they stand for */
+  .run-header {
+    text-align: center;
+
+    a {
+      white-space: nowrap;
+    }
+
+    .small {
+      display: block;
+      font-weight: normal;
+    }
+  }
+
+  /* the direction of a change column, set at runtime. .value handles
+     text contrast against these, same as the results tables */
+  .better {
+    background: #77ff77;
+  }
+
+  .worse {
+    background: #ff7777;
+  }
 }
 
 /* The control bars above the tables: which value to show on a results
@@ -268,5 +289,41 @@ table {
     cursor: text;
     text-align: right;
     font-variant-numeric: tabular-nums;
+  }
+}
+
+/* The settings panel's cards come from the caller's block, so these rules
+   cannot live in the panel's scoped styles. */
+.settings .fields {
+  /* one card per group, as many across as fit. Each card is its own
+     fieldset, so a group never splits across a column boundary. */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  align-items: start;
+  gap: var(--gap-4);
+  padding-top: var(--padding-4);
+
+  /* the stacked layout spaced its groups with margins; the grid's own
+     gutters do that now */
+  > * {
+    margin-bottom: 0;
+
+    /* a grid item's floor is its content, so the borrow card's <select>
+       would push its column -- and the centred panel -- out of line */
+    min-width: 0;
+    max-width: none;
+  }
+
+  /* the run names are long; let the control shrink to its card instead of
+     sizing the card to the longest name. Both the label and the select
+     need the floor lifted -- each is a flex item whose automatic minimum
+     is its own content. */
+  label {
+    min-width: 0;
+  }
+
+  select {
+    min-width: 0;
+    max-width: 100%;
   }
 }
