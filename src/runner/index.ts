@@ -1,4 +1,6 @@
 import assert from 'node:assert';
+import { existsSync } from 'node:fs';
+import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import * as clack from '@clack/prompts';
@@ -19,6 +21,34 @@ import { serve } from './serve.ts';
 import type { BenchmarkInfo } from './bench-info.ts';
 
 const info = await getBenchInfo();
+
+/**
+ * A framework's `notes.json` can declare bench apps it does not implement,
+ * with the reason (see `frameworks/README.md`):
+ *
+ *   { "skip": { "<bench app>": "why" } }
+ *
+ * Those app folders do not exist, so there is nothing to build or serve.
+ *
+ * The notes file lands in the result file (`saveNotes`),
+ * which is how the results app knows the reason.
+ *
+ * @returns reason string, or undefined to run the app
+ */
+async function skipReason(
+  framework: string,
+  app: string,
+): Promise<string | undefined> {
+  const notePath = join('frameworks', framework, 'notes.json');
+
+  if (!existsSync(notePath)) return;
+
+  const notes: { skip?: Record<string, string> } = JSON.parse(
+    (await readFile(notePath)).toString(),
+  );
+
+  return notes.skip?.[app];
+}
 
 interface MarkEntry {
   /**
@@ -219,6 +249,8 @@ if (!SKIP_BUILD) {
 
   for (const framework of info.frameworks) {
     for (const app of info.apps) {
+      if (await skipReason(framework, app)) continue;
+
       const dir = join('frameworks', framework, app);
 
       console.info(`Building in ${dir}`);
@@ -247,6 +279,13 @@ for (const framework of info.frameworks) {
    * Iterating on the apps allows us to boot one server for a whose suite of tests
    */
   for (const app of info.apps) {
+    const skipped = await skipReason(framework, app);
+
+    if (skipped) {
+      clack.log.warn(`Skipping ${app} for ${framework}: ${skipped}`);
+      continue;
+    }
+
     const dir = join('frameworks', framework, app);
 
     clack.log.info(`Starting server for ${app} in ${dir}/dist`);

@@ -64,6 +64,11 @@ export interface FrameworkNotes {
    * Vapor build. Shown under the framework's name, above its version.
    */
   variant?: string;
+  /**
+   * Bench apps this framework does not implement, keyed by app name, with
+   * the reason. Shown in place of the value for every bench of that app.
+   */
+  skip?: Record<string, string>;
 }
 
 export interface BenchmarkInfo {

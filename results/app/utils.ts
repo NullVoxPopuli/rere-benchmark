@@ -72,6 +72,14 @@ export function variantOf(file: ResultSet, framework: string) {
   return file.notes?.[framework]?.variant;
 }
 
+/**
+ * Why a run has no result for a framework at a benchmark, when the
+ * framework does not implement the benchmark's app.
+ */
+export function skipReasonOf(file: ResultSet, framework: string, bench: BenchmarkInfo) {
+  return file.notes?.[framework]?.skip?.[bench.app];
+}
+
 export interface DisplayPr {
   url: string;
   title?: string;

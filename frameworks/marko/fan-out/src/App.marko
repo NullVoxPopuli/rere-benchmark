@@ -1,0 +1,14 @@
+import { helpers } from "common";
+import { flushSoon } from "./flush.js";
+
+static const test = helpers.fanOut();
+
+<let/value=(test.getData())>
+
+<lifecycle onMount() { test.doit((v) => { value = v; flushSoon(); }); }>
+
+<output>
+  <for|c| of=(test.consumerRange)>
+    <span>${test.formatItem(value)}</span>
+  </for>
+</output>

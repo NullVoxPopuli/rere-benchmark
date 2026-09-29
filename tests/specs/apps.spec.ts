@@ -7,6 +7,7 @@ import {
   BENCHES,
   appDir,
   serveDist,
+  skipReason,
   startDevServer,
   type BenchSpec,
 } from '../helpers';
@@ -61,7 +62,19 @@ async function expectBenchCompletes(
 
 for (const framework of FRAMEWORKS) {
   for (const bench of BENCHES) {
-    test(`${framework} / ${bench.app}`, async ({ page }) => {
+    const title = `${framework} / ${bench.app}`;
+    const skipped = skipReason(framework, bench.app);
+
+    if (skipped) {
+      test.skip(
+        title,
+        { annotation: { type: 'skip', description: skipped } },
+        () => {},
+      );
+      continue;
+    }
+
+    test(title, async ({ page }) => {
       const server = await serveDist(
         join(appDir(framework, bench.app), 'dist'),
       );

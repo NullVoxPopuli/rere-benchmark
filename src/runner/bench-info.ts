@@ -28,7 +28,7 @@ export interface BenchmarkInfo {
   /**
    * The name of the app to launch.
    * Every framework must have a matching app name
-   * for each benchmark.
+   * for each benchmark, unless its `notes.json` skips the app.
    */
   app: string;
   /**
