@@ -10,12 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@preact/signals": "^2.10.0",
+    "@preact/signals": "^2.11.2",
     "common": "link:../../../common",
-    "preact": "^10.29.7"
+    "preact": "^10.29.8"
   },
   "devDependencies": {
-    "@preact/preset-vite": "^2.10.5",
+    "@preact/preset-vite": "^2.10.6",
     "@types/node": "^24.13.2",
     "oxlint": "^1.71.0",
     "typescript": "~6.0.2",
