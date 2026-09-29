@@ -12,15 +12,15 @@ importers:
         specifier: link:../../../common
         version: link:../../../common
       marko:
-        specifier: ^6.3.34
-        version: 6.3.34
+        specifier: ^6.4.0
+        version: 6.4.0
     devDependencies:
       '@marko/compiler':
-        specifier: ^5.41.18
-        version: 5.41.18
+        specifier: ^5.42.10
+        version: 5.42.10
       '@marko/vite':
-        specifier: ^6.1.9
-        version: 6.1.9(@marko/compiler@5.41.18)(vite@8.2.1)
+        specifier: ^6.1.13
+        version: 6.1.13(@marko/compiler@5.42.10)(vite@8.2.1)
       vite:
         specifier: ^8.1.1
         version: 8.2.1
@@ -38,12 +38,12 @@ packages:
     resolution: {integrity: sha512-y0rBJcC8idzWD8qnBOXuTAOG/Fudu0reZs/6INyn6aPxCyvk484x9Ib2TAnJtsol2A6IaQB4kmxBSZlR0Crf0g==}
     engines: {node: '>=20'}
 
-  '@marko/compiler@5.41.18':
-    resolution: {integrity: sha512-iNJEmlW+on3jniIZ6Ps0LDTy3wvPmmnVz5DAh+/TIodzvYeMUVWrzdweqd6+WnA4ty/XdTmrU2v9WtUemy5FPA==}
+  '@marko/compiler@5.42.10':
+    resolution: {integrity: sha512-E/TWzirWpTNKdYurzsTsE0GFnyOBW7TRshiv1XhZ4vWAyYvp4/ZhjuJO8kJ6itfgUNs/woCCEOhmgG/cejTqIw==}
     engines: {node: '>=22'}
 
-  '@marko/vite@6.1.9':
-    resolution: {integrity: sha512-ozJjVNe6988rWuNwYJf5+aWFO9iPkz5I6nIz7iK8fCrJq8KEHd7InMdovGaeKFf+mb0VZBWEH9WjbNqUoBQZlg==}
+  '@marko/vite@6.1.13':
+    resolution: {integrity: sha512-srxhr40LcHHp65UhCInZoze7bBoW0u/kT7mtM3RZn+EEEUrhuChhsfcFI6oQsKTb2915lvJjDzRZyeeGuGMk7A==}
     peerDependencies:
       '@marko/compiler': ^5
       vite: ^8
@@ -156,37 +156,31 @@ packages:
     resolution: {integrity: sha512-ZHQVey/O4K3zTIKtpfsbtJIE8MPTRHRxgY3dejaoeFQGf9C3HasgF132Yp4zN/jOUx+x8czKPVa/Af40ViyhGQ==}
     cpu: [arm64]
     os: [linux]
-    libc: [glibc]
 
   '@oxc-parser/binding-linux-arm64-musl@0.8.0':
     resolution: {integrity: sha512-Diw+Tnf5v+zAYXzDoSKCZsMaroU6GoqZMS7smfDtFnZYTHWZrsTmPBLUQe7AFiG7O7tkhsCdcWjOYgbVkrSVOA==}
     cpu: [arm64]
     os: [linux]
-    libc: [musl]
 
   '@oxc-parser/binding-linux-x64-gnu@0.8.0':
     resolution: {integrity: sha512-WloqcRrtQUVEP/Sy8ZeEgF0HgBKQjOv3zLFZqbC5ipkerKriGcVbsq3fOIMOi/55AM6/UhIAjeZGnoeco72JjQ==}
     cpu: [x64]
     os: [linux]
-    libc: [glibc]
 
   '@oxc-parser/binding-linux-x64-musl@0.8.0':
     resolution: {integrity: sha512-2j7BD9szwSXTvSj0Q8VE98UHGYvrgZzdLy4EyB0FilhQnopEfz+YV674rWGY2Il1VYxHJwGctrTJHvARolu37g==}
     cpu: [x64]
     os: [linux]
-    libc: [musl]
 
   '@oxc-parser/binding-win32-arm64-msvc@0.8.0':
     resolution: {integrity: sha512-mcomr1og17yCmnwn8Q7CRzrH9Va0HccWe4Ld3/u/elBsw0SEzYGVvECRzCyRglYAbKTtusz7as9Jee0RiMOMmg==}
     cpu: [arm64]
     os: [win32]
-    libc: [null]
 
   '@oxc-parser/binding-win32-x64-msvc@0.8.0':
     resolution: {integrity: sha512-nIBkc1KZOVYUaHT3+U+gM354P3byMAIXMvlmLMbs0kWVRcI4vrzL8qwWpC6QdBQxWKZGqPEqGolv8H4dDYA9nQ==}
     cpu: [x64]
     os: [win32]
-    libc: [null]
 
   '@oxc-project/types@0.143.0':
     resolution: {integrity: sha512-u6JZdLBTLotrNC9Vd6vPssINdzcCzleKAH6EJKImQb7GtYvX5keN2dxkoK44stCc4tffE6QQRtZTXVSzsLUlWA==}
@@ -230,42 +224,36 @@ packages:
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [arm64]
     os: [linux]
-    libc: [glibc]
 
   '@rolldown/binding-linux-arm64-musl@1.2.3':
     resolution: {integrity: sha512-NHqjnxpsndf4MPymxteFAWHHfkTL8HjWh1KB7z23ofZ6QO2euONuxDXjat69dKZRALnGypg8k8SsK8vZJoXv1Q==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [arm64]
     os: [linux]
-    libc: [musl]
 
   '@rolldown/binding-linux-ppc64-gnu@1.2.3':
     resolution: {integrity: sha512-6tbrbwfz5GB9DQ4Jwo6hy9v+vR31xZlvzZ6n5Xut6Hhx5PvrA9q/HsK8KMaYQp063iqZGXwNvZtYNLD7EM/x0w==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [ppc64]
     os: [linux]
-    libc: [glibc]
 
   '@rolldown/binding-linux-s390x-gnu@1.2.3':
     resolution: {integrity: sha512-oyuXxXmoZHjXC917IAPFAAv4wWAa0cM9afk8nx1+9/jNNOX1uPf8yDA6p7G0RypOfw/X0PQt5IfoquY1um+zSg==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [s390x]
     os: [linux]
-    libc: [glibc]
 
   '@rolldown/binding-linux-x64-gnu@1.2.3':
     resolution: {integrity: sha512-TytMwF2KVGqP2tgd0I1OY0PAv78dZRAYcF5ssDzjM34SUXCED3uXvSd5+lHoC0bTD6eEdFz7LdQNCO1y0oVk9w==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [x64]
     os: [linux]
-    libc: [glibc]
 
   '@rolldown/binding-linux-x64-musl@1.2.3':
     resolution: {integrity: sha512-/E9m3qstrJFVPoULV25mVQblSNExY2+kBsYe4sy0Tn0yOOgJ8wZbZt3KnRbF/XeU2Gl1STKUQnDNTqhIE5MD4A==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [x64]
     os: [linux]
-    libc: [musl]
 
   '@rolldown/binding-openharmony-arm64@1.2.3':
     resolution: {integrity: sha512-Kr0OcsoQI816i6HOl3vFHpd1K0eZyh76zgfj4c1nTyaTsd5r2Mj1lwM4R90y/qaCfmTn9eHy0SKwi98eitRxug==}
@@ -377,12 +365,11 @@ packages:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}
     engines: {node: '>= 6'}
 
-  he@1.2.0:
-    resolution: {integrity: sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==}
-    hasBin: true
-
   htmljs-parser@5.13.0:
     resolution: {integrity: sha512-utBMB1wGNNovgi1Bq//CfSg9LZ2SF6kfMHrfVy+d2RqwdAeVbzOFblXkdqycG+SbFGGUafbPuWy7/83s10ApfA==}
+
+  htmljs-parser@5.18.0:
+    resolution: {integrity: sha512-ANKBAi2UyiQ7K/In2a3jZLt/WLAIKl8GFE3k5KIYEaroUdOBtt/gnclkJcSMI+kPChWdGOw3YHnbequVNy39Tg==}
 
   htmlparser2@10.1.0:
     resolution: {integrity: sha512-VTZkM9GWRAtEpveh7MSF6SjjrpNVNNVJfFup7xTY3UpFtm67foy9HDVXneLtFVt4pMz5kZtgNcvCniNFb1hlEQ==}
@@ -449,28 +436,24 @@ packages:
     engines: {node: '>= 12.0.0'}
     cpu: [arm64]
     os: [linux]
-    libc: [glibc]
 
   lightningcss-linux-arm64-musl@1.33.0:
     resolution: {integrity: sha512-yiO5ROMuYQgXbC60yjZU5CYSFZGKXL0HFATXt9mHJn1+zW55oCtMI9NfcVhYLMFDL7gV7oBPon/EmMMGg2OvtQ==}
     engines: {node: '>= 12.0.0'}
     cpu: [arm64]
     os: [linux]
-    libc: [musl]
 
   lightningcss-linux-x64-gnu@1.33.0:
     resolution: {integrity: sha512-ar+Ju7LmcN0Jo4FpL4hpFybwNG9/3A/Br5KW2n2jyODg3MEZXaDYADdemoNS+BDNfMgKvylJLj4S5tyRActuAg==}
     engines: {node: '>= 12.0.0'}
     cpu: [x64]
     os: [linux]
-    libc: [glibc]
 
   lightningcss-linux-x64-musl@1.33.0:
     resolution: {integrity: sha512-RYiYbkokw0trfKqqzfF55lginwEPrD3OJDfTuJzFs1MK6iFnDenaz1fqLLtX4ITG3OktJQXOeTaw1awrBAlZPw==}
     engines: {node: '>= 12.0.0'}
     cpu: [x64]
     os: [linux]
-    libc: [musl]
 
   lightningcss-win32-arm64-msvc@1.33.0:
     resolution: {integrity: sha512-1K+MPfLSFVpphzpdbfkhlWk6wBrTObBzS2T6db10PNOZgR9GoVsAWzwNyuhUYYbTp23j+4RrncfujZ4uAzXvwA==}
@@ -491,8 +474,8 @@ packages:
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
 
-  marko@6.3.34:
-    resolution: {integrity: sha512-EyaQ6xdwR3lR137Zo80PNm4Zmmo3QcPoFALnPI8R49n1iqqfyCwtpFco/Tnv30AjIm6ILNpqu8CZP/zXjJhdkQ==}
+  marko@6.4.0:
+    resolution: {integrity: sha512-9k8xzDWM0Oo898JY/c/Galu/Jqq9MRWmCUBYuB3GCvxfRTjlnj/1CR14HAYppLEcJjl2fHDi0uEp5j8rN4EKDA==}
     engines: {node: '>=22'}
 
   merge2@1.4.1:
@@ -651,12 +634,11 @@ snapshots:
 
   '@luxass/strip-json-comments@2.0.1': {}
 
-  '@marko/compiler@5.41.18':
+  '@marko/compiler@5.42.10':
     dependencies:
       '@luxass/strip-json-comments': 2.0.1
       complain: 1.6.1
-      he: 1.2.0
-      htmljs-parser: 5.13.0
+      htmljs-parser: 5.18.0
       jsesc: 3.1.0
       kleur: 4.1.5
       lasso-package-root: 1.0.1
@@ -668,10 +650,10 @@ snapshots:
       self-closing-tags: 1.0.1
       source-map-support: 0.5.21
 
-  '@marko/vite@6.1.9(@marko/compiler@5.41.18)(vite@8.2.1)':
+  '@marko/vite@6.1.13(@marko/compiler@5.42.10)(vite@8.2.1)':
     dependencies:
       '@chialab/estransform': 0.19.1
-      '@marko/compiler': 5.41.18
+      '@marko/compiler': 5.42.10
       anymatch: 3.1.3
       domelementtype: 2.3.0
       domhandler: 5.0.3
@@ -904,9 +886,9 @@ snapshots:
     dependencies:
       is-glob: 4.0.3
 
-  he@1.2.0: {}
-
   htmljs-parser@5.13.0: {}
+
+  htmljs-parser@5.18.0: {}
 
   htmlparser2@10.1.0:
     dependencies:
@@ -988,9 +970,9 @@ snapshots:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  marko@6.3.34:
+  marko@6.4.0:
     dependencies:
-      '@marko/compiler': 5.41.18
+      '@marko/compiler': 5.42.10
       csstype: 3.2.3
       fastest-levenshtein: 1.0.16
       magic-string: 0.30.21

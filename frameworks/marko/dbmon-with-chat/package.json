@@ -10,11 +10,11 @@
   },
   "dependencies": {
     "common": "link:../../../common",
-    "marko": "^6.3.34"
+    "marko": "^6.4.0"
   },
   "devDependencies": {
-    "@marko/compiler": "^5.41.18",
-    "@marko/vite": "^6.1.9",
+    "@marko/compiler": "^5.42.10",
+    "@marko/vite": "^6.1.13",
     "vite": "^8.1.1"
   }
 }

@@ -11,18 +11,18 @@
     "preview": "ng serve --configuration production"
   },
   "dependencies": {
-    "@angular/common": "^22.0.0",
-    "@angular/compiler": "^22.0.0",
-    "@angular/core": "^22.0.0",
-    "@angular/platform-browser": "^22.0.0",
+    "@angular/common": "^22.2.0",
+    "@angular/compiler": "^22.2.0",
+    "@angular/core": "^22.2.0",
+    "@angular/platform-browser": "^22.2.0",
     "common": "link:../../../common",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
-    "@angular/build": "^22.0.7",
-    "@angular/cli": "^22.0.7",
-    "@angular/compiler-cli": "^22.0.0",
+    "@angular/build": "^22.2.0",
+    "@angular/cli": "^22.2.0",
+    "@angular/compiler-cli": "^22.2.0",
     "esbuild": "^0.27.2",
     "oxlint": "^1.71.0",
     "typescript": "~6.0.2"

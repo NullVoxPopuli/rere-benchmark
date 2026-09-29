@@ -30,12 +30,12 @@
     "lint:types": "ember-tsc --noEmit"
   },
   "dependencies": {
-    "@embroider/macros": "1.20.5",
+    "@embroider/macros": "1.21.1",
     "@embroider/router": "3.0.6",
     "@glimmer/component": "2.1.1",
     "common": "link:../../../common",
     "decorator-transforms": "2.4.0",
-    "ember-source": "7.3.0-alpha.5",
+    "ember-source": "7.5.0-alpha.2",
     "ember-strict-application-resolver": "0.1.1"
   },
   "devDependencies": {
@@ -44,11 +44,11 @@
     "@babel/plugin-transform-typescript": "7.29.7",
     "@babel/runtime": "7.29.7",
     "@ember/app-tsconfig": "2.0.0",
-    "@embroider/core": "4.6.2",
+    "@embroider/core": "4.6.7",
     "@glint/ember-tsc": "1.8.12",
     "@glint/template": "1.7.8",
     "@glint/tsserver-plugin": "2.5.18",
-    "@nullvoxpopuli/ember-vite": "1.1.0",
+    "@nullvoxpopuli/ember-vite": "1.2.0",
     "@nullvoxpopuli/eslint-configs": "5.5.0",
     "@rollup/plugin-babel": "7.1.0",
     "babel-plugin-ember-template-compilation": "4.0.0",
