@@ -1,4 +1,5 @@
 import { helpers } from "common";
+import { flushSoon } from "./flush.js";
 
 static const test = helpers.tenKitems1UpdateEach();
 static const format = (item) => test.formatItem(item);
@@ -7,7 +8,7 @@ static const format = (item) => test.formatItem(item);
 static const setters = [];
 static const register = (index, set) => { setters[index] = set; };
 
-<lifecycle onMount() { test.doit((i) => setters[i]?.(i)); }>
+<lifecycle onMount() { test.doit((i) => { setters[i]?.(i); flushSoon(); }); }>
 
 <for|item, index| of=(test.getData())>
   <bench-item value=item index=index format=format register=register/>

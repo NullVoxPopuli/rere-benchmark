@@ -23,15 +23,14 @@ Notes:
   get passed to a custom tag can compile to a hoisted function that
   loses the loop scope (`$scope is not defined` at runtime). Passing a
   `static` function plus the index as separate attributes avoids it.
-- Marko's update scheduler has a frame-rate floor (`schedule()` in
-  marko's `src/dom/schedule.ts`): the first write in a frame renders in
-  a microtask, every later write waits for the next animation frame.
-  Bursts coalesce to one render per frame. Do not force `run()` (from
-  `marko/dom`) into the apps to change this. That measures manual
-  flushing instead of Marko. The conformance suite paces its writes with
-  `yield=frame` for marko instead (see `FRAME_THROTTLED` in
-  `tests/specs/conformance.spec.ts`), so the anti-cheat trace assertions
-  still fully apply.
+- Marko renders the first write of a frame in a microtask, and holds
+  every later write until the next animation frame (`schedule()` in
+  Marko's `src/dom/schedule.ts`). The other frameworks here render every
+  write. So after each write, every app calls `flushSoon()` from
+  `src/flush.js`, which runs Marko's `run()` (from `marko/dom`) on a
+  microtask. Without it, the conformance specs fail.
+- In dev, the compiled templates use `marko/debug/dom`. The Vite config
+  aliases `marko/dom` to it there, so `run()` flushes the same runtime.
 - There is no `incrementing-render-effect` app, because Marko does not
   support effects. `notes.json` declares the skip, so the runner and the
   tests leave it out, and the results app shows the reason.

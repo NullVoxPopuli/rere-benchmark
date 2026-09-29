@@ -1,6 +1,7 @@
 import "common/dbmon.css";
 import "./layout.css";
 import { helpers } from "common";
+import { flushSoon } from "./flush.js";
 
 static const test = helpers.dbMonWithChat();
 
@@ -15,6 +16,7 @@ static const test = helpers.dbMonWithChat();
         next.set(d.dbname, d);
       }
       db = next;
+      flushSoon();
     },
     handleChat: (eventData) => {
       let next = chats.concat(eventData.data);
@@ -22,6 +24,7 @@ static const test = helpers.dbMonWithChat();
         next = next.slice(next.length - 12);
       }
       chats = next;
+      flushSoon();
     },
   });
 }>

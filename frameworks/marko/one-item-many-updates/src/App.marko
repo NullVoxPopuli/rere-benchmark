@@ -1,9 +1,10 @@
 import { helpers } from "common";
+import { flushSoon } from "./flush.js";
 
 static const test = helpers.oneItem10kUpdates();
 
 <let/count=(test.getData())>
 
-<lifecycle onMount() { test.doit((i) => { count = i; }); }>
+<lifecycle onMount() { test.doit((i) => { count = i; flushSoon(); }); }>
 
 <output>${test.formatItem(count)}</output>
