@@ -4,7 +4,7 @@ import { get } from "@ember/helper";
 import { service } from "@ember/service";
 
 import { BenchmarkName } from "#components/benchmark-name.gts";
-import { curveFrom, percentileFrom, timeFor } from "#utils";
+import { curveFrom, percentileFrom, skipReasonOf, timeFor } from "#utils";
 
 import { colorFor, formatTimes, scoreFor, timesBestFor } from "./cell-values.ts";
 import { modeFrom } from "./value-mode-control.gts";
@@ -87,6 +87,8 @@ export class TableRow extends Component<{
 
   value = (key: string) => this.displayOf(this.row.speeds[key]);
 
+  skipReason = (column: Column) => skipReasonOf(column.data, column.framework, this.args.benchInfo);
+
   <template>
     <tr>
       <BenchmarkName @bench={{@benchInfo}} />
@@ -95,8 +97,24 @@ export class TableRow extends Component<{
         <td
           class={{if column.borrowedFrom "borrowed"}}
           style="background: {{get this.colors column.key}};"
-        ><span class="value">{{this.value column.key}}</span></td>
+        >
+          {{#let (this.skipReason column) as |reason|}}
+            {{#if reason}}
+              <span class="value skipped" title={{reason}}>n/a</span>
+            {{else}}
+              <span class="value">{{this.value column.key}}</span>
+            {{/if}}
+          {{/let}}
+        </td>
       {{/each}}
     </tr>
+
+    <style scoped>
+      /* the reason is only in the tooltip, so the cell has to invite a hover */
+      .skipped {
+        cursor: help;
+        text-decoration: underline dotted;
+      }
+    </style>
   </template>
 }

@@ -1,5 +1,5 @@
 import { createServer, type Server } from 'node:http';
-import { createReadStream, existsSync, statSync } from 'node:fs';
+import { createReadStream, existsSync, readFileSync, statSync } from 'node:fs';
 import { join, extname, normalize } from 'node:path';
 import { spawn, type ChildProcess } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -74,6 +74,27 @@ export const BENCHES: BenchSpec[] = [
 
 export function appDir(framework: string, app: string) {
   return join(REPO_ROOT, 'frameworks', framework, app);
+}
+
+/**
+ * Why a framework has no app for a bench, from the `skip` list in its
+ * `notes.json` (see frameworks/README.md).
+ *
+ * The runner reads the same list, so the tests and the benchmark
+ * leave out the same apps.
+ *
+ * @returns reason string, or undefined when the app exists
+ */
+export function skipReason(framework: string, app: string): string | undefined {
+  const notePath = join(REPO_ROOT, 'frameworks', framework, 'notes.json');
+
+  if (!existsSync(notePath)) return;
+
+  const notes: { skip?: Record<string, string> } = JSON.parse(
+    readFileSync(notePath, 'utf8'),
+  );
+
+  return notes.skip?.[app];
 }
 
 const MIME: Record<string, string> = {

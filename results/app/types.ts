@@ -65,10 +65,8 @@ export interface FrameworkNotes {
    */
   variant?: string;
   /**
-   * Benches (by app name) this framework cannot run through the standard
-   * command, with the reason. The runner logs and skips these instead of
-   * aborting the run when the sample can never finish -- e.g. marko's
-   * frame-rate-floor scheduler and incrementing-render-effect.
+   * Bench apps this framework does not implement, keyed by app name, with
+   * the reason. Shown in place of the value for every bench of that app.
    */
   skip?: Record<string, string>;
 }

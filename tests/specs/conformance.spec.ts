@@ -2,7 +2,7 @@ import { join } from 'node:path';
 
 import { test, expect, type Page } from '@playwright/test';
 
-import { FRAMEWORKS, appDir, serveDist } from '../helpers';
+import { FRAMEWORKS, appDir, serveDist, skipReason } from '../helpers';
 
 /*
  * Anti-cheating conformance: is every framework doing the same DOM work?
@@ -270,7 +270,19 @@ test.describe('conformance (anti-cheating)', () => {
 
   for (const framework of FRAMEWORKS) {
     for (const spec of SPECS) {
-      test(`${framework} / ${spec.app}`, async ({ page }) => {
+      const title = `${framework} / ${spec.app}`;
+      const skipped = skipReason(framework, spec.app);
+
+      if (skipped) {
+        test.skip(
+          title,
+          { annotation: { type: 'skip', description: skipped } },
+          () => {},
+        );
+        continue;
+      }
+
+      test(title, async ({ page }) => {
         await runConformance(page, framework, spec);
       });
     }

@@ -3,7 +3,7 @@ import { promisify } from 'node:util';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { REPO_ROOT, FRAMEWORKS, BENCHES, appDir } from './helpers';
+import { REPO_ROOT, FRAMEWORKS, BENCHES, appDir, skipReason } from './helpers';
 
 const run = promisify(execFile);
 
@@ -29,6 +29,8 @@ export default async function globalSetup() {
 
   for (const framework of FRAMEWORKS) {
     for (const bench of BENCHES) {
+      if (skipReason(framework, bench.app)) continue;
+
       dirs.push(appDir(framework, bench.app));
     }
   }

@@ -12,6 +12,9 @@ bench actually works**, so PRs can't silently break an app.
     performance mark and fail on any page error
   - dbmon runs forever, so the tests assert both data streams render and
     keep updating
+  - a bench app that a framework's `notes.json` skips (see
+    `frameworks/README.md`) is not built, and its tests report as skipped
+    with the reason
 - the dev server (`vite dev`, or `ng serve` for angular) for the dbmon
   apps: dev serves the linked `common` package's web workers via `/@fs`,
   which `server.fs.allow` can block — a failure mode production builds

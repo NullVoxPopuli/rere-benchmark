@@ -23,17 +23,17 @@ import type { BenchmarkInfo } from './bench-info.ts';
 const info = await getBenchInfo();
 
 /**
- * A framework's `notes.json` can declare benches it cannot run through
- * the standard command, with the reason (see `frameworks/README.md`):
+ * A framework's `notes.json` can declare bench apps it does not implement,
+ * with the reason (see `frameworks/README.md`):
  *
  *   { "skip": { "<bench app>": "why" } }
  *
- * The notes file already lands in the result file (`saveNotes`), so the
- * reason travels with the run; here it just keeps the run alive -- a
- * bench that can never reach `:done` inside the timeout would otherwise
- * abort everything after ~`--timeout` ms per sample.
+ * Those app folders do not exist, so there is nothing to build or serve.
  *
- * @returns reason string, or undefined to run the bench
+ * The notes file lands in the result file (`saveNotes`),
+ * which is how the results app knows the reason.
+ *
+ * @returns reason string, or undefined to run the app
  */
 async function skipReason(
   framework: string,
@@ -249,6 +249,8 @@ if (!SKIP_BUILD) {
 
   for (const framework of info.frameworks) {
     for (const app of info.apps) {
+      if (await skipReason(framework, app)) continue;
+
       const dir = join('frameworks', framework, app);
 
       console.info(`Building in ${dir}`);
@@ -277,6 +279,13 @@ for (const framework of info.frameworks) {
    * Iterating on the apps allows us to boot one server for a whose suite of tests
    */
   for (const app of info.apps) {
+    const skipped = await skipReason(framework, app);
+
+    if (skipped) {
+      clack.log.warn(`Skipping ${app} for ${framework}: ${skipped}`);
+      continue;
+    }
+
     const dir = join('frameworks', framework, app);
 
     clack.log.info(`Starting server for ${app} in ${dir}/dist`);
@@ -304,13 +313,6 @@ for (const framework of info.frameworks) {
 
     for (const bench of info.benches) {
       if (bench.app !== app) continue;
-
-      const skipped = await skipReason(framework, bench.app);
-
-      if (skipped) {
-        clack.log.warn(`Skipping ${bench.name} for ${framework}: ${skipped}`);
-        continue;
-      }
 
       await prepareForResults(framework, bench, info.filePath);
 
