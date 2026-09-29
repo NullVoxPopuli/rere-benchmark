@@ -1,7 +1,7 @@
+import Application from "@ember/application";
 import setupInspector from "@embroider/legacy-inspector-support/ember-source-4.12";
 
 import PageTitleService from "ember-page-title/services/page-title";
-import Application from "ember-strict-application-resolver";
 
 import { customLayout } from "./custom-layout.ts";
 
