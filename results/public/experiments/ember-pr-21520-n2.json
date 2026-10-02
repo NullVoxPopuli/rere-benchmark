@@ -1,0 +1,5241 @@
+{
+  "date": "2026-10-02T19:11:18.575Z",
+  "sha": "f11315488d6c49f549bae914c9c7edcdf376ad96",
+  "args": {
+    "SKIP_BUILD": false,
+    "CPU_THROTTLE": 8,
+    "HEADLESS": true,
+    "COUNT": 25,
+    "FRAMEWORK": "ember",
+    "BENCH_NAME": "all",
+    "TIMEOUT": 300000
+  },
+  "environment": {
+    "machine": {
+      "os": {
+        "name": "Pop",
+        "version": "24.04"
+      },
+      "cpu": "AMD Ryzen 9 7900X",
+      "ram": "24.6 GB"
+    },
+    "monitor": {
+      "hz": 59
+    },
+    "browser": {
+      "name": "Google Chrome",
+      "version": "152.0.7977.64"
+    }
+  },
+  "results": {
+    "ember": {
+      "DB Monitor w/ chat simulation": {
+        "app": "dbmon-with-chat",
+        "query": "",
+        "version": "7.5.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 642.3999999761581
+            },
+            {
+              "name": "fps",
+              "at": 6275.399999976158,
+              "detail": 25.201008040321614
+            },
+            {
+              "name": "fps",
+              "at": 11258.199999988079,
+              "detail": 40.00160006400257
+            },
+            {
+              "name": "fps",
+              "at": 16277.199999988079,
+              "detail": 41.54040657422087
+            },
+            {
+              "name": "fps",
+              "at": 21258.799999952316,
+              "detail": 42.602556153369214
+            },
+            {
+              "name": "fps",
+              "at": 26253.19999998808,
+              "detail": 40.134853106437625
+            },
+            {
+              "name": ":done",
+              "at": 26255.299999952316,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ]
+        ],
+        "measure": "fps",
+        "whatsBetter": "bigger"
+      },
+      "Incrementing Render Effect": {
+        "app": "incrementing-render-effect",
+        "query": "&updates=100000",
+        "version": "7.5.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 414.30000001192093
+            },
+            {
+              "name": ":done",
+              "at": 3408.5,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 426.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 3449.600000023842,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 425.5
+            },
+            {
+              "name": ":done",
+              "at": 3507.300000011921,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 440.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 3460.399999976158,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 409.30000001192093
+            },
+            {
+              "name": ":done",
+              "at": 3472.899999976158,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 414.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 3426.900000035763,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 414.80000001192093
+            },
+            {
+              "name": ":done",
+              "at": 4037.899999976158,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 392.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 3720,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 472.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 3969.699999988079,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 438.4000000357628
+            },
+            {
+              "name": ":done",
+              "at": 3464.5,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 438.30000001192093
+            },
+            {
+              "name": ":done",
+              "at": 3556.699999988079,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 387.19999998807907
+            },
+            {
+              "name": ":done",
+              "at": 3490.599999964237,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 871.5999999642372
+            },
+            {
+              "name": ":done",
+              "at": 3889,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 421
+            },
+            {
+              "name": ":done",
+              "at": 3446.399999976158,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 432.5
+            },
+            {
+              "name": ":done",
+              "at": 3473.599999964237,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 408.80000001192093
+            },
+            {
+              "name": ":done",
+              "at": 3466.800000011921,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 411.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 3469.800000011921,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 434.5
+            },
+            {
+              "name": ":done",
+              "at": 3497.5,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 426.30000001192093
+            },
+            {
+              "name": ":done",
+              "at": 3457.099999964237,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 435.5
+            },
+            {
+              "name": ":done",
+              "at": 3442.899999976158,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 375.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 3394.199999988079,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 415.5
+            },
+            {
+              "name": ":done",
+              "at": 3470.599999964237,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 445
+            },
+            {
+              "name": ":done",
+              "at": 3449.599999964237,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 402.5999999642372
+            },
+            {
+              "name": ":done",
+              "at": 3408.699999988079,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 411.2000000476837
+            },
+            {
+              "name": ":done",
+              "at": 3403.600000023842,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 item, 1k updates (async)": {
+        "app": "one-item-many-updates",
+        "query": "&updates=1000&percentRandomAwait=100",
+        "version": "7.5.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 440.19999998807907
+            },
+            {
+              "name": ":done",
+              "at": 460.0999999642372,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 424.19999998807907
+            },
+            {
+              "name": ":done",
+              "at": 440.69999998807907,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 398.5
+            },
+            {
+              "name": ":done",
+              "at": 419.39999997615814,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 426.7999999523163
+            },
+            {
+              "name": ":done",
+              "at": 447.0999999642372,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 439.80000001192093
+            },
+            {
+              "name": ":done",
+              "at": 459.4000000357628,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 418.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 436,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 441.19999998807907
+            },
+            {
+              "name": ":done",
+              "at": 461.60000002384186,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 454
+            },
+            {
+              "name": ":done",
+              "at": 471.39999997615814,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 407.19999998807907
+            },
+            {
+              "name": ":done",
+              "at": 425.80000001192093,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 414.5999999642372
+            },
+            {
+              "name": ":done",
+              "at": 437.19999998807907,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 436.7999999523163
+            },
+            {
+              "name": ":done",
+              "at": 452.5999999642372,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 440.69999998807907
+            },
+            {
+              "name": ":done",
+              "at": 459.5999999642372,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 420
+            },
+            {
+              "name": ":done",
+              "at": 440.89999997615814,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 427
+            },
+            {
+              "name": ":done",
+              "at": 445.30000001192093,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 410.2999999523163
+            },
+            {
+              "name": ":done",
+              "at": 434.5999999642372,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 423.5999999642372
+            },
+            {
+              "name": ":done",
+              "at": 442.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 422.80000001192093
+            },
+            {
+              "name": ":done",
+              "at": 439.10000002384186,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 446.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 465.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 425.69999998807907
+            },
+            {
+              "name": ":done",
+              "at": 446.39999997615814,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 434.7999999523163
+            },
+            {
+              "name": ":done",
+              "at": 454.19999998807907,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 864.3999999761581
+            },
+            {
+              "name": ":done",
+              "at": 882.1999999880791,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 412.69999998807907
+            },
+            {
+              "name": ":done",
+              "at": 435.2999999523163,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 438.30000001192093
+            },
+            {
+              "name": ":done",
+              "at": 465.60000002384186,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 433.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 451.69999998807907,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 466.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 488.89999997615814,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 item, 1k updates": {
+        "app": "one-item-many-updates",
+        "query": "&updates=1000&percentRandomAwait=0",
+        "version": "7.5.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 466.0999999642372
+            },
+            {
+              "name": ":done",
+              "at": 485.0999999642372,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 424.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 439.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 438.7999999523163
+            },
+            {
+              "name": ":done",
+              "at": 452.0999999642372,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 413.7000000476837
+            },
+            {
+              "name": ":done",
+              "at": 426.2000000476837,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 442.9000000357628
+            },
+            {
+              "name": ":done",
+              "at": 455.19999998807907,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 413.19999998807907
+            },
+            {
+              "name": ":done",
+              "at": 434.39999997615814,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 388
+            },
+            {
+              "name": ":done",
+              "at": 388.89999997615814,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 434.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 447,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 422.30000001192093
+            },
+            {
+              "name": ":done",
+              "at": 434.80000001192093,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 418
+            },
+            {
+              "name": ":done",
+              "at": 433.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 428.4000000357628
+            },
+            {
+              "name": ":done",
+              "at": 441.10000002384186,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 437.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 452.10000002384186,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 440.9000000357628
+            },
+            {
+              "name": ":done",
+              "at": 453.4000000357628,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 421.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 433.60000002384186,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 483
+            },
+            {
+              "name": ":done",
+              "at": 497.69999998807907,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 410.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 420.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 455.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 468.4000000357628,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 432.19999998807907
+            },
+            {
+              "name": ":done",
+              "at": 452.89999997615814,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 423.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 435.10000002384186,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 389.9000000357628
+            },
+            {
+              "name": ":done",
+              "at": 402,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 439.30000001192093
+            },
+            {
+              "name": ":done",
+              "at": 450.39999997615814,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 417.69999998807907
+            },
+            {
+              "name": ":done",
+              "at": 429.89999997615814,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 426.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 444.80000001192093,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 408.69999998807907
+            },
+            {
+              "name": ":done",
+              "at": 421.30000001192093,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 445.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 459.30000001192093,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 item, 100k updates (async)": {
+        "app": "one-item-many-updates",
+        "query": "&updates=100000&percentRandomAwait=100",
+        "version": "7.5.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 388
+            },
+            {
+              "name": ":done",
+              "at": 462.30000001192093,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 395.30000001192093
+            },
+            {
+              "name": ":done",
+              "at": 470.2000000476837,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 426.2999999523163
+            },
+            {
+              "name": ":done",
+              "at": 500.0999999642372,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 417.5
+            },
+            {
+              "name": ":done",
+              "at": 502.39999997615814,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 427
+            },
+            {
+              "name": ":done",
+              "at": 502.0999999642372,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 415.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 491.89999997615814,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 423.7000000476837
+            },
+            {
+              "name": ":done",
+              "at": 499.2000000476837,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 396.30000001192093
+            },
+            {
+              "name": ":done",
+              "at": 468.69999998807907,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 428.80000001192093
+            },
+            {
+              "name": ":done",
+              "at": 513,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 428.30000001192093
+            },
+            {
+              "name": ":done",
+              "at": 500.30000001192093,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 420.10000002384186
+            },
+            {
+              "name": ":done",
+              "at": 512.9000000357628,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 435.80000001192093
+            },
+            {
+              "name": ":done",
+              "at": 517.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 449.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 502,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 432.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 518.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 417.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 502.60000002384186,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 436.80000001192093
+            },
+            {
+              "name": ":done",
+              "at": 509.10000002384186,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 426.5
+            },
+            {
+              "name": ":done",
+              "at": 497.80000001192093,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 885.1999999880791
+            },
+            {
+              "name": ":done",
+              "at": 953.5999999642372,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 418.5
+            },
+            {
+              "name": ":done",
+              "at": 499.60000002384186,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 422.0999999642372
+            },
+            {
+              "name": ":done",
+              "at": 508.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 424.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 499.19999998807907,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 431.9000000357628
+            },
+            {
+              "name": ":done",
+              "at": 521.6999999880791,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 424.9000000357628
+            },
+            {
+              "name": ":done",
+              "at": 496.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 451.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 530.8000000119209,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 417
+            },
+            {
+              "name": ":done",
+              "at": 493.89999997615814,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 item, 100k updates": {
+        "app": "one-item-many-updates",
+        "query": "&updates=100000&percentRandomAwait=0",
+        "version": "7.5.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 453.7000000476837
+            },
+            {
+              "name": ":done",
+              "at": 492,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 427.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 471.19999998807907,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 418.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 474.30000001192093,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 453.9000000357628
+            },
+            {
+              "name": ":done",
+              "at": 492.69999998807907,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 443
+            },
+            {
+              "name": ":done",
+              "at": 484.69999998807907,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 414.69999998807907
+            },
+            {
+              "name": ":done",
+              "at": 459.5999999642372,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 442.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 483.69999998807907,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 432.69999998807907
+            },
+            {
+              "name": ":done",
+              "at": 477.4000000357628,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 428.80000001192093
+            },
+            {
+              "name": ":done",
+              "at": 466.30000001192093,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 398.80000001192093
+            },
+            {
+              "name": ":done",
+              "at": 433.89999997615814,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 428.80000001192093
+            },
+            {
+              "name": ":done",
+              "at": 470.30000001192093,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 418.5
+            },
+            {
+              "name": ":done",
+              "at": 459.89999997615814,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 412.5
+            },
+            {
+              "name": ":done",
+              "at": 457.39999997615814,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 422.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 464.89999997615814,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 395.9000000357628
+            },
+            {
+              "name": ":done",
+              "at": 456.4000000357628,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 440.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 481,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 444.60000002384186
+            },
+            {
+              "name": ":done",
+              "at": 480.60000002384186,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 408.19999998807907
+            },
+            {
+              "name": ":done",
+              "at": 450.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 379.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 425.80000001192093,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 431.89999997615814
+            },
+            {
+              "name": ":done",
+              "at": 477.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 439.5999999642372
+            },
+            {
+              "name": ":done",
+              "at": 480.5999999642372,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 384.39999997615814
+            },
+            {
+              "name": ":done",
+              "at": 430.89999997615814,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 431.80000001192093
+            },
+            {
+              "name": ":done",
+              "at": 470.69999998807907,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 424.4000000357628
+            },
+            {
+              "name": ":done",
+              "at": 468.80000001192093,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 420.30000001192093
+            },
+            {
+              "name": ":done",
+              "at": 467.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1k items, 1 update each (sequentially, async)": {
+        "app": "ten-k-items-one-time",
+        "query": "&items=1000&updates=1000&percentRandomAwait=100",
+        "version": "7.5.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 689.8999999761581
+            },
+            {
+              "name": ":done",
+              "at": 807.0999999642372,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 729.4000000357628
+            },
+            {
+              "name": ":done",
+              "at": 838.1000000238419,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 756
+            },
+            {
+              "name": ":done",
+              "at": 851.3999999761581,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 723.4000000357628
+            },
+            {
+              "name": ":done",
+              "at": 827.1000000238419,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 694.8999999761581
+            },
+            {
+              "name": ":done",
+              "at": 803.3999999761581,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 699.6000000238419
+            },
+            {
+              "name": ":done",
+              "at": 809.6000000238419,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 742.6000000238419
+            },
+            {
+              "name": ":done",
+              "at": 844.6999999880791,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 694.1000000238419
+            },
+            {
+              "name": ":done",
+              "at": 792.2000000476837,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 724.3999999761581
+            },
+            {
+              "name": ":done",
+              "at": 837.0999999642372,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 739.6999999880791
+            },
+            {
+              "name": ":done",
+              "at": 847.8999999761581,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 689.8000000119209
+            },
+            {
+              "name": ":done",
+              "at": 800.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 699.8999999761581
+            },
+            {
+              "name": ":done",
+              "at": 820.7999999523163,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 685.6999999880791
+            },
+            {
+              "name": ":done",
+              "at": 808.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 645
+            },
+            {
+              "name": ":done",
+              "at": 750.8999999761581,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 671.3999999761581
+            },
+            {
+              "name": ":done",
+              "at": 789.1999999880791,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 702.5
+            },
+            {
+              "name": ":done",
+              "at": 809.2000000476837,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 697.5
+            },
+            {
+              "name": ":done",
+              "at": 815.1999999880791,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 721
+            },
+            {
+              "name": ":done",
+              "at": 822.0999999642372,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 708.7999999523163
+            },
+            {
+              "name": ":done",
+              "at": 771.2999999523163,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 677.3000000119209
+            },
+            {
+              "name": ":done",
+              "at": 799.8000000119209,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 715
+            },
+            {
+              "name": ":done",
+              "at": 833.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 686.3000000119209
+            },
+            {
+              "name": ":done",
+              "at": 792.3000000119209,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 706.5
+            },
+            {
+              "name": ":done",
+              "at": 801.8000000119209,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 714.7999999523163
+            },
+            {
+              "name": ":done",
+              "at": 806.8999999761581,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 721.7000000476837
+            },
+            {
+              "name": ":done",
+              "at": 816.3000000119209,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1k items, 1 update each (sequentially)": {
+        "app": "ten-k-items-one-time",
+        "query": "&items=1000&updates=1000&percentRandomAwait=0",
+        "version": "7.5.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 680.3999999761581
+            },
+            {
+              "name": ":done",
+              "at": 791.2999999523163,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 697.1000000238419
+            },
+            {
+              "name": ":done",
+              "at": 786.8000000119209,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 722.3000000119209
+            },
+            {
+              "name": ":done",
+              "at": 821,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 699
+            },
+            {
+              "name": ":done",
+              "at": 790.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 712.6999999880791
+            },
+            {
+              "name": ":done",
+              "at": 815,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 735.4000000357628
+            },
+            {
+              "name": ":done",
+              "at": 831,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 691.1999999880791
+            },
+            {
+              "name": ":done",
+              "at": 785.8000000119209,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 701.1999999880791
+            },
+            {
+              "name": ":done",
+              "at": 799.6999999880791,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 682.5
+            },
+            {
+              "name": ":done",
+              "at": 773.6000000238419,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 718.5
+            },
+            {
+              "name": ":done",
+              "at": 817.6000000238419,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 661.9000000357628
+            },
+            {
+              "name": ":done",
+              "at": 764.6999999880791,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 680.1999999880791
+            },
+            {
+              "name": ":done",
+              "at": 767.8999999761581,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 605.3000000119209
+            },
+            {
+              "name": ":done",
+              "at": 701.6999999880791,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 693.8999999761581
+            },
+            {
+              "name": ":done",
+              "at": 799.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 706.5999999642372
+            },
+            {
+              "name": ":done",
+              "at": 790.8999999761581,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 669.3999999761581
+            },
+            {
+              "name": ":done",
+              "at": 782.2999999523163,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 701.2000000476837
+            },
+            {
+              "name": ":done",
+              "at": 807.9000000357628,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 710.8000000119209
+            },
+            {
+              "name": ":done",
+              "at": 831.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 653.5999999642372
+            },
+            {
+              "name": ":done",
+              "at": 758.8000000119209,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 722.6999999880791
+            },
+            {
+              "name": ":done",
+              "at": 829.1000000238419,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 723.7000000476837
+            },
+            {
+              "name": ":done",
+              "at": 841.8000000119209,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 747.1000000238419
+            },
+            {
+              "name": ":done",
+              "at": 857.6000000238419,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 701.7000000476837
+            },
+            {
+              "name": ":done",
+              "at": 797.4000000357628,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 742
+            },
+            {
+              "name": ":done",
+              "at": 850.6999999880791,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 755
+            },
+            {
+              "name": ":done",
+              "at": 853.4000000357628,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1k items 1 update on 5% (random, async)": {
+        "app": "ten-k-items-one-time",
+        "query": "&items=1000&updates=50&random=true&percentRandomAwait=100",
+        "version": "7.5.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 728.5999999642372
+            },
+            {
+              "name": ":done",
+              "at": 806.3999999761581,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 739.5
+            },
+            {
+              "name": ":done",
+              "at": 801.8000000119209,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 731.4000000357628
+            },
+            {
+              "name": ":done",
+              "at": 793.4000000357628,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 731.4000000357628
+            },
+            {
+              "name": ":done",
+              "at": 783.1000000238419,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 636
+            },
+            {
+              "name": ":done",
+              "at": 708.7000000476837,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 716.1999999880791
+            },
+            {
+              "name": ":done",
+              "at": 780.1999999880791,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 749
+            },
+            {
+              "name": ":done",
+              "at": 814.4000000357628,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 697.5999999642372
+            },
+            {
+              "name": ":done",
+              "at": 771.0999999642372,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 662
+            },
+            {
+              "name": ":done",
+              "at": 729.6000000238419,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 681.5
+            },
+            {
+              "name": ":done",
+              "at": 753.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 735.5
+            },
+            {
+              "name": ":done",
+              "at": 808.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 696.1000000238419
+            },
+            {
+              "name": ":done",
+              "at": 766.9000000357628,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 703.6999999880791
+            },
+            {
+              "name": ":done",
+              "at": 758,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 704.2999999523163
+            },
+            {
+              "name": ":done",
+              "at": 766.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 682.1000000238419
+            },
+            {
+              "name": ":done",
+              "at": 754,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 704.1999999880791
+            },
+            {
+              "name": ":done",
+              "at": 771.6000000238419,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 721.1000000238419
+            },
+            {
+              "name": ":done",
+              "at": 793.4000000357628,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 687.4000000357628
+            },
+            {
+              "name": ":done",
+              "at": 765,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 703.5
+            },
+            {
+              "name": ":done",
+              "at": 774,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 659.8999999761581
+            },
+            {
+              "name": ":done",
+              "at": 737.1999999880791,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 751
+            },
+            {
+              "name": ":done",
+              "at": 802.1999999880791,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 741.5999999642372
+            },
+            {
+              "name": ":done",
+              "at": 814.3999999761581,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 733.5
+            },
+            {
+              "name": ":done",
+              "at": 796.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 708.3000000119209
+            },
+            {
+              "name": ":done",
+              "at": 778.9000000357628,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 655.4000000357628
+            },
+            {
+              "name": ":done",
+              "at": 729.2000000476837,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1k items 1 update on 5% (random)": {
+        "app": "ten-k-items-one-time",
+        "query": "&items=1000&updates=50&random=true&percentRandomAwait=0",
+        "version": "7.5.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 721.7000000476837
+            },
+            {
+              "name": ":done",
+              "at": 779.2000000476837,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 715.2999999523163
+            },
+            {
+              "name": ":done",
+              "at": 776,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 709.6000000238419
+            },
+            {
+              "name": ":done",
+              "at": 781.6000000238419,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 686.5
+            },
+            {
+              "name": ":done",
+              "at": 756.3999999761581,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 688.1999999880791
+            },
+            {
+              "name": ":done",
+              "at": 753.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 725.4000000357628
+            },
+            {
+              "name": ":done",
+              "at": 794.9000000357628,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 701.2999999523163
+            },
+            {
+              "name": ":done",
+              "at": 777.0999999642372,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 694.8999999761581
+            },
+            {
+              "name": ":done",
+              "at": 766.5999999642372,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 730.8000000119209
+            },
+            {
+              "name": ":done",
+              "at": 799.6999999880791,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 731
+            },
+            {
+              "name": ":done",
+              "at": 809,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 714.8000000119209
+            },
+            {
+              "name": ":done",
+              "at": 779.6000000238419,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 696.5
+            },
+            {
+              "name": ":done",
+              "at": 769.8000000119209,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 704.1999999880791
+            },
+            {
+              "name": ":done",
+              "at": 773.8000000119209,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 704.3000000119209
+            },
+            {
+              "name": ":done",
+              "at": 769.1999999880791,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 732
+            },
+            {
+              "name": ":done",
+              "at": 800.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 731.8999999761581
+            },
+            {
+              "name": ":done",
+              "at": 800.6999999880791,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 683.8000000119209
+            },
+            {
+              "name": ":done",
+              "at": 755.1000000238419,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 680.0999999642372
+            },
+            {
+              "name": ":done",
+              "at": 755.8000000119209,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 676.6000000238419
+            },
+            {
+              "name": ":done",
+              "at": 743.8999999761581,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 683.3999999761581
+            },
+            {
+              "name": ":done",
+              "at": 756.8999999761581,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 719.3999999761581
+            },
+            {
+              "name": ":done",
+              "at": 786.3000000119209,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 710.6999999880791
+            },
+            {
+              "name": ":done",
+              "at": 778.5999999642372,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 770.4000000357628
+            },
+            {
+              "name": ":done",
+              "at": 845.1000000238419,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 786.9000000357628
+            },
+            {
+              "name": ":done",
+              "at": 849.9000000357628,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 670.7000000476837
+            },
+            {
+              "name": ":done",
+              "at": 743.8000000119209,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1k items 1 update on 25% (random, async)": {
+        "app": "ten-k-items-one-time",
+        "query": "&items=1000&updates=250&random=true&percentRandomAwait=100",
+        "version": "7.5.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 692.3000000119209
+            },
+            {
+              "name": ":done",
+              "at": 773.6999999880791,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 708.6999999880791
+            },
+            {
+              "name": ":done",
+              "at": 782.3999999761581,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 723.9000000357628
+            },
+            {
+              "name": ":done",
+              "at": 782.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 738.0999999642372
+            },
+            {
+              "name": ":done",
+              "at": 803,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 726.6999999880791
+            },
+            {
+              "name": ":done",
+              "at": 805.3999999761581,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 641.2000000476837
+            },
+            {
+              "name": ":done",
+              "at": 725.6000000238419,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 730.3000000119209
+            },
+            {
+              "name": ":done",
+              "at": 775.3000000119209,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 704.5999999642372
+            },
+            {
+              "name": ":done",
+              "at": 776.3999999761581,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 727.5
+            },
+            {
+              "name": ":done",
+              "at": 816.1999999880791,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 717.1999999880791
+            },
+            {
+              "name": ":done",
+              "at": 783.1000000238419,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 738.8999999761581
+            },
+            {
+              "name": ":done",
+              "at": 818.8999999761581,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 727.1999999880791
+            },
+            {
+              "name": ":done",
+              "at": 791,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 735.3000000119209
+            },
+            {
+              "name": ":done",
+              "at": 818.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 683.6999999880791
+            },
+            {
+              "name": ":done",
+              "at": 762.0999999642372,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 688.1999999880791
+            },
+            {
+              "name": ":done",
+              "at": 779.8000000119209,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 702.1000000238419
+            },
+            {
+              "name": ":done",
+              "at": 777.8000000119209,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 741.6000000238419
+            },
+            {
+              "name": ":done",
+              "at": 814.9000000357628,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 673.3000000119209
+            },
+            {
+              "name": ":done",
+              "at": 756,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 680.5
+            },
+            {
+              "name": ":done",
+              "at": 766.4000000357628,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 790
+            },
+            {
+              "name": ":done",
+              "at": 869.1000000238419,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 717.1999999880791
+            },
+            {
+              "name": ":done",
+              "at": 755.7999999523163,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 685.6999999880791
+            },
+            {
+              "name": ":done",
+              "at": 760.8999999761581,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 706.6000000238419
+            },
+            {
+              "name": ":done",
+              "at": 789,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 709.6999999880791
+            },
+            {
+              "name": ":done",
+              "at": 793.3000000119209,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 632.3000000119209
+            },
+            {
+              "name": ":done",
+              "at": 716.6999999880791,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1k items 1 update on 25% (random)": {
+        "app": "ten-k-items-one-time",
+        "query": "&items=1000&updates=250&random=true&percentRandomAwait=0",
+        "version": "7.5.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 1106.6000000238419
+            },
+            {
+              "name": ":done",
+              "at": 1178,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 703.0999999642372
+            },
+            {
+              "name": ":done",
+              "at": 783.8000000119209,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 718.8000000119209
+            },
+            {
+              "name": ":done",
+              "at": 797,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 705.5
+            },
+            {
+              "name": ":done",
+              "at": 787,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 733.7000000476837
+            },
+            {
+              "name": ":done",
+              "at": 811.9000000357628,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 747.5
+            },
+            {
+              "name": ":done",
+              "at": 811.6999999880791,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 677
+            },
+            {
+              "name": ":done",
+              "at": 758.9000000357628,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 675.9000000357628
+            },
+            {
+              "name": ":done",
+              "at": 750,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 716.5999999642372
+            },
+            {
+              "name": ":done",
+              "at": 787,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 690.9000000357628
+            },
+            {
+              "name": ":done",
+              "at": 747.8000000119209,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 706.6999999880791
+            },
+            {
+              "name": ":done",
+              "at": 783.6999999880791,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 659.9000000357628
+            },
+            {
+              "name": ":done",
+              "at": 743.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 669.4000000357628
+            },
+            {
+              "name": ":done",
+              "at": 745.1000000238419,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 643.4000000357628
+            },
+            {
+              "name": ":done",
+              "at": 715.9000000357628,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 733.5999999642372
+            },
+            {
+              "name": ":done",
+              "at": 796.7999999523163,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 708.9000000357628
+            },
+            {
+              "name": ":done",
+              "at": 775.9000000357628,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 728.6999999880791
+            },
+            {
+              "name": ":done",
+              "at": 795.3999999761581,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 697.3999999761581
+            },
+            {
+              "name": ":done",
+              "at": 772,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 697.1000000238419
+            },
+            {
+              "name": ":done",
+              "at": 790.1999999880791,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 639.5
+            },
+            {
+              "name": ":done",
+              "at": 723.1999999880791,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 703.6999999880791
+            },
+            {
+              "name": ":done",
+              "at": 773.3000000119209,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 665.1999999880791
+            },
+            {
+              "name": ":done",
+              "at": 713.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 708.1999999880791
+            },
+            {
+              "name": ":done",
+              "at": 777.1999999880791,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 692.5999999642372
+            },
+            {
+              "name": ":done",
+              "at": 754.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 739.5
+            },
+            {
+              "name": ":done",
+              "at": 812.1000000238419,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 value, 1k consumers, 10k updates (bursts of 100)": {
+        "app": "fan-out",
+        "query": "&consumers=1000&updates=10000&burstSize=100",
+        "version": "7.5.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 668.7000000476837
+            },
+            {
+              "name": ":done",
+              "at": 2180.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 649.0999999642372
+            },
+            {
+              "name": ":done",
+              "at": 997.1999999880791,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 654.6999999880791
+            },
+            {
+              "name": ":done",
+              "at": 2214.399999976158,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 611.6999999880791
+            },
+            {
+              "name": ":done",
+              "at": 2205.599999964237,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 605.5
+            },
+            {
+              "name": ":done",
+              "at": 1467.9000000357628,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 651.1999999880791
+            },
+            {
+              "name": ":done",
+              "at": 2191.699999988079,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 632.2999999523163
+            },
+            {
+              "name": ":done",
+              "at": 1892.699999988079,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 596.2999999523163
+            },
+            {
+              "name": ":done",
+              "at": 1634.699999988079,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 634
+            },
+            {
+              "name": ":done",
+              "at": 1582.800000011921,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 618.9000000357628
+            },
+            {
+              "name": ":done",
+              "at": 1449.2000000476837,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 636.1999999880791
+            },
+            {
+              "name": ":done",
+              "at": 2109.099999964237,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 644
+            },
+            {
+              "name": ":done",
+              "at": 1100.5,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 632.6999999880791
+            },
+            {
+              "name": ":done",
+              "at": 2354.399999976158,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 654.1999999880791
+            },
+            {
+              "name": ":done",
+              "at": 2415.399999976158,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 607.4000000357628
+            },
+            {
+              "name": ":done",
+              "at": 1995.7000000476837,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 658.0999999642372
+            },
+            {
+              "name": ":done",
+              "at": 1745.8999999761581,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 590.0999999642372
+            },
+            {
+              "name": ":done",
+              "at": 1302.699999988079,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 615.2999999523163
+            },
+            {
+              "name": ":done",
+              "at": 1077.0999999642372,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 618.3999999761581
+            },
+            {
+              "name": ":done",
+              "at": 1948.2999999523163,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 641.1999999880791
+            },
+            {
+              "name": ":done",
+              "at": 1948.8999999761581,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 638.2999999523163
+            },
+            {
+              "name": ":done",
+              "at": 2306.699999988079,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 637.7000000476837
+            },
+            {
+              "name": ":done",
+              "at": 2051.400000035763,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 602.3000000119209
+            },
+            {
+              "name": ":done",
+              "at": 1401.1000000238419,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 671.5
+            },
+            {
+              "name": ":done",
+              "at": 1326,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 606.2999999523163
+            },
+            {
+              "name": ":done",
+              "at": 2376.099999964237,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 value, 1k consumers, 10k updates (bursts of 1000)": {
+        "app": "fan-out",
+        "query": "&consumers=1000&updates=10000&burstSize=1000",
+        "version": "7.5.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 631.2000000476837
+            },
+            {
+              "name": ":done",
+              "at": 980.6000000238419,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 642.1000000238419
+            },
+            {
+              "name": ":done",
+              "at": 967.6999999880791,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 639.8000000119209
+            },
+            {
+              "name": ":done",
+              "at": 967.4000000357628,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 664.5999999642372
+            },
+            {
+              "name": ":done",
+              "at": 823.2999999523163,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 644.5
+            },
+            {
+              "name": ":done",
+              "at": 956.5999999642372,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 625.1999999880791
+            },
+            {
+              "name": ":done",
+              "at": 934.1000000238419,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 551.2000000476837
+            },
+            {
+              "name": ":done",
+              "at": 861.7000000476837,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 599
+            },
+            {
+              "name": ":done",
+              "at": 890.5999999642372,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 631
+            },
+            {
+              "name": ":done",
+              "at": 923,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 585.3999999761581
+            },
+            {
+              "name": ":done",
+              "at": 897.3999999761581,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 627.9000000357628
+            },
+            {
+              "name": ":done",
+              "at": 950.6000000238419,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 604.3000000119209
+            },
+            {
+              "name": ":done",
+              "at": 924.3000000119209,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 594.1000000238419
+            },
+            {
+              "name": ":done",
+              "at": 890.6999999880791,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 625.1000000238419
+            },
+            {
+              "name": ":done",
+              "at": 936.8000000119209,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 582.8999999761581
+            },
+            {
+              "name": ":done",
+              "at": 943.7999999523163,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 585.5
+            },
+            {
+              "name": ":done",
+              "at": 870.3000000119209,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 606.7999999523163
+            },
+            {
+              "name": ":done",
+              "at": 886.3999999761581,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 614
+            },
+            {
+              "name": ":done",
+              "at": 923.1000000238419,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 615.5999999642372
+            },
+            {
+              "name": ":done",
+              "at": 931,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 629.7999999523163
+            },
+            {
+              "name": ":done",
+              "at": 897.0999999642372,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 598.4000000357628
+            },
+            {
+              "name": ":done",
+              "at": 906.4000000357628,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 618.6000000238419
+            },
+            {
+              "name": ":done",
+              "at": 910.3000000119209,
+              "detail": {
+                "checks": 2,
+                "via": "mutation"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 616
+            },
+            {
+              "name": ":done",
+              "at": 927.8999999761581,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 626.3999999761581
+            },
+            {
+              "name": ":done",
+              "at": 915.2999999523163,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 610
+            },
+            {
+              "name": ":done",
+              "at": 904,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      },
+      "1 value, 1k consumers, 10k updates (single burst)": {
+        "app": "fan-out",
+        "query": "&consumers=1000&updates=10000&burstSize=10000",
+        "version": "7.5.0-alpha.1",
+        "times": [
+          [
+            {
+              "name": ":start",
+              "at": 622.5
+            },
+            {
+              "name": ":done",
+              "at": 733.3000000119209,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 606.7000000476837
+            },
+            {
+              "name": ":done",
+              "at": 704.6000000238419,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 664
+            },
+            {
+              "name": ":done",
+              "at": 761.9000000357628,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 609.8000000119209
+            },
+            {
+              "name": ":done",
+              "at": 721.8000000119209,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 652.5999999642372
+            },
+            {
+              "name": ":done",
+              "at": 768,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 649.3999999761581
+            },
+            {
+              "name": ":done",
+              "at": 755.8999999761581,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 578.8000000119209
+            },
+            {
+              "name": ":done",
+              "at": 681.2000000476837,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 664.8000000119209
+            },
+            {
+              "name": ":done",
+              "at": 763.6000000238419,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 622
+            },
+            {
+              "name": ":done",
+              "at": 715.1999999880791,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 611.6999999880791
+            },
+            {
+              "name": ":done",
+              "at": 714.1000000238419,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 608.9000000357628
+            },
+            {
+              "name": ":done",
+              "at": 699.9000000357628,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 610.2999999523163
+            },
+            {
+              "name": ":done",
+              "at": 708.6999999880791,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 648.0999999642372
+            },
+            {
+              "name": ":done",
+              "at": 742.3999999761581,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 654
+            },
+            {
+              "name": ":done",
+              "at": 756.1000000238419,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 676.6999999880791
+            },
+            {
+              "name": ":done",
+              "at": 765.4000000357628,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 565.6999999880791
+            },
+            {
+              "name": ":done",
+              "at": 662.7999999523163,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 656.8999999761581
+            },
+            {
+              "name": ":done",
+              "at": 758.5,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 624.5
+            },
+            {
+              "name": ":done",
+              "at": 717.4000000357628,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 598.5
+            },
+            {
+              "name": ":done",
+              "at": 694.1999999880791,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 624.4000000357628
+            },
+            {
+              "name": ":done",
+              "at": 717.8000000119209,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 675.6000000238419
+            },
+            {
+              "name": ":done",
+              "at": 763.1000000238419,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 626.4000000357628
+            },
+            {
+              "name": ":done",
+              "at": 723.9000000357628,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 595.5
+            },
+            {
+              "name": ":done",
+              "at": 682.6999999880791,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 623.3999999761581
+            },
+            {
+              "name": ":done",
+              "at": 728.5,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ],
+          [
+            {
+              "name": ":start",
+              "at": 651.1999999880791
+            },
+            {
+              "name": ":done",
+              "at": 752.3000000119209,
+              "detail": {
+                "checks": 1,
+                "via": "immediate"
+              }
+            }
+          ]
+        ],
+        "whatsBetter": "smaller"
+      }
+    }
+  },
+  "selections": {
+    "benches": [
+      "DB Monitor w/ chat simulation",
+      "Incrementing Render Effect",
+      "1 item, 1k updates (async)",
+      "1 item, 1k updates",
+      "1 item, 100k updates (async)",
+      "1 item, 100k updates",
+      "1k items, 1 update each (sequentially, async)",
+      "1k items, 1 update each (sequentially)",
+      "1k items 1 update on 5% (random, async)",
+      "1k items 1 update on 5% (random)",
+      "1k items 1 update on 25% (random, async)",
+      "1k items 1 update on 25% (random)",
+      "1 value, 1k consumers, 10k updates (bursts of 100)",
+      "1 value, 1k consumers, 10k updates (bursts of 1000)",
+      "1 value, 1k consumers, 10k updates (single burst)"
+    ],
+    "frameworks": [
+      "ember"
+    ]
+  },
+  "benchmarkInfo": [
+    {
+      "name": "DB Monitor w/ chat simulation",
+      "app": "dbmon-with-chat",
+      "query": "",
+      "measure": "fps",
+      "whatsBetter": "bigger",
+      "units": "FPS"
+    },
+    {
+      "name": "Incrementing Render Effect",
+      "app": "incrementing-render-effect",
+      "query": "&updates=100000",
+      "whatsBetter": "smaller",
+      "units": "ms",
+      "section": "effects"
+    },
+    {
+      "name": "1 item, 1k updates (async)",
+      "app": "one-item-many-updates",
+      "query": "&updates=1000&percentRandomAwait=100",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1 item, 1k updates",
+      "app": "one-item-many-updates",
+      "query": "&updates=1000&percentRandomAwait=0",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1 item, 100k updates (async)",
+      "app": "one-item-many-updates",
+      "query": "&updates=100000&percentRandomAwait=100",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1 item, 100k updates",
+      "app": "one-item-many-updates",
+      "query": "&updates=100000&percentRandomAwait=0",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1k items, 1 update each (sequentially, async)",
+      "app": "ten-k-items-one-time",
+      "query": "&items=1000&updates=1000&percentRandomAwait=100",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1k items, 1 update each (sequentially)",
+      "app": "ten-k-items-one-time",
+      "query": "&items=1000&updates=1000&percentRandomAwait=0",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1k items 1 update on 5% (random, async)",
+      "app": "ten-k-items-one-time",
+      "query": "&items=1000&updates=50&random=true&percentRandomAwait=100",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1k items 1 update on 5% (random)",
+      "app": "ten-k-items-one-time",
+      "query": "&items=1000&updates=50&random=true&percentRandomAwait=0",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1k items 1 update on 25% (random, async)",
+      "app": "ten-k-items-one-time",
+      "query": "&items=1000&updates=250&random=true&percentRandomAwait=100",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1k items 1 update on 25% (random)",
+      "app": "ten-k-items-one-time",
+      "query": "&items=1000&updates=250&random=true&percentRandomAwait=0",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1 value, 1k consumers, 10k updates (bursts of 100)",
+      "app": "fan-out",
+      "query": "&consumers=1000&updates=10000&burstSize=100",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1 value, 1k consumers, 10k updates (bursts of 1000)",
+      "app": "fan-out",
+      "query": "&consumers=1000&updates=10000&burstSize=1000",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    },
+    {
+      "name": "1 value, 1k consumers, 10k updates (single burst)",
+      "app": "fan-out",
+      "query": "&consumers=1000&updates=10000&burstSize=10000",
+      "whatsBetter": "smaller",
+      "units": "ms"
+    }
+  ],
+  "versionOverrides": {
+    "ember": {
+      "number": 21520,
+      "url": "https://github.com/emberjs/ember.js/pull/21520"
+    }
+  },
+  "timing": {
+    "buildMs": 11118,
+    "benchmarkMs": 486949,
+    "totalMs": 498067
+  },
+  "notes": {
+    "ember": {
+      "variant": "Rebased onto main f693f240ee (d155d6759d)"
+    }
+  }
+}
