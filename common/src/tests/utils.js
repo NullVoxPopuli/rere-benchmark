@@ -130,8 +130,12 @@ export function tryVerify(label, check) {
  * runner launches it. Opening an app by hand skips the collection.
  */
 export function collectGarbage() {
-  if (typeof globalThis.gc === 'function') {
-    globalThis.gc();
+  const { gc } = /** @type {{ gc?: () => void }} */ (
+    /** @type {unknown} */ (globalThis)
+  );
+
+  if (typeof gc === 'function') {
+    gc();
   }
 }
 
