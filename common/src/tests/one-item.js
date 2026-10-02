@@ -1,4 +1,5 @@
 import {
+  collectGarbage,
   qpNum,
   qpPercent,
   seededRandom,
@@ -85,6 +86,7 @@ export class OneItem extends BaseTest {
   async [RUN](set) {
     let name = this.name;
 
+    collectGarbage();
     performance.mark(`:start`);
 
     for (let i = 0; i < this.#num; i++) {

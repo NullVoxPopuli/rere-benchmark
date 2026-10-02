@@ -1,5 +1,5 @@
 import { BaseTest, RUN } from './base-test.js';
-import { qpNum, tryVerify } from './utils.js';
+import { collectGarbage, qpNum, tryVerify } from './utils.js';
 
 export class IncrementingRenderEffect extends BaseTest {
   name = `Incrementing Render Effect`;
@@ -48,6 +48,7 @@ export class IncrementingRenderEffect extends BaseTest {
    */
   [RUN]({ get, set, setupAdvancer, element }) {
     let name = this.name;
+    collectGarbage();
     performance.mark(`:start`);
 
     let limit = this.#num;

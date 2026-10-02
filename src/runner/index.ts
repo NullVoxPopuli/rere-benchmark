@@ -225,6 +225,12 @@ const browser = await puppeteer.launch({
     '--disable-extensions',
     '--no-default-browser-check',
     '--no-first-run',
+    /**
+     * Gives the page `gc()`, which the benches call before `:start`,
+     * so that the garbage of booting the app is not collected inside the
+     * measurement.
+     */
+    '--js-flags=--expose-gc',
   ],
 });
 

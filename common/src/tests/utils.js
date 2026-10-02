@@ -119,6 +119,22 @@ export function tryVerify(label, check) {
   requestAnimationFrame(nextFrame);
 }
 
+/**
+ * Collects the garbage that booting the app left behind, so that a
+ * collection of it does not land inside the measurement.
+ *
+ * Call it right before `:start`. Each sample is a fresh page load, so this
+ * is the only garbage that is not the bench's own.
+ *
+ * `gc` exists only when Chrome runs with `--js-flags=--expose-gc`, as the
+ * runner launches it. Opening an app by hand skips the collection.
+ */
+export function collectGarbage() {
+  if (typeof globalThis.gc === 'function') {
+    globalThis.gc();
+  }
+}
+
 const macrotaskChannel = new MessageChannel();
 
 /**

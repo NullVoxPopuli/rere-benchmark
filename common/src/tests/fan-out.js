@@ -1,5 +1,5 @@
 import { BaseTest, RUN } from './base-test.js';
-import { nextMacrotask, qpNum, tryVerify } from './utils.js';
+import { collectGarbage, nextMacrotask, qpNum, tryVerify } from './utils.js';
 
 /**
  * One value, rendered in many places.
@@ -139,6 +139,7 @@ export class FanOut extends BaseTest {
     // not part of the measurement.
     await nextMacrotask();
 
+    collectGarbage();
     performance.mark(`:start`);
 
     let value = 0;

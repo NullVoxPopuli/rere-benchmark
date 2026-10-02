@@ -1,5 +1,6 @@
 import { BaseTest, RUN } from './base-test.js';
 import {
+  collectGarbage,
   qpBool,
   qpNum,
   qpPercent,
@@ -136,6 +137,7 @@ export class ManyItems extends BaseTest {
   async [RUN](set) {
     let name = this.name;
 
+    collectGarbage();
     performance.mark(`:start`);
 
     for (let i = 0; i < this.#totalUpdates; i++) {

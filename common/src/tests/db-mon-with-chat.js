@@ -1,6 +1,6 @@
 import { BaseTest, RUN } from './base-test.js';
 import { setupFPS, get5sAverage } from '../fps.js';
-import { tryVerify } from './utils.js';
+import { collectGarbage, tryVerify } from './utils.js';
 
 const ms_5s = 5_000;
 
@@ -84,6 +84,7 @@ export class DBMonWithChat extends BaseTest {
    * @param {(...args: unknown[]) => unknown} options.addChat
    */
   [RUN]({ updateDB, addChat }) {
+    collectGarbage();
     performance.mark(`:start`);
 
     const dbWorker = new Worker(
