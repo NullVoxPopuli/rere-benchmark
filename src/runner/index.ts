@@ -114,10 +114,12 @@ async function getMarks(browser: Browser, url: string) {
   // whole measurement on the dbmon bench
   await page.bringToFront();
 
-  await page.goto(url, { waitUntil: 'load' });
+  // A bench that starts at load can block the main thread for longer than
+  // puppeteer's 30s default, and network events wait for that thread.
+  await page.goto(url, { waitUntil: 'load', timeout: TIMEOUT });
 
   // TODO: is there a way to wait for the page to calmn down?
-  await page.waitForNetworkIdle();
+  await page.waitForNetworkIdle({ timeout: TIMEOUT });
 
   const progress = clack.progress({ style: 'light', max: TIMEOUT });
   // Node-side only: this ticks the bar without touching the page.
