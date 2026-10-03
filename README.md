@@ -260,6 +260,30 @@ window you've covered up.
 | `--include-prs` | off | record the PRs that landed since the previous result set in the run's notes (from git history; shown in the results app) |
 | `--file` | prompts | append to this existing result file; the bench selection comes from the file, so only `--framework` is left to pick |
 | `--yes` | off | take the default for every prompt, so the run needs no terminal; requires `--framework` and `--bench` |
+| `--profile` | off | a directory; records a CPU profile of every sample, from `:start` to `:done` (see below) |
+
+### Profiling
+
+```bash
+pnpm bench --framework=ember --bench=all --profile=profiles/ember-main
+pnpm profile:report profiles/ember-main
+pnpm profile:report profiles/ember-pr --base=profiles/ember-main
+```
+
+`--profile=<dir>` records a Chrome trace of every sample and keeps the CPU
+profile of the page's main thread between `:start` and `:done`. Per bench, the
+directory gets one line per sample (`<bench>.jsonl`) and the full trace of the
+first sample (`<bench>.trace.json.gz`), which DevTools and Perfetto can open.
+The app's source maps are copied next to them, because the next build replaces
+`dist`.
+
+`pnpm profile:report` prints where the time went, per bench: self time per
+package and per function, and inclusive time per function. With `--base`, it
+prints the largest changes against another profiled run. Functions are matched
+by name and file, so two different builds line up.
+
+Profiling slows the page down. A profiled run is only comparable with other
+profiled runs, and the result file records the flag.
 
 ### Adding one framework to an existing result set
 

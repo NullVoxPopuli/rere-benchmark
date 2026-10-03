@@ -20,7 +20,8 @@
     "bench": "node --experimental-strip-types ./src/runner/index.ts",
     "bench:add": "node --experimental-strip-types ./src/runner/add.ts",
     "bench:one": "pnpm bench --bench=all --cpu-throttle=8",
-    "bench:all": "pnpm bench --framework=all --bench=all --cpu-throttle=8"
+    "bench:all": "pnpm bench --framework=all --bench=all --cpu-throttle=8",
+    "profile:report": "node --experimental-strip-types ./src/runner/profile-report.ts"
   },
   "packageManager": "pnpm@10.21.0",
   "engines": {
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "@clack/prompts": "^1.0.1",
+    "@jridgewell/trace-mapping": "^0.3.31",
     "@nullvoxpopuli/eslint-configs": "^5.5.0",
     "@tsconfig/node22": "^22.0.5",
     "@tsconfig/strictest": "^2.0.8",

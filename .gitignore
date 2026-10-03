@@ -12,3 +12,4 @@ out/
 tmp/
 .log/
 .eslintcache
+profiles/

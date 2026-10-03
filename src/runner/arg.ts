@@ -23,6 +23,7 @@ export const TIMEOUT = int('--timeout', 60_000);
 export const INCLUDE_PRS = bool('--include-prs');
 export const FILE = str('--file');
 export const YES = bool('--yes');
+export const PROFILE = str('--profile');
 export const VERSION_OVERRIDES = versionOverrides();
 
 function col1(name: string) {
@@ -79,6 +80,11 @@ console.log(
       col1('--yes'),
       col2(YES),
       col3('take the default for every prompt, for non-interactive usage'),
+    ),
+    row(
+      col1('--profile'),
+      col2(PROFILE),
+      col3('write a CPU profile of every sample into this directory'),
     ),
     ...Object.entries(VERSION_OVERRIDES).map(([framework, override]) =>
       row(
