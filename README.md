@@ -342,3 +342,12 @@ in every ember app, and opens a draft PR here with the result -- check it out, a
     - install
     - build
     - framework version
+
+## Other Benchmarks
+
+Reactivity
+- [Reactivity without effects](https://github.com/NullVoxPopuli-ai-agent/ember-reactivity-bench/tree/main)
+- [JS Reactivity](https://github.com/milomg/js-reactivity-benchmark)
+
+Rendering
+- [js framework benchmark](https://github.com/krausest/js-framework-benchmark)
