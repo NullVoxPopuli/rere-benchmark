@@ -181,10 +181,15 @@ class Symbolicator {
           position.column,
         );
 
-        // no line number: it moves between builds, and the name and file
-        // are enough to tell functions apart
+        // The name and file tell functions apart without the line number,
+        // which moves between builds. A minified name changes with every
+        // build, so an unnamed function keeps its original line instead.
+        const known = originalName ?? position.name;
+
         frame = {
-          label: `${originalName ?? position.name ?? (name || '(anonymous)')} ${source}`,
+          label: known
+            ? `${known} ${source}`
+            : `(anonymous) ${source}:${position.line}`,
           group: groupOf(source),
         };
       } else {
