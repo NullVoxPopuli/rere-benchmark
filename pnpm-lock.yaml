@@ -18,6 +18,9 @@ importers:
       '@clack/prompts':
         specifier: ^1.0.1
         version: 1.0.1
+      '@jridgewell/trace-mapping':
+        specifier: ^0.3.31
+        version: 0.3.31
       '@nullvoxpopuli/eslint-configs':
         specifier: ^5.5.0
         version: 5.5.0(@babel/core@7.29.0)(@babel/eslint-parser@7.28.6(@babel/core@7.29.0)(eslint@9.39.3))(eslint@9.39.3)(prettier@https://codeload.github.com/prettier/prettier/tar.gz/34f6badf2d6f3004642711a391e9a0d3c547d317)(typescript@5.9.3)

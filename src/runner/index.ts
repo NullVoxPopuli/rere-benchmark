@@ -7,9 +7,23 @@ import * as clack from '@clack/prompts';
 import { $ } from 'execa';
 import puppeteer, { type Browser } from 'puppeteer';
 
-import { COUNT, CPU_THROTTLE, HEADLESS, SKIP_BUILD, TIMEOUT } from './arg.ts';
+import {
+  COUNT,
+  CPU_THROTTLE,
+  HEADLESS,
+  PROFILE,
+  SKIP_BUILD,
+  TIMEOUT,
+} from './arg.ts';
 import { getBenchInfo } from './bench-info.ts';
 import { chromeLocation } from './environment.ts';
+import {
+  resetProfile,
+  saveProfile,
+  saveSourceMaps,
+  startProfile,
+  stopProfile,
+} from './profile.ts';
 import {
   addResult,
   info as environmentInfo,
@@ -101,7 +115,16 @@ function warnIfCapped(
   );
 }
 
-async function getMarks(browser: Browser, url: string) {
+interface ProfileTarget {
+  framework: string;
+  benchName: string;
+}
+
+async function getMarks(
+  browser: Browser,
+  url: string,
+  profileTarget: ProfileTarget,
+) {
   const page = await browser.newPage();
 
   if (CPU_THROTTLE !== 1) {
@@ -113,6 +136,10 @@ async function getMarks(browser: Browser, url: string) {
   // a tab that is not the active one gets its rAF throttled, which is the
   // whole measurement on the dbmon bench
   await page.bringToFront();
+
+  if (PROFILE) {
+    await startProfile(page);
+  }
 
   // A bench that starts at load can block the main thread for longer than
   // puppeteer's 30s default, and network events wait for that thread.
@@ -180,6 +207,8 @@ async function getMarks(browser: Browser, url: string) {
     return entry as MarkEntry;
   });
 
+  const trace = PROFILE ? await stopProfile(page) : undefined;
+
   await page.close();
 
   /**
@@ -198,6 +227,15 @@ async function getMarks(browser: Browser, url: string) {
     throw new Error(
       `No :done mark after ${TIMEOUT}ms at ${url}\n` +
         `Recorded marks: ${marks.map((mark) => mark.name).join(', ') || '(none)'}`,
+    );
+  }
+
+  if (PROFILE && trace) {
+    await saveProfile(
+      PROFILE,
+      profileTarget.framework,
+      profileTarget.benchName,
+      trace,
     );
   }
 
@@ -314,6 +352,10 @@ for (const framework of info.frameworks) {
 
     clack.log.info(`Server up at ${serverUrl}`);
 
+    if (PROFILE) {
+      await saveSourceMaps(PROFILE, framework, `${dir}/dist`);
+    }
+
     if (!info.benches) {
       clack.log.error(`No benches selected`);
       process.exit(1);
@@ -330,17 +372,23 @@ for (const framework of info.frameworks) {
         clack.log.info(`\tVariant: ${url}`);
 
         const count = bench.ignoreCount ? 1 : COUNT;
+        const name = variant.name
+          ? `${bench.name} ${variant.name}`
+          : bench.name;
+
+        if (PROFILE) {
+          await resetProfile(PROFILE, framework, name);
+        }
 
         for (let i = 0; i < count; i++) {
           clack.log.info(`\t\tRemaining: ${count - i}`);
 
-          const performanceMarks = await getMarks(browser, url);
+          const performanceMarks = await getMarks(browser, url, {
+            framework,
+            benchName: name,
+          });
 
           warnIfCapped(framework, bench, performanceMarks);
-
-          const name = variant.name
-            ? `${bench.name} ${variant.name}`
-            : bench.name;
 
           await addResult(
             framework,
