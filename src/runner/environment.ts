@@ -13,6 +13,7 @@ import {
   CPU_THROTTLE,
   FRAMEWORK,
   HEADLESS,
+  PROFILE,
   SKIP_BUILD,
   TIMEOUT,
 } from './arg.ts';
@@ -125,6 +126,7 @@ export async function getInfo() {
       FRAMEWORK,
       BENCH_NAME,
       TIMEOUT,
+      PROFILE,
     },
     environment: {
       machine: {
