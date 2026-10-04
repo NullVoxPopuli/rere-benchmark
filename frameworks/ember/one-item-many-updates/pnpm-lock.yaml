@@ -24,8 +24,8 @@ importers:
         specifier: 2.4.0
         version: 2.4.0(@babel/core@7.29.7)
       ember-source:
-        specifier: 7.5.0-alpha.2
-        version: 7.5.0-alpha.2(@glimmer/component@2.1.1)
+        specifier: file:../../../ember-source-pr-21656-ed36dd6.tgz
+        version: file:../../../ember-source-pr-21656-ed36dd6.tgz(@glimmer/component@2.1.1)
       ember-strict-application-resolver:
         specifier: 0.1.1
         version: 0.1.1(@babel/core@7.29.7)
@@ -50,13 +50,13 @@ importers:
         version: 4.6.7(@glint/template@1.7.8)
       '@glint/ember-tsc':
         specifier: 1.8.12
-        version: 1.8.12(ember-source@7.5.0-alpha.2(@glimmer/component@2.1.1))(typescript@6.0.3)
+        version: 1.8.12(ember-source@file:../../../ember-source-pr-21656-ed36dd6.tgz(@glimmer/component@2.1.1))(typescript@6.0.3)
       '@glint/template':
         specifier: 1.7.8
         version: 1.7.8
       '@glint/tsserver-plugin':
         specifier: 2.5.18
-        version: 2.5.18(ember-source@7.5.0-alpha.2(@glimmer/component@2.1.1))
+        version: 2.5.18(ember-source@file:../../../ember-source-pr-21656-ed36dd6.tgz(@glimmer/component@2.1.1))
       '@nullvoxpopuli/ember-vite':
         specifier: 1.2.0
         version: 1.2.0(@glint/template@1.7.8)(vite@8.1.5(jiti@2.6.1)(terser@5.49.0))
@@ -800,6 +800,7 @@ packages:
 
   '@glint/ember-tsc@1.8.12':
     resolution: {integrity: sha512-crG2gYm4H5ckYwBVNpb+DWtHkf9c4Rn1K32+JMMJLZFepcyUkoJdCRQiMcfs3zQSmR8OdvAv6ggB51FML4a4Zg==}
+    version: 1.8.12
     hasBin: true
     peerDependencies:
       ember-source: '>=3.28.0'
@@ -813,6 +814,7 @@ packages:
 
   '@glint/tsserver-plugin@2.5.18':
     resolution: {integrity: sha512-agIodcCuaxwJK15Fzi/tvCmdXRhMYUG+m4o6xwp1Pwi2qKcOb83voxvjpkT1NDAXDR9nyxr53FSW9fLyylGqmw==}
+    version: 2.5.18
 
   '@handlebars/parser@2.2.2':
     resolution: {integrity: sha512-n/SZW+12rwikx/f8YcSv9JCi5p9vn1Bnts9ZtVvfErG4h0gbjHI1H1ZMhVUnaOC7yzFc6PtsCKIK8XeTnL90Gw==}
@@ -1412,9 +1414,6 @@ packages:
     peerDependencies:
       '@babel/core': ^7.4.0 || ^8.0.0-0 <8.0.0
 
-  backburner.js@2.8.0:
-    resolution: {integrity: sha512-zYXY0KvpD7/CWeOLF576mV8S+bQsaIoj/GNLXXB+Eb8SJcQy5lqSjkRrZ0MZhdKUs9QoqmGNIEIe3NQfGiiscQ==}
-
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
@@ -1762,8 +1761,9 @@ packages:
     resolution: {integrity: sha512-89oVHVJwmLDvGvAUWgS87KpBoRhy3aZ6U0Ql6HOmU4TrPkyaa8pM0W81wj9cIwjYprcQtN9EwzZMHnq46+oUyw==}
     engines: {node: 8.* || 10.* || >= 12}
 
-  ember-source@7.5.0-alpha.2:
-    resolution: {integrity: sha512-sFNxiBq2STRS4Gzc4dpSJBbV7og7GEpBYDBIEB9zHjvceo3bcQf0yHFhuA/1iNXH4Sma0jiZXStm8fZYciAHbg==}
+  ember-source@file:../../../ember-source-pr-21656-ed36dd6.tgz:
+    resolution: {integrity: sha512-/6yjt7NlCCxbwO2FijqincMIxOKRpp9Uoyisn2soFqZgwIXrp+42BxjsEtphwPWNWavG2fSQ4Awgx1HPBdi9cg==, tarball: file:../../../ember-source-pr-21656-ed36dd6.tgz}
+    version: 7.5.0-alpha.1
     engines: {node: '>= 20.19'}
     peerDependencies:
       '@glimmer/component': '>= 1.1.2'
@@ -4715,7 +4715,7 @@ snapshots:
     dependencies:
       '@glimmer/interfaces': 0.94.6
 
-  '@glint/ember-tsc@1.8.12(ember-source@7.5.0-alpha.2(@glimmer/component@2.1.1))(typescript@5.9.3)':
+  '@glint/ember-tsc@1.8.12(ember-source@file:../../../ember-source-pr-21656-ed36dd6.tgz(@glimmer/component@2.1.1))(typescript@5.9.3)':
     dependencies:
       '@glimmer/syntax': 0.95.0
       '@glint/template': 1.7.8
@@ -4735,11 +4735,11 @@ snapshots:
       vscode-languageserver-textdocument: 1.0.12
       vscode-uri: 3.1.0
     optionalDependencies:
-      ember-source: 7.5.0-alpha.2(@glimmer/component@2.1.1)
+      ember-source: file:../../../ember-source-pr-21656-ed36dd6.tgz(@glimmer/component@2.1.1)
     transitivePeerDependencies:
       - supports-color
 
-  '@glint/ember-tsc@1.8.12(ember-source@7.5.0-alpha.2(@glimmer/component@2.1.1))(typescript@6.0.3)':
+  '@glint/ember-tsc@1.8.12(ember-source@file:../../../ember-source-pr-21656-ed36dd6.tgz(@glimmer/component@2.1.1))(typescript@6.0.3)':
     dependencies:
       '@glimmer/syntax': 0.95.0
       '@glint/template': 1.7.8
@@ -4759,15 +4759,15 @@ snapshots:
       vscode-languageserver-textdocument: 1.0.12
       vscode-uri: 3.1.0
     optionalDependencies:
-      ember-source: 7.5.0-alpha.2(@glimmer/component@2.1.1)
+      ember-source: file:../../../ember-source-pr-21656-ed36dd6.tgz(@glimmer/component@2.1.1)
     transitivePeerDependencies:
       - supports-color
 
   '@glint/template@1.7.8': {}
 
-  '@glint/tsserver-plugin@2.5.18(ember-source@7.5.0-alpha.2(@glimmer/component@2.1.1))':
+  '@glint/tsserver-plugin@2.5.18(ember-source@file:../../../ember-source-pr-21656-ed36dd6.tgz(@glimmer/component@2.1.1))':
     dependencies:
-      '@glint/ember-tsc': 1.8.12(ember-source@7.5.0-alpha.2(@glimmer/component@2.1.1))(typescript@5.9.3)
+      '@glint/ember-tsc': 1.8.12(ember-source@file:../../../ember-source-pr-21656-ed36dd6.tgz(@glimmer/component@2.1.1))(typescript@5.9.3)
       '@volar/language-core': 2.4.28
       '@volar/typescript': 2.4.28
       jiti: 2.6.1
@@ -5412,8 +5412,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  backburner.js@2.8.0: {}
-
   balanced-match@1.0.2: {}
 
   balanced-match@4.0.4: {}
@@ -5859,13 +5857,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  ember-source@7.5.0-alpha.2(@glimmer/component@2.1.1):
+  ember-source@file:../../../ember-source-pr-21656-ed36dd6.tgz(@glimmer/component@2.1.1):
     dependencies:
       '@babel/core': 7.29.7
       '@embroider/addon-shim': 1.10.3
       '@glimmer/component': 2.1.1
       '@simple-dom/interface': 1.4.0
-      backburner.js: 2.8.0
       broccoli-file-creator: 2.1.1
       chalk: 4.1.2
       ember-cli-get-component-path-option: 1.0.0
