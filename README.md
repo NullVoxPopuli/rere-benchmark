@@ -285,6 +285,10 @@ by name and file, so two different builds line up.
 Profiling slows the page down. A profiled run is only comparable with other
 profiled runs, and the result file records the flag.
 
+Profiling also changes the difference between two builds, not only the times.
+Compare times with unprofiled runs, and use profiled runs to find where the
+time goes.
+
 ### Adding one framework to an existing result set
 
 ```bash
